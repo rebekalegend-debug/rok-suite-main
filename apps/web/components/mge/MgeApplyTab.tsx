@@ -71,18 +71,34 @@ export function MgeApplyTab({ event, onApplicationSubmitted }: MgeApplyTabProps)
   const [existingApp, setExistingApp] = useState<MgeApplication | null>(null);
   const [isEditing, setIsEditing] = useState(false);
 
-  // Load roster
-  useEffect(() => {
-    async function fetchRoster() {
-      const { data } = await supabase
-        .from('alliance_roster')
-        .select('id, name, alliance, power')
-        .eq('is_active', true)
-        .order('power', { ascending: false });
-      setRoster(data || []);
-    }
-    fetchRoster();
-  }, []);
+ useEffect(() => {
+  async function fetchRoster() {
+    const res = await fetch(
+      "https://docs.google.com/spreadsheets/d/1ZUf-qCCvZ5N6qU_hCNHXQ1z-6qxhn36PucYOxbaXIv0/export?format=csv&gid=0"
+    );
+
+    const text = await res.text();
+
+    const rows = text.split("\n").slice(1);
+
+    const parsed = rows
+      .map((row) => {
+        const cols = row.split(",");
+
+        return {
+          id: cols[0]?.trim(),        // Governor ID
+          name: cols[1]?.trim(),      // Name
+          alliance: null,             // not in sheet
+          power: Number(cols[2]) || 0 // Power
+        };
+      })
+      .filter(r => r.name);
+
+    setRoster(parsed);
+  }
+
+  fetchRoster();
+}, []);
 
   // Load saved name
   useEffect(() => {
