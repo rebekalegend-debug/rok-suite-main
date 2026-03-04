@@ -7,7 +7,7 @@ import { AppSidebar } from '@/components/AppSidebar';
 // Google Calendar configuration
 const PUBLIC_CALENDARS = [
     {
-        id: '5589780017d3612c518e01669b77b70f667a6cee4798c961dbfb9cf1119811f3%40group.calendar.google.com',
+        id: '5589780017d3612c518e01669b77b70f667a6cee4798c961dbfb9cf1119811f3@group.calendar.google.com',
         name: 'Angmar Alliance',
         color: '#D50000', // red
         displayColor: '#ef4444', // red
