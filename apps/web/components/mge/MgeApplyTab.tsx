@@ -289,8 +289,11 @@ export function MgeApplyTab({ event, onApplicationSubmitted }: MgeApplyTabProps)
       declined: { icon: <XCircle size={18} />, color: 'text-red-400', label: 'Declined' },
       withdrawn: { icon: <XCircle size={18} />, color: 'text-zinc-400', label: 'Withdrawn' },
     };
-    const config = statusConfig[existingApp.status];
-
+    const config = statusConfig[existingApp.status] ?? {
+  icon: <Clock size={18} />,
+  color: 'text-zinc-400',
+  label: 'Unknown',
+};
     return (
       <div className="p-4">
         <div className="rounded-lg border p-4" style={{ backgroundColor: 'var(--background-card)', borderColor: 'var(--border)' }}>
