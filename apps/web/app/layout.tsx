@@ -18,8 +18,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ANGMAR - Kingdom 23 - RoK",
-  description: "Angmar Nazgul Guards - Rise of Kingdoms Kingdom 23 alliance tools and battle planning",
+  title: "KD 3237 Board",
+  description: "Rise of Kingdoms Kingdom",
   icons: {
     icon: "/favicon.svg",
   },
