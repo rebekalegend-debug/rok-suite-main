@@ -1,0 +1,26 @@
+# Node
+node_modules/
+dist/
+.next/
+.env*
+!.env.local.example
+!.env*.example
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Data
+*.log
+packages/**/data/**
+!packages/**/data/.keep
+.vercel
+
+# Alliance data files (may contain player PII)
+apps/web/data/*.csv
+apps/web/data/*.sql
+apps/web/data/*.xlsx
+apps/web/data/*.numbers
+apps/web/data/*.pptx
+apps/web/data/*.ics

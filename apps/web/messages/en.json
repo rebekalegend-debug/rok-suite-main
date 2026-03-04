@@ -1,0 +1,270 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "search": "Search",
+    "export": "Export",
+    "import": "Import",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "all": "All",
+    "none": "None",
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK",
+    "apply": "Apply",
+    "reset": "Reset",
+    "filter": "Filter",
+    "sort": "Sort",
+    "theme": "Theme",
+    "language": "Language"
+  },
+  "nav": {
+    "siteTitle": "Kingdom 23",
+    "siteSubtitle": "Led by Angmar Nazgul Guards",
+    "home": "Home",
+    "calendar": "Calendar",
+    "rosters": "Rosters",
+    "recognition": "Recognition",
+    "angmar": "Angmar",
+    "events": "Events",
+    "rokMail": "RoK Mail",
+    "mge": "MGE",
+    "kingdom": "Kingdom",
+    "migrationTracker": "Migration Tracker",
+    "allianceSorter": "Alliance Sorter",
+    "wanted": "Wanted",
+    "aooPlanner": "AoO Planner",
+    "protocols": "Protocols",
+    "resources": "Resources",
+    "guide": "Guide",
+    "betaTools": "Beta Tools",
+    "wipBadge": "WIP",
+    "kvkMap": "KvK Map",
+    "kingdomStats": "Kingdom Stats"
+  },
+  "home": {
+    "tagline": "Kingdom 23 • Rise of Kingdoms",
+    "title": "ANGMAR",
+    "subtitle": "Nazgul Guards",
+    "builtFor": "Kingdom 23 Alliance Tools",
+    "sections": {
+      "interactiveTools": "Kingdom Tools",
+      "guides": "Guides & Documentation",
+      "experimental": "Experimental"
+    },
+    "tools": {
+      "calendar": {
+        "title": "Calendar",
+        "description": "Upcoming events, KvK schedule, and kingdom activities",
+        "badge": "Events"
+      },
+      "roster": {
+        "title": "Rosters",
+        "description": "Member stats, power rankings, and kill points tracking",
+        "badge": "Members"
+      },
+      "recognition": {
+        "title": "Recognition",
+        "description": "Honor roll, top performers, and member achievements",
+        "badge": "Awards"
+      },
+      "events": {
+        "title": "Angmar Events",
+        "description": "Event results, challenge rankings, and competition tracking",
+        "badge": "Results"
+      },
+      "aoo": {
+        "title": "AoO Planner",
+        "description": "Interactive 30v30 team assignments, zone distribution, and match planning",
+        "badge": "Tool"
+      },
+      "rokMail": {
+        "title": "RoK Mail",
+        "description": "Format in-game mail with bold, italic, colors, symbols, and AI assistance"
+      },
+      "mge": {
+        "title": "MGE",
+        "description": "Plan and track Mightiest Governor Event rankings and assignments"
+      },
+      "migrationTracker": {
+        "title": "Migration Tracker",
+        "description": "Track kingdom migrations, detect illegal migrants, and monitor player status"
+      },
+      "allianceSorter": {
+        "title": "Alliance Sorter",
+        "description": "Auto-assign members to alliances based on power and kill point thresholds"
+      },
+      "wanted": {
+        "title": "Wanted",
+        "description": "Track wanted players, zeroing priority, and officer status updates"
+      },
+      "kvkMap": {
+        "title": "KvK War Room",
+        "description": "Interactive KvK map with alliance assignments, strategy planning, and achievement tracking"
+      },
+      "kingdomStats": {
+        "title": "Kingdom Stats",
+        "description": "Daily member rankings, power trends, and historical kingdom data"
+      }
+    },
+    "guide": {
+      "title": "Strategy Guide",
+      "description": "Event strategies, alliance protocols, commander guides, and checklists",
+      "badge": "Docs"
+    },
+    "beta": {
+      "title": "Beta Tools",
+      "description": "Scanners, Sunset Canyon simulator, Upgrade Calculator - experimental features in development",
+      "badge": "WIP"
+    },
+    "footer": {
+      "github": "GitHub",
+      "documentation": "Documentation",
+      "copyright": "Kingdom 23 • Rise of Kingdoms"
+    }
+  },
+  "roster": {
+    "title": "Alliance Roster",
+    "tabs": {
+      "roster": "Roster",
+      "growth": "Growth",
+      "analytics": "Analytics",
+      "history": "History",
+      "comparison": "Comparison",
+      "settings": "Settings"
+    },
+    "columns": {
+      "name": "Name",
+      "power": "Power",
+      "kills": "Kill Points",
+      "killsShort": "KP",
+      "ratio": "Power:KP",
+      "t4Kills": "T4 Kills",
+      "t5Kills": "T5 Kills",
+      "t4t5": "T4/T5 KP",
+      "honor": "Honor",
+      "deads": "Deads",
+      "alliance": "Alliance",
+      "role": "Role",
+      "highestPower": "Highest Power",
+      "powerChange": "Power Change",
+      "kpChange": "KP Change",
+      "honorChange": "Honor Change",
+      "t1Kills": "T1 Kills",
+      "t2Kills": "T2 Kills",
+      "t3Kills": "T3 Kills",
+      "troopsHealed": "Troops Healed",
+      "acclaim": "Acclaim",
+      "kvkPoints": "KvK Points",
+      "trades": "Trades",
+      "governorId": "Governor ID",
+      "mobilization": "Mobilization",
+      "turnedIn": "Turned In",
+      "accepted": "Accepted"
+    },
+    "tooltips": {
+      "name": "In-game governor name",
+      "power": "Total account power",
+      "kills": "Kill points (total kills across all troop types)",
+      "ratio": "Power per kill point — lower ratio indicates more aggressive play style",
+      "t4Kills": "Tier 4 kill points",
+      "t5Kills": "Tier 5 kill points",
+      "honor": "Honor points earned",
+      "deads": "Dead troops count",
+      "alliance": "Current alliance membership",
+      "role": "Alliance role (R1-R5)"
+    },
+    "filters": {
+      "searchPlaceholder": "Search members...",
+      "alliance": "Filter by Alliance",
+      "allMembers": "All Members",
+      "activeOnly": "Active Only"
+    },
+    "categories": {
+      "core": "Core",
+      "combat": "Combat",
+      "support": "Support",
+      "events": "Events",
+      "profile": "Profile"
+    },
+    "growth": {
+      "title": "Growth Tracking",
+      "powerGrowth": "Power Growth",
+      "kpGrowth": "KP Growth",
+      "honorGrowth": "Honor Growth",
+      "noData": "No growth data available"
+    },
+    "analytics": {
+      "title": "Analytics",
+      "topPerformers": "Top Performers",
+      "allianceBreakdown": "Alliance Breakdown",
+      "powerDistribution": "Power Distribution"
+    }
+  },
+  "calendar": {
+    "title": "Alliance Calendar",
+    "subtitle": "Upcoming events, KvK schedule, and alliance activities",
+    "subscribe": "Subscribe",
+    "timezone": "Timezone",
+    "today": "Today",
+    "upcoming": "Upcoming",
+    "noEvents": "No upcoming events"
+  },
+  "events": {
+    "title": "Alliance Events",
+    "status": {
+      "active": "Active",
+      "completed": "Completed",
+      "upcoming": "Upcoming"
+    },
+    "noEvents": "No events found"
+  },
+  "aoo": {
+    "title": "AoO Battle Planner",
+    "description": "Ark of Osiris team assignment and battle planning tool",
+    "teams": "Teams",
+    "unassigned": "Unassigned",
+    "tags": {
+      "rallyLeader": "Rally Leader",
+      "coordinator": "Coordinator",
+      "teleportFirst": "Teleport 1st",
+      "garrison": "Garrison",
+      "openField": "Open Field",
+      "support": "Support"
+    }
+  },
+  "guide": {
+    "title": "Strategy Guide",
+    "subtitle": "Rise of Kingdoms strategy guides, tips, and alliance protocols",
+    "sections": {
+      "events": "Events",
+      "alliance": "Alliance",
+      "commanders": "Commanders"
+    }
+  },
+  "betaTools": {
+    "title": "Beta Tools",
+    "warning": "Work in Progress",
+    "warningDescription": "These tools are experimental and may change or break. Use at your own risk.",
+    "scanners": {
+      "title": "Scanners",
+      "description": "Screenshot analysis and OCR tools for extracting game data"
+    },
+    "sunsetCanyon": {
+      "title": "Sunset Canyon",
+      "description": "Sunset Canyon defense and attack simulator"
+    },
+    "upgradeCalculator": {
+      "title": "Upgrade Calculator",
+      "description": "Resource and speedup planning for building and research upgrades"
+    }
+  }
+}
