@@ -7,23 +7,12 @@ import { AppSidebar } from '@/components/AppSidebar';
 // Google Calendar configuration
 const PUBLIC_CALENDARS = [
     {
-        id: '2aed069b30c3f3501b64ef982441f597b833e3db8b855488f734efe1b9552040@group.calendar.google.com',
+        id: 'https://calendar.google.com/calendar/embed?src=5589780017d3612c518e01669b77b70f667a6cee4798c961dbfb9cf1119811f3%40group.calendar.google.com',
         name: 'Angmar Alliance',
         color: '#D50000', // red
         displayColor: '#ef4444', // red
     },
-    {
-        id: 'e1ef35a9b7dd39094f70f7065b2c20e86685b9f7e1e62f17030298d0a3bbedca@group.calendar.google.com',
-        name: 'Kingdom 23',
-        color: '#039BE5', // blue
-        displayColor: '#3b82f6', // blue
-    },
-    {
-        id: 'd005a7955410ff8b21164034320d73e20fad0124e59617077234e6b15aae0577@group.calendar.google.com',
-        name: 'ROK Events',
-        color: '#7986CB', // purple
-        displayColor: '#8b5cf6', // violet
-    },
+   
 ];
 
 const ADMIN_CALENDAR = {
