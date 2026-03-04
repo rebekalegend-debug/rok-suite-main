@@ -34,11 +34,23 @@ const formatPower = (val: number): string => {
   return val + 'M';
 };
 
-/** Format summed power (already in millions) */
+/** Format summed power (raw power values) */
 const formatTotalPower = (val: number): string => {
-  if (!val) return '0M';
-  if (val >= 1_000) return (val / 1_000).toFixed(2) + 'B';
-  return val.toLocaleString() + 'M';
+  if (!val) return '0';
+
+  if (val >= 1_000_000_000_000)
+    return (val / 1_000_000_000_000).toFixed(2) + 'T';
+
+  if (val >= 1_000_000_000)
+    return (val / 1_000_000_000).toFixed(2) + 'B';
+
+  if (val >= 1_000_000)
+    return (val / 1_000_000).toFixed(1) + 'M';
+
+  if (val >= 1_000)
+    return (val / 1_000).toFixed(0) + 'K';
+
+  return val.toString();
 };
 
 // ─── Sort types ────────────────────────────────────────────────────
