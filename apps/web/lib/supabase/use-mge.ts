@@ -94,7 +94,7 @@ export function useMgeEvents() {
     setLoading(true);
     const { data, error: err } = await supabase
       .from('mge_events')
-      .select('*, mge_selections(*), mge_event_commanders(*), mge_rank_tiers(*), mge_applications(*)')
+      .select('*, mge_selections(*), mge_event_commanders(*), mge_rank_tiers!fk_mge_rank_event(*), mge_applications(*)')
       .order('event_date', { ascending: false });
 
     if (err) {
