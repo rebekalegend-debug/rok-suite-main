@@ -70,7 +70,7 @@ export interface WantedPlayer {
   alliance: string;
   zero: 'yes' | 'no' | '';
   reason: string;
-  zeroed: 'yes' | 'no' | '';
+ zeroed: 'yes' | 'no' | 'left' | '';
   display: boolean;
 }
 
