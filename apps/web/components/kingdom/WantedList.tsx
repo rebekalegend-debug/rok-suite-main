@@ -782,9 +782,9 @@ export default function WantedList() {
                         )}
                       </td>
                       <td className="px-3 py-2.5 text-center">
-                        <span className={`inline-block px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase border ${handledBg(handled)}`}>
-                          {handled}
-                        </span>
+<span className={`inline-block px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase border ${handledBg(handled)}`}>
+  {handled === 'pending' ? 'NO ACTION' : handled}
+</span>
                       </td>
                       {isOfficer && (
                         <td className="px-3 py-2.5 text-center">
