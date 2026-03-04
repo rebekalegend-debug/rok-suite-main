@@ -224,6 +224,7 @@ export default function WantedList() {
     const mark = officerMarks.get(player.governorId);
     if (mark) return mark;
     if (player.zeroed === 'yes') return 'zeroed';
+     if (player.zeroed === 'left') return 'left';
     return 'pending';
   }, [officerMarks]);
 
