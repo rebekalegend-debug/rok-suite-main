@@ -703,9 +703,7 @@ export default function WantedList() {
                 <SortHeader field="name" label="Name" />
                 <SortHeader field="governorId" label="Gov ID" />
                 <SortHeader field="power" label="Power" align="right" />
-                <th className="text-center px-3 py-2 sm:py-3">
-                  <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">Coords</span>
-                </th>
+                
                 <SortHeader field="alliance" label="Alliance" />
                 <SortHeader field="reason" label="Reason" />
                 <SortHeader field="zero" label="Zero?" align="center" />
@@ -720,7 +718,7 @@ export default function WantedList() {
             <tbody>
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={isOfficer ? 9 : 8} className="px-3 py-8 text-center text-sm text-[var(--text-muted)]">
+                  <td colSpan={isOfficer ? 8 : 7} className="px-3 py-8 text-center text-sm text-[var(--text-muted)]">
                     {hasActiveFilters ? 'No players match filters' : 'No wanted players'}
                   </td>
                 </tr>
@@ -745,9 +743,7 @@ export default function WantedList() {
                       <td className="px-3 py-2.5 text-right font-mono text-sm text-[var(--foreground)]">
                         {formatPower(player.power2)}
                       </td>
-                      <td className="px-3 py-2.5 text-center font-mono text-xs text-[var(--text-muted)] whitespace-nowrap">
-                        {player.x || player.y ? `${player.x}, ${player.y}` : '-'}
-                      </td>
+
                       <td className="px-3 py-2.5 text-sm text-[var(--text-secondary)]">
                         {player.alliance || '-'}
                       </td>
@@ -851,10 +847,7 @@ export default function WantedList() {
                       <span className="text-[var(--text-muted)]">Power: </span>
                       <span className="font-mono text-[var(--text-secondary)]">{formatPower(player.power2)}</span>
                     </div>
-                    <div>
-                      <span className="text-[var(--text-muted)]">Coords: </span>
-                      <span className="font-mono text-[var(--text-secondary)]">{player.x || player.y ? `${player.x}, ${player.y}` : '-'}</span>
-                    </div>
+                    
                     <div>
                       <span className="text-[var(--text-muted)]">Alliance: </span>
                       <span className="text-[var(--text-secondary)]">{player.alliance || '-'}</span>
