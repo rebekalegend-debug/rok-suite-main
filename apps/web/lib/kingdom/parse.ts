@@ -243,7 +243,12 @@ export async function fetchWantedSheet(url: string): Promise<WantedPlayer[]> {
         alliance: (cols[iAlliance] || '').trim(),
         zero: (zeroVal === 'yes' ? 'yes' : zeroVal === 'no' ? 'no' : '') as WantedPlayer['zero'],
         reason: (cols[iReason] || '').trim(),
-        zeroed: (zeroedVal === 'yes' ? 'yes' : zeroedVal === 'no' ? 'no' : '') as WantedPlayer['zeroed'],
+        zeroed: (
+  zeroedVal === 'yes' ? 'yes' :
+  zeroedVal === 'left' ? 'left' :
+  zeroedVal === 'no' ? 'no' :
+  ''
+) as WantedPlayer['zeroed'],
         display: displayVal !== 'no',
       };
     })
