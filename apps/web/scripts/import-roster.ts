@@ -130,7 +130,7 @@ console.log('KILLS INDEX:', killsIdx);
     };
 
     if (killsIdx !== -1 && values[killsIdx]) {
-      row.kills = parseInt(values[killsIdx], 10) || 0;
+      row.kills = parseInt(values[killsIdx].replace(/[^0-9]/g, ''), 10) || 0;
     }
     if (deadsIdx !== -1 && values[deadsIdx]) {
       row.deads = parseInt(values[deadsIdx], 10) || 0;
