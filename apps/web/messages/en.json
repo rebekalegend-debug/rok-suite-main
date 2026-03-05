@@ -51,10 +51,10 @@
     "kingdomStats": "Kingdom Stats"
   },
   "home": {
-    "tagline": "Kingdom 23 • Rise of Kingdoms",
-    "title": "ANGMAR",
-    "subtitle": "Nazgul Guards",
-    "builtFor": "Kingdom 23 Alliance Tools",
+    "tagline": "Kingdom 3237 • Rise of Kingdoms",
+    "title": "Harley quinn",
+    "subtitle": "ds",
+    "builtFor": "Tools",
     "sections": {
       "interactiveTools": "Kingdom Tools",
       "guides": "Guides & Documentation",
@@ -67,8 +67,8 @@
         "badge": "Events"
       },
       "roster": {
-        "title": "Rosters",
-        "description": "Member stats, power rankings, and kill points tracking",
+        "title": "Members",
+        "description": "Member stats, power rankings",
         "badge": "Members"
       },
       "recognition": {
