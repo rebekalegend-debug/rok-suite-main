@@ -49,6 +49,7 @@ function normalizeRank(rank: string): string | null {
 }
 
 interface RosterRow {
+  governor_id?: number;
   name: string;
   power: number;
   kills?: number;
@@ -69,7 +70,7 @@ function parseCSV(content: string): RosterRow[] {
   .split(',')
   .map((h) => h.trim().toLowerCase());
 
-
+const governorIdx = header.indexOf('governor id');
   
  const nameIdx =
   header.indexOf('name') !== -1
@@ -138,7 +139,9 @@ console.log('KILLS INDEX:', killsIdx);
 if (allianceIdx !== -1 && values[allianceIdx]) {
   row.alliance = values[allianceIdx];
 }
-    
+    if (governorIdx !== -1 && values[governorIdx]) {
+  row.governor_id = parseInt(values[governorIdx], 10);
+}
     if (tierIdx !== -1 && values[tierIdx]) {
       row.tier = values[tierIdx];
     }
@@ -167,7 +170,8 @@ async function importRoster(csvPath: string) {
   const { data, error } = await supabase
     .from('alliance_roster')
     .upsert(rows.map((row) => ({
-  name: row.name,
+  governor_id: row.governor_id,
+      name: row.name,
   power: row.power,
   kills: row.kills || 0,
   alliance: row.alliance || null,
