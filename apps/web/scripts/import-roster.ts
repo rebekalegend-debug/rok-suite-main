@@ -87,10 +87,9 @@ function parseCSV(content: string): RosterRow[] {
 const allianceIdx = header.indexOf('alliance');
 
   
-  const killsIdx =
-  header.indexOf('kills') !== -1
-    ? header.indexOf('kills')
-    : header.indexOf('total kp');
+const killsIdx = header.findIndex(h =>
+  h.includes('kp') || h.includes('kill')
+);
   const deadsIdx = header.indexOf('deads');
   const tierIdx = header.indexOf('tier');
   // Support both 'role' and 'rank' column names
@@ -153,7 +152,9 @@ if (allianceIdx !== -1 && values[allianceIdx]) {
 
   return rows;
 }
-
+console.log('HEADER:', header);
+console.log('NAME INDEX:', nameIdx);
+console.log('KILLS INDEX:', killsIdx);
 async function importRoster(csvPath: string) {
   console.log(`Reading CSV from: ${csvPath}`);
 
