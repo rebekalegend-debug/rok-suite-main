@@ -153,7 +153,7 @@ async function importRoster(csvPath: string) {
   role: row.role || null,
   notes: row.notes || null,
   is_active: true
-})), { onConflict: 'governor_id' })}
+})), { onConflict: 'name' })}
     )
     .select();
 
