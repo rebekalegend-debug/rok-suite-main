@@ -65,9 +65,9 @@ function parseCSV(content: string): RosterRow[] {
     throw new Error('CSV must have a header row and at least one data row');
   }
 
-  const header = lines[0].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g)!.map((h) =>
-  h.replace(/"/g, '').trim().toLowerCase()
-);
+ const header = lines[0]
+  .split(',')
+  .map((h) => h.trim().toLowerCase());
 
 
   
