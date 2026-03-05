@@ -47,6 +47,11 @@ function isFlagFeatureType(type: FeatureType): boolean {
 export default function WarRoomPage() {
   const { maps } = useKvkMaps();
 const [selectedMapId, setSelectedMapId] = useState<string | undefined>();
+  useEffect(() => {
+  if (!selectedMapId && maps.length > 0) {
+    setSelectedMapId(maps[0].id);
+  }
+}, [maps]);
   const { isAtLeast } = useWarRoomAuth();
   const searchParams = useSearchParams();
   const strategyCode = searchParams.get('strategy');
@@ -814,18 +819,15 @@ const [selectedMapId, setSelectedMapId] = useState<string | undefined>();
       />
 <div className="mb-3">
   <select
-    value={selectedMapId || ""}
-    onChange={(e) => setSelectedMapId(e.target.value)}
-    className="px-2 py-1 border rounded text-xs"
-  >
-    <option value="">Latest Map</option>
-
-    {maps.map((m) => (
-      <option key={m.id} value={m.id}>
-        {m.name}
-      </option>
-    ))}
-  </select>
+  value={selectedMapId || ""}
+  onChange={(e) => setSelectedMapId(e.target.value)}
+>
+  {maps.map((m) => (
+    <option key={m.id} value={m.id}>
+      {m.name}
+    </option>
+  ))}
+</select>
 </div>
       {/* Strategy banner */}
       {activeStrategyId && (
