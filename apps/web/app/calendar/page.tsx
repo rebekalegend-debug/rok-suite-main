@@ -8,7 +8,7 @@ import { AppSidebar } from '@/components/AppSidebar';
 const PUBLIC_CALENDARS = [
     {
         id: '5589780017d3612c518e01669b77b70f667a6cee4798c961dbfb9cf1119811f3@group.calendar.google.com',
-        name: 'Angmar Alliance',
+        name: 'Rise of Kingdoms',
         color: '#D50000', // red
         displayColor: '#ef4444', // red
     },
@@ -137,7 +137,7 @@ export default function CalendarPage() {
                             </div>
                             <div>
                                 <h1 className="text-xl sm:text-2xl font-semibold tracking-tight">Event Calendar</h1>
-                                <p className="text-xs sm:text-sm text-[var(--text-secondary)] hidden sm:block">Kingdom 23 events and Angmar alliance activities</p>
+                                <p className="text-xs sm:text-sm text-[var(--text-secondary)] hidden sm:block">Rise of Kingdoms Event Calendar</p>
                             </div>
                         </div>
                         {isAdmin ? (
@@ -344,14 +344,7 @@ export default function CalendarPage() {
                     Times shown in {TIMEZONE_OPTIONS.find(tz => tz.value === timezone)?.label || timezone}
                 </p>
 
-                <footer className={`mt-8 pt-4 border-t ${theme.border} text-center space-y-1`}>
-                    <p className={`text-xs ${theme.textMuted}`}>Kingdom 23 • Rise of Kingdoms</p>
-                    <p className={`text-[10px] ${theme.textMuted} opacity-50`}>Subscribe to get event reminders in your calendar app</p>
-                    <p className={`text-[10px] ${theme.textMuted} opacity-50`}>
-                        ROK Events calendar sourced from{' '}
-                        <a href="https://rokcentral.com/calendar/" target="_blank" rel="noopener noreferrer" className="underline hover:text-[var(--foreground)] transition-colors">rokcentral.com</a>
-                    </p>
-                </footer>
+               
             </div>
         </div>
         </AppSidebar>
