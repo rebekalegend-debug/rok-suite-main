@@ -89,7 +89,10 @@ const allianceIdx = header.indexOf('alliance');
 
   
 const killsIdx = header.findIndex(h =>
-  h.includes('kp') || h.includes('kill')
+  h === 'kills' ||
+  h === 'kp' ||
+  h === 'total kp' ||
+  h.includes('kill')
 );
   const deadsIdx = header.indexOf('deads');
   const tierIdx = header.indexOf('tier');
