@@ -106,21 +106,7 @@ console.log('KILLS INDEX:', killsIdx);
     if (!line) continue;
 
     // Handle quoted fields
-    const values: string[] = [];
-    let current = '';
-    let inQuotes = false;
-
-    for (const char of line) {
-      if (char === '"') {
-        inQuotes = !inQuotes;
-      } else if (char === ',' && !inQuotes) {
-        values.push(current.trim());
-        current = '';
-      } else {
-        current += char;
-      }
-    }
-    values.push(current.trim());
+const values = line.split(',').map(v => v.trim());
 
     const name = values[nameIdx];
     if (!name) continue;
