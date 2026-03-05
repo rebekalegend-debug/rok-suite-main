@@ -821,9 +821,22 @@ const [selectedMapId, setSelectedMapId] = useState<string | undefined>();
   <select
   value={selectedMapId || ""}
   onChange={(e) => setSelectedMapId(e.target.value)}
+  className="px-3 py-1 rounded border text-sm"
+  style={{
+    backgroundColor: "#0b1220",
+    color: "#ffffff",
+    borderColor: "#2a2f45"
+  }}
 >
   {maps.map((m) => (
-    <option key={m.id} value={m.id}>
+    <option
+      key={m.id}
+      value={m.id}
+      style={{
+        backgroundColor: "#0b1220",
+        color: "#ffffff"
+      }}
+    >
       {m.name}
     </option>
   ))}
