@@ -144,7 +144,6 @@ async function importRoster(csvPath: string) {
   const { data, error } = await supabase
     .from('alliance_roster')
     .upsert(rows.map(row => ({
-  governor_id: row.governor_id,
   name: row.name,
   power: row.power,
   kills: row.kills || 0,
