@@ -89,9 +89,8 @@ const allianceIdx = header.indexOf('alliance');
 
   
 const killsIdx = header.findIndex(h =>
-  h === 'kills' ||
-  h === 'kp' ||
-  h === 'total kp' ||
+  h.replace(/\s+/g, ' ').trim() === 'kp' ||
+  h.replace(/\s+/g, ' ').trim() === 'total kp' ||
   h.includes('kill')
 );
   const deadsIdx = header.indexOf('deads');
