@@ -71,7 +71,10 @@ function parseCSV(content: string): RosterRow[] {
 
 
   
-  const nameIdx = header.indexOf('name');
+ const nameIdx =
+  header.indexOf('name') !== -1
+    ? header.indexOf('name')
+    : header.indexOf('governor name');
   const powerIdx = header.indexOf('power');
 
   if (nameIdx === -1) {
@@ -131,6 +134,10 @@ const allianceIdx = header.indexOf('alliance');
     if (deadsIdx !== -1 && values[deadsIdx]) {
       row.deads = parseInt(values[deadsIdx], 10) || 0;
     }
+if (allianceIdx !== -1 && values[allianceIdx]) {
+  row.alliance = values[allianceIdx];
+}
+    
     if (tierIdx !== -1 && values[tierIdx]) {
       row.tier = values[tierIdx];
     }
@@ -162,14 +169,14 @@ async function importRoster(csvPath: string) {
   name: row.name,
   power: row.power,
   kills: row.kills || 0,
+  alliance: row.alliance || null,
   deads: row.deads || 0,
   tier: row.tier || null,
   role: row.role || null,
   notes: row.notes || null,
   is_active: true,
 })),
-    { onConflict: 'name' }
-    )
+{ onConflict: 'name' })
     .select();
 
   if (error) {
