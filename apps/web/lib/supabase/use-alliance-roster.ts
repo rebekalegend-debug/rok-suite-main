@@ -242,12 +242,22 @@ export function useScanRoster(): UseAllianceRosterReturn & { scanLabel: string |
 
 // Utility to format power with M suffix
 // Returns '-' for 0 or falsy values (no data entered)
-export const formatPower = (power: number | null | undefined): string => {
-  if (!power) return '-';
-  if (power >= 1000000) {
-    return (power / 1000000).toFixed(1) + 'M';
+export const formatPower = (value: number | null | undefined): string => {
+  if (!value) return '-';
+
+  if (value >= 1_000_000_000) {
+    return (value / 1_000_000_000).toFixed(1) + 'B';
   }
-  return power.toLocaleString();
+
+  if (value >= 1_000_000) {
+    return (value / 1_000_000).toFixed(1) + 'M';
+  }
+
+  if (value >= 1_000) {
+    return (value / 1_000).toFixed(1) + 'K';
+  }
+
+  return value.toString();
 };
 
 export interface R4R5Member {
