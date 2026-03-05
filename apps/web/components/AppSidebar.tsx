@@ -79,7 +79,7 @@ export function AppSidebar({ children }: AppSidebarProps) {
       titleKey: 'Rokstats',
       titleColor: 'text-amber-500',
       items: [
-        { labelKey: 'KvKstats', href: '/events', icon: <Trophy size={20} />, hoverColor: 'group-hover:text-amber-500', hoverBg: 'hover:bg-amber-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-amber-500 to-orange-500' },
+        { labelKey: 'rokStats', href: '/events', icon: <Trophy size={20} />, hoverColor: 'group-hover:text-amber-500', hoverBg: 'hover:bg-amber-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-amber-500 to-orange-500' },
   
       ],
     },
