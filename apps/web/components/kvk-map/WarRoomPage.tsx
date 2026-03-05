@@ -1129,17 +1129,6 @@ const [selectedMapId, setSelectedMapId] = useState<string | undefined>();
               ) : null}
             </div>
           )}
-        </div>
-
-        {/* Bottom panel: Achievement Progress */}
-        <AchievementProgressPanel
-          features={features}
-          assignments={isOfficerMode ? activeAssignments : []}
-          alliances={isOfficerMode ? alliances : []}
-          collapsed={!bottomPanelOpen}
-          onToggle={() => setBottomPanelOpen((v) => !v)}
-        />
-      </div>
-    </div>
+     
   );
 }
