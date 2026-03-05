@@ -96,6 +96,8 @@ const killsIdx = header.findIndex(h =>
   const roleIdx = header.indexOf('role') !== -1 ? header.indexOf('role') : header.indexOf('rank');
   const notesIdx = header.indexOf('notes');
 
+console.log('NAME INDEX:', nameIdx);
+console.log('KILLS INDEX:', killsIdx);
   const rows: RosterRow[] = [];
 
   for (let i = 1; i < lines.length; i++) {
@@ -152,9 +154,7 @@ if (allianceIdx !== -1 && values[allianceIdx]) {
 
   return rows;
 }
-console.log('HEADER:', header);
-console.log('NAME INDEX:', nameIdx);
-console.log('KILLS INDEX:', killsIdx);
+
 async function importRoster(csvPath: string) {
   console.log(`Reading CSV from: ${csvPath}`);
 
