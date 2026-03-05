@@ -127,7 +127,7 @@ export function AppSidebar({ children }: AppSidebarProps) {
     <>
       {/* Logo */}
       <div className={`flex items-center gap-3 px-4 py-5 border-b border-[var(--border)] ${isCollapsed ? 'justify-center' : ''}`}>
-        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-fuchsia-500 to-pink-500 flex items-center justify-center shadow-lg shadow-pink-500/40 flex-shrink-0">
+       <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center shadow-lg shadow-pink-500/30 flex-shrink-0">
   <Shield className="w-5 h-5 text-white" />
 </div>
         {!isCollapsed && (
@@ -235,7 +235,7 @@ export function AppSidebar({ children }: AppSidebarProps) {
             <Menu size={20} />
           </button>
           <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-fuchsia-500 to-pink-500 flex items-center justify-center shadow-lg shadow-pink-500/40 flex-shrink-0">
+           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center shadow-lg shadow-pink-500/30 flex-shrink-0">
   <Shield className="w-5 h-5 text-white" />
 </div>
             <span className="text-sm font-semibold text-[var(--foreground)]">{t('siteTitle')}</span>
