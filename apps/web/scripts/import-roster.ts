@@ -52,6 +52,7 @@ interface RosterRow {
   name: string;
   power: number;
   kills?: number;
+  alliance?: string;
   deads?: number;
   tier?: string;
   role?: string;
@@ -71,6 +72,12 @@ function parseCSV(content: string): RosterRow[] {
   if (nameIdx === -1) {
     throw new Error('CSV must have a "name" column');
   }
+
+if (allianceIdx !== -1 && values[allianceIdx]) {
+  (row as any).alliance = values[allianceIdx];
+}
+
+  
 const allianceIdx = header.indexOf('alliance');
 
   
