@@ -985,7 +985,7 @@ export default function MigrationTracker() {
           <div className="text-center py-20 text-[var(--text-muted)]">
             <ShieldAlert size={40} className="mx-auto mb-4 opacity-40" />
             <p className="text-lg font-medium">No scan data available</p>
-            <p className="text-sm mt-1">Ask an admin to upload scan data to get started.</p>
+            <p className="text-sm mt-1">Work in progress!.</p>
           </div>
         ) : null}
       </div>
