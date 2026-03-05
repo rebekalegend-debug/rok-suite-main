@@ -147,7 +147,14 @@ export function useScanRoster(): UseAllianceRosterReturn & { scanLabel: string |
       }
 
       const latestScan = scans[0];
-      setScanLabel(latestScan.label || new Date(latestScan.created_at).toLocaleDateString());
+      const date = latestScan.created_at ? new Date(String(latestScan.created_at)) : null;
+
+setScanLabel(
+  latestScan.label ||
+  (date && !isNaN(date.getTime())
+    ? date.toISOString().slice(0, 10)
+    : null)
+);
 
       // Fetch all players for this scan in batches
       let allPlayers: Record<string, unknown>[] = [];
