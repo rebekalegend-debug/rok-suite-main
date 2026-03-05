@@ -31,11 +31,11 @@
     "siteSubtitle": "Powered by Harley Quinn👑",
     "home": "Home",
     "calendar": "Calendar",
-    "rosters": "Rosters",
+    "rosters": "Members",
     "recognition": "Recognition",
     "angmar": "Angmar",
     "events": "Events",
-    "rokMail": "RoK Mail",
+    "rokMail": "Mail Generator",
     "mge": "MGE",
     "kingdom": "Kingdom",
     "migrationTracker": "Migration Tracker",
@@ -132,9 +132,9 @@
     }
   },
   "roster": {
-    "title": "Alliance Roster",
+    "title": "All members",
     "tabs": {
-      "roster": "Roster",
+      "roster": "Members",
       "growth": "Growth",
       "analytics": "Analytics",
       "history": "History",
