@@ -260,7 +260,6 @@ export default function WantedList() {
   const resetFiltersAndSort = () => {
     setSortRules(DEFAULT_SORT_RULES);
     setReasonFilter(null);
-    setAllianceFilter(null);
     setHandledFilter('all');
     setZeroFilter('all');
     setSearch('');
