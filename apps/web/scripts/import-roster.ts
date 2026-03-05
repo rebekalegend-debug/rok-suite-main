@@ -151,8 +151,9 @@ async function importRoster(csvPath: string) {
   tier: row.tier || null,
   role: row.role || null,
   notes: row.notes || null,
-  is_active: true
-})), { onConflict: 'name' })}
+  is_active: true,
+})),
+    { onConflict: 'name' })}
     )
     .select();
 
