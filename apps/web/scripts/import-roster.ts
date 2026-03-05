@@ -71,8 +71,13 @@ function parseCSV(content: string): RosterRow[] {
   if (nameIdx === -1) {
     throw new Error('CSV must have a "name" column');
   }
+const allianceIdx = header.indexOf('alliance');
 
-  const killsIdx = header.indexOf('kills');
+  
+  const killsIdx =
+  header.indexOf('kills') !== -1
+    ? header.indexOf('kills')
+    : header.indexOf('total kp');
   const deadsIdx = header.indexOf('deads');
   const tierIdx = header.indexOf('tier');
   // Support both 'role' and 'rank' column names
@@ -143,15 +148,14 @@ async function importRoster(csvPath: string) {
   // Upsert rows (update if name exists, insert if new)
   const { data, error } = await supabase
     .from('alliance_roster')
-    .upsert(rows.map((row: any) => ({
-  name: row['Name'],
-  power: Number(row['Power']),
-  kills: Number(row['Total KP'] || 0),
-  alliance: row['Alliance'] || null,
-  deads: 0,
-  tier: null,
-  role: null,
-  notes: null,
+    .upsert(rows.map((row) => ({
+  name: row.name,
+  power: row.power,
+  kills: row.kills || 0,
+  deads: row.deads || 0,
+  tier: row.tier || null,
+  role: row.role || null,
+  notes: row.notes || null,
   is_active: true,
 })),
     { onConflict: 'name' }
