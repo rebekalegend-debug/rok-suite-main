@@ -1628,7 +1628,7 @@ export default function RosterPage() {
                             </div>
                             <div className="min-w-0">
                                 <div className="flex items-center gap-2 flex-wrap">
-                                    <h1 className="text-xl sm:text-2xl font-semibold tracking-tight truncate">Alliance Roster</h1>
+                                    <h1 className="text-xl sm:text-2xl font-semibold tracking-tight truncate">All Members</h1>
                                     <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-sky-500/20 text-sky-400 flex-shrink-0">
                                         {statsRoster.length} members
                                     </span>
@@ -6821,7 +6821,7 @@ export default function RosterPage() {
                 })()}
 
                 <footer className={`mt-8 pt-4 border-t ${theme.border} text-center`}>
-                    <p className={`text-xs ${theme.textMuted}`}>Angmar Nazgul Guards - Rise of Kingdoms</p>
+                    <p className={`text-xs ${theme.textMuted}`}>Kingdom 3237</p>
                     <p className={`text-[10px] ${theme.textMuted} mt-1 opacity-50`}>
                         Use CSV import to update roster data
                     </p>
