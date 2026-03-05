@@ -82,7 +82,7 @@ export default function WantedList() {
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [reasonFilter, setReasonFilter] = useState<string | null>(null);
-  const [allianceFilter, setAllianceFilter] = useState<string | null>(null);
+  
   const [handledFilter, setHandledFilter] = useState<'all' | 'pending' | 'zeroed' | 'left'>('all');
   const [zeroFilter, setZeroFilter] = useState<'all' | 'yes' | 'no'>('all');
 
@@ -331,7 +331,7 @@ export default function WantedList() {
       .filter(p => {
         if (search && !matchesSearch(search, p.name, p.governorId)) return false;
         if (reasonFilter && p.reason !== reasonFilter) return false;
-        if (allianceFilter && p.alliance !== allianceFilter) return false;
+      
         if (zeroFilter !== 'all' && p.zero !== zeroFilter) return false;
         const handled = getHandledStatus(p);
         if (handledFilter !== 'all' && handled !== handledFilter) return false;
@@ -344,7 +344,7 @@ export default function WantedList() {
         }
         return 0;
       });
-  }, [visiblePlayers, search, reasonFilter, allianceFilter, zeroFilter, handledFilter, sortRules, getHandledStatus, compareByField]);
+  }, [visiblePlayers, search, reasonFilter, zeroFilter, handledFilter, sortRules, getHandledStatus, compareByField]);
 
   // Dashboard stats — based on visible players only (excludes hidden)
   const stats = useMemo(() => {
@@ -592,19 +592,7 @@ export default function WantedList() {
               className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] text-sm focus:outline-none focus:border-red-500/50"
             />
           </div>
-          {/* Alliance filter */}
-          {alliances.length > 0 && (
-            <select
-              value={allianceFilter || ''}
-              onChange={(e) => setAllianceFilter(e.target.value || null)}
-              className="px-3 py-2.5 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] text-sm focus:outline-none focus:border-red-500/50"
-            >
-              <option value="">All Alliances</option>
-              {alliances.map(a => (
-                <option key={a} value={a}>{a}</option>
-              ))}
-            </select>
-          )}
+         
           {/* Zero filter */}
           <select
             value={zeroFilter}
