@@ -412,8 +412,9 @@ export default function WantedList() {
     );
   };
 
-  const hasActiveFilters = search || reasonFilter || allianceFilter || handledFilter !== 'all' || zeroFilter !== 'all'
-    || JSON.stringify(sortRules) !== JSON.stringify(DEFAULT_SORT_RULES);
+ const hasActiveFilters =
+  search || reasonFilter || handledFilter !== 'all' || zeroFilter !== 'all'
+  || JSON.stringify(sortRules) !== JSON.stringify(DEFAULT_SORT_RULES);
 
   // Sortable header helper
   const SortHeader = ({ field, label, align = 'left' }: { field: SortableField; label: string; align?: 'left' | 'right' | 'center' }) => (
