@@ -132,9 +132,9 @@ export function AppSidebar({ children }: AppSidebarProps) {
 </div>
         {!isCollapsed && (
           <div className="min-w-0">
-    <h1 className="text-lg font-semibold text-pink-400 truncate">
-      {t('siteTitle')}
-    </h1>
+   <h1 className="text-lg font-semibold text-white/95 truncate">
+  {t('siteTitle')}
+</h1>
     <p className="text-[10px] text-pink-300/70 truncate">
       {t('siteSubtitle')}
     </p>
