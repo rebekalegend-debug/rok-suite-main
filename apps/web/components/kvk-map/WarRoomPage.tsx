@@ -22,6 +22,7 @@ import {
   useActiveKvkMap,
   useKvkMapFeatures,
   useKvkMapZones,
+  useKvkMaps,
   createMapFeature,
   updateMapFeature,
   updateMapZone,
@@ -44,12 +45,14 @@ function isFlagFeatureType(type: FeatureType): boolean {
 }
 
 export default function WarRoomPage() {
+  const { maps } = useKvkMaps();
+const [selectedMapId, setSelectedMapId] = useState<string | undefined>();
   const { isAtLeast } = useWarRoomAuth();
   const searchParams = useSearchParams();
   const strategyCode = searchParams.get('strategy');
 
   // ── Data ───────────────────────────────────────────────────────────
-  const { map, loading: mapLoading } = useActiveKvkMap();
+  const { map, loading: mapLoading } = useActiveKvkMap(selectedMapId);
   const { features, refetch: refetchFeatures } = useKvkMapFeatures(map?.id);
   const { zones, refetch: refetchZones } = useKvkMapZones(map?.id);
   const { alliances, loading: alliancesLoading, refetch: refetchAlliances } = useKvkAlliances(map?.id);
@@ -809,7 +812,21 @@ export default function WarRoomPage() {
         onSaveStrategy={handleSaveStrategy}
         onDeleteStrategy={handleDeleteStrategy}
       />
+<div className="mb-3">
+  <select
+    value={selectedMapId || ""}
+    onChange={(e) => setSelectedMapId(e.target.value)}
+    className="px-2 py-1 border rounded text-xs"
+  >
+    <option value="">Latest Map</option>
 
+    {maps.map((m) => (
+      <option key={m.id} value={m.id}>
+        {m.name}
+      </option>
+    ))}
+  </select>
+</div>
       {/* Strategy banner */}
       {activeStrategyId && (
         <div
