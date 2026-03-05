@@ -143,15 +143,15 @@ async function importRoster(csvPath: string) {
   // Upsert rows (update if name exists, insert if new)
   const { data, error } = await supabase
     .from('alliance_roster')
-    .upsert(rows.map(row => ({
-  name: row.name,
-  power: row.power,
-  kills: (row as any)['Total KP'] || 0,
-  deads: row.deads || 0,
-  alliance: (row as any)['Alliance'] || null,
-  tier: row.tier || null,
-  role: row.role || null,
-  notes: row.notes || null,
+    .upsert(rows.map((row: any) => ({
+  name: row['Name'],
+  power: Number(row['Power']),
+  kills: Number(row['Total KP'] || 0),
+  alliance: row['Alliance'] || null,
+  deads: 0,
+  tier: null,
+  role: null,
+  notes: null,
   is_active: true,
 })),
     { onConflict: 'name' }
