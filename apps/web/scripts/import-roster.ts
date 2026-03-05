@@ -153,7 +153,7 @@ async function importRoster(csvPath: string) {
   notes: row.notes || null,
   is_active: true,
 })),
-    { onConflict: 'name' })}
+    { onConflict: 'name' }
     )
     .select();
 
