@@ -4,7 +4,7 @@ import type { KvkMap, KvkMapFeature, KvkMapZone } from '@/lib/kvk-map-types';
 
 // ─── Active Map Hook ────────────────────────────────────────────────
 
-export function useActiveKvkMap() {
+export function useActiveKvkMap(mapId?: string) {
   const [map, setMap] = useState<KvkMap | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -12,20 +12,22 @@ export function useActiveKvkMap() {
   const fetchMap = useCallback(async () => {
     setLoading(true);
     setError(null);
-    const { data, error: err } = await supabase
-      .from('kvk_maps')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .single();
 
-    if (err) {
-      setError(err.message);
+    let query = supabase.from('kvk_maps').select('*');
+
+    if (mapId) {
+      query = query.eq('id', mapId);
     } else {
-      setMap(data as KvkMap);
+      query = query.order('created_at', { ascending: false }).limit(1);
     }
+
+    const { data, error: err } = await query.single();
+
+    if (err) setError(err.message);
+    else setMap(data as KvkMap);
+
     setLoading(false);
-  }, []);
+  }, [mapId]);
 
   useEffect(() => {
     fetchMap();
@@ -33,7 +35,29 @@ export function useActiveKvkMap() {
 
   return { map, loading, error, refetch: fetchMap };
 }
+// ─── Maps Hook ─────────────────────────────────────────────
 
+export function useKvkMaps() {
+  const [maps, setMaps] = useState<KvkMap[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchMaps = useCallback(async () => {
+    const { data, error } = await supabase
+      .from('kvk_maps')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (!error) setMaps((data || []) as KvkMap[]);
+
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    fetchMaps();
+  }, [fetchMaps]);
+
+  return { maps, loading };
+}
 // ─── Features Hook ──────────────────────────────────────────────────
 
 export function useKvkMapFeatures(mapId: string | undefined) {
