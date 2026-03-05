@@ -146,9 +146,9 @@ async function importRoster(csvPath: string) {
     .upsert(rows.map(row => ({
   name: row.name,
   power: row.power,
-  kills: row['Total KP'] || 0,
+  kills: (row as any)['Total KP'] || 0,
   deads: row.deads || 0,
-      alliance: row['Alliance'] || null,
+  alliance: (row as any)['Alliance'] || null,
   tier: row.tier || null,
   role: row.role || null,
   notes: row.notes || null,
