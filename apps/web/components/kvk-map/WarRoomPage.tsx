@@ -1129,6 +1129,11 @@ const [selectedMapId, setSelectedMapId] = useState<string | undefined>();
               ) : null}
             </div>
           )}
-     
+        </div>
+
+        {/* Bottom panel: Achievement Progress */}
+       
+      </div>
+    </div>
   );
 }
