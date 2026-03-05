@@ -133,7 +133,7 @@ Your message here.
     id: 'kingdom-mail',
     name: 'Kingdom Mail',
     category: 'kingdom',
-    description: 'Standard Kingdom 3923 mail format',
+    description: 'Standard Kingdom mail format',
     content: `<size=30px><color=#4d0000>KINGDOM 3923</color> <color=#cc0000>—</color> <color=#4d0000>A</color><color=#660000>N</color><color=#800000>G</color><color=#990000>M</color><color=#b30000>A</color><color=#cc0000>R</color> <color=#4d0000>N</color><color=#660000>A</color><color=#800000>Z</color><color=#990000>G</color><color=#b30000>U</color><color=#cc0000>L</color> <color=#e60000>G</color><color=#ff0000>U</color><color=#ff0000>A</color><color=#cc0000>R</color><color=#990000>D</color><color=#800000>S</color></size>
 ►═════════❂❂❂═════════◄
 
