@@ -94,7 +94,21 @@ export async function updateMemberSnapshot(member: {
  * Create a snapshot of the current roster for today
  * Uses upsert to allow updating today's snapshot if called multiple times
  */
-export async function createSnapshot(roster: Array<{ governor_id: number; name: string; power: number; kills: number; ... }>) {
+export async function createSnapshot(
+  roster: Array<{
+    governor_id: number;
+    name: string;
+    power: number;
+    kills: number;
+    t4_kills?: number;
+    t5_kills?: number;
+    honor_points?: number;
+    gathered?: number;
+    alliance_helps?: number;
+    role: string | null;
+    is_active?: boolean;
+  }>
+) {
   const supabase = createClient();
   const now = new Date().toISOString();
 
