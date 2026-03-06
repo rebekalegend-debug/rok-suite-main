@@ -1261,12 +1261,13 @@ export default function RosterPage() {
             try {
                 const { data: updatedRoster } = await supabase
                     .from('alliance_roster')
-                    .select('name, power, kills, t4_kills, t5_kills, honor_points, role, is_active')
+                   .select('governor_id, name, power, kills, t4_kills, t5_kills, honor_points, role, is_active')
                     .eq('is_active', true);
 
                 if (updatedRoster) {
                     const snapshotData = updatedRoster.map(r => ({
-                        name: r.name,
+                       governor_id: r.governor_id ?? 0,
+    name: r.name,
                         power: r.power || 0,
                         kills: r.kills || 0,
                         t4_kills: r.t4_kills || 0,
