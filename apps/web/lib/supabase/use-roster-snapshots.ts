@@ -63,7 +63,7 @@ export async function updateMemberSnapshot(member: {
   is_active?: boolean;
 }) {
   const supabase = createClient();
-  const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+  const now = new Date().toISOString(); // full timestamp // YYYY-MM-DD
 
   const { error } = await supabase
     .from('roster_snapshots')
@@ -79,7 +79,7 @@ export async function updateMemberSnapshot(member: {
       alliance_helps: member.alliance_helps || 0,
       role: member.role,
       is_active: member.is_active ?? true,
-    }, { onConflict: 'snapshot_date,member_name' });
+    },  );
 
   if (error) {
     console.error('Error updating member snapshot:', error);
@@ -95,10 +95,10 @@ export async function updateMemberSnapshot(member: {
  */
 export async function createSnapshot(roster: Array<{ name: string; power: number; kills: number; t4_kills?: number; t5_kills?: number; honor_points?: number; gathered?: number; alliance_helps?: number; role: string | null; is_active?: boolean }>) {
   const supabase = createClient();
-  const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+  const now = new Date().toISOString(); // full timestamp // YYYY-MM-DD
 
   const snapshotRows = roster.map(member => ({
-    snapshot_date: today,
+    snapshot_date: now,
     member_name: member.name,
     power: member.power,
     kills: member.kills || 0,
@@ -113,7 +113,7 @@ export async function createSnapshot(roster: Array<{ name: string; power: number
 
   const { data, error } = await supabase
     .from('roster_snapshots')
-    .upsert(snapshotRows, { onConflict: 'snapshot_date,member_name' })
+    .upsert(snapshotRows,  )
     .select();
 
   if (error) {
