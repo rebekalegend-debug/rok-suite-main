@@ -269,7 +269,7 @@ useEffect(() => {
         fetchMigrantSheet(MIGRANT_SHEET_URL),
         fetchInactivesSheet(INACTIVES_SHEET_URL),
       ]);
-      set(migrants);
+      setMigrantData(migrants);
       setInactiveData(inactives);
       setMigrantCount(migrants.length);
       setMigrantStatus('done');
@@ -345,7 +345,7 @@ useEffect(() => {
 
       // Merge
       setUploadProgress('Merging player data...');
-      const merged = mergePlayers(snapshot, kingdom, , preMigrationSet, inactiveData);
+      const merged = mergePlayers(snapshot, kingdom, migrantData, preMigrationSet, inactiveData);const merged = mergePlayers(snapshot, kingdom, migrantData, preMigrationSet, inactiveData);
 
       // Post-process: roster members are ALWAYS original (roster is curated by leadership)
       // Checks both governor_id and name to cover roster members without governor_id set.
@@ -379,7 +379,7 @@ useEffect(() => {
       const scanId = await uploadScan(label, merged, {
         snapshot: snapshot.length,
         kingdom: kingdom.length,
-        migrant: .length,
+        migrant: migrantData.length,
         preMigration: preMigrationSet.size,
       });
 
@@ -408,7 +408,7 @@ useEffect(() => {
         setSnapshotFile(null);
         setKingdomFile(null);
         setPreMigrationFile(null);
-        set([]);
+        setMigrantData([]);
         setMigrantCount(0);
         setMigrantStatus('idle');
         setUploadLabel('');
