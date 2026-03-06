@@ -356,7 +356,7 @@ for (const migrant of migrantData) {
       name: migrant.name || 'Unknown',
       power: 0,
       killPoints: 0,
-      alliance: null,
+      currentAlliance: null,
       x: null,
       y: null,
       startingKd: null,
