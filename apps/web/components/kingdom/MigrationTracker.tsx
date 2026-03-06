@@ -346,7 +346,29 @@ useEffect(() => {
       // Merge
 setUploadProgress('Merging player data...');
 const merged = mergePlayers(snapshot, kingdom, migrantData, preMigrationSet, inactiveData);
+// Add migrants that are not present in the scan
+for (const migrant of migrantData) {
+  const exists = merged.some(p => p.governorId === migrant.governorId);
 
+  if (!exists) {
+    merged.push({
+      governorId: migrant.governorId,
+      name: migrant.name || 'Unknown',
+      power: 0,
+      killPoints: 0,
+      alliance: null,
+      x: null,
+      y: null,
+      startingKd: null,
+      migrantGroup: migrant.group || null,
+      migrantRecruiter: migrant.recruiter || null,
+      migrationStatus: 'ACCEPTED',
+      existedPreMigration: false,
+      isMigrant: true,
+      migrantAccepted: true,
+    });
+  }
+}
 // Post-process: roster members are ALWAYS original
       // Checks both governor_id and name to cover roster members without governor_id set.
       for (const player of merged) {
