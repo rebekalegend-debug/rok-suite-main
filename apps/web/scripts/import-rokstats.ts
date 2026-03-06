@@ -184,7 +184,7 @@ async function importRokstats(csvPath: string, filterKingdom?: string) {
         trades: row.trades,
         is_active: true,
       })),
-      { onConflict: 'name' }
+      { onConflict: 'governor_id' }
     )
     .select();
 
