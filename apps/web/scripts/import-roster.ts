@@ -154,22 +154,34 @@ async function importRoster(csvPath: string) {
 
   console.log(`Parsed ${rows.length} roster entries`);
 
-  // Upsert rows (update if name exists, insert if new)
+  // Remove duplicate governor_ids (last occurrence wins)
+  const uniqueRows = Object.values(
+    rows.reduce((acc, row) => {
+      acc[row.governor_id] = row;
+      return acc;
+    }, {} as Record<number, typeof rows[number]>)
+  );
+
+  console.log(`After dedupe: ${uniqueRows.length} unique governors`);
+
+  // Upsert rows
   const { data, error } = await supabase
     .from('alliance_roster')
-    .upsert(rows.map((row) => ({
-  governor_id: row.governor_id,
-      name: row.name,
-  power: row.power,
-  kills: row.kills || 0,
-  alliance: row.alliance || null,
-  deads: row.deads || 0,
-  tier: row.tier || null,
-  role: row.role || null,
-  notes: row.notes || null,
-  is_active: true,
-})),
-{ onConflict: 'governor_id' })
+    .upsert(
+      uniqueRows.map((row) => ({
+        governor_id: row.governor_id,
+        name: row.name,
+        power: row.power,
+        kills: row.kills || 0,
+        alliance: row.alliance || null,
+        deads: row.deads || 0,
+        tier: row.tier || null,
+        role: row.role || null,
+        notes: row.notes || null,
+        is_active: true,
+      })),
+      { onConflict: 'governor_id' }
+    )
     .select();
 
   if (error) {
@@ -180,7 +192,8 @@ async function importRoster(csvPath: string) {
   console.log(`Successfully imported/updated ${data?.length || 0} roster entries`);
 
   // Show summary by power
-  const sorted = rows.sort((a, b) => b.power - a.power);
+  const sorted = uniqueRows.sort((a, b) => b.power - a.power);
+
   console.log('\nTop 10 by power:');
   sorted.slice(0, 10).forEach((row, i) => {
     const powerM = (row.power / 1000000).toFixed(1);
