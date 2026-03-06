@@ -154,35 +154,40 @@ async function importRoster(csvPath: string) {
 
   console.log(`Parsed ${rows.length} roster entries`);
 
+  // remove invalid IDs
+  const validRows = rows.filter(r => r.governor_id !== null && r.governor_id !== undefined);
 
-// remove invalid IDs
-const validRows = rows.filter(r => r.governor_id != null);
+  // normalize IDs to numbers first
+  const normalizedRows = validRows.map(r => ({
+    ...r,
+    governor_id: Number(r.governor_id)
+  }));
 
-// dedupe
-const uniqueRows = [...new Map(
-  validRows.map(r => [Number(r.governor_id), r])
-).values()];
+  // dedupe by governor_id
+  const uniqueRows = [...new Map(
+    normalizedRows.map(r => [r.governor_id, r])
+  ).values()];
 
-console.log(`After dedupe: ${uniqueRows.length} unique governors`);
+  console.log(`After dedupe: ${uniqueRows.length} unique governors`);
 
-const { data, error } = await supabase
-  .from('alliance_roster')
-  .upsert(
-    uniqueRows.map((row) => ({
-      governor_id: Number(row.governor_id),
-      name: row.name,
-      power: row.power,
-      kills: row.kills || 0,
-      alliance: row.alliance || null,
-      deads: row.deads || 0,
-      tier: row.tier || null,
-      role: row.role || null,
-      notes: row.notes || null,
-      is_active: true,
-    })),
-    { onConflict: ['governor_id'] }
-  )
-  .select();
+  const { data, error } = await supabase
+    .from('alliance_roster')
+    .upsert(
+      uniqueRows.map((row) => ({
+        governor_id: row.governor_id,
+        name: row.name,
+        power: row.power,
+        kills: row.kills ?? 0,
+        alliance: row.alliance ?? null,
+        deads: row.deads ?? 0,
+        tier: row.tier ?? null,
+        role: row.role ?? null,
+        notes: row.notes ?? null,
+        is_active: true,
+      })),
+      { onConflict: 'governor_id' }
+    )
+    .select();
 
   if (error) {
     console.error('Error importing roster:', error);
