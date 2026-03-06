@@ -1678,7 +1678,8 @@ export default function RosterPage() {
                                         if (roster.length > 0) {
                                             try {
                                                 const snapshotData = roster.map(m => ({
-                                                    name: m.name,
+                                                   governor_id: m.governor_id ?? 0,
+  name: m.name,
                                                     power: m.power,
                                                     kills: m.kills || 0,
                                                     t4_kills: m.t4_kills || 0,
