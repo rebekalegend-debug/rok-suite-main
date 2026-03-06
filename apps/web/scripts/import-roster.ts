@@ -158,36 +158,35 @@ async function importRoster(csvPath: string) {
   const validRows = rows.filter(r => r.governor_id !== null && r.governor_id !== undefined);
 
   // normalize IDs to numbers first
-  const normalizedRows = validRows.map(r => ({
+const normalizedRows = validRows
+  .map(r => ({
     ...r,
     governor_id: Number(r.governor_id)
-  }));
+  }))
+  .filter(r => Number.isFinite(r.governor_id));
 
-  // dedupe by governor_id
-  const uniqueRows = [...new Map(
-    normalizedRows.map(r => [r.governor_id, r])
-  ).values()];
+const uniqueRows = [...new Map(
+  normalizedRows.map(r => [r.governor_id, r])
+).values()];
 
-  console.log(`After dedupe: ${uniqueRows.length} unique governors`);
-
-  const { data, error } = await supabase
-    .from('alliance_roster')
-    .upsert(
-      uniqueRows.map((row) => ({
-        governor_id: row.governor_id,
-        name: row.name,
-        power: row.power,
-        kills: row.kills ?? 0,
-        alliance: row.alliance ?? null,
-        deads: row.deads ?? 0,
-        tier: row.tier ?? null,
-        role: row.role ?? null,
-        notes: row.notes ?? null,
-        is_active: true,
-      })),
-      { onConflict: 'alliance_roster_governor_id_unique' }
-    )
-    .select();
+const { data, error } = await supabase
+  .from('alliance_roster')
+  .upsert(
+    uniqueRows.map((row) => ({
+      governor_id: row.governor_id,
+      name: row.name,
+      power: row.power,
+      kills: row.kills ?? 0,
+      alliance: row.alliance ?? null,
+      deads: row.deads ?? 0,
+      tier: row.tier ?? null,
+      role: row.role ?? null,
+      notes: row.notes ?? null,
+      is_active: true,
+    })),
+    { onConflict: 'governor_id' }
+  )
+  .select();
 
   if (error) {
     console.error('Error importing roster:', error);
