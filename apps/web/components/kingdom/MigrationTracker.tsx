@@ -968,23 +968,7 @@ const merged = mergePlayers(snapshot, kingdom, migrantData, preMigrationSet, ina
           </div>
         )}
 {/* Google Sheet Table */}
-{sheetRows.length > 0 && players.length === 0 && (
-  <div className="rounded-xl border border-[var(--border)] overflow-x-auto mb-6">
-    <table className="w-full text-sm">
-      <tbody>
-        {sheetRows.map((row, i) => (
-          <tr key={i} className="border-b border-[var(--border)]">
-            {row.map((cell, j) => (
-              <td key={j} className="px-3 py-2">
-                {cell}
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-)}
+
         {/* Player Table (desktop) / Cards (mobile) */}
         {players.length > 0 ? (
           <>
