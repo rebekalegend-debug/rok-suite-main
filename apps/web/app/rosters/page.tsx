@@ -759,7 +759,7 @@ export default function RosterPage() {
 
             // Also update today's snapshot for this member
            await updateMemberSnapshot({
-  governor_id: member.governor_id,
+governor_id: member.governor_id ?? 0,
   name: member.name,
   power: powerRaw,
   kills: killsRaw,
