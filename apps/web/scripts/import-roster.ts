@@ -185,7 +185,7 @@ async function importRoster(csvPath: string) {
         notes: row.notes ?? null,
         is_active: true,
       })),
-      { onConflict: 'governor_id' }
+      { onConflict: 'alliance_roster_governor_id_unique' }
     )
     .select();
 
