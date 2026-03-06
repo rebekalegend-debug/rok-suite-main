@@ -169,7 +169,7 @@ async function importRoster(csvPath: string) {
   notes: row.notes || null,
   is_active: true,
 })),
-{ onConflict: 'name' })
+{ onConflict: 'governor_id' })
     .select();
 
   if (error) {
