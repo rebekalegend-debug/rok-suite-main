@@ -51,6 +51,7 @@ export interface TopGainer {
  * Uses upsert to create or update today's snapshot entry for this member
  */
 export async function updateMemberSnapshot(member: {
+  governor_id: member.governor_id;
   name: string;
   power: number;
   kills: number;
@@ -93,13 +94,14 @@ export async function updateMemberSnapshot(member: {
  * Create a snapshot of the current roster for today
  * Uses upsert to allow updating today's snapshot if called multiple times
  */
-export async function createSnapshot(roster: Array<{ name: string; power: number; kills: number; t4_kills?: number; t5_kills?: number; honor_points?: number; gathered?: number; alliance_helps?: number; role: string | null; is_active?: boolean }>) {
+export async function createSnapshot(roster: Array<{ governor_id: number; name: string; power: number; kills: number; ... }>) {
   const supabase = createClient();
   const now = new Date().toISOString();
 
-  const snapshotRows = roster.map(member => ({
-    snapshot_date: now,
-    member_name: member.name,
+const snapshotRows = roster.map(member => ({
+  snapshot_date: now,
+  governor_id: member.governor_id,
+  member_name: member.name,
     power: member.power,
     kills: member.kills || 0,
     t4_kills: member.t4_kills || 0,
@@ -487,7 +489,7 @@ export async function getTopGainers(startDate: string, endDate: string, limit = 
   if (!startData || !endData) return [];
 
   // Use canonical names for matching (handles name changes via alternate_names)
-  const startMap = new Map(startData.map(d => [getKey(d.member_name), d]));
+  const startMap = new Map(startData.map(d => [d.governor_id, d]));
   const gainers: TopGainer[] = [];
 
   for (const end of endData) {
