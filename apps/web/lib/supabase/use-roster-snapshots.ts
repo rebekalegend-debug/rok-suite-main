@@ -1594,6 +1594,14 @@ export const formatPower = (power: number): string => {
 
 // Utility to format date for display
 export const formatDate = (dateStr: string): string => {
-  const date = new Date(dateStr + 'T00:00:00');
+ export const formatDate = (dateStr: string): string => {
+  const date = new Date(dateStr);
+  return date.toLocaleString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+};
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 };
