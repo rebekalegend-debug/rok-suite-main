@@ -84,6 +84,7 @@ export default function MigrationTracker() {
   const [migrantStatus, setMigrantStatus] = useState<'idle' | 'fetching' | 'done' | 'error'>('idle');
   const [migrantCount, setMigrantCount] = useState(0);
   const [migrantData, setMigrantData] = useState<MigrantRow[]>([]);
+  const [sheetRows, setSheetRows] = useState<string[][]>([]);
   const [inactiveData, setInactiveData] = useState<InactiveRow[]>([]);
   const [uploadLabel, setUploadLabel] = useState('');
   const [isUploading, setIsUploading] = useState(false);
@@ -114,7 +115,28 @@ export default function MigrationTracker() {
     getPreMigrationCount().then(setStoredPreMigCount);
     fetchPlayerOverrides().then(setOverrides);
   }, []);
+useEffect(() => {
+  async function loadSheet() {
+    try {
+      const res = await fetch(
+        "https://docs.google.com/spreadsheets/d/1ZUf-qCCvZ5N6qU_hCNHXQ1z-6qxhn36PucYOxbaXIv0/export?format=csv&gid=845020290"
+      );
 
+      const text = await res.text();
+
+      const rows = text
+        .trim()
+        .split("\n")
+        .map(r => r.replace(/\r/g, "").split(","));
+
+      setSheetRows(rows);
+    } catch (err) {
+      console.error("Sheet load error:", err);
+    }
+  }
+
+  loadSheet();
+}, []);
   // Auto-refresh migration statuses from Google Sheets when scan loads
   const hasRefreshedRef = useRef(false);
   useEffect(() => {
@@ -247,7 +269,7 @@ export default function MigrationTracker() {
         fetchMigrantSheet(MIGRANT_SHEET_URL),
         fetchInactivesSheet(INACTIVES_SHEET_URL),
       ]);
-      setMigrantData(migrants);
+      set(migrants);
       setInactiveData(inactives);
       setMigrantCount(migrants.length);
       setMigrantStatus('done');
@@ -323,7 +345,7 @@ export default function MigrationTracker() {
 
       // Merge
       setUploadProgress('Merging player data...');
-      const merged = mergePlayers(snapshot, kingdom, migrantData, preMigrationSet, inactiveData);
+      const merged = mergePlayers(snapshot, kingdom, , preMigrationSet, inactiveData);
 
       // Post-process: roster members are ALWAYS original (roster is curated by leadership)
       // Checks both governor_id and name to cover roster members without governor_id set.
@@ -357,7 +379,7 @@ export default function MigrationTracker() {
       const scanId = await uploadScan(label, merged, {
         snapshot: snapshot.length,
         kingdom: kingdom.length,
-        migrant: migrantData.length,
+        migrant: .length,
         preMigration: preMigrationSet.size,
       });
 
@@ -386,7 +408,7 @@ export default function MigrationTracker() {
         setSnapshotFile(null);
         setKingdomFile(null);
         setPreMigrationFile(null);
-        setMigrantData([]);
+        set([]);
         setMigrantCount(0);
         setMigrantStatus('idle');
         setUploadLabel('');
@@ -945,7 +967,24 @@ export default function MigrationTracker() {
             </div>
           </div>
         )}
-
+{/* Google Sheet Table */}
+{sheetRows.length > 0 && players.length === 0 && (
+  <div className="rounded-xl border border-[var(--border)] overflow-x-auto mb-6">
+    <table className="w-full text-sm">
+      <tbody>
+        {sheetRows.map((row, i) => (
+          <tr key={i} className="border-b border-[var(--border)]">
+            {row.map((cell, j) => (
+              <td key={j} className="px-3 py-2">
+                {cell}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}
         {/* Player Table (desktop) / Cards (mobile) */}
         {players.length > 0 ? (
           <>
