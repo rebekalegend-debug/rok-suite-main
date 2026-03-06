@@ -758,16 +758,19 @@ export default function RosterPage() {
             if (error) throw error;
 
             // Also update today's snapshot for this member
-            await updateMemberSnapshot({
-                name: member.name,
-                power: powerRaw,
-                kills: killsRaw,
-                t4_kills: t4KillsRaw,
-                t5_kills: t5KillsRaw,
-                honor_points: honorRaw,
-                role: member.role,
-                is_active: member.is_active,
-            });
+           await updateMemberSnapshot({
+  governor_id: member.governor_id,
+  name: member.name,
+  power: powerRaw,
+  kills: killsRaw,
+  t4_kills: t4Raw,
+  t5_kills: t5Raw,
+  honor_points: honorRaw,
+  gathered: member.gathered ?? 0,
+  alliance_helps: member.alliance_helps ?? 0,
+  role: member.role,
+  is_active: true,
+});
 
             setRoster(roster.map(m =>
                 m.id === editingId
