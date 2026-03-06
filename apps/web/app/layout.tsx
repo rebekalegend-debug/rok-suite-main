@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "KD 3237 Board",
+  title: "Kingdom 3237",
   description: "Rise of Kingdoms Kingdom",
   icons: {
     icon: "/favicon.svg",
