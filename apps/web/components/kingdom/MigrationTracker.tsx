@@ -344,10 +344,10 @@ useEffect(() => {
       for (const id of roster.ids) preMigrationSet.add(id);
 
       // Merge
-      setUploadProgress('Merging player data...');
-      const merged = mergePlayers(snapshot, kingdom, migrantData, preMigrationSet, inactiveData);const merged = mergePlayers(snapshot, kingdom, migrantData, preMigrationSet, inactiveData);
+setUploadProgress('Merging player data...');
+const merged = mergePlayers(snapshot, kingdom, migrantData, preMigrationSet, inactiveData);
 
-      // Post-process: roster members are ALWAYS original (roster is curated by leadership)
+// Post-process: roster members are ALWAYS original
       // Checks both governor_id and name to cover roster members without governor_id set.
       for (const player of merged) {
         if (player.migrationStatus === 'ORIGINAL') continue;
