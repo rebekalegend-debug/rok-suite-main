@@ -158,35 +158,35 @@ async function importRokstats(csvPath: string, filterKingdom?: string) {
     rows = rows.filter(row => row.kingdom === filterKingdom);
     console.log(`Filtered to ${rows.length} entries for kingdom ${filterKingdom}`);
   }
-
+rows = rows.filter(r => r.governor_id && Number.isFinite(r.governor_id));
   if (rows.length === 0) {
     console.log('No rows to import after filtering');
     return;
   }
 
   // Upsert rows (update if name exists, insert if new)
-  const { data, error } = await supabase
-    .from('alliance_roster')
-    .upsert(
-      rows.map((row) => ({
-        name: row.name,
-        governor_id: row.governor_id || null,
-        kingdom: row.kingdom || null,
-        camp: row.camp || null,
-        power: row.power,
-        kills: row.kills,
-        t4_kills: row.t4_kills,
-        t5_kills: row.t5_kills,
-        deads: row.deads,
-        acclaim: row.acclaim,
-        troops_healed: row.troops_healed,
-        kvk_points: row.kvk_points,
-        trades: row.trades,
-        is_active: true,
-      })),
-      { onConflict: 'governor_id' }
-    )
-    .select();
+ const { data, error } = await supabase
+  .from('alliance_roster')
+  .upsert(
+    rows.map((row) => ({
+      governor_id: row.governor_id,
+      name: row.name,
+      kingdom: row.kingdom || null,
+      camp: row.camp || null,
+      power: row.power,
+      kills: row.kills,
+      t4_kills: row.t4_kills,
+      t5_kills: row.t5_kills,
+      deads: row.deads,
+      acclaim: row.acclaim,
+      troops_healed: row.troops_healed,
+      kvk_points: row.kvk_points,
+      trades: row.trades,
+      is_active: true,
+    })),
+    { onConflict: 'governor_id' }
+  )
+  .select();
 
   if (error) {
     console.error('Error importing roster:', error);
