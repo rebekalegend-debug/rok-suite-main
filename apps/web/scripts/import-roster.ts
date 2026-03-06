@@ -154,10 +154,6 @@ async function importRoster(csvPath: string) {
 
   console.log(`Parsed ${rows.length} roster entries`);
 
-const content = fs.readFileSync(csvPath, 'utf-8');
-const rows = parseCSV(content);
-
-console.log(`Parsed ${rows.length} roster entries`);
 
 // remove invalid IDs
 const validRows = rows.filter(r => r.governor_id != null);
