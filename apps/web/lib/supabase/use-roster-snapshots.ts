@@ -50,11 +50,11 @@ export interface TopGainer {
  * Update a single member's snapshot for today
  * Uses upsert to create or update today's snapshot entry for this member
  */
-export async function updateMemberSnapshot(member: {
-  governor_id: member.governor_id;
-  name: string;
-  power: number;
-  kills: number;
+await updateMemberSnapshot({
+  governor_id: member.governor_id,
+  name: member.name,
+  power: powerRaw,
+  kills: killsRaw,
   t4_kills?: number;
   t5_kills?: number;
   honor_points?: number;
@@ -69,8 +69,9 @@ export async function updateMemberSnapshot(member: {
   const { error } = await supabase
     .from('roster_snapshots')
     .upsert({
-      snapshot_date: now,
-      member_name: member.name,
+  snapshot_date: now,
+  governor_id: member.governor_id,
+  member_name: member.name,
       power: member.power,
       kills: member.kills || 0,
       t4_kills: member.t4_kills || 0,
@@ -489,14 +490,14 @@ export async function getTopGainers(startDate: string, endDate: string, limit = 
   // Get snapshots for start date
   const { data: startData } = await supabase
     .from('roster_snapshots')
-    .select('member_name, power, kills, honor_points')
+    .select('governor_id, member_name, power, kills, honor_points')
     .eq('snapshot_date', startDate)
     .eq('is_active', true);
 
   // Get snapshots for end date
   const { data: endData } = await supabase
     .from('roster_snapshots')
-    .select('member_name, power, kills, honor_points')
+    .select('governor_id, member_name, power, kills, honor_points')
     .eq('snapshot_date', endDate)
     .eq('is_active', true);
 
