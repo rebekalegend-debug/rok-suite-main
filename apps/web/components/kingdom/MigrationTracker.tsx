@@ -84,7 +84,6 @@ export default function MigrationTracker() {
   const [migrantStatus, setMigrantStatus] = useState<'idle' | 'fetching' | 'done' | 'error'>('idle');
   const [migrantCount, setMigrantCount] = useState(0);
   const [migrantData, setMigrantData] = useState<MigrantRow[]>([]);
-  const [sheetRows, setSheetRows] = useState<string[][]>([]);
   const [inactiveData, setInactiveData] = useState<InactiveRow[]>([]);
   const [uploadLabel, setUploadLabel] = useState('');
   const [isUploading, setIsUploading] = useState(false);
@@ -115,28 +114,7 @@ export default function MigrationTracker() {
     getPreMigrationCount().then(setStoredPreMigCount);
     fetchPlayerOverrides().then(setOverrides);
   }, []);
-useEffect(() => {
-  async function loadSheet() {
-    try {
-      const res = await fetch(
-        "https://docs.google.com/spreadsheets/d/1ZUf-qCCvZ5N6qU_hCNHXQ1z-6qxhn36PucYOxbaXIv0/export?format=csv&gid=845020290"
-      );
 
-      const text = await res.text();
-
-      const rows = text
-        .trim()
-        .split("\n")
-        .map(r => r.replace(/\r/g, "").split(","));
-
-      setSheetRows(rows);
-    } catch (err) {
-      console.error("Sheet load error:", err);
-    }
-  }
-
-  loadSheet();
-}, []);
   // Auto-refresh migration statuses from Google Sheets when scan loads
   const hasRefreshedRef = useRef(false);
   useEffect(() => {
@@ -344,32 +322,10 @@ useEffect(() => {
       for (const id of roster.ids) preMigrationSet.add(id);
 
       // Merge
-setUploadProgress('Merging player data...');
-const merged = mergePlayers(snapshot, kingdom, migrantData, preMigrationSet, inactiveData);
-// Add migrants that are not present in the scan
-for (const migrant of migrantData) {
-  const exists = merged.some(p => p.governorId === migrant.governorId);
+      setUploadProgress('Merging player data...');
+      const merged = mergePlayers(snapshot, kingdom, migrantData, preMigrationSet, inactiveData);
 
-  if (!exists) {
-    merged.push({
-      governorId: migrant.governorId,
-      name: migrant.name || 'Unknown',
-      power: 0,
-      killPoints: 0,
-      currentAlliance: '',
-      x: null,
-      y: null,
-      startingKd: null,
-      migrantGroup: migrant.group || null,
-      migrantRecruiter: migrant.recruiter || null,
-      migrationStatus: 'ACCEPTED',
-      existedPreMigration: false,
-      isMigrant: true,
-      migrantAccepted: true,
-    });
-  }
-}
-// Post-process: roster members are ALWAYS original
+      // Post-process: roster members are ALWAYS original (roster is curated by leadership)
       // Checks both governor_id and name to cover roster members without governor_id set.
       for (const player of merged) {
         if (player.migrationStatus === 'ORIGINAL') continue;
@@ -989,10 +945,9 @@ for (const migrant of migrantData) {
             </div>
           </div>
         )}
-{/* Google Sheet Table */}
 
         {/* Player Table (desktop) / Cards (mobile) */}
-        {filteredPlayers.length > 0 ? (
+        {players.length > 0 ? (
           <>
             {/* Mobile card view */}
             <div className="md:hidden space-y-2">
@@ -1027,10 +982,11 @@ for (const migrant of migrantData) {
             </div>
           </>
         ) : !scan ? (
-            <div className="text-center py-20 text-[var(--text-muted)]">
-    <ShieldAlert size={40} className="mx-auto mb-4 opacity-40" />
-    <p className="text-lg font-medium">No players match the current filters</p>
-  </div>
+          <div className="text-center py-20 text-[var(--text-muted)]">
+            <ShieldAlert size={40} className="mx-auto mb-4 opacity-40" />
+            <p className="text-lg font-medium">No scan data available</p>
+            <p className="text-sm mt-1">Ask an admin to upload scan data to get started.</p>
+          </div>
         ) : null}
       </div>
     </div>
