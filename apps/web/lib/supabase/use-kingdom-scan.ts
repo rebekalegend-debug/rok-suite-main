@@ -287,15 +287,35 @@ export async function getPreMigrationCount(): Promise<number> {
  * Does NOT update kills/KP (kingdom exports give cumulative KP between dates).
  * Adds new kingdom alliance members. Creates a roster snapshot afterward.
  */
-export async function updateRosterFromScan(
-  mergedPlayers: MergedPlayer[],
-): Promise<{ updated: number; added: number } | null> {
-  // Filter to kingdom alliance members and map to sorter tags
-  const kingdomPlayers = mergedPlayers
-    .filter(p => p.currentAlliance && isKingdomAlliance(p.currentAlliance))
-    .map(p => ({ ...p, sorterAlliance: toSorterTag(p.currentAlliance) }));
+export async function updateRosterFromScan(players: MergedPlayer[]) {
+  const supabase = createClient()
 
-  if (kingdomPlayers.length === 0) return { updated: 0, added: 0 };
+  if (!players.length) return { updated: 0, added: 0 }
+
+  const rows = players.map(p => ({
+    governor_id: p.governorId,
+    name: p.name,
+    power: p.power,
+    kill_points: p.killPoints,
+    alliance: p.currentAlliance
+  }))
+
+  const { error } = await supabase
+    .from("players")   // <-- your table
+    .upsert(rows, {
+      onConflict: "governor_id"
+    })
+
+  if (error) {
+    console.error(error)
+    return null
+  }
+
+  return {
+    updated: rows.length,
+    added: rows.length
+  }
+}
 
   // Fetch existing active roster in batches
   type RosterRow = { id: string; name: string; governor_id: number | null; alternate_names: string[] | null };
