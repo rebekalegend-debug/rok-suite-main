@@ -223,15 +223,16 @@ async function importRoster(csvPath: string) {
   }
 
   console.log(`Successfully imported ${data?.length || 0} roster entries`);
-}
-  // Show summary by power
+
+// Show summary by power
 const sorted = processedRows.sort((a, b) => b.power - a.power);
 
-  console.log('\nTop 10 by power:');
-  sorted.slice(0, 10).forEach((row, i) => {
-    const powerM = (row.power / 1000000).toFixed(1);
-    console.log(`  ${i + 1}. ${row.name}: ${powerM}M`);
-  });
+console.log('\nTop 10 by power:');
+sorted.slice(0, 10).forEach((row, i) => {
+  const powerM = (row.power / 1000000).toFixed(1);
+  console.log(`  ${i + 1}. ${row.name}: ${powerM}M`);
+});
+
 }
 
 // Main
