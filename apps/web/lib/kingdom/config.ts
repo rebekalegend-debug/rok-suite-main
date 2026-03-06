@@ -11,7 +11,7 @@ export const DEFAULT_ALLIANCE_CONFIGS: AllianceConfig[] = [
 ];
 
 export const MIGRANT_SHEET_URL =
-  'https://docs.google.com/spreadsheets/d/1VoYEGLmM4H1HQ-uHSwgI_8SrQM4wryGH/export?format=csv&gid=443630646';
+ 'https://docs.google.com/spreadsheets/d/1ZUf-qCCvZ5N6qU_hCNHXQ1z-6qxhn36PucYOxbaXIv0/export?format=csv&gid=845020290';
 
 export const INACTIVES_SHEET_URL =
   'https://docs.google.com/spreadsheets/d/1VoYEGLmM4H1HQ-uHSwgI_8SrQM4wryGH/export?format=csv&gid=4777644';
