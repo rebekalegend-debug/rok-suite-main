@@ -160,7 +160,8 @@ const validRows = rows.filter(r => r.governor_id != null);
 // deduplicate by governor_id
 const uniqueRows = Object.values(
   validRows.reduce((acc, row) => {
-    acc[row.governor_id] = row;
+    const id = Number(row.governor_id);
+    acc[id] = row;
     return acc;
   }, {} as Record<number, typeof validRows[number]>)
 );
