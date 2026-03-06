@@ -373,13 +373,7 @@ export default function MigrationTracker() {
         await savePreMigrationIds(idsToSave);
         setStoredPreMigCount(idsToSave.size);
 
-        // Update alliance roster with power data (not KP — kingdom exports give cumulative KP)
-        setUploadProgress('Updating roster with latest power data...');
-        const rosterResult = await updateRosterFromScan(merged);
-        if (rosterResult) {
-          console.log(`Roster updated: ${rosterResult.updated} updated, ${rosterResult.added} added`);
-        }
-
+       
         setUploadProgress('Done! Refreshing data...');
         await refetch();
         // Reset upload form
