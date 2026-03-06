@@ -348,24 +348,24 @@ setUploadProgress('Merging player data...');
 const merged = mergePlayers(snapshot, kingdom, migrantData, preMigrationSet, inactiveData);
 // Add migrants that are not present in the scan
 for (const migrant of migrantData) {
-  const exists = merged.some(p => p.governor_id === migrant.governorId);
+  const exists = merged.some(p => p.governorId === migrant.governorId);
 
   if (!exists) {
     merged.push({
-      governor_id: migrant.governorId,
+      governorId: migrant.governorId,
       name: migrant.name || 'Unknown',
       power: 0,
-      kill_points: 0,
-      current_alliance: '',
+      killPoints: 0,
+      currentAlliance: '',
       x: null,
       y: null,
-      starting_kd: null,
-      migrant_group: migrant.group || null,
-      migrant_recruiter: migrant.recruiter || null,
-      migration_status: 'ACCEPTED',
-      existed_pre_migration: false,
-      is_migrant: true,
-      migrant_accepted: true,
+      startingKd: null,
+      migrantGroup: migrant.group || null,
+      migrantRecruiter: migrant.recruiter || null,
+      migrationStatus: 'ACCEPTED',
+      existedPreMigration: false,
+      isMigrant: true,
+      migrantAccepted: true,
     });
   }
 }
