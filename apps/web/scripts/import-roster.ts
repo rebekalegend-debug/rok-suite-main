@@ -154,15 +154,18 @@ async function importRoster(csvPath: string) {
 
   console.log(`Parsed ${rows.length} roster entries`);
 
-  // Remove duplicate governor_ids (last occurrence wins)
-  const uniqueRows = Object.values(
-    rows.reduce((acc, row) => {
-      acc[row.governor_id] = row;
-      return acc;
-    }, {} as Record<number, typeof rows[number]>)
-  );
+// remove rows without governor_id
+const validRows = rows.filter(r => r.governor_id != null);
 
-  console.log(`After dedupe: ${uniqueRows.length} unique governors`);
+// deduplicate by governor_id
+const uniqueRows = Object.values(
+  validRows.reduce((acc, row) => {
+    acc[row.governor_id] = row;
+    return acc;
+  }, {} as Record<number, typeof validRows[number]>)
+);
+
+console.log(`After dedupe: ${uniqueRows.length} unique governors`);
 
   // Upsert rows
   const { data, error } = await supabase
