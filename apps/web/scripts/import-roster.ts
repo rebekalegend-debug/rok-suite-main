@@ -176,7 +176,7 @@ const uniqueRows = [...new Map(
   normalizedRows.map(r => [r.governor_id, r])
 ).values()];
 
-const processedRows = uniqueRows.map(row => {
+const processedRows = uniqueRows.map((row) => {
   const old = existingMap.get(row.governor_id);
 
   let previous_names = old?.previous_names || [];
@@ -201,6 +201,15 @@ const processedRows = uniqueRows.map(row => {
   };
 });
 
+const { data, error } = await supabase
+  .from('alliance_roster')
+  .upsert(processedRows, { onConflict: 'governor_id' })
+  .select();
+
+if (error) {
+  console.error('Error importing roster:', error);
+  process.exit(1);
+}
   console.log(`Successfully imported/updated ${data?.length || 0} roster entries`);
 
   // Show summary by power
