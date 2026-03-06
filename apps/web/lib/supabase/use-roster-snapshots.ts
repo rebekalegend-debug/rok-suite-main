@@ -68,7 +68,7 @@ export async function updateMemberSnapshot(member: {
   const { error } = await supabase
     .from('roster_snapshots')
     .upsert({
-      snapshot_date: today,
+      snapshot_date: now,
       member_name: member.name,
       power: member.power,
       kills: member.kills || 0,
@@ -86,7 +86,7 @@ export async function updateMemberSnapshot(member: {
     throw error;
   }
 
-  return { date: today, member: member.name };
+  return { date: now, member: member.name };
 }
 
 /**
@@ -1603,5 +1603,4 @@ export const formatDate = (dateStr: string): string => {
     minute: '2-digit',
   });
 };
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-};
+
