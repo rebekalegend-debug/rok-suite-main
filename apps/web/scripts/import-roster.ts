@@ -153,109 +153,77 @@ async function importRoster(csvPath: string) {
   const rows = parseCSV(content);
 
   console.log(`Parsed ${rows.length} roster entries`);
-// get existing roster from database
-const { data: existingRoster } = await supabase
-  .from('alliance_roster')
-  .select('governor_id,name,previous_names');
 
-const existingMap = new Map(
-  (existingRoster || []).map(r => [r.governor_id, r])
-);
+  // get existing roster
+  const { data: existingRoster } = await supabase
+    .from('alliance_roster')
+    .select('governor_id,name,previous_names');
+
+  const existingMap = new Map(
+    (existingRoster || []).map(r => [r.governor_id, r])
+  );
+
   // remove invalid IDs
-  const validRows = rows.filter(r => r.governor_id !== null && r.governor_id !== undefined);
+  const validRows = rows.filter(
+    r => r.governor_id !== null && r.governor_id !== undefined
+  );
 
-  // normalize IDs to numbers first
-const normalizedRows = validRows
-  .map(r => ({
-    ...r,
-    governor_id: Number(r.governor_id)
-  }))
-  .filter(r => Number.isFinite(r.governor_id));
+  const normalizedRows = validRows
+    .map(r => ({
+      ...r,
+      governor_id: Number(r.governor_id)
+    }))
+    .filter(r => Number.isFinite(r.governor_id));
 
-const uniqueRows = [...new Map(
-  normalizedRows.map(r => [r.governor_id, r])
-).values()];
+  const uniqueRows = [...new Map(
+    normalizedRows.map(r => [r.governor_id, r])
+  ).values()];
 
-const processedRows = uniqueRows.map((row) => {
-  const old = existingMap.get(row.governor_id);
+  // detect renames
+  const processedRows = uniqueRows.map(row => {
+    const old = existingMap.get(row.governor_id);
 
-  let previous_names = old?.previous_names || [];
+    let previous_names = old?.previous_names || [];
 
-  if (old && old.name !== row.name) {
-    previous_names = [...new Set([...previous_names, old.name])];
-    console.log(`Rename detected: ${old.name} -> ${row.name}`);
+    if (old && old.name !== row.name) {
+      previous_names = [...new Set([...previous_names, old.name])];
+      console.log(`Rename detected: ${old.name} -> ${row.name}`);
+    }
+
+    return {
+      governor_id: row.governor_id,
+      name: row.name,
+      power: row.power,
+      kills: row.kills ?? 0,
+      alliance: row.alliance ?? null,
+      deads: row.deads ?? 0,
+      tier: row.tier ?? null,
+      role: row.role ?? null,
+      notes: row.notes ?? null,
+      is_active: true,
+      previous_names
+    };
+  });
+
+  // delete old roster
+  await supabase
+    .from('alliance_roster')
+    .delete()
+    .neq('governor_id', 0);
+
+  // insert new roster
+  const { data, error } = await supabase
+    .from('alliance_roster')
+    .insert(processedRows)
+    .select();
+
+  if (error) {
+    console.error('Error importing roster:', error);
+    process.exit(1);
   }
 
-  return {
-    governor_id: row.governor_id,
-    name: row.name,
-    power: row.power,
-    kills: row.kills ?? 0,
-    alliance: row.alliance ?? null,
-    deads: row.deads ?? 0,
-    tier: row.tier ?? null,
-    role: row.role ?? null,
-    notes: row.notes ?? null,
-    is_active: true,
-    previous_names
-  };
-});
-
-
-// fetch existing roster
-const { data: existingRoster } = await supabase
-  .from('alliance_roster')
-  .select('governor_id,name,previous_names');
-
-const existingMap = new Map(
-  (existingRoster || []).map(r => [r.governor_id, r])
-);
-
-// detect renames
-const processedRows = uniqueRows.map(row => {
-  const old = existingMap.get(row.governor_id);
-
-  let previous_names = old?.previous_names || [];
-
-  if (old && old.name !== row.name) {
-    previous_names = [...new Set([...previous_names, old.name])];
-    console.log(`Rename detected: ${old.name} -> ${row.name}`);
-  }
-
-  return {
-    governor_id: row.governor_id,
-    name: row.name,
-    power: row.power,
-    kills: row.kills ?? 0,
-    alliance: row.alliance ?? null,
-    deads: row.deads ?? 0,
-    tier: row.tier ?? null,
-    role: row.role ?? null,
-    notes: row.notes ?? null,
-    is_active: true,
-    previous_names
-  };
-});
-
-// delete old roster
-await supabase
-  .from('alliance_roster')
-  .delete()
-  .neq('governor_id', 0);
-
-// insert new roster
-const { data, error } = await supabase
-  .from('alliance_roster')
-  .insert(processedRows)
-  .select();
-
-if (error) {
-  console.error('Error importing roster:', error);
-  process.exit(1);
+  console.log(`Successfully imported ${data?.length || 0} roster entries`);
 }
-
-console.log(`Successfully imported ${data?.length || 0} roster entries`);
-
   // Show summary by power
   const sorted = uniqueRows.sort((a, b) => b.power - a.power);
 
