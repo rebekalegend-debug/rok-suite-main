@@ -180,7 +180,7 @@ const { data, error } = await supabase
       notes: row.notes || null,
       is_active: true,
     })),
-    { onConflict: 'governor_id' }
+    { onConflict: ['governor_id'] }
   )
   .select();
 
