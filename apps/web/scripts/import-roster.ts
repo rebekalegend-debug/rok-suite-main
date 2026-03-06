@@ -225,7 +225,7 @@ async function importRoster(csvPath: string) {
   console.log(`Successfully imported ${data?.length || 0} roster entries`);
 }
   // Show summary by power
-  const sorted = uniqueRows.sort((a, b) => b.power - a.power);
+const sorted = processedRows.sort((a, b) => b.power - a.power);
 
   console.log('\nTop 10 by power:');
   sorted.slice(0, 10).forEach((row, i) => {
