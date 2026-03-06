@@ -401,7 +401,7 @@ export async function updateRosterFromScan(
     const batch = insertOps.slice(i, i + 100);
     const { error } = await supabase
       .from('alliance_roster')
-      .upsert(batch, { onConflict: 'name' });
+   .upsert(batch, { onConflict: 'governor_id' });
     if (!error) added += batch.length;
   }
 
