@@ -201,16 +201,60 @@ const processedRows = uniqueRows.map((row) => {
   };
 });
 
+
+// fetch existing roster
+const { data: existingRoster } = await supabase
+  .from('alliance_roster')
+  .select('governor_id,name,previous_names');
+
+const existingMap = new Map(
+  (existingRoster || []).map(r => [r.governor_id, r])
+);
+
+// detect renames
+const processedRows = uniqueRows.map(row => {
+  const old = existingMap.get(row.governor_id);
+
+  let previous_names = old?.previous_names || [];
+
+  if (old && old.name !== row.name) {
+    previous_names = [...new Set([...previous_names, old.name])];
+    console.log(`Rename detected: ${old.name} -> ${row.name}`);
+  }
+
+  return {
+    governor_id: row.governor_id,
+    name: row.name,
+    power: row.power,
+    kills: row.kills ?? 0,
+    alliance: row.alliance ?? null,
+    deads: row.deads ?? 0,
+    tier: row.tier ?? null,
+    role: row.role ?? null,
+    notes: row.notes ?? null,
+    is_active: true,
+    previous_names
+  };
+});
+
+// delete old roster
+await supabase
+  .from('alliance_roster')
+  .delete()
+  .neq('governor_id', 0);
+
+// insert new roster
 const { data, error } = await supabase
   .from('alliance_roster')
-  .upsert(processedRows, { onConflict: 'governor_id' })
+  .insert(processedRows)
   .select();
 
 if (error) {
   console.error('Error importing roster:', error);
   process.exit(1);
 }
-  console.log(`Successfully imported/updated ${data?.length || 0} roster entries`);
+
+console.log(`Successfully imported ${data?.length || 0} roster entries`);
 
   // Show summary by power
   const sorted = uniqueRows.sort((a, b) => b.power - a.power);
