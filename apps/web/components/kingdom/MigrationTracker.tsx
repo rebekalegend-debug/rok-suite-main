@@ -970,7 +970,7 @@ const merged = mergePlayers(snapshot, kingdom, migrantData, preMigrationSet, ina
 {/* Google Sheet Table */}
 
         {/* Player Table (desktop) / Cards (mobile) */}
-        {players.length > 0 ? (
+        {filteredPlayers.length > 0 ? (
           <>
             {/* Mobile card view */}
             <div className="md:hidden space-y-2">
@@ -1005,11 +1005,10 @@ const merged = mergePlayers(snapshot, kingdom, migrantData, preMigrationSet, ina
             </div>
           </>
         ) : !scan ? (
-          <div className="text-center py-20 text-[var(--text-muted)]">
-            <ShieldAlert size={40} className="mx-auto mb-4 opacity-40" />
-            <p className="text-lg font-medium">No scan data available</p>
-            <p className="text-sm mt-1">Work in progress!.</p>
-          </div>
+            <div className="text-center py-20 text-[var(--text-muted)]">
+    <ShieldAlert size={40} className="mx-auto mb-4 opacity-40" />
+    <p className="text-lg font-medium">No players match the current filters</p>
+  </div>
         ) : null}
       </div>
     </div>
