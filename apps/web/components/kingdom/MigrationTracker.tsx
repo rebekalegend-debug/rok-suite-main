@@ -3,7 +3,7 @@ import { History } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Search, RefreshCw, Lock, ExternalLink, Crosshair, X, Info, ChevronDown, ChevronUp, Undo2, Target, Skull, LogOut } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
-import { fetchWantedSheet } from '@/lib/kingdom/parse';
+import { fetchMgeViolationsSheet } from '@/lib/kingdom/parse';
 import { MGE_VIOLATION_SHEET_URL, MGE_VIOLATION_SHEET_EDIT_URL } from '@/lib/kingdom/config';
 import { matchesSearch } from '@/lib/search';
 import type { WantedPlayer } from '@/lib/kingdom/types';
@@ -114,7 +114,7 @@ export default function WantedList() {
     setError(null);
     try {
       const [wantedPlayers, { data: statusRows }] = await Promise.all([
-        fetchWantedSheet(MGE_VIOLATION_SHEET_URL),
+        fetchMgeViolationsSheet(MGE_VIOLATION_SHEET_URL),
         supabase.from('wanted_status').select('*'),
       ]);
 
