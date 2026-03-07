@@ -465,8 +465,8 @@ const hasActiveFilters =
   <Crosshair className="w-6 h-6 text-red-400" />
 </div>
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-red-400">
-  violation Track
+            <h1 className="text-xl sm:text-2xl font-bold text-white-400">
+  Violation Track
 </h1>
             <p className="text-sm text-[var(--text-muted)]">
               {stats.total} players tracked{stats.hidden > 0 && ` · ${stats.hidden} hidden`}
