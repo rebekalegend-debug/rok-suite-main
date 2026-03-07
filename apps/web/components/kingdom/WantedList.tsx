@@ -268,9 +268,8 @@ export default function WantedList() {
     setSortRules(remaining.length > 0 ? remaining : DEFAULT_SORT_RULES);
   };
 
-  const resetFiltersAndSort = () => {
+const resetFiltersAndSort = () => {
   setSortRules(DEFAULT_SORT_RULES);
-  setReasonFilter(null);
   setHandledFilter('all');
   setSearch('');
 };
