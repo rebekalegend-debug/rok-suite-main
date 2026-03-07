@@ -231,20 +231,20 @@ export async function fetchMgeViolationsSheet(url: string): Promise<WantedPlayer
       delta: 0,
       x: 0,
       y: 0,
-      zero: '',
+      zero: '' as WantedPlayer['zero'],
 
       alliance: (cols[iAlliance] || '').trim(),
       reason: (cols[iViolation] || '').trim(),
 
-      zeroed:
-        handledVal === 'wanted'
-          ? 'yes'
-          : handledVal === 'left'
-          ? 'left'
-          : handledVal === 'no'
-          ? 'no'
-          : '',
-
+      zeroed: (
+  handledVal === 'wanted'
+    ? 'yes'
+    : handledVal === 'left'
+    ? 'left'
+    : handledVal === 'no'
+    ? 'no'
+    : ''
+) as WantedPlayer['zeroed'],
       display: true,
     };
   })
