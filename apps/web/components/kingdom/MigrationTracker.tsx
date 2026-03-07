@@ -803,27 +803,29 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 </span>
 )}
 
-  {player.prevNames && (
-    <div className="relative group inline-flex">
-      <button className="text-[var(--text-muted)] hover:text-[var(--foreground)]">
-        <History size={12} />
-      </button>
+ {player.prevNames?.trim() && (
+  <div className="relative group inline-flex">
+    <button className="text-[var(--text-muted)] hover:text-[var(--foreground)]">
+      <History size={12} />
+    </button>
 
-    <div className="absolute left-5 top-4 hidden group-hover:block z-50">
-        <div className="bg-[var(--background-card)] border border-[var(--border)] rounded-lg px-3 py-2 shadow-lg text-xs whitespace-nowrap">
-          <div className="font-semibold text-[var(--text-secondary)] mb-1">
-            {player.prevNames.split(',').length} previous names
-          </div>
+    <div className="absolute left-5 top-4 hidden group-hover:block z-[9999] pointer-events-none">
+      <div className="bg-[var(--background-card)] border border-[var(--border)] rounded-lg px-3 py-2 shadow-lg text-xs whitespace-nowrap">
 
-          <div className="space-y-0.5 text-[var(--text-muted)]">
-            {player.prevNames.split(',').map((n, i) => (
-              <div key={i}>{n.trim()}</div>
-            ))}
-          </div>
+        <div className="font-semibold text-[var(--text-secondary)] mb-1">
+          {player.prevNames.split(',').length} previous names
         </div>
+
+        <div className="space-y-0.5 text-[var(--text-muted)]">
+          {player.prevNames.split(',').map((n, i) => (
+            <div key={i}>{n.trim()}</div>
+          ))}
+        </div>
+
       </div>
     </div>
-  )}
+  </div>
+)}
 </div>
                       </td>
                       <td className="px-3 py-2.5 font-mono text-xs text-[var(--text-muted)]">
