@@ -82,11 +82,11 @@ export function AppSidebar({ children }: AppSidebarProps) {
     { 
       labelKey: 'migrationTracker',
       href: '/kingdom/migration-tracker',
-      icon: <Radar size={20} />,
-      hoverColor: 'group-hover:text-teal-500',
-      hoverBg: 'hover:bg-teal-500/10',
-      activeColor: 'text-white',
-      activeBg: 'bg-gradient-to-r from-teal-500 to-cyan-500'
+       icon: <Radar size={20} />,
+  hoverColor: 'group-hover:text-orange-500',
+  hoverBg: 'hover:bg-orange-500/10',
+  activeColor: 'text-white',
+  activeBg: 'bg-gradient-to-r from-orange-500 to-red-500'
     },
     { 
       labelKey: 'wanted',
