@@ -769,7 +769,7 @@ export default function WantedList() {
         <History size={12} />
       </button>
 
-      <div className="absolute left-4 top-5 hidden group-hover:block z-20">
+     <div className="absolute left-0 top-full mt-1 hidden group-hover:block z-50">
         <div className="bg-[var(--background-card)] border border-[var(--border)] rounded-lg px-3 py-2 shadow-lg text-xs whitespace-nowrap">
           <div className="font-semibold text-[var(--text-secondary)] mb-1">
             {player.prevNames.split(',').length} previous names
