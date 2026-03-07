@@ -30,11 +30,17 @@ const UNDO_TIMEOUT_MS = 6000;
 const formatPower = (val: number): string => {
   if (!val) return '-';
 
+  // values are stored in millions
   if (val >= 1000) {
-    return (val / 1000).toFixed(1) + 'B';
+    const b = val / 1000;
+
+    // show decimal only for small billions
+    if (b < 10) return b.toFixed(1).replace('.0', '') + 'B';
+
+    return Math.round(b) + 'B';
   }
 
-  return val.toFixed(1) + 'M';
+  return Math.round(val) + 'M';
 };
 
 /** Format summed power (raw power values) */
