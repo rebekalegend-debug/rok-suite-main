@@ -548,7 +548,7 @@ export default function WantedList() {
             <p className="text-2xl font-bold text-[var(--foreground)]">{stats.pendingCount}</p>
             <p className="text-sm font-semibold text-[var(--text-secondary)] mt-1">{formatTotalPower(stats.pendingPower)}</p>
             <p className="text-[10px] text-[var(--text-muted)]">total power</p>
-          </div>
+         </button>
 
           {/* To Be Zeroed (subset of pending with zero=yes) */}
           <button
@@ -562,7 +562,7 @@ export default function WantedList() {
             <p className="text-2xl font-bold text-[var(--foreground)]">{stats.toZeroCount}</p>
             <p className="text-sm font-semibold text-[var(--text-secondary)] mt-1">{formatTotalPower(stats.toZeroPower)}</p>
             <p className="text-[10px] text-[var(--text-muted)]">total power</p>
-          </div>
+          </button>
 
           {/* Zeroed */}
          <button
@@ -578,7 +578,7 @@ export default function WantedList() {
             <p className="text-2xl font-bold text-[var(--foreground)]">{stats.zeroedCount}</p>
             <p className="text-sm font-semibold text-[var(--text-secondary)] mt-1">{formatTotalPower(stats.zeroedPower)}</p>
             <p className="text-[10px] text-[var(--text-muted)]">total power</p>
-          </div>
+         </button>
 
           {/* Left Kingdom */}
          <button
@@ -594,7 +594,7 @@ export default function WantedList() {
             <p className="text-2xl font-bold text-[var(--foreground)]">{stats.leftCount}</p>
             <p className="text-xs text-[var(--text-muted)] mt-0.5">migrated out</p>
           </div>
-        </div>
+        </button>
       )}
 
       {/* Search + filters */}
