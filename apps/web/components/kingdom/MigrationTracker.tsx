@@ -581,7 +581,7 @@ const hasActiveFilters =
   onClick={() => {
     setHandledFilter('zeroed');
   }}
-className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 hover:bg-sky-500/10 transition shadow-lg shadow-sky-500/20"
+className="cursor-pointer rounded-xl border border-red-500/20 bg-red-500/5 p-4 hover:bg-red-500/10 transition shadow-lg shadow-red-500/30"
   >
   <div className="flex items-center gap-2 mb-2">
     <Skull size={16} className="text-red-400" />
@@ -609,8 +609,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
   setHandledFilter('left');
    
 }}
-  className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 hover:bg-sky-500/10 transition"
->
+className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 hover:bg-sky-500/10 transition shadow-lg shadow-sky-500/20">
             <div className="flex items-center gap-2 mb-2">
               <LogOut size={16} className="text-sky-400" />
               <span className="text-xs font-semibold uppercase tracking-wider text-sky-400">Left</span>
