@@ -36,46 +36,8 @@ export default function Home() {
       iconHoverBg: 'group-hover:bg-rose-500/15',
       iconHoverColor: 'group-hover:text-rose-500',
     },
-    {
-      href: '/rosters',
-      titleKey: 'tools.roster.title',
-      descriptionKey: 'tools.roster.description',
-      icon: Users,
-      hoverBorder: 'hover:border-sky-500/40',
-      hoverShadow: 'hover:shadow-sky-500/10',
-      iconHoverBg: 'group-hover:bg-sky-500/15',
-      iconHoverColor: 'group-hover:text-sky-500',
-    },
-    {
-      href: '/recognition',
-      titleKey: 'tools.recognition.title',
-      descriptionKey: 'tools.recognition.description',
-      icon: Crown,
-      hoverBorder: 'hover:border-violet-500/40',
-      hoverShadow: 'hover:shadow-violet-500/10',
-      iconHoverBg: 'group-hover:bg-violet-500/15',
-      iconHoverColor: 'group-hover:text-violet-500',
-    },
-    {
-      href: '/events',
-      titleKey: 'tools.events.title',
-      descriptionKey: 'tools.events.description',
-      icon: Trophy,
-      hoverBorder: 'hover:border-amber-500/40',
-      hoverShadow: 'hover:shadow-amber-500/10',
-      iconHoverBg: 'group-hover:bg-amber-500/15',
-      iconHoverColor: 'group-hover:text-amber-500',
-    },
-    {
-      href: '/aoo-strategy',
-      titleKey: 'tools.aoo.title',
-      descriptionKey: 'tools.aoo.description',
-      icon: Swords,
-      hoverBorder: 'hover:border-emerald-500/40',
-      hoverShadow: 'hover:shadow-emerald-500/10',
-      iconHoverBg: 'group-hover:bg-emerald-500/15',
-      iconHoverColor: 'group-hover:text-emerald-500',
-    },
+  
+   
     {
       href: '/rok-mail',
       titleKey: 'tools.rokMail.title',
@@ -106,16 +68,7 @@ export default function Home() {
       iconHoverBg: 'group-hover:bg-teal-500/15',
       iconHoverColor: 'group-hover:text-teal-500',
     },
-    {
-      href: '/kingdom/alliance-sorter',
-      titleKey: 'tools.allianceSorter.title',
-      descriptionKey: 'tools.allianceSorter.description',
-      icon: ArrowUpDown,
-      hoverBorder: 'hover:border-indigo-500/40',
-      hoverShadow: 'hover:shadow-indigo-500/10',
-      iconHoverBg: 'group-hover:bg-indigo-500/15',
-      iconHoverColor: 'group-hover:text-indigo-500',
-    },
+   
     {
       href: '/kingdom/wanted',
       titleKey: 'tools.wanted.title',
@@ -198,52 +151,7 @@ export default function Home() {
             </div>
           </section>
 
-          {/* Resources */}
-          <section className="mb-14">
-            <h2 className="text-xs font-medium uppercase tracking-wider text-[var(--text-muted)] mb-5">
-              {t('sections.guides')}
-            </h2>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <Link href="/guide">
-                <div className="group p-4 rounded-xl bg-[var(--background-card)] border border-[var(--border)] shadow-[var(--card-shadow)] hover:border-cyan-500/40 hover:bg-[var(--background-hover)] hover:-translate-y-0.5 hover:shadow-[var(--card-shadow-hover)] hover:shadow-cyan-500/10 transition-all duration-200 cursor-pointer h-full">
-                  <div className="flex items-start gap-3">
-                    <div className="p-2 rounded-lg bg-[var(--background-secondary)] group-hover:bg-cyan-500/15 transition-colors duration-200 flex-shrink-0">
-                      <BookOpen className="w-4 h-4 text-[var(--text-muted)] group-hover:text-cyan-500 transition-colors duration-200" />
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-medium text-[var(--foreground)] mb-0.5 transition-colors duration-200">
-                        {t('guide.title')}
-                      </h3>
-                      <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-                        {t('guide.description')}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-
-              <Link href="/beta-tools">
-                <div className="group p-4 rounded-xl bg-[var(--background-card)] border border-[var(--border)] shadow-[var(--card-shadow)] hover:border-orange-500/40 hover:bg-[var(--background-hover)] hover:-translate-y-0.5 hover:shadow-[var(--card-shadow-hover)] hover:shadow-orange-500/10 transition-all duration-200 cursor-pointer h-full">
-                  <div className="flex items-start gap-3">
-                    <div className="p-2 rounded-lg bg-[var(--background-secondary)] group-hover:bg-orange-500/15 transition-colors duration-200 flex-shrink-0">
-                      <FlaskConical className="w-4 h-4 text-[var(--text-muted)] group-hover:text-orange-500 transition-colors duration-200" />
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-medium text-[var(--foreground)] mb-0.5 transition-colors duration-200">
-                        {t('beta.title')}
-                      </h3>
-                      <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-                        {t('beta.description')}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </div>
-          </section>
+       
 
           {/* Footer */}
           <footer className="pt-8 border-t border-[var(--border)]">
@@ -251,26 +159,8 @@ export default function Home() {
               <p className="text-sm text-[var(--text-muted)]">
                 {t('footer.copyright')}
               </p>
-              <div className="flex items-center gap-5 text-sm">
-                <a
-                  href="https://github.com/avweigel/rok-suite"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[var(--text-muted)] hover:text-[var(--foreground)] transition-colors flex items-center gap-1.5"
-                >
-                  <Github className="w-3.5 h-3.5" />
-                  GitHub
-                </a>
-                <a
-                  href="https://avweigel.github.io/rok-suite/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[var(--text-muted)] hover:text-[var(--foreground)] transition-colors flex items-center gap-1.5"
-                >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                  Docs
-                </a>
-              </div>
+              
+              
             </div>
           </footer>
         </div>
