@@ -706,8 +706,11 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
        <div className="hidden md:block overflow-x-auto overflow-y-visible">
           <table className="w-full">
             <thead className="sticky top-0 z-10 bg-[var(--background-card)]">
-              <tr className="border-b border-[var(--border)]">
-                <SortHeader field="name" label="Name" />
+             <tr className="border-b border-[var(--border)]">
+  <th className="px-3 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+    #
+  </th>
+  <SortHeader field="name" label="Name" />
                 <SortHeader field="governorId" label="Gov ID" />
                 <SortHeader field="power" label="Power" align="right" />
                 
@@ -739,6 +742,10 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                       key={player.governorId || player.name}
                       className={`border-b border-[var(--border)] hover:bg-[var(--background-secondary)]/50 transition-colors ${idx % 2 === 0 ? 'bg-[var(--background-secondary)]/30' : ''} ${isDone ? 'opacity-50' : ''}`}
                     >
+
+                      <td className="px-3 py-2.5 text-xs text-[var(--text-muted)] font-mono">
+  {idx + 1}
+</td>
                       <td className="px-3 py-2.5">
                        <div className="flex items-center gap-1">
   <span className={`font-medium text-sm ${isDone ? 'line-through text-[var(--text-muted)]' : 'text-[var(--foreground)]'}`}>
