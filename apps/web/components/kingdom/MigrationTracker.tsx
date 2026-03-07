@@ -536,6 +536,29 @@ const hasActiveFilters =
       {/* Dashboard cards */}
       {!loading && !error && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+         
+          
+            {/* ALL MEMBERS */}
+        <div
+ onClick={() => {
+  setHandledFilter('all');
+}}
+  className="cursor-pointer rounded-xl border border-yellow-500/20 bg-yellow-500/5 p-4 hover:bg-yellow-500/10 transition"
+>
+            <div className="flex items-center gap-2 mb-2">
+              <Crosshair size={16} className="text-yellow-400" />
+             <span className="text-xs font-semibold uppercase tracking-wider text-yellow-400">
+  ALL MEMBERS
+</span>
+            </div>
+            <p className="text-2xl font-bold text-[var(--foreground)]">{stats.total}</p>
+            <p className="text-sm font-semibold text-[var(--text-secondary)] mt-1">{formatTotalPower(
+  visiblePlayers.reduce((sum, p) => sum + (p.power2 || 0), 0)
+)}</p>
+            <p className="text-[10px] text-[var(--text-muted)]">total power</p>
+          </div
+          
+          
           {/* Pending */}
           <div
   onClick={() => {
@@ -546,48 +569,39 @@ const hasActiveFilters =
 >
             <div className="flex items-center gap-2 mb-2">
               <Target size={16} className="text-orange-400" />
-              <span className="text-xs font-semibold uppercase tracking-wider text-amber-400">Violators</span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-orange-400">Violators</span>
             </div>
             <p className="text-2xl font-bold text-[var(--foreground)]">{stats.pendingCount}</p>
             <p className="text-sm font-semibold text-[var(--text-secondary)] mt-1">{formatTotalPower(stats.pendingPower)}</p>
             <p className="text-[10px] text-[var(--text-muted)]">total power</p>
           </div>
 
-          {/* To Be Zeroed (subset of pending with zero=yes) */}
-        <div
+         {/* On Wanted List */}
+<div
   onClick={() => {
     setHandledFilter('zeroed');
   }}
-  className="cursor-pointer rounded-xl border border-red-500/20 bg-red-500/5 p-4 hover:bg-red-500/10 transition"
+  className="cursor-pointer rounded-xl border border-red-500/20 bg-red-500/5 p-4 hover:bg-red-500/10 transition shadow-red-500/20 shadow-lg"
 >
-            <div className="flex items-center gap-2 mb-2">
-              <Skull size={16} className="text-red-400" />
-              <span className="text-xs font-semibold uppercase tracking-wider text-red-400">On Wanted List</span>
-            </div>
-            <p className="text-2xl font-bold text-[var(--foreground)]">{stats.toZeroCount}</p>
-            <p className="text-sm font-semibold text-[var(--text-secondary)] mt-1">{formatTotalPower(stats.toZeroPower)}</p>
-            <p className="text-[10px] text-[var(--text-muted)]">total power</p>
-          </div>
+  <div className="flex items-center gap-2 mb-2">
+    <Skull size={16} className="text-red-400" />
+    <span className="text-xs font-semibold uppercase tracking-wider text-red-400">
+      On Wanted List
+    </span>
+  </div>
 
-          {/* Zeroed */}
-        <div
- onClick={() => {
-  setHandledFilter('all');
-}}
-  className="cursor-pointer rounded-xl border border-yellow-500/20 bg-yellow-500/5 p-4 hover:bg-yellow-500/10 transition"
->
-            <div className="flex items-center gap-2 mb-2">
-              <Crosshair size={16} className="text-emerald-400" />
-             <span className="text-xs font-semibold uppercase tracking-wider text-yellow-400">
-  ALL MEMBERS
-</span>
-            </div>
-            <p className="text-2xl font-bold text-[var(--foreground)]">{stats.total}</p>
-            <p className="text-sm font-semibold text-[var(--text-secondary)] mt-1">{formatTotalPower(
-  visiblePlayers.reduce((sum, p) => sum + (p.power2 || 0), 0)
-)}</p>
-            <p className="text-[10px] text-[var(--text-muted)]">total power</p>
-          </div>
+  <p className="text-2xl font-bold text-[var(--foreground)]">
+    {stats.toZeroCount}
+  </p>
+
+  <p className="text-sm font-semibold text-[var(--text-secondary)] mt-1">
+    {formatTotalPower(stats.toZeroPower)}
+  </p>
+
+  <p className="text-[10px] text-[var(--text-muted)]">total power</p>
+</div>
+
+        >
 
           {/* Left Kingdom */}
           <div
