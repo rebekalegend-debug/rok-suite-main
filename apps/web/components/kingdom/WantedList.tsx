@@ -535,7 +535,7 @@ const hasActiveFilters =
           <div
  onClick={() => {
   setHandledFilter('all');
-  setZeroFilter('all');
+  
 }}
   className="cursor-pointer rounded-xl border border-yellow-500/20 bg-yellow-500/5 p-4 hover:bg-yellow-500/10 transition shadow-lg shadow-yellow-500/20"
 >
@@ -554,7 +554,7 @@ const hasActiveFilters =
         <div
   onClick={() => {
     setHandledFilter('pending');
-    setZeroFilter('yes');
+    
   }}
  className="cursor-pointer rounded-xl border border-red-500/20 bg-red-500/5 p-4 hover:bg-red-500/10 transition shadow-lg shadow-red-500/30"
 >
@@ -571,7 +571,7 @@ const hasActiveFilters =
         <div
   onClick={() => {
   setHandledFilter('zeroed');
-  setZeroFilter('all');
+  
 }}
 className="cursor-pointer rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 hover:bg-emerald-500/10 transition shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40"            
      >
@@ -588,7 +588,7 @@ className="cursor-pointer rounded-xl border border-emerald-500/20 bg-emerald-500
           <div
   onClick={() => {
   setHandledFilter('left');
-  setZeroFilter('all');
+  
 }}
 className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 hover:bg-sky-500/10 transition shadow-lg shadow-sky-500/20">
             <div className="flex items-center gap-2 mb-2">
