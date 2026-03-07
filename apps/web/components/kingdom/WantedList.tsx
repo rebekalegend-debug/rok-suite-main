@@ -269,12 +269,11 @@ export default function WantedList() {
   };
 
   const resetFiltersAndSort = () => {
-    setSortRules(DEFAULT_SORT_RULES);
-    setReasonFilter(null);
-    setHandledFilter('all');
-    setZeroFilter('all');
-    setSearch('');
-  };
+  setSortRules(DEFAULT_SORT_RULES);
+  setReasonFilter(null);
+  setHandledFilter('all');
+  setSearch('');
+};
 
   const handledOrder = (status: 'pending' | 'zeroed' | 'left'): number => {
     switch (status) {
