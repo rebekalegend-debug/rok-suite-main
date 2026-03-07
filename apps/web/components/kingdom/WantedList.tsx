@@ -92,7 +92,7 @@ export default function WantedList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
- 
+ const [zeroFilter, setZeroFilter] = useState<'all' | 'yes'>('all');
   
   const [handledFilter, setHandledFilter] = useState<'all' | 'pending' | 'zeroed' | 'left'>('all');
  
@@ -525,9 +525,9 @@ const hasActiveFilters =
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
           {/* Pending */}
           <div
- onClick={() => {
+onClick={() => {
   setHandledFilter('all');
-  
+  setZeroFilter('all');
 }}
   className="cursor-pointer rounded-xl border border-yellow-500/20 bg-yellow-500/5 p-4 hover:bg-yellow-500/10 transition shadow-lg shadow-yellow-500/20"
 >
@@ -544,10 +544,10 @@ const hasActiveFilters =
 
           {/* To Be Zeroed (subset of pending with zero=yes) */}
         <div
-  onClick={() => {
-    setHandledFilter('pending');
-    
-  }}
+ onClick={() => {
+  setHandledFilter('pending');
+  setZeroFilter('yes');
+}}
  className="cursor-pointer rounded-xl border border-red-500/20 bg-red-500/5 p-4 hover:bg-red-500/10 transition shadow-lg shadow-red-500/30"
 >
             <div className="flex items-center gap-2 mb-2">
@@ -562,8 +562,8 @@ const hasActiveFilters =
           {/* Zeroed */}
         <div
   onClick={() => {
-  setHandledFilter('zeroed');
-  
+ setHandledFilter('zeroed');
+setZeroFilter('all');
 }}
 className="cursor-pointer rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 hover:bg-emerald-500/10 transition shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40"            
      >
@@ -578,8 +578,9 @@ className="cursor-pointer rounded-xl border border-emerald-500/20 bg-emerald-500
 
           {/* Left Kingdom */}
           <div
-  onClick={() => {
-  setHandledFilter('left');
+             onClick={() => {
+ setHandledFilter('left');
+setZeroFilter('all');
   
 }}
 className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 hover:bg-sky-500/10 transition shadow-lg shadow-sky-500/20">
