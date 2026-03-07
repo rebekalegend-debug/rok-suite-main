@@ -798,13 +798,19 @@ export default function WantedList() {
                       </td>
                       <td className="px-3 py-2.5">
                         {player.reason ? (
-                          <span className={`inline-block whitespace-nowrap px-2 py-0.5 rounded-md text-xs font-medium border ${
-                            isIllegal
-                              ? 'bg-amber-500/10 text-amber-400 border-amber-500/20'
-                              : 'bg-red-500/10 text-red-400 border-red-500/20'
-                          }`}>
-                            {player.reason}
-                          </span>
+                          <span
+  className={`inline-block whitespace-nowrap px-2 py-0.5 rounded-md text-xs font-medium border ${
+    player.reason === '1'
+      ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/30'
+      : player.reason === '2'
+      ? 'bg-orange-500/10 text-orange-400 border-orange-500/30'
+      : player.reason === '3'
+      ? 'bg-red-500/10 text-red-400 border-red-500/30'
+      : 'bg-[var(--background-secondary)] text-[var(--text-muted)] border-[var(--border)]'
+  }`}
+>
+  {player.reason}
+</span>
                         ) : (
                           <span className="text-[var(--text-muted)]">-</span>
                         )}
