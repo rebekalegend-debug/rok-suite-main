@@ -95,7 +95,7 @@ export default function WantedList() {
   const [reasonFilter, setReasonFilter] = useState<string | null>(null);
   
   const [handledFilter, setHandledFilter] = useState<'all' | 'pending' | 'zeroed' | 'left'>('all');
-  const [zeroFilter, setZeroFilter] = useState<'all' | 'yes' | 'no'>('all');
+ 
 
   // Sort state
   const [sortRules, setSortRules] = useState<SortRule[]>(DEFAULT_SORT_RULES);
@@ -357,7 +357,7 @@ const duplicateNames = useMemo(() => {
         if (search && !matchesSearch(search, p.name, p.governorId)) return false;
         if (reasonFilter && p.reason !== reasonFilter) return false;
       
-        if (zeroFilter !== 'all' && p.zero !== zeroFilter) return false;
+       
         const handled = getHandledStatus(p);
         if (handledFilter !== 'all' && handled !== handledFilter) return false;
         return true;
@@ -438,8 +438,8 @@ const duplicateNames = useMemo(() => {
     );
   };
 
- const hasActiveFilters =
-  search || reasonFilter || handledFilter !== 'all' || zeroFilter !== 'all'
+const hasActiveFilters =
+  search || reasonFilter || handledFilter !== 'all'
   || JSON.stringify(sortRules) !== JSON.stringify(DEFAULT_SORT_RULES);
 
   // Sortable header helper
@@ -616,16 +616,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
             />
           </div>
          
-          {/* Zero filter */}
-          <select
-            value={zeroFilter}
-            onChange={(e) => setZeroFilter(e.target.value as 'all' | 'yes' | 'no')}
-            className="px-3 py-2.5 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] text-sm focus:outline-none focus:border-red-500/50"
-          >
-            <option value="all">Zero: All</option>
-            <option value="yes">Zero: Yes</option>
-            <option value="no">Zero: No</option>
-          </select>
+          
           {/* Reset */}
           {hasActiveFilters && (
             <button
