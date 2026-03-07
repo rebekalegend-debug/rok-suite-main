@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Search, RefreshCw, Lock, ExternalLink, Crosshair, X, Info, ChevronDown, ChevronUp, Undo2, Target, Skull, LogOut } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { fetchWantedSheet } from '@/lib/kingdom/parse';
-import { WANTED_SHEET_URL, WANTED_SHEET_EDIT_URL } from '@/lib/kingdom/config';
+import { MGE_VIOLATION_SHEET_URL, MGE_VIOLATION_SHEET_EDIT_URL } from '@/lib/kingdom/config';
 import { matchesSearch } from '@/lib/search';
 import type { WantedPlayer } from '@/lib/kingdom/types';
 
@@ -114,7 +114,7 @@ export default function WantedList() {
     setError(null);
     try {
       const [wantedPlayers, { data: statusRows }] = await Promise.all([
-        fetchWantedSheet(WANTED_SHEET_URL),
+        fetchWantedSheet(MGE_VIOLATION_SHEET_URL),
         supabase.from('wanted_status').select('*'),
       ]);
 
@@ -472,7 +472,7 @@ export default function WantedList() {
           )}
           {isAdmin && (
             <a
-              href={WANTED_SHEET_EDIT_URL}
+             href={MGE_VIOLATION_SHEET_EDIT_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium bg-amber-500/10 border border-amber-500/30 text-amber-400 hover:bg-amber-500/20 transition-colors"
