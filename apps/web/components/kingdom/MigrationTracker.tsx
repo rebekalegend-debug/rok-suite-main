@@ -737,7 +737,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                 <SortHeader field="governorId" label="Gov ID" />
                 <SortHeader field="power" label="Power" align="right" />
                 
-                <SortHeader field="alliance" label="Alliance" />
+             {/* <SortHeader field="alliance" label="Alliance" /> */}
                 <SortHeader field="reason" label="Violation" />
                 
                 <SortHeader field="handled" label="Handled" align="center" />
@@ -751,7 +751,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
             <tbody>
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={isOfficer ? 7 : 6} className="px-3 py-8 text-center text-sm text-[var(--text-muted)]">
+                 <td colSpan={isOfficer ? 6 : 5} className="px-3 py-8 text-center text-sm text-[var(--text-muted)]">
                     {hasActiveFilters ? 'No players match filters' : 'No wanted players'}
                   </td>
                 </tr>
@@ -801,9 +801,11 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                         {formatPower(player.power2)}
                       </td>
 
-                      <td className="px-3 py-2.5 text-sm text-[var(--text-secondary)]">
-                        {player.alliance || '-'}
-                      </td>
+                    {/* 
+<td className="px-3 py-2.5 text-sm text-[var(--text-secondary)]">
+  {player.alliance || '-'}
+</td>
+*/}
                       <td className="px-3 py-2.5">
                         {player.reason ? (
                          <span
