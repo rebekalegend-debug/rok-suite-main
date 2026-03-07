@@ -411,8 +411,8 @@ export default function WantedList() {
     );
   };
 
- const hasActiveFilters =
-  search || reasonFilter || handledFilter !== 'all' || zeroFilter !== 'all'
+const hasActiveFilters =
+  search || reasonFilter || handledFilter !== 'all'
   || JSON.stringify(sortRules) !== JSON.stringify(DEFAULT_SORT_RULES);
 
   // Sortable header helper
@@ -537,7 +537,7 @@ export default function WantedList() {
           <div
   onClick={() => {
   setHandledFilter('pending');
-  setZeroFilter('all');
+   
 }}
   className="cursor-pointer rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 hover:bg-amber-500/10 transition"
 >
@@ -587,7 +587,7 @@ export default function WantedList() {
           <div
   onClick={() => {
   setHandledFilter('left');
-  setZeroFilter('all');
+   
 }}
   className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 hover:bg-sky-500/10 transition"
 >
