@@ -472,14 +472,7 @@ const hasActiveFilters =
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <button
-            onClick={() => setShowInstructions(v => !v)}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors"
-          >
-            <Info size={16} />
-            <span className="hidden sm:inline">Instructions</span>
-            {showInstructions ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-          </button>
+         
           <button
             onClick={handleRefresh}
             disabled={isRefreshing}
