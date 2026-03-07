@@ -98,8 +98,8 @@
         "description": "Plan and track Mightiest Governor Event rankings and assignments"
       },
       "migrationTracker": {
-        "title": "Migration Tracker",
-        "description": "Track kingdom migrations, detect illegal migrants, and monitor player status"
+        "title": "Violation Track",
+        "description": "Track MGE, 20GH and KD rule breakers"
       },
       "allianceSorter": {
         "title": "Alliance Sorter",
@@ -107,11 +107,11 @@
       },
       "wanted": {
         "title": "Wanted",
-        "description": "Track wanted players, zeroing priority, and officer status updates"
+        "description": "Track wanted players"
       },
       "kvkMap": {
         "title": "KvK War Room",
-        "description": "Interactive KvK map with alliance assignments, strategy planning, and achievement tracking"
+        "description": "Interactive KvK map"
       },
       "kingdomStats": {
         "title": "Kingdom Stats",
