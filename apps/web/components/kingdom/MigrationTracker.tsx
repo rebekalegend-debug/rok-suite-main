@@ -601,7 +601,7 @@ const hasActiveFilters =
   <p className="text-[10px] text-[var(--text-muted)]">total power</p>
 </div>
 
-        >
+  
 
           {/* Left Kingdom */}
           <div
