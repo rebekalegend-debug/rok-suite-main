@@ -543,7 +543,7 @@ const hasActiveFilters =
  onClick={() => {
   setHandledFilter('all');
 }}
-  className="cursor-pointer rounded-xl border border-yellow-500/20 bg-yellow-500/5 p-4 hover:bg-yellow-500/10 transition"
+  className="cursor-pointer rounded-xl border border-yellow-500/20 bg-yellow-500/5 p-4 hover:bg-yellow-500/10 transition shadow-lg shadow-yellow-500/20"
 >
             <div className="flex items-center gap-2 mb-2">
               <Crosshair size={16} className="text-yellow-400" />
@@ -565,7 +565,7 @@ const hasActiveFilters =
   setHandledFilter('pending');
    
 }}
-  className="cursor-pointer rounded-xl border border-orange-500/20 bg-orange-500/5 p-4 hover:bg-orange-500/10 transition"
+  className="cursor-pointer rounded-xl border border-orange-500/20 bg-orange-500/5 p-4 hover:bg-orange-500/10 transition shadow-lg shadow-orange-500/20"
 >
             <div className="flex items-center gap-2 mb-2">
               <Target size={16} className="text-orange-400" />
@@ -581,8 +581,8 @@ const hasActiveFilters =
   onClick={() => {
     setHandledFilter('zeroed');
   }}
-  className="cursor-pointer rounded-xl border border-red-500/20 bg-red-500/5 p-4 hover:bg-red-500/10 transition shadow-red-500/20 shadow-lg"
->
+className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 hover:bg-sky-500/10 transition shadow-lg shadow-sky-500/20"
+  >
   <div className="flex items-center gap-2 mb-2">
     <Skull size={16} className="text-red-400" />
     <span className="text-xs font-semibold uppercase tracking-wider text-red-400">
