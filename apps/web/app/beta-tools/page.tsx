@@ -12,15 +12,7 @@ import { AppSidebar } from '@/components/AppSidebar';
 
 export default function BetaToolsPage() {
   const tools = [
-    {
-      href: '/scanners',
-      title: 'Scanners',
-      description: 'Scan screenshots to inventory commanders, equipment, and bag items',
-      icon: Scan,
-      gradient: 'from-[#4318ff] to-[#9f7aea]',
-      shadowColor: 'shadow-[#4318ff]/25',
-      hoverBorder: 'hover:border-[#4318ff]/50',
-    },
+   
     {
       href: '/sunset-canyon',
       title: 'Sunset Canyon Simulator',
@@ -30,15 +22,7 @@ export default function BetaToolsPage() {
       shadowColor: 'shadow-[#ffb547]/25',
       hoverBorder: 'hover:border-[#ffb547]/50',
     },
-    {
-      href: '/upgrade-calculator',
-      title: 'Upgrade Calculator',
-      description: 'Building dependency graph and resource planning for City Hall upgrades',
-      icon: Calculator,
-      gradient: 'from-[#0075ff] to-[#21d4fd]',
-      shadowColor: 'shadow-[#0075ff]/25',
-      hoverBorder: 'hover:border-[#0075ff]/50',
-    },
+   
   ];
 
   return (
@@ -110,10 +94,10 @@ export default function BetaToolsPage() {
         {/* Footer */}
         <footer className="mt-16 pt-8 border-t border-[var(--border)] text-center">
           <p className="text-xs text-[var(--text-secondary)]">
-            Angmar Nazgul Guards • Rise of Kingdoms
+            Kingdom 3237 • Rise of Kingdoms
           </p>
           <p className="text-[10px] text-[var(--text-muted)] mt-2">
-            Have feedback? Let us know on Discord
+            
           </p>
         </footer>
       </div>
