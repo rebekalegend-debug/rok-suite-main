@@ -351,24 +351,27 @@ export default function WantedList() {
     let leftCount = 0;
     let toZeroCount = 0, toZeroPower = 0;
 
-    for (const p of visiblePlayers) {
-      const s = getHandledStatus(p);
-      const power = p.power2 || 0;
+for (const p of visiblePlayers) {
+  const s = getHandledStatus(p);
+  const power = p.power2 || 0;
 
-      if (s === 'pending') {
-        pendingCount++;
-        pendingPower += power;
-        if (p.zero === 'yes') {
-          toZeroCount++;
-          toZeroPower += power;
-        }
-      } else if (s === 'zeroed') {
-        zeroedCount++;
-        zeroedPower += power;
-      } else {
-        leftCount++;
-      }
-    }
+  if (s === 'pending') {
+    pendingCount++;
+    pendingPower += power;
+  }
+
+  if (s === 'zeroed') {
+    zeroedCount++;
+    zeroedPower += power;
+
+    toZeroCount++;
+    toZeroPower += power;
+  }
+
+  if (s === 'left') {
+    leftCount++;
+  }
+}
 
     return {
       total: visiblePlayers.length,
