@@ -730,7 +730,7 @@ export default function WantedList() {
                 <SortHeader field="power" label="Power" align="right" />
                 
                 <SortHeader field="alliance" label="Alliance" />
-                <SortHeader field="reason" label="Reason" />
+                <SortHeader field="reason" label="Violation" />
                 <SortHeader field="zero" label="Zero?" align="center" />
                 <SortHeader field="handled" label="Handled" align="center" />
                 {isOfficer && (
