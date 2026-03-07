@@ -92,7 +92,7 @@ export default function WantedList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
-  const [reasonFilter, setReasonFilter] = useState<string | null>(null);
+ 
   
   const [handledFilter, setHandledFilter] = useState<'all' | 'pending' | 'zeroed' | 'left'>('all');
  
@@ -354,7 +354,7 @@ const duplicateNames = useMemo(() => {
     return visiblePlayers
       .filter(p => {
         if (search && !matchesSearch(search, p.name, p.governorId)) return false;
-        if (reasonFilter && p.reason !== reasonFilter) return false;
+   
       
        
         const handled = getHandledStatus(p);
@@ -620,56 +620,9 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
           )}
         </div>
 
-        {/* Handled status filter chips */}
-        <div className="flex flex-wrap gap-2">
-          {(['all', 'pending', 'zeroed', 'left'] as const).map(s => (
-            <button
-              key={s}
-              onClick={() => setHandledFilter(s)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
-                handledFilter === s
-                  ? s === 'all'
-                    ? 'bg-[var(--foreground)]/10 border-[var(--foreground)]/30 text-[var(--foreground)]'
-                    : handledBg(s)
-                  : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
-              }`}
-            >
-              {s === 'all' ? `All (${stats.total})` :
-               s === 'pending' ? `Pending (${stats.pendingCount})` :
-               s === 'zeroed' ? `Zeroed (${stats.zeroedCount})` :
-               `Left (${stats.leftCount})`}
-            </button>
-          ))}
-        </div>
+       
 
-        {/* Reason filter chips */}
-        {reasons.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => setReasonFilter(null)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
-                reasonFilter === null
-                  ? 'bg-red-500/10 border-red-500/30 text-red-400'
-                  : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
-              }`}
-            >
-              All Reasons
-            </button>
-            {reasons.map(r => (
-              <button
-                key={r}
-                onClick={() => setReasonFilter(reasonFilter === r ? null : r)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
-                  reasonFilter === r
-                    ? 'bg-red-500/10 border-red-500/30 text-red-400'
-                    : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
-                }`}
-              >
-                {r}
-              </button>
-            ))}
-          </div>
-        )}
+       
 
         {/* Sort chain display */}
         {JSON.stringify(sortRules) !== JSON.stringify(DEFAULT_SORT_RULES) && (
