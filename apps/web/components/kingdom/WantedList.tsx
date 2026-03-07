@@ -7,7 +7,7 @@ import { fetchWantedSheet } from '@/lib/kingdom/parse';
 import { WANTED_SHEET_URL, WANTED_SHEET_EDIT_URL } from '@/lib/kingdom/config';
 import { matchesSearch } from '@/lib/search';
 import type { WantedPlayer } from '@/lib/kingdom/types';
-
+import { AlertCircle } from "lucide-react";
 type OfficerMark = 'zeroed' | 'left';
 
 interface WantedStatus {
@@ -305,7 +305,22 @@ export default function WantedList() {
 
   // Only visible players (display !== false)
   const visiblePlayers = useMemo(() => players.filter(p => p.display), [players]);
+const duplicateNames = useMemo(() => {
+  const map = new Map<string, number>();
 
+  for (const p of visiblePlayers) {
+    const name = p.name?.toLowerCase().trim();
+    if (!name) continue;
+    map.set(name, (map.get(name) || 0) + 1);
+  }
+
+  const duplicates = new Set<string>();
+  for (const [name, count] of map) {
+    if (count > 1) duplicates.add(name);
+  }
+
+  return duplicates;
+}, [visiblePlayers]);
   // Unique reasons for filter chips
   const reasons = useMemo(() => {
     const set = new Set<string>();
@@ -761,8 +776,14 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                       <td className="px-3 py-2.5">
                        <div className="flex items-center gap-1">
   <span className={`font-medium text-sm ${isDone ? 'line-through text-[var(--text-muted)]' : 'text-[var(--foreground)]'}`}>
-    {player.name}
+  {player.name}
+</span>
+
+{duplicateNames.has(player.name.toLowerCase().trim()) && (
+  <span title="Duplicate name detected">
+    <AlertCircle size={14} className="text-red-500 ml-1 drop-shadow-[0_0_6px_rgba(239,68,68,0.8)]" />
   </span>
+)}
 
   {player.prevNames && (
   <div className="relative group inline-flex">
