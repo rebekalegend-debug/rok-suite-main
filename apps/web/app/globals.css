@@ -8,10 +8,10 @@
 /* Default to dark theme, then override with .light class */
 .dark {
   /* Background colors - deeper, more sophisticated */
-  --background: #0a0e1a;
-  --background-secondary: #111827;
-  --background-card: rgba(17, 24, 39, 0.95);
-  --background-hover: rgba(31, 41, 55, 0.8);
+  
+  --background: #020617;
+--background-secondary: #030712;
+--background-card: #030712;
 
   /* Primary gradient colors */
   --primary: #4318ff;
