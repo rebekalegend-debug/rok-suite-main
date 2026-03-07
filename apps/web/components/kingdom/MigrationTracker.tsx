@@ -671,7 +671,7 @@ export default function WantedList() {
                   : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
               }`}
             >
-              All Reasons
+              All Violations
             </button>
             {reasons.map(r => (
               <button
