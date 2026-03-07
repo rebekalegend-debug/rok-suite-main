@@ -349,17 +349,18 @@ const duplicateNames = useMemo(() => {
   }, [visiblePlayers]);
 
   // Filtered and sorted players (from visible only)
-  const filtered = useMemo(() => {
-    return visiblePlayers
-      .filter(p => {
-        if (search && !matchesSearch(search, p.name, p.governorId)) return false;
-   
-      
-       
-        const handled = getHandledStatus(p);
-        if (handledFilter !== 'all' && handled !== handledFilter) return false;
-        return true;
-      })
+ const filtered = useMemo(() => {
+  return visiblePlayers
+    .filter(p => {
+      if (search && !matchesSearch(search, p.name, p.governorId)) return false;
+
+      const handled = getHandledStatus(p);
+      if (handledFilter !== 'all' && handled !== handledFilter) return false;
+
+      if (zeroFilter === 'yes' && p.zero !== 'yes') return false;
+
+      return true;
+    })
       .sort((a, b) => {
         for (const rule of sortRules) {
           const result = compareByField(a, b, rule.field, rule.direction);
