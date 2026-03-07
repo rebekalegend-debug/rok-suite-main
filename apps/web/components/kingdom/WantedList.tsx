@@ -721,7 +721,7 @@ export default function WantedList() {
 
       {/* Desktop table */}
       {!loading && !error && (
-        <div className="hidden md:block overflow-x-auto">
+        <div className="hidden md:block overflow-x-auto overflow-y-visible">
           <table className="w-full">
             <thead className="sticky top-0 z-10 bg-[var(--background-card)]">
               <tr className="border-b border-[var(--border)]">
