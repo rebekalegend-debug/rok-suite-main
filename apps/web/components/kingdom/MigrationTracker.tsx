@@ -556,7 +556,7 @@ const hasActiveFilters =
   visiblePlayers.reduce((sum, p) => sum + (p.power2 || 0), 0)
 )}</p>
             <p className="text-[10px] text-[var(--text-muted)]">total power</p>
-          </div
+          </div>
           
           
           {/* Pending */}
