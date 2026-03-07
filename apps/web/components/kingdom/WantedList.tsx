@@ -593,7 +593,6 @@ export default function WantedList() {
             </div>
             <p className="text-2xl font-bold text-[var(--foreground)]">{stats.leftCount}</p>
             <p className="text-xs text-[var(--text-muted)] mt-0.5">migrated out</p>
-          </div>
         </button>
       )}
 
