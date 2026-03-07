@@ -27,9 +27,9 @@
 
     /* Light theme (default) */
     :root {
-      --base-background-color: #ffffff;
+      --base-background-color: #fdfcf9;   /* creamy white */
       --base-color: #1e293b;
-      --sidebar-background: #f8fafc;
+      --sidebar-background: #f8f6f2;
       --sidebar-border-color: #e2e8f0;
       --sidebar-nav-link-color: #475569;
       --sidebar-nav-link-color--active: var(--primary);
@@ -39,16 +39,16 @@
       --heading-color: #0f172a;
       --link-color: var(--primary);
       --link-color--hover: var(--primary-dark);
-      --code-background: #f1f5f9;
+     --code-background: #f5f3ef;
       --code-color: var(--primary-dark);
       --blockquote-background: #f0f9ff;
       --blockquote-border-color: var(--primary);
-      --table-row-odd-background: #f8fafc;
+      --table-row-odd-background: #faf8f4;
       --notice-tip-background: #ecfdf5;
       --notice-tip-border-color: var(--success);
       --notice-warn-background: #fffbeb;
       --notice-warn-border-color: var(--warning);
-      --search-background: #ffffff;
+     --search-background: #ffffff;
       --search-result-keyword-background: #fef3c7;
     }
 
@@ -308,11 +308,11 @@
 
   <script>
     // Theme toggle functionality
-    function getPreferredTheme() {
-      const stored = localStorage.getItem('docs-theme');
-      if (stored) return stored;
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
+   function getPreferredTheme() {
+  const stored = localStorage.getItem('docs-theme');
+  if (stored) return stored;
+  return 'light'; // default theme
+}
 
     function setTheme(theme) {
       document.documentElement.setAttribute('data-theme', theme);
