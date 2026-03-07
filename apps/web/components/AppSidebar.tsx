@@ -64,7 +64,7 @@ const touchStartY = useRef<number | null>(null);
     {
       // Kingdom section (no title, top level)
       items: [
-       // { labelKey: 'home', href: '/', icon: <Home size={20} />, hoverColor: 'group-hover:text-violet-400', hoverBg: 'hover:bg-violet-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-[#4318ff] to-[#7c3aed]' },
+        { labelKey: 'home', href: '/', icon: <Home size={20} />, hoverColor: 'group-hover:text-violet-400', hoverBg: 'hover:bg-violet-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-[#4318ff] to-[#7c3aed]' },
         { labelKey: 'calendar', href: '/calendar', icon: <Calendar size={20} />, hoverColor: 'group-hover:text-rose-500', hoverBg: 'hover:bg-rose-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-rose-500 to-pink-500' },
        // { labelKey: 'rosters', href: '/rosters', icon: <Users size={20} />, hoverColor: 'group-hover:text-sky-500', hoverBg: 'hover:bg-sky-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-sky-500 to-blue-500' },
        // { labelKey: 'recognition', href: '/recognition', icon: <Crown size={20} />, hoverColor: 'group-hover:text-violet-500', hoverBg: 'hover:bg-violet-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-violet-500 to-purple-500' },
