@@ -88,5 +88,4 @@ import { AppSidebar } from '@/components/AppSidebar';
       </div>
     </div>
     </AppSidebar>
-  );
-}
+  
