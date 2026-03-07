@@ -461,11 +461,13 @@ const hasActiveFilters =
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-red-500/10">
-            <Crosshair className="w-6 h-6 text-red-500" />
-          </div>
+          <div className="p-2.5 rounded-xl bg-red-500/20">
+  <Crosshair className="w-6 h-6 text-red-400" />
+</div>
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-[var(--foreground)]">Wanted</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-red-400">
+  violation Track
+</h1>
             <p className="text-sm text-[var(--text-muted)]">
               {stats.total} players tracked{stats.hidden > 0 && ` · ${stats.hidden} hidden`}
             </p>
