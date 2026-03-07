@@ -536,7 +536,10 @@ export default function WantedList() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
           {/* Pending */}
           <div
-  onClick={() => setHandledFilter('pending')}
+  onClick={() => {
+  setHandledFilter('pending');
+  setZeroFilter('all');
+}}
   className="cursor-pointer rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 hover:bg-amber-500/10 transition"
 >
             <div className="flex items-center gap-2 mb-2">
@@ -567,7 +570,10 @@ export default function WantedList() {
 
           {/* Zeroed */}
         <div
-  onClick={() => setHandledFilter('zeroed')}
+  onClick={() => {
+  setHandledFilter('zeroed');
+  setZeroFilter('all');
+}}
   className="cursor-pointer rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 hover:bg-emerald-500/10 transition"
 >
             <div className="flex items-center gap-2 mb-2">
@@ -581,7 +587,10 @@ export default function WantedList() {
 
           {/* Left Kingdom */}
           <div
-  onClick={() => setHandledFilter('left')}
+  onClick={() => {
+  setHandledFilter('left');
+  setZeroFilter('all');
+}}
   className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 hover:bg-sky-500/10 transition"
 >
             <div className="flex items-center gap-2 mb-2">
