@@ -542,10 +542,10 @@ const hasActiveFilters =
   setHandledFilter('pending');
    
 }}
-  className="cursor-pointer rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 hover:bg-amber-500/10 transition"
+  className="cursor-pointer rounded-xl border border-orange-500/20 bg-orange-500/5 p-4 hover:bg-orange-500/10 transition"
 >
             <div className="flex items-center gap-2 mb-2">
-              <Target size={16} className="text-amber-400" />
+              <Target size={16} className="text-orange-400" />
               <span className="text-xs font-semibold uppercase tracking-wider text-amber-400">Violators</span>
             </div>
             <p className="text-2xl font-bold text-[var(--foreground)]">{stats.pendingCount}</p>
@@ -571,18 +571,21 @@ const hasActiveFilters =
 
           {/* Zeroed */}
         <div
-  onClick={() => {
-  setHandledFilter('zeroed');
- 
+ onClick={() => {
+  setHandledFilter('all');
 }}
-  className="cursor-pointer rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 hover:bg-emerald-500/10 transition"
+  className="cursor-pointer rounded-xl border border-yellow-500/20 bg-yellow-500/5 p-4 hover:bg-yellow-500/10 transition"
 >
             <div className="flex items-center gap-2 mb-2">
               <Crosshair size={16} className="text-emerald-400" />
-              <span className="text-xs font-semibold uppercase tracking-wider text-emerald-400">Zeroed</span>
+             <span className="text-xs font-semibold uppercase tracking-wider text-yellow-400">
+  ALL MEMBERS
+</span>
             </div>
-            <p className="text-2xl font-bold text-[var(--foreground)]">{stats.zeroedCount}</p>
-            <p className="text-sm font-semibold text-[var(--text-secondary)] mt-1">{formatTotalPower(stats.zeroedPower)}</p>
+            <p className="text-2xl font-bold text-[var(--foreground)]">{stats.total}</p>
+            <p className="text-sm font-semibold text-[var(--text-secondary)] mt-1">{formatTotalPower(
+  visiblePlayers.reduce((sum, p) => sum + (p.power2 || 0), 0)
+)}</p>
             <p className="text-[10px] text-[var(--text-muted)]">total power</p>
           </div>
 
