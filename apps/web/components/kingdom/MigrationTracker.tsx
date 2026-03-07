@@ -8,6 +8,7 @@ import { MGE_VIOLATION_SHEET_URL, MGE_VIOLATION_SHEET_EDIT_URL } from '@/lib/kin
 import { matchesSearch } from '@/lib/search';
 import type { WantedPlayer } from '@/lib/kingdom/types';
 import { AlertCircle } from "lucide-react";
+import { Radar } from "lucide-react";
 type OfficerMark = 'zeroed' | 'left';
 
 interface WantedStatus {
@@ -462,7 +463,7 @@ const hasActiveFilters =
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-red-500/20">
-  <Crosshair className="w-6 h-6 text-red-400" />
+  <Radar className="w-6 h-6 text-red-400" />
 </div>
           <div>
             <h1 className="text-xl sm:text-2xl font-bold text-white-400">
