@@ -27,7 +27,7 @@ import {
 import { ThemeToggle } from './ThemeToggle';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { useTranslations } from 'next-intl';
-
+import { useRef } from 'react';
 interface NavItem {
   labelKey: string;
   href: string;
@@ -54,6 +54,9 @@ export function AppSidebar({ children }: AppSidebarProps) {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+ const touchStartX = useRef<number | null>(null);
+const touchStartY = useRef<number | null>(null);
+  
   const t = useTranslations('nav');
   const t2 = useTranslations('common');
 
@@ -134,7 +137,54 @@ export function AppSidebar({ children }: AppSidebarProps) {
   useEffect(() => {
     setIsMobileOpen(false);
   }, [pathname]);
+useEffect(() => {
+  const EDGE_SIZE = 20;
+  const OPEN_THRESHOLD = 60;
+  const CLOSE_THRESHOLD = 60;
 
+  const onTouchStart = (e: TouchEvent) => {
+    const t = e.touches[0];
+    touchStartX.current = t.clientX;
+    touchStartY.current = t.clientY;
+  };
+
+  const onTouchMove = (e: TouchEvent) => {
+    if (touchStartX.current === null || touchStartY.current === null) return;
+
+    const t = e.touches[0];
+    const dx = t.clientX - touchStartX.current;
+    const dy = Math.abs(t.clientY - touchStartY.current);
+
+    if (dy > 40) return;
+
+    if (!isMobileOpen && touchStartX.current < EDGE_SIZE && dx > OPEN_THRESHOLD) {
+      setIsMobileOpen(true);
+      touchStartX.current = null;
+      touchStartY.current = null;
+    }
+
+    if (isMobileOpen && dx < -CLOSE_THRESHOLD) {
+      setIsMobileOpen(false);
+      touchStartX.current = null;
+      touchStartY.current = null;
+    }
+  };
+
+  const onTouchEnd = () => {
+    touchStartX.current = null;
+    touchStartY.current = null;
+  };
+
+  window.addEventListener('touchstart', onTouchStart, { passive: true });
+  window.addEventListener('touchmove', onTouchMove, { passive: true });
+  window.addEventListener('touchend', onTouchEnd);
+
+  return () => {
+    window.removeEventListener('touchstart', onTouchStart);
+    window.removeEventListener('touchmove', onTouchMove);
+    window.removeEventListener('touchend', onTouchEnd);
+  };
+}, [isMobileOpen]);
   // Close mobile menu on escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
