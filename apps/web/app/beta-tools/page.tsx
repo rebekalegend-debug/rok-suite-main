@@ -11,7 +11,7 @@ import {
 import { AppSidebar } from '@/components/AppSidebar';
 
 export default function BetaToolsPage() {
-  const tools = [];
+const tools: any[] = [];
 
   return (
     <AppSidebar>
