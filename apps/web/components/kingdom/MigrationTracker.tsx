@@ -571,8 +571,8 @@ export default function WantedList() {
           {/* Zeroed */}
         <div
   onClick={() => {
-  setHandledFilter('zeroed');
-  setZeroFilter('all');
+  setHandledFilter('pending');
+  setZeroFilter('yes');
 }}
   className="cursor-pointer rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 hover:bg-emerald-500/10 transition"
 >
