@@ -218,28 +218,37 @@ export async function fetchMgeViolationsSheet(url: string): Promise<WantedPlayer
   const iHandled = headers.findIndex(h => h.toLowerCase().trim() === 'handled');
 
   return rows
-    .map(cols => {
-      const handledVal = (cols[iHandled] || '').trim().toLowerCase();
+  .map(cols => {
+    const handledVal = (cols[iHandled] || '').trim().toLowerCase();
 
-      return {
-        governorId: parseInt(cols[iGovId]) || 0,
-        name: (cols[iName] || '').trim(),
-        power1: parseInt(cols[iPower1]) || 0,
-        power2: parseInt(cols[iPower2]) || 0,
-        alliance: (cols[iAlliance] || '').trim(),
-        reason: (cols[iViolation] || '').trim(),
+    return {
+      governorId: parseInt(cols[iGovId]) || 0,
+      name: (cols[iName] || '').trim(),
+      power1: parseInt(cols[iPower1]) || 0,
+      power2: parseInt(cols[iPower2]) || 0,
 
-        zeroed: (
-          handledVal === 'wanted' ? 'yes' :
-          handledVal === 'left' ? 'left' :
-          handledVal === 'no' ? 'no' :
-          ''
-        ) as WantedPlayer['zeroed'],
+      // required fields for WantedPlayer
+      delta: 0,
+      x: 0,
+      y: 0,
+      zero: '',
 
-        display: true,
-      };
-    })
-    .filter(r => r.name || r.governorId);
+      alliance: (cols[iAlliance] || '').trim(),
+      reason: (cols[iViolation] || '').trim(),
+
+      zeroed:
+        handledVal === 'wanted'
+          ? 'yes'
+          : handledVal === 'left'
+          ? 'left'
+          : handledVal === 'no'
+          ? 'no'
+          : '',
+
+      display: true,
+    };
+  })
+  .filter(r => r.name || r.governorId);
 }
 /**
  * Fetch and parse the Google Sheet wanted list as CSV.
