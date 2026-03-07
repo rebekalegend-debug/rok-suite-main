@@ -29,9 +29,12 @@ const UNDO_TIMEOUT_MS = 6000;
 /** Format power — sheet stores values in millions (e.g. 28 = 28M) */
 const formatPower = (val: number): string => {
   if (!val) return '-';
-  if (val >= 1_000_000) return (val / 1_000_000).toFixed(1) + 'M';
-  if (val >= 1_000) return (val / 1_000).toFixed(0) + 'K';
-  return val + 'M';
+
+  if (val >= 1000) {
+    return (val / 1000).toFixed(1) + 'B';
+  }
+
+  return val.toFixed(1) + 'M';
 };
 
 /** Format summed power (raw power values) */
