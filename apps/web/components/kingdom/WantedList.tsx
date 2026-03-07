@@ -535,7 +535,12 @@ export default function WantedList() {
       {!loading && !error && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
           {/* Pending */}
-          <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4">
+         <button
+  onClick={() => setHandledFilter('pending')}
+  className={`rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-left transition hover:bg-amber-500/10 ${
+    handledFilter === 'pending' ? 'ring-2 ring-amber-500/50' : ''
+  }`}
+>
             <div className="flex items-center gap-2 mb-2">
               <Target size={16} className="text-amber-400" />
               <span className="text-xs font-semibold uppercase tracking-wider text-amber-400">Pending</span>
@@ -546,7 +551,10 @@ export default function WantedList() {
           </div>
 
           {/* To Be Zeroed (subset of pending with zero=yes) */}
-          <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
+          <button
+  onClick={() => setHandledFilter('pending')}
+  className="rounded-xl border border-red-500/20 bg-red-500/5 p-4 text-left transition hover:bg-red-500/10"
+>
             <div className="flex items-center gap-2 mb-2">
               <Skull size={16} className="text-red-400" />
               <span className="text-xs font-semibold uppercase tracking-wider text-red-400">To Zero</span>
@@ -557,7 +565,12 @@ export default function WantedList() {
           </div>
 
           {/* Zeroed */}
-          <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
+         <button
+  onClick={() => setHandledFilter('zeroed')}
+  className={`rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 text-left transition hover:bg-emerald-500/10 ${
+    handledFilter === 'zeroed' ? 'ring-2 ring-emerald-500/50' : ''
+  }`}
+>
             <div className="flex items-center gap-2 mb-2">
               <Crosshair size={16} className="text-emerald-400" />
               <span className="text-xs font-semibold uppercase tracking-wider text-emerald-400">Zeroed</span>
@@ -568,7 +581,12 @@ export default function WantedList() {
           </div>
 
           {/* Left Kingdom */}
-          <div className="rounded-xl border border-sky-500/20 bg-sky-500/5 p-4">
+         <button
+  onClick={() => setHandledFilter('left')}
+  className={`rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 text-left transition hover:bg-sky-500/10 ${
+    handledFilter === 'left' ? 'ring-2 ring-sky-500/50' : ''
+  }`}
+>
             <div className="flex items-center gap-2 mb-2">
               <LogOut size={16} className="text-sky-400" />
               <span className="text-xs font-semibold uppercase tracking-wider text-sky-400">Left</span>
