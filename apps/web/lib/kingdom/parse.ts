@@ -226,7 +226,7 @@ export async function fetchWantedSheet(url: string): Promise<WantedPlayer[]> {
   const iReason = idx('reason');
   const iZeroed = headers.findIndex(h => h.toLowerCase().trim() === 'zeroed');
   const iDisplay = idx('display');
-
+  const iPrevNames = idx('prev name');
   return rows
     .map(cols => {
       const zeroVal = (cols[iZero] || '').trim().toLowerCase();
@@ -243,6 +243,7 @@ export async function fetchWantedSheet(url: string): Promise<WantedPlayer[]> {
         alliance: (cols[iAlliance] || '').trim(),
         zero: (zeroVal === 'yes' ? 'yes' : zeroVal === 'no' ? 'no' : '') as WantedPlayer['zero'],
         reason: (cols[iReason] || '').trim(),
+        prevNames: (cols[iPrevNames] || '').trim(),
         zeroed: (
   zeroedVal === 'yes' ? 'yes' :
   zeroedVal === 'left' ? 'left' :
