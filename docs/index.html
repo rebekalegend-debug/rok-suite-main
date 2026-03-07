@@ -28,8 +28,8 @@
     /* Light theme (default) */
     :root {
       --base-background-color: #fdfcf9;   /* creamy white */
-      --base-color: #1e293b;
-      --sidebar-background: #f8f6f2;
+      --base-background-color: #fbf7f2;
+  --sidebar-background: #f5efe7;
       --sidebar-border-color: #e2e8f0;
       --sidebar-nav-link-color: #475569;
       --sidebar-nav-link-color--active: var(--primary);
@@ -39,11 +39,11 @@
       --heading-color: #0f172a;
       --link-color: var(--primary);
       --link-color--hover: var(--primary-dark);
-     --code-background: #f5f3ef;
+   --code-background: #f3ede6;
       --code-color: var(--primary-dark);
       --blockquote-background: #f0f9ff;
       --blockquote-border-color: var(--primary);
-      --table-row-odd-background: #faf8f4;
+  --table-row-odd-background: #f9f4ee;
       --notice-tip-background: #ecfdf5;
       --notice-tip-border-color: var(--success);
       --notice-warn-background: #fffbeb;
@@ -90,6 +90,15 @@
       max-width: 900px;
     }
 
+
+    /* ADD IT HERE ↓ */
+
+.markdown-section pre,
+.markdown-section table {
+  background: #ffffff;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+  border-radius: 10px;
+}
     .markdown-section h1 {
       font-weight: 700;
       border-bottom: 2px solid var(--primary);
@@ -308,24 +317,23 @@
 
   <script>
     // Theme toggle functionality
-   function getPreferredTheme() {
+ function getPreferredTheme() {
   const stored = localStorage.getItem('docs-theme');
-  if (stored) return stored;
-  return 'light'; // default theme
+  return stored ? stored : 'light'; // always default to light
 }
 
-    function setTheme(theme) {
-      document.documentElement.setAttribute('data-theme', theme);
-      localStorage.setItem('docs-theme', theme);
-    }
+function setTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('docs-theme', theme);
+}
 
-    function toggleTheme() {
-      const current = document.documentElement.getAttribute('data-theme') || 'light';
-      setTheme(current === 'dark' ? 'light' : 'dark');
-    }
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'light';
+  const next = current === 'dark' ? 'light' : 'dark';
+  setTheme(next);
+}
 
-    // Apply theme on load
-    setTheme(getPreferredTheme());
+setTheme(getPreferredTheme());
 
     // Docsify configuration
     window.$docsify = {
