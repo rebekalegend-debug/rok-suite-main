@@ -913,21 +913,31 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                   </div>
 
                   {/* Reason */}
-                  {player.reason && (
-                   <div>
-  <span className="text-[var(--text-muted)]">Violation: </span>
-  <span className="text-[var(--text-secondary)]">
-    {player.reason === '1'
-      ? 'FIRST'
-      : player.reason === '2'
-      ? 'SECOND'
-      : player.reason === '3'
-      ? 'THIRD'
-      : player.reason || '-'}
-  </span>
-</div>
-                  )}
+                 {player.reason && (
+  <div className="flex items-center gap-2">
+    <span className="text-[var(--text-muted)]">Violation:</span>
 
+    <span
+      className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${
+        player.reason === '1'
+          ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/30'
+          : player.reason === '2'
+          ? 'bg-orange-500/10 text-orange-400 border-orange-500/30'
+          : player.reason === '3'
+          ? 'bg-red-500/10 text-red-400 border-red-500/30'
+          : 'bg-[var(--background-secondary)] text-[var(--text-muted)] border-[var(--border)]'
+      }`}
+    >
+      {player.reason === '1'
+        ? 'FIRST'
+        : player.reason === '2'
+        ? 'SECOND'
+        : player.reason === '3'
+        ? 'THIRD'
+        : player.reason}
+    </span>
+  </div>
+)}
                   {/* Officer actions */}
                   {isOfficer && (
                     <div className="flex gap-2 pt-1 border-t border-[var(--border)]/50">
