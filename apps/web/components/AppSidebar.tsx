@@ -163,9 +163,10 @@ export function AppSidebar({ children }: AppSidebarProps) {
    <h1 className="text-lg font-semibold text-white/95 truncate">
   {t('siteTitle')}
 </h1>
-    <p className="text-[10px] text-pink-300/70 whitespace-pre-line leading-tight">
-  {t('siteSubtitle')}
-</p>
+   <div className="text-[10px] text-pink-300/70 leading-tight">
+  <div>{t('siteSubtitle1')}</div>
+  <div>{t('siteSubtitle2')}</div>
+</div>
   </div>
         )}
       </div>
