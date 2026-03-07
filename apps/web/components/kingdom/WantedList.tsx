@@ -437,7 +437,7 @@ const duplicateNames = useMemo(() => {
   };
 
 const hasActiveFilters =
-  search || reasonFilter || handledFilter !== 'all'
+  search || handledFilter !== 'all'
   || JSON.stringify(sortRules) !== JSON.stringify(DEFAULT_SORT_RULES);
 
   // Sortable header helper
