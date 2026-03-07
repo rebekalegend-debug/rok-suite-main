@@ -32,12 +32,13 @@ const formatPower = (val: number): string => {
 
   // values are stored in millions
   if (val >= 1000) {
-    const b = val / 1000;
+    const billions = val / 1000;
 
-    // show decimal only for small billions
-    if (b < 10) return b.toFixed(1).replace('.0', '') + 'B';
+    if (billions < 10) {
+      return billions.toFixed(1).replace('.0', '') + 'B';
+    }
 
-    return Math.round(b) + 'B';
+    return Math.round(billions) + 'B';
   }
 
   return Math.round(val) + 'M';
