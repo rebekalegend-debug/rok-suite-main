@@ -30,11 +30,17 @@ const UNDO_TIMEOUT_MS = 6000;
 const formatPower = (val: number): string => {
   if (!val) return '-';
 
+  // values are stored in millions
   if (val >= 1000) {
-    return (val / 1000).toFixed(1) + 'B';
+    const b = val / 1000;
+
+    // show decimal only for small billions
+    if (b < 10) return b.toFixed(1).replace('.0', '') + 'B';
+
+    return Math.round(b) + 'B';
   }
 
-  return val.toFixed(1) + 'M';
+  return Math.round(val) + 'M';
 };
 
 /** Format summed power (raw power values) */
@@ -826,7 +832,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                         {player.governorId || '-'}
                       </td>
                       <td className="px-3 py-2.5 text-right font-mono text-sm text-[var(--foreground)]">
-                        {formatTotalPower(player.power2 * 1_000_000)}
+                        {formatPower(player.power2)}
                       </td>
 
                     {/* 
@@ -948,7 +954,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                   <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
                     <div>
                       <span className="text-[var(--text-muted)]">Power: </span>
-                      <span className="font-mono text-[var(--text-secondary)]">{formatTotalPower(player.power2 * 1_000_000)}</span>
+                      <span className="font-mono text-[var(--text-secondary)]">{formatPower(player.power2)}</span>
                     </div>
                     
                     <div>
