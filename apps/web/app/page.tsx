@@ -36,7 +36,17 @@ export default function Home() {
       iconHoverBg: 'group-hover:bg-rose-500/15',
       iconHoverColor: 'group-hover:text-rose-500',
     },
-  
+  {
+      href: '/events',
+      titleKey: 'tools.events.title',
+      descriptionKey: 'tools.events.description',
+      icon: Trophy,
+      hoverBorder: 'hover:border-amber-500/40',
+      hoverShadow: 'hover:shadow-amber-500/10',
+      iconHoverBg: 'group-hover:bg-amber-500/15',
+      iconHoverColor: 'group-hover:text-amber-500',
+    },
+
    
     {
       href: '/rok-mail',
