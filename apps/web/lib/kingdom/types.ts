@@ -62,6 +62,7 @@ export interface InactiveRow {
 export interface WantedPlayer {
   governorId: number;
   name: string;
+  prevNames?: string;
   power1: number;
   power2: number;
   delta: number;
