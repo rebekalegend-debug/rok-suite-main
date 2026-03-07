@@ -134,7 +134,7 @@ Your message here.
     name: 'Kingdom Mail',
     category: 'kingdom',
     description: 'Standard Kingdom mail format',
-    content: `<size=30px><color=#4d0000>KINGDOM 3923</color> <color=#cc0000>—</color> <color=#4d0000>A</color><color=#660000>N</color><color=#800000>G</color><color=#990000>M</color><color=#b30000>A</color><color=#cc0000>R</color> <color=#4d0000>N</color><color=#660000>A</color><color=#800000>Z</color><color=#990000>G</color><color=#b30000>U</color><color=#cc0000>L</color> <color=#e60000>G</color><color=#ff0000>U</color><color=#ff0000>A</color><color=#cc0000>R</color><color=#990000>D</color><color=#800000>S</color></size>
+    content: `<size=30px><color=#4d0000>KINGDOM 3237</color> <color=#cc0000>—</color> <color=#4d0000>A</color><color=#660000>N</color><color=#800000>G</color><color=#990000>M</color><color=#b30000>A</color><color=#cc0000>R</color> <color=#4d0000>N</color><color=#660000>A</color><color=#800000>Z</color><color=#990000>G</color><color=#b30000>U</color><color=#cc0000>L</color> <color=#e60000>G</color><color=#ff0000>U</color><color=#ff0000>A</color><color=#cc0000>R</color><color=#990000>D</color><color=#800000>S</color></size>
 ►═════════❂❂❂═════════◄
 
 <b><color=#ff3333>SUBJECT TITLE HERE</color></b>
@@ -142,6 +142,6 @@ Your message here.
 Your message here.
 
 ►═════════❂❂❂═════════◄
-<b><color=#800000>— King Fluffy</color></b>`,
+<b><color=#800000>— King xxxxx</color></b>`,
   },
 ];
