@@ -9,9 +9,9 @@
 .dark {
   /* Background colors - deeper, more sophisticated */
   
-  --background: #020617;
---background-secondary: #030712;
---background-card: #030712;
+  --background: #0A090A;
+--background-secondary: #141416;
+--background-card: #141416;
 
   /* Primary gradient colors */
   --primary: #4318ff;
