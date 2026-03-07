@@ -13,15 +13,7 @@ import { AppSidebar } from '@/components/AppSidebar';
 export default function BetaToolsPage() {
   const tools = [
    
-    {
-      href: '/sunset-canyon',
-      title: 'Sunset Canyon Simulator',
-      description: 'Commander scanner, formation optimizer, and battle simulation',
-      icon: Sun,
-      gradient: 'from-[#ffb547] to-[#ffd97a]',
-      shadowColor: 'shadow-[#ffb547]/25',
-      hoverBorder: 'hover:border-[#ffb547]/50',
-    },
+    
    
   ];
 
