@@ -222,12 +222,7 @@ export function AppSidebar({ children }: AppSidebarProps) {
 
       {/* Bottom section */}
       <div className={`px-3 py-4 border-t border-[var(--border)] space-y-2 ${isCollapsed ? 'flex flex-col items-center' : ''}`}>
-        <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
-          {!isCollapsed && (
-            <span className="text-xs text-[var(--text-muted)]">{t2('language')}</span>
-          )}
-          <LanguageSwitcher collapsed={isCollapsed} />
-        </div>
+       
         <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
           {!isCollapsed && (
             <span className="text-xs text-[var(--text-muted)]">{t2('theme')}</span>
@@ -273,10 +268,9 @@ export function AppSidebar({ children }: AppSidebarProps) {
             <span className="text-sm font-semibold text-[var(--foreground)]">{t('siteTitle')}</span>
           </div>
         </div>
-        <div className="flex items-center gap-1">
-          <LanguageSwitcher collapsed />
-          <ThemeToggle />
-        </div>
+       <div className="flex items-center gap-1">
+  <ThemeToggle />
+</div>
       </header>
 
       {/* Mobile Sidebar Overlay */}
