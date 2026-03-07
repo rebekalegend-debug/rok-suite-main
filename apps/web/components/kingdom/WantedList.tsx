@@ -510,35 +510,7 @@ const duplicateNames = useMemo(() => {
         </div>
       </div>
 
-      {/* Instructions panel */}
-      {showInstructions && (
-        <div className="mb-4 px-4 py-4 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-sm text-[var(--text-secondary)] space-y-3">
-          <p>
-            This page tracks wanted players in the kingdom. The list is pulled from a shared Google Sheet that admins can edit.
-          </p>
-          <div>
-            <p className="font-semibold text-[var(--foreground)] mb-1">Columns</p>
-            <ul className="list-disc list-inside space-y-0.5 text-[var(--text-muted)]">
-              <li><span className="text-[var(--text-secondary)]">Zero?</span> &mdash; Whether the player should be zeroed (from the sheet)</li>
-              <li><span className="text-[var(--text-secondary)]">Handled</span> &mdash; Officer-set status: Pending, Zeroed, or Left kingdom</li>
-            </ul>
-          </div>
-          <div>
-            <p className="font-semibold text-[var(--foreground)] mb-1">Zeroing Priority</p>
-            <ol className="list-decimal list-inside space-y-0.5 text-[var(--text-muted)]">
-              <li>Farm killers and hostile players &mdash; zero first</li>
-              <li>Players who refuse to follow kingdom rules</li>
-              <li className="text-amber-400 font-medium">Illegal migrants &mdash; zero LAST (they may still leave on their own)</li>
-            </ol>
-          </div>
-          <div>
-            <p className="font-semibold text-[var(--foreground)] mb-1">Officer Mode</p>
-            <p className="text-[var(--text-muted)]">
-              Log in as an officer to mark players as &quot;Zeroed&quot; or &quot;Left Kingdom&quot;. You can undo any status change within a few seconds.
-            </p>
-          </div>
-        </div>
-      )}
+     
 
       {/* Officer/Admin mode banner */}
       {isOfficer && (
