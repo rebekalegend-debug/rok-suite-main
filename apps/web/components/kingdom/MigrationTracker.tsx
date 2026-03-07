@@ -908,33 +908,24 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                       <span className="font-mono text-[var(--text-secondary)]">{formatPower(player.power2)}</span>
                     </div>
                     
-                    <div>
-                      <span className="text-[var(--text-muted)]">Alliance: </span>
-                      <span className="text-[var(--text-secondary)]">{player.alliance || '-'}</span>
-                    </div>
-                    <div>
-                      <span className="text-[var(--text-muted)]">Zero? </span>
-                      {player.zero === 'yes' ? (
-                        <span className="font-semibold text-red-400">YES</span>
-                      ) : player.zero === 'no' ? (
-                        <span className="font-semibold text-[var(--text-muted)]">NO</span>
-                      ) : (
-                        <span className="text-[var(--text-muted)]">-</span>
-                      )}
-                    </div>
+                    
+                    
                   </div>
 
                   {/* Reason */}
                   {player.reason && (
-                    <div>
-                      <span className={`inline-block px-2 py-0.5 rounded-md text-xs font-medium border ${
-                        isIllegal
-                          ? 'bg-amber-500/10 text-amber-400 border-amber-500/20'
-                          : 'bg-red-500/10 text-red-400 border-red-500/20'
-                      }`}>
-                        {player.reason}
-                      </span>
-                    </div>
+                   <div>
+  <span className="text-[var(--text-muted)]">Violation: </span>
+  <span className="text-[var(--text-secondary)]">
+    {player.reason === '1'
+      ? 'FIRST'
+      : player.reason === '2'
+      ? 'SECOND'
+      : player.reason === '3'
+      ? 'THIRD'
+      : player.reason || '-'}
+  </span>
+</div>
                   )}
 
                   {/* Officer actions */}
