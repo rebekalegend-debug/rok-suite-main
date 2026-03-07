@@ -544,7 +544,7 @@ export default function WantedList() {
 >
             <div className="flex items-center gap-2 mb-2">
               <Target size={16} className="text-amber-400" />
-              <span className="text-xs font-semibold uppercase tracking-wider text-amber-400">Pending</span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-amber-400">Violators</span>
             </div>
             <p className="text-2xl font-bold text-[var(--foreground)]">{stats.pendingCount}</p>
             <p className="text-sm font-semibold text-[var(--text-secondary)] mt-1">{formatTotalPower(stats.pendingPower)}</p>
@@ -561,7 +561,7 @@ export default function WantedList() {
 >
             <div className="flex items-center gap-2 mb-2">
               <Skull size={16} className="text-red-400" />
-              <span className="text-xs font-semibold uppercase tracking-wider text-red-400">To Zero</span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-red-400">On Wanted List</span>
             </div>
             <p className="text-2xl font-bold text-[var(--foreground)]">{stats.toZeroCount}</p>
             <p className="text-sm font-semibold text-[var(--text-secondary)] mt-1">{formatTotalPower(stats.toZeroPower)}</p>
@@ -653,7 +653,7 @@ export default function WantedList() {
               }`}
             >
               {s === 'all' ? `All (${stats.total})` :
-               s === 'pending' ? `Pending (${stats.pendingCount})` :
+               s === 'pending' ? `Violators (${stats.pendingCount})` :
                s === 'zeroed' ? `Zeroed (${stats.zeroedCount})` :
                `Left (${stats.leftCount})`}
             </button>
@@ -731,7 +731,7 @@ export default function WantedList() {
                 
                 <SortHeader field="alliance" label="Alliance" />
                 <SortHeader field="reason" label="Violation" />
-                <SortHeader field="zero" label="Zero?" align="center" />
+                
                 <SortHeader field="handled" label="Handled" align="center" />
                 {isOfficer && (
                   <th className="text-center px-3 py-2 sm:py-3">
@@ -743,7 +743,7 @@ export default function WantedList() {
             <tbody>
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={isOfficer ? 8 : 7} className="px-3 py-8 text-center text-sm text-[var(--text-muted)]">
+                  <td colSpan={isOfficer ? 7 : 6} className="px-3 py-8 text-center text-sm text-[var(--text-muted)]">
                     {hasActiveFilters ? 'No players match filters' : 'No wanted players'}
                   </td>
                 </tr>
@@ -821,18 +821,22 @@ export default function WantedList() {
                           <span className="text-[var(--text-muted)]">-</span>
                         )}
                       </td>
+                     
                       <td className="px-3 py-2.5 text-center">
-                        {player.zero === 'yes' ? (
-                          <span className="text-xs font-semibold text-red-400">YES</span>
-                        ) : player.zero === 'no' ? (
-                          <span className="text-xs font-semibold text-[var(--text-muted)]">NO</span>
-                        ) : (
-                          <span className="text-[var(--text-muted)]">-</span>
-                        )}
-                      </td>
-                      <td className="px-3 py-2.5 text-center">
-<span className={`inline-block px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase border ${handledBg(handled)}`}>
-  {handled === 'pending' ? 'NO ACTION' : handled}
+<span
+  className={`inline-block px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase border ${
+    handled === 'zeroed'
+      ? 'bg-red-500/10 text-red-400 border-red-500/30'
+      : handled === 'left'
+      ? 'bg-sky-500/10 text-sky-400 border-sky-500/30'
+      : 'bg-amber-500/10 text-amber-400 border-amber-500/30'
+  }`}
+>
+  {handled === 'pending'
+    ? 'NO ACTION'
+    : handled === 'zeroed'
+    ? 'ON WANTED LIST'
+    : 'LEFT'}
 </span>
                       </td>
                       {isOfficer && (
