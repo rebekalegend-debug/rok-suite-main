@@ -826,7 +826,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                         {player.governorId || '-'}
                       </td>
                       <td className="px-3 py-2.5 text-right font-mono text-sm text-[var(--foreground)]">
-                        {formatPower(player.power2)}
+                        {formatTotalPower(player.power2 * 1_000_000)}
                       </td>
 
                     {/* 
@@ -948,7 +948,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                   <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
                     <div>
                       <span className="text-[var(--text-muted)]">Power: </span>
-                      <span className="font-mono text-[var(--text-secondary)]">{formatPower(player.power2)}</span>
+                      <span className="font-mono text-[var(--text-secondary)]">{formatTotalPower(player.power2 * 1_000_000)}</span>
                     </div>
                     
                     <div>
