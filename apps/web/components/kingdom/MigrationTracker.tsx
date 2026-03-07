@@ -788,11 +788,12 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 </span>
 
 {duplicateNames.has(player.name.toLowerCase().trim()) && (
+ <span title="Duplicate name detected">
   <AlertCircle
     size={14}
     className="text-red-500 ml-1"
-    title="Duplicate name detected"
   />
+</span>
 )}
 
   {player.prevNames && (
