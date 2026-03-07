@@ -1,5 +1,5 @@
 'use client';
-
+import { History } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Search, RefreshCw, Lock, ExternalLink, Crosshair, X, Info, ChevronDown, ChevronUp, Undo2, Target, Skull, LogOut } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
@@ -749,9 +749,33 @@ export default function WantedList() {
                       className={`border-b border-[var(--border)] hover:bg-[var(--background-secondary)]/50 transition-colors ${idx % 2 === 0 ? 'bg-[var(--background-secondary)]/30' : ''} ${isDone ? 'opacity-50' : ''}`}
                     >
                       <td className="px-3 py-2.5">
-                        <span className={`font-medium text-sm ${isDone ? 'line-through text-[var(--text-muted)]' : 'text-[var(--foreground)]'}`}>
-                          {player.name}
-                        </span>
+                       <div className="flex items-center gap-1">
+  <span className={`font-medium text-sm ${isDone ? 'line-through text-[var(--text-muted)]' : 'text-[var(--foreground)]'}`}>
+    {player.name}
+  </span>
+
+  {player.prevNames && (
+    <div className="relative group">
+      <button className="text-[var(--text-muted)] hover:text-[var(--foreground)]">
+        <History size={12} />
+      </button>
+
+      <div className="absolute left-4 top-5 hidden group-hover:block z-20">
+        <div className="bg-[var(--background-card)] border border-[var(--border)] rounded-lg px-3 py-2 shadow-lg text-xs whitespace-nowrap">
+          <div className="font-semibold text-[var(--text-secondary)] mb-1">
+            {player.prevNames.split(',').length} previous names
+          </div>
+
+          <div className="space-y-0.5 text-[var(--text-muted)]">
+            {player.prevNames.split(',').map((n, i) => (
+              <div key={i}>{n.trim()}</div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )}
+</div>
                       </td>
                       <td className="px-3 py-2.5 font-mono text-xs text-[var(--text-muted)]">
                         {player.governorId || '-'}
