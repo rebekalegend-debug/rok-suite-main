@@ -535,11 +535,9 @@ export default function WantedList() {
       {!loading && !error && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
           {/* Pending */}
-         <button
+          <div
   onClick={() => setHandledFilter('pending')}
-  className={`rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-left transition hover:bg-amber-500/10 ${
-    handledFilter === 'pending' ? 'ring-2 ring-amber-500/50' : ''
-  }`}
+  className="cursor-pointer rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 hover:bg-amber-500/10 transition"
 >
             <div className="flex items-center gap-2 mb-2">
               <Target size={16} className="text-amber-400" />
@@ -548,12 +546,12 @@ export default function WantedList() {
             <p className="text-2xl font-bold text-[var(--foreground)]">{stats.pendingCount}</p>
             <p className="text-sm font-semibold text-[var(--text-secondary)] mt-1">{formatTotalPower(stats.pendingPower)}</p>
             <p className="text-[10px] text-[var(--text-muted)]">total power</p>
-         </button>
+          </div>
 
           {/* To Be Zeroed (subset of pending with zero=yes) */}
-          <button
+         <div
   onClick={() => setHandledFilter('pending')}
-  className="rounded-xl border border-red-500/20 bg-red-500/5 p-4 text-left transition hover:bg-red-500/10"
+  className="cursor-pointer rounded-xl border border-red-500/20 bg-red-500/5 p-4 hover:bg-red-500/10 transition"
 >
             <div className="flex items-center gap-2 mb-2">
               <Skull size={16} className="text-red-400" />
@@ -562,14 +560,12 @@ export default function WantedList() {
             <p className="text-2xl font-bold text-[var(--foreground)]">{stats.toZeroCount}</p>
             <p className="text-sm font-semibold text-[var(--text-secondary)] mt-1">{formatTotalPower(stats.toZeroPower)}</p>
             <p className="text-[10px] text-[var(--text-muted)]">total power</p>
-          </button>
+          </div>
 
           {/* Zeroed */}
-         <button
+        <div
   onClick={() => setHandledFilter('zeroed')}
-  className={`rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 text-left transition hover:bg-emerald-500/10 ${
-    handledFilter === 'zeroed' ? 'ring-2 ring-emerald-500/50' : ''
-  }`}
+  className="cursor-pointer rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 hover:bg-emerald-500/10 transition"
 >
             <div className="flex items-center gap-2 mb-2">
               <Crosshair size={16} className="text-emerald-400" />
@@ -578,14 +574,12 @@ export default function WantedList() {
             <p className="text-2xl font-bold text-[var(--foreground)]">{stats.zeroedCount}</p>
             <p className="text-sm font-semibold text-[var(--text-secondary)] mt-1">{formatTotalPower(stats.zeroedPower)}</p>
             <p className="text-[10px] text-[var(--text-muted)]">total power</p>
-         </button>
+          </div>
 
           {/* Left Kingdom */}
-         <button
+          <div
   onClick={() => setHandledFilter('left')}
-  className={`rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 text-left transition hover:bg-sky-500/10 ${
-    handledFilter === 'left' ? 'ring-2 ring-sky-500/50' : ''
-  }`}
+  className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 hover:bg-sky-500/10 transition"
 >
             <div className="flex items-center gap-2 mb-2">
               <LogOut size={16} className="text-sky-400" />
@@ -593,7 +587,8 @@ export default function WantedList() {
             </div>
             <p className="text-2xl font-bold text-[var(--foreground)]">{stats.leftCount}</p>
             <p className="text-xs text-[var(--text-muted)] mt-0.5">migrated out</p>
-        </button>
+          </div>
+        </div>
       )}
 
       {/* Search + filters */}
