@@ -766,7 +766,7 @@ export default function WantedList() {
   </span>
 
   {player.prevNames && (
-    <div className="relative group">
+  <div className="relative group inline-flex">
       <button className="text-[var(--text-muted)] hover:text-[var(--foreground)]">
         <History size={12} />
       </button>
