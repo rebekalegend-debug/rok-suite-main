@@ -28,20 +28,21 @@ const UNDO_TIMEOUT_MS = 6000;
 
 /** Format power — sheet stores values in millions (e.g. 28 = 28M) */
 const formatPower = (val: number): string => {
-  if (!val) return '-';
+  if (!val) return "-";
 
-  // values are stored in millions
-  if (val >= 1000) {
-    const billions = val / 1000;
-
-    if (billions < 10) {
-      return billions.toFixed(1).replace('.0', '') + 'B';
-    }
-
-    return Math.round(billions) + 'B';
+  if (val >= 1_000_000_000) {
+    return Math.round(val / 1_000_000_000) + "B";
   }
 
-  return Math.round(val) + 'M';
+  if (val >= 1_000_000) {
+    return Math.round(val / 1_000_000) + "M";
+  }
+
+  if (val >= 1_000) {
+    return Math.round(val / 1_000) + "K";
+  }
+
+  return val.toString();
 };
 
 /** Format summed power (raw power values) */
