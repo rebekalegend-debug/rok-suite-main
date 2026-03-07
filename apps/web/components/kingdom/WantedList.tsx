@@ -540,7 +540,7 @@ export default function WantedList() {
   setHandledFilter('all');
   setZeroFilter('all');
 }}
-  className="cursor-pointer rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 hover:bg-amber-500/10 transition"
+  className="cursor-pointer rounded-xl border border-yellow-500/20 bg-yellow-500/5 p-4 hover:bg-yellow-500/10 transition shadow-lg shadow-yellow-500/20"
 >
             <div className="flex items-center gap-2 mb-2">
               <Target size={16} className="text-amber-400" />
@@ -576,9 +576,7 @@ export default function WantedList() {
   setHandledFilter('zeroed');
   setZeroFilter('all');
 }}
-  className="cursor-pointer rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 hover:bg-emerald-500/10 transition"
->
-            <div className="flex items-center gap-2 mb-2">
+className="cursor-pointer rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 hover:bg-emerald-500/10 transition shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40"            <div className="flex items-center gap-2 mb-2">
               <Crosshair size={16} className="text-emerald-400" />
               <span className="text-xs font-semibold uppercase tracking-wider text-emerald-400">Zeroed</span>
             </div>
@@ -593,8 +591,7 @@ export default function WantedList() {
   setHandledFilter('left');
   setZeroFilter('all');
 }}
-  className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 hover:bg-sky-500/10 transition"
->
+className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 hover:bg-sky-500/10 transition shadow-lg shadow-sky-500/20">
             <div className="flex items-center gap-2 mb-2">
               <LogOut size={16} className="text-sky-400" />
               <span className="text-xs font-semibold uppercase tracking-wider text-sky-400">Left</span>
