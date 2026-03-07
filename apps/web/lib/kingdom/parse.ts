@@ -216,7 +216,7 @@ export async function fetchMgeViolationsSheet(url: string): Promise<WantedPlayer
   const iAlliance = idx('alliance');
   const iViolation = idx('violation');
   const iHandled = headers.findIndex(h => h.toLowerCase().trim() === 'handled');
-
+const iPrevNames = idx('prev');
   return rows
   .map(cols => {
     const handledVal = (cols[iHandled] || '').trim().toLowerCase();
@@ -235,7 +235,7 @@ export async function fetchMgeViolationsSheet(url: string): Promise<WantedPlayer
 
       alliance: (cols[iAlliance] || '').trim(),
       reason: (cols[iViolation] || '').trim(),
-
+prevNames: (cols[iPrevNames] || '').trim(),
       zeroed: (
   handledVal === 'wanted'
     ? 'yes'
