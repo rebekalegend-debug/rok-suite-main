@@ -549,8 +549,11 @@ export default function WantedList() {
           </div>
 
           {/* To Be Zeroed (subset of pending with zero=yes) */}
-         <div
-  onClick={() => setHandledFilter('pending')}
+        <div
+  onClick={() => {
+    setHandledFilter('pending');
+    setZeroFilter('yes');
+  }}
   className="cursor-pointer rounded-xl border border-red-500/20 bg-red-500/5 p-4 hover:bg-red-500/10 transition"
 >
             <div className="flex items-center gap-2 mb-2">
