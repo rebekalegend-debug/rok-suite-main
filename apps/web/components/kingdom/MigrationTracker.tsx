@@ -386,7 +386,7 @@ for (const p of visiblePlayers) {
   const handledBg = (status: 'pending' | 'zeroed' | 'left') => {
     switch (status) {
       case 'pending': return 'bg-amber-500/10 border-amber-500/30 text-amber-400';
-      case 'zeroed': return 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400';
+      case 'zeroed': return 'bg-red-500/10 border-red-500/30 text-red-400';
       case 'left': return 'bg-sky-500/10 border-sky-500/30 text-sky-400';
     }
   };
@@ -681,9 +681,11 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
             >
               All Violations
             </button>
-            {reasons.map(r => (
-              <button
-                key={r}
+            {reasons
+  .filter(r => r !== '4')
+  .map(r => (
+  <button
+    key={r}
                 onClick={() => setReasonFilter(reasonFilter === r ? null : r)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
                   reasonFilter === r
