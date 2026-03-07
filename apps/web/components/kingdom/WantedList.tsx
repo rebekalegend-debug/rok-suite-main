@@ -367,7 +367,7 @@ const duplicateNames = useMemo(() => {
         }
         return 0;
       });
- }, [visiblePlayers, search, reasonFilter, handledFilter, sortRules, getHandledStatus, compareByField]);
+}, [visiblePlayers, search, handledFilter, sortRules, getHandledStatus, compareByField]);
 
   // Dashboard stats — based on visible players only (excludes hidden)
   const stats = useMemo(() => {
