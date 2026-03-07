@@ -559,7 +559,7 @@ export default function WantedList() {
     setHandledFilter('pending');
     setZeroFilter('yes');
   }}
-  className="cursor-pointer rounded-xl border border-red-500/20 bg-red-500/5 p-4 hover:bg-red-500/10 transition"
+ className="cursor-pointer rounded-xl border border-red-500/20 bg-red-500/5 p-4 hover:bg-red-500/10 transition shadow-lg shadow-red-500/30"
 >
             <div className="flex items-center gap-2 mb-2">
               <Skull size={16} className="text-red-400" />
