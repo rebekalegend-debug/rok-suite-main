@@ -138,7 +138,7 @@ const touchStartY = useRef<number | null>(null);
     setIsMobileOpen(false);
   }, [pathname]);
 useEffect(() => {
-  const EDGE_SIZE = 20;
+  const EDGE_SIZE = 120;
   const OPEN_THRESHOLD = 60;
   const CLOSE_THRESHOLD = 60;
 
@@ -157,7 +157,7 @@ useEffect(() => {
 
     if (dy > 40) return;
 
-    if (!isMobileOpen && touchStartX.current < EDGE_SIZE && dx > OPEN_THRESHOLD) {
+    if (!isMobileOpen && dx > OPEN_THRESHOLD) {
       setIsMobileOpen(true);
       touchStartX.current = null;
       touchStartY.current = null;
