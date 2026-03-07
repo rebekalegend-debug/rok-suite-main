@@ -37,7 +37,7 @@ export default function Home() {
       iconHoverColor: 'group-hover:text-rose-500',
     },
   {
-      href: '/events',
+      href: 'https://app.rokstats.online/kvk/ranking',
       titleKey: 'tools.events.title',
       descriptionKey: 'tools.events.description',
       icon: Trophy,
