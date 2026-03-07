@@ -536,15 +536,17 @@ export default function WantedList() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
           {/* Pending */}
           <div
-  onClick={() => {
-  setHandledFilter('pending');
+ onClick={() => {
+  setHandledFilter('all');
   setZeroFilter('all');
 }}
   className="cursor-pointer rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 hover:bg-amber-500/10 transition"
 >
             <div className="flex items-center gap-2 mb-2">
               <Target size={16} className="text-amber-400" />
-              <span className="text-xs font-semibold uppercase tracking-wider text-amber-400">Pending</span>
+             <span className="text-xs font-semibold uppercase tracking-wider text-amber-400">
+  All Members
+</span>
             </div>
             <p className="text-2xl font-bold text-[var(--foreground)]">{stats.pendingCount}</p>
             <p className="text-sm font-semibold text-[var(--text-secondary)] mt-1">{formatTotalPower(stats.pendingPower)}</p>
