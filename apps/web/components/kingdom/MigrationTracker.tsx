@@ -84,7 +84,7 @@ export default function WantedList() {
   const [reasonFilter, setReasonFilter] = useState<string | null>(null);
   
   const [handledFilter, setHandledFilter] = useState<'all' | 'pending' | 'zeroed' | 'left'>('all');
-  const [zeroFilter, setZeroFilter] = useState<'all' | 'yes' | 'no'>('all');
+
 
   // Sort state
   const [sortRules, setSortRules] = useState<SortRule[]>(DEFAULT_SORT_RULES);
@@ -257,13 +257,12 @@ export default function WantedList() {
     setSortRules(remaining.length > 0 ? remaining : DEFAULT_SORT_RULES);
   };
 
-  const resetFiltersAndSort = () => {
-    setSortRules(DEFAULT_SORT_RULES);
-    setReasonFilter(null);
-    setHandledFilter('all');
-    setZeroFilter('all');
-    setSearch('');
-  };
+ const resetFiltersAndSort = () => {
+  setSortRules(DEFAULT_SORT_RULES);
+  setReasonFilter(null);
+  setHandledFilter('all');
+  setSearch('');
+};
 
   const handledOrder = (status: 'pending' | 'zeroed' | 'left'): number => {
     switch (status) {
@@ -331,7 +330,7 @@ export default function WantedList() {
         if (search && !matchesSearch(search, p.name, p.governorId)) return false;
         if (reasonFilter && p.reason !== reasonFilter) return false;
       
-        if (zeroFilter !== 'all' && p.zero !== zeroFilter) return false;
+       
         const handled = getHandledStatus(p);
         if (handledFilter !== 'all' && handled !== handledFilter) return false;
         return true;
@@ -343,7 +342,7 @@ export default function WantedList() {
         }
         return 0;
       });
-  }, [visiblePlayers, search, reasonFilter, zeroFilter, handledFilter, sortRules, getHandledStatus, compareByField]);
+}, [visiblePlayers, search, reasonFilter, handledFilter, sortRules, getHandledStatus, compareByField]);
 
   // Dashboard stats — based on visible players only (excludes hidden)
   const stats = useMemo(() => {
@@ -554,8 +553,7 @@ export default function WantedList() {
           {/* To Be Zeroed (subset of pending with zero=yes) */}
         <div
   onClick={() => {
-    setHandledFilter('pending');
-    setZeroFilter('yes');
+    setHandledFilter('zeroed');
   }}
   className="cursor-pointer rounded-xl border border-red-500/20 bg-red-500/5 p-4 hover:bg-red-500/10 transition"
 >
@@ -571,8 +569,8 @@ export default function WantedList() {
           {/* Zeroed */}
         <div
   onClick={() => {
-  setHandledFilter('pending');
-  setZeroFilter('yes');
+  setHandledFilter('zeroed');
+ 
 }}
   className="cursor-pointer rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 hover:bg-emerald-500/10 transition"
 >
@@ -617,16 +615,7 @@ export default function WantedList() {
             />
           </div>
          
-          {/* Zero filter */}
-          <select
-            value={zeroFilter}
-            onChange={(e) => setZeroFilter(e.target.value as 'all' | 'yes' | 'no')}
-            className="px-3 py-2.5 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] text-sm focus:outline-none focus:border-red-500/50"
-          >
-            <option value="all">Zero: All</option>
-            <option value="yes">Zero: Yes</option>
-            <option value="no">Zero: No</option>
-          </select>
+         
           {/* Reset */}
           {hasActiveFilters && (
             <button
