@@ -41,6 +41,22 @@ const tools = [
   iconHoverColor: 'group-hover:text-rose-600',
 },
 
+
+{
+  href: '/kvk-map',
+  titleKey: 'tools.kvkMap.title',
+  descriptionKey: 'tools.kvkMap.description',
+  icon: Map,
+
+  iconColor: 'text-orange-500',
+  iconGlow: 'drop-shadow-[0_0_6px_rgba(249,115,22,0.45)]',
+
+  hoverBorder: 'hover:border-orange-500/40',
+  hoverShadow: 'hover:shadow-orange-500/10',
+  iconHoverBg: 'group-hover:bg-orange-500/15',
+  iconHoverColor: 'group-hover:text-orange-600',
+},
+  
 {
   href: 'https://app.rokstats.online/kvk/ranking',
   titleKey: 'tools.events.title',
@@ -103,20 +119,7 @@ const tools = [
   iconHoverColor: 'group-hover:text-red-600',
 },
 
-{
-  href: '/kvk-map',
-  titleKey: 'tools.kvkMap.title',
-  descriptionKey: 'tools.kvkMap.description',
-  icon: Map,
 
-  iconColor: 'text-orange-500',
-  iconGlow: 'drop-shadow-[0_0_6px_rgba(249,115,22,0.45)]',
-
-  hoverBorder: 'hover:border-orange-500/40',
-  hoverShadow: 'hover:shadow-orange-500/10',
-  iconHoverBg: 'group-hover:bg-orange-500/15',
-  iconHoverColor: 'group-hover:text-orange-600',
-},
 
 {
   href: '/kingdom/kingdom-stats',
