@@ -64,7 +64,12 @@
   /* Background colors - deeper, more sophisticated */
   
   --background: #0A090A;
---background-secondary: #141416;
+--background-secondary: linear-gradient(
+  180deg,
+  #1a161b 0%,
+  #141416 50%,
+  #0d0d11 100%
+);
 --background-card: #141416;
 
   /* Primary gradient colors */
