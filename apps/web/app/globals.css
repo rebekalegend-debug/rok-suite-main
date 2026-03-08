@@ -61,47 +61,59 @@
 }
 /* Default to dark theme, then override with .light class */
 .dark {
-  /* Background colors - deeper, more sophisticated */
-  
-  --background: #0A090A;
---background-secondary: linear-gradient(
-  180deg,
-  #1a161b 0%,
-  #141416 50%,
-  #0d0d11 100%
+
+/* MAIN BACKGROUND */
+--background: linear-gradient(
+135deg,
+#0b0c10 0%,
+#0f1117 40%,
+#12141c 100%
 );
---background-card: #141416;
 
-  /* Primary gradient colors */
-  --primary: #4318ff;
-  --primary-light: #9f7aea;
+/* SIDEBAR */
+--background-secondary: linear-gradient(
+180deg,
+#151722 0%,
+#11131b 40%,
+#0d0f15 100%
+);
 
-  /* Info/accent */
-  --info: #0ea5e9;
-  --info-light: #38bdf8;
+/* CARDS */
+--background-card: #141826;
 
-  /* Success */
-  --success: #10b981;
-  --success-light: #34d399;
+/* HOVER */
+--background-hover: #1a1f2e;
 
-  /* Warning */
-  --warning: #f59e0b;
+/* PRIMARY (keep Quinn identity) */
+--primary: #e11d8a;
+--primary-light: #f472b6;
 
-  /* Error */
-  --error: #ef4444;
+/* accent info */
+--info: #38bdf8;
+--info-light: #60a5fa;
 
-  /* Text colors */
-  --foreground: #f9fafb;
-  --text-secondary: #9ca3af;
-  --text-muted: #6b7280;
+/* success */
+--success: #10b981;
 
-  /* Border */
-  --border: rgba(255, 255, 255, 0.08);
-  --border-hover: rgba(255, 255, 255, 0.15);
+/* warning */
+--warning: #f59e0b;
 
-  /* Card shadow - minimal for dark mode */
-  --card-shadow: none;
-  --card-shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.3);
+/* error */
+--error: #ef4444;
+
+/* text */
+--foreground: #e6e8ef;
+--text-secondary: #9aa3b2;
+--text-muted: #6b7280;
+
+/* borders */
+--border: rgba(255,255,255,0.06);
+--border-hover: rgba(255,255,255,0.12);
+
+/* shadows */
+--card-shadow: none;
+--card-shadow-hover: 0 8px 30px rgba(0,0,0,0.45);
+
 }
 
 
