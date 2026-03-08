@@ -412,20 +412,33 @@ console.log("ZONES:", zones);
             onClose={() => setSelectedFeatureId(null)}
           />
         ) : (
-          <div
-            className="rounded-xl p-4 border text-center"
-            style={{
-              backgroundColor: 'var(--background-card)',
-              borderColor: 'var(--border)',
-              color: 'var(--text-muted)',
-            }}
-          >
-            <p className="text-sm">
-              {isPlacing
-                ? 'Click on the map to place a feature'
-                : 'Click a marker to edit, or a zone to redraw its boundary'}
-            </p>
-          </div>
+         <div
+  className="rounded-xl p-4 border text-center space-y-3"
+  style={{
+    backgroundColor: 'var(--background-card)',
+    borderColor: 'var(--border)',
+    color: 'var(--text-muted)',
+  }}
+>
+  <p className="text-sm">
+    No zones yet. Create one to start drawing.
+  </p>
+
+  <button
+    onClick={() => {
+      setSelectedZoneId('new');
+      setIsDrawingZone(true);
+      setZoneVertices([]);
+    }}
+    className="px-3 py-1.5 rounded text-sm"
+    style={{
+      background: '#3b82f6',
+      color: '#fff'
+    }}
+  >
+    Create Zone
+  </button>
+</div>
         )}
       </div>
     </div>
