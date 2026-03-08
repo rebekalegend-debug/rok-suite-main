@@ -424,3 +424,18 @@ html, body {
 .transition-slow {
   transition: all 0.3s ease;
 }
+/* ======================================
+   SIDEBAR TEXT FIX
+   ====================================== */
+
+.sidebar h1,
+.sidebar-title {
+  color: #2a1f1a;
+  font-weight: 700;
+}
+
+.sidebar small,
+.sidebar-subtitle {
+  color: #d63384;
+  font-weight: 500;
+}
