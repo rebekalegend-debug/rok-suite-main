@@ -82,15 +82,15 @@ const touchStartY = useRef<number | null>(null);
   titleKey: 'breakers',
   titleColor: 'text-red-500',
   items: [
-    { 
-      labelKey: 'migrationTracker',
-      href: '/kingdom/migration-tracker',
-       icon: <Radar size={20} />,
+    {
+  labelKey: 'migrationTracker',
+  href: '/kingdom/migration-tracker',
+  icon: <Radar size={20} className="text-orange-500" />,
   hoverColor: 'group-hover:text-orange-500',
   hoverBg: 'hover:bg-orange-500/10',
   activeColor: 'text-white',
   activeBg: 'bg-gradient-to-r from-orange-500 to-red-500'
-    },
+},
     { 
       labelKey: 'wanted',
       href: '/kingdom/wanted',
