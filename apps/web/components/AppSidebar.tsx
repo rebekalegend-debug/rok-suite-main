@@ -124,6 +124,17 @@ const touchStartY = useRef<number | null>(null);
   titleKey: 'breakers',
   titleColor: 'text-red-500',
   items: [
+   
+        { 
+      labelKey: 'wanted',
+      href: '/kingdom/wanted',
+      icon: <Crosshair size={20} />,
+      hoverColor: 'group-hover:text-red-500',
+      hoverBg: 'hover:bg-red-500/10',
+      activeColor: 'text-white',
+      activeBg: 'bg-gradient-to-r from-red-500 to-rose-500'
+    },
+    
     {
   labelKey: 'migrationTracker',
   href: '/kingdom/migration-tracker',
@@ -133,15 +144,7 @@ const touchStartY = useRef<number | null>(null);
   activeColor: 'text-white',
   activeBg: 'bg-gradient-to-r from-orange-500 to-red-500'
 },
-    { 
-      labelKey: 'wanted',
-      href: '/kingdom/wanted',
-      icon: <Crosshair size={20} />,
-      hoverColor: 'group-hover:text-red-500',
-      hoverBg: 'hover:bg-red-500/10',
-      activeColor: 'text-white',
-      activeBg: 'bg-gradient-to-r from-red-500 to-rose-500'
-    },
+
   ],
 },
 
