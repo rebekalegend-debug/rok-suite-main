@@ -1,5 +1,5 @@
 import { google } from "googleapis";
-
+ import { Readable } from "stream";
 export async function POST(req: Request) {
 
   const formData = await req.formData();
@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
   const drive = google.drive({ version:"v3", auth });
 
-  import { Readable } from "stream";
+ 
 
 async function uploadFile(file: File) {
 
