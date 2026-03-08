@@ -24,6 +24,29 @@ interface RosterMember {
 
 const KINGDOM_HEADER = `<size=30px><color=#4d0000>KINGDOM 3923</color> <color=#cc0000>—</color> <color=#4d0000>A</color><color=#660000>N</color><color=#800000>G</color><color=#990000>M</color><color=#b30000>A</color><color=#cc0000>R</color> <color=#4d0000>N</color><color=#660000>A</color><color=#800000>Z</color><color=#990000>G</color><color=#b30000>U</color><color=#cc0000>L</color> <color=#e60000>G</color><color=#ff0000>U</color><color=#ff0000>A</color><color=#cc0000>R</color><color=#990000>D</color><color=#800000>S</color></size>`;
 const KINGDOM_DIVIDER = '►═════════❂❂❂═════════◄';
+const [form, setForm] = useState({
+  id: '',
+  commander: '',
+  equipment: '',
+  rank: '',
+  kvkSpending: '',
+  purpose: '',
+  troopType: '',
+  pair: '',
+  comment: ''
+});
+async function submitApplication() {
+  await fetch('/api/mge-application', {
+    method: 'POST',
+    body: JSON.stringify(form),
+  });
+
+  alert('Application submitted');
+}
+
+
+
+
 
 function formatDate(dateStr: string): string {
   const d = new Date(dateStr + 'T00:00:00');
@@ -332,6 +355,89 @@ export default function MgePage() {
           </div>
         </div>
 
+
+<div className="p-6 rounded-lg border space-y-4"
+ style={{background:'var(--background-card)', borderColor:'var(--border)'}}>
+
+<h2 className="text-lg font-semibold">MGE Application</h2>
+
+<input
+placeholder="Your ingame name"
+className="w-full border px-3 py-2 rounded"
+onChange={e=>setForm({...form,id:e.target.value})}
+/>
+
+<input
+placeholder="Commander Screenshot URL"
+className="w-full border px-3 py-2 rounded"
+onChange={e=>setForm({...form,commander:e.target.value})}
+/>
+
+<input
+placeholder="Equipment Screenshot URL"
+className="w-full border px-3 py-2 rounded"
+onChange={e=>setForm({...form,equipment:e.target.value})}
+/>
+
+<select
+className="w-full border px-3 py-2 rounded"
+onChange={e=>setForm({...form,rank:e.target.value})}
+>
+<option>Select Rank</option>
+<option>Rank 1</option>
+<option>Rank 2</option>
+<option>Rank 3</option>
+<option>Rank 4-10</option>
+<option>Free for all</option>
+</select>
+
+<select
+className="w-full border px-3 py-2 rounded"
+onChange={e=>setForm({...form,kvkSpending:e.target.value})}
+>
+<option>F2P</option>
+<option>Crystal Mine +50%</option>
+<option>Crystal Quest</option>
+<option>Buy Popups</option>
+<option>Max Tech</option>
+</select>
+
+<select
+className="w-full border px-3 py-2 rounded"
+onChange={e=>setForm({...form,troopType:e.target.value})}
+>
+<option>INF</option>
+<option>ARCH</option>
+<option>CAV</option>
+</select>
+
+<input
+placeholder="Commander Pair"
+className="w-full border px-3 py-2 rounded"
+onChange={e=>setForm({...form,pair:e.target.value})}
+/>
+
+<textarea
+placeholder="Comment"
+className="w-full border px-3 py-2 rounded"
+onChange={e=>setForm({...form,comment:e.target.value})}
+/>
+
+<button
+onClick={submitApplication}
+className="px-4 py-2 bg-blue-500 text-white rounded"
+>
+Submit Application
+</button>
+
+</div>
+
+
+
+
+
+
+        
         {/* Mode banner */}
         {isOfficer && (
           <div className="mb-4 px-4 py-2 rounded-lg border flex items-center gap-2 text-sm bg-blue-500/10 border-blue-500/30">
