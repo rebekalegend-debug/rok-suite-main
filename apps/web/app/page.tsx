@@ -92,13 +92,13 @@ const tools = [
   descriptionKey: 'tools.migrationTracker.description',
   icon: Radar,
 
-  iconColor: 'text-teal-500',
-  iconGlow: 'drop-shadow-[0_0_6px_rgba(20,184,166,0.45)]',
+  iconColor: 'text-orange-500',
+  iconGlow: 'drop-shadow-[0_0_6px_rgba(249,115,22,0.45)]',
 
-  hoverBorder: 'hover:border-teal-500/40',
-  hoverShadow: 'hover:shadow-teal-500/10',
-  iconHoverBg: 'group-hover:bg-teal-500/15',
-  iconHoverColor: 'group-hover:text-teal-600',
+  hoverBorder: 'hover:border-orange-500/40',
+  hoverShadow: 'hover:shadow-orange-500/10',
+  iconHoverBg: 'group-hover:bg-orange-500/15',
+  iconHoverColor: 'group-hover:text-orange-600',
 },
 
 {
