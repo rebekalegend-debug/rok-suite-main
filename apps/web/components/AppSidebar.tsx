@@ -379,9 +379,14 @@ useEffect(() => {
 
       {/* Mobile Sidebar */}
       <aside
-        className={`lg:hidden fixed left-0 top-0 h-screen w-64 bg-gradient-to-b from-[#ffe4ef] via-[#fff3f8] to-[#fff1dc] border-r border-[var(--border)] shadow-[inset_-1px_0_0_rgba(244,114,182,0.15)] z-50 transform transition-transform duration-300 flex flex-col ${
-          isMobileOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+    className={`lg:hidden fixed left-0 top-0 h-screen w-64
+bg-gradient-to-b from-[#ffd6e8] via-[#ffe9f4] to-[#ffe8c2]
+dark:bg-gradient-to-b dark:from-[#1f0f19] dark:via-[#1a1220] dark:to-[#16121c]
+border-r border-pink-300/40 dark:border-purple-500/20
+shadow-[inset_-1px_0_0_rgba(244,114,182,0.2)]
+z-50 transform transition-transform duration-300 flex flex-col ${
+  isMobileOpen ? 'translate-x-0' : '-translate-x-full'
+}`}
       >
         <button
           onClick={() => setIsMobileOpen(false)}
