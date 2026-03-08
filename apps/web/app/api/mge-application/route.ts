@@ -20,33 +20,36 @@ export async function POST(req: Request) {
 
   const drive = google.drive({ version:"v3", auth });
 
-  async function uploadFile(file: File){
+  import { Readable } from "stream";
 
-    const buffer = Buffer.from(await file.arrayBuffer());
+async function uploadFile(file: File) {
 
-    const res = await drive.files.create({
-      requestBody:{
-        name:file.name,
-        parents:[process.env.GOOGLE_DRIVE_FOLDER_ID!]
-      },
-      media:{
-        mimeType:file.type,
-        body:buffer
-      }
-    });
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const stream = Readable.from(buffer);
 
-   const fileId = res.data.id!;
+  const res = await drive.files.create({
+    requestBody:{
+      name:file.name,
+      parents:[process.env.GOOGLE_DRIVE_FOLDER_ID!]
+    },
+    media:{
+      mimeType:file.type,
+      body:stream
+    }
+  });
 
-    await drive.permissions.create({
-      fileId,
-      requestBody:{
-        role:"reader",
-        type:"anyone"
-      }
-    });
+  const fileId = res.data.id!;
 
-    return `https://drive.google.com/file/d/${fileId}/view`;
-  }
+  await drive.permissions.create({
+    fileId:fileId,
+    requestBody:{
+      role:"reader",
+      type:"anyone"
+    }
+  });
+
+  return `https://drive.google.com/file/d/${fileId}/view`;
+}
 
   const commanderUrl = await uploadFile(commanderFile);
   const gearUrl = await uploadFile(gearFile);
