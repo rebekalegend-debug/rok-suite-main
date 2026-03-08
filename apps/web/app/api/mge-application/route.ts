@@ -33,28 +33,21 @@ const buffer = Buffer.from(await file.arrayBuffer());
   const stream = Readable.from(buffer);
 
  
- const res = await drive.files.create({
-  requestBody:{
-    name:file.name,
-    parents:["12MJVTyP17D77gMLuYkxqFUWsrxeMFXf9"]
+const res = await drive.files.create({
+  requestBody: {
+    name: file.name,
+    parents: ["12MJVTyP17D77gMLuYkxqFUWsrxeMFXf9"]
   },
-  media:{
-    mimeType:file.type,
-    body:stream
+  media: {
+    mimeType: file.type,
+    body: stream
   },
-  fields:"id"
+  fields: "id, webViewLink"
 });
 
   const fileId = res.data.id!;
 
-  await drive.permissions.create({
-    fileId,
-    requestBody: {
-      role: "reader",
-      type: "anyone"
-    },
-   
-  });
+
 
   return `https://drive.google.com/file/d/${fileId}/view`;
 }
