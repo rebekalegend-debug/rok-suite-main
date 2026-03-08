@@ -29,7 +29,7 @@ export default function AdminMapView() {
   const { map, loading: mapLoading } = useActiveKvkMap();
   const { features, refetch } = useKvkMapFeatures(map?.id);
   const { zones, refetch: refetchZones } = useKvkMapZones(map?.id);
-
+console.log("ZONES:", zones);
   // Feature UI state
   const [selectedFeatureId, setSelectedFeatureId] = useState<string | null>(null);
   const [placingType, setPlacingType] = useState<FeatureType | null>(null);
