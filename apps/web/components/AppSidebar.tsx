@@ -379,14 +379,14 @@ useEffect(() => {
 
       {/* Mobile Sidebar */}
       <aside
-    className={`lg:hidden fixed left-0 top-0 h-screen w-64
-bg-[var(--background-secondary)]
-border-r border-pink-300/40 dark:border-purple-500/20
+className={`lg:hidden fixed left-0 top-0 h-screen w-64
+border-r border-pink-300/40
 shadow-[inset_-1px_0_0_rgba(244,114,182,0.2)]
 z-50 transform transition-transform duration-300 flex flex-col ${
   isMobileOpen ? 'translate-x-0' : '-translate-x-full'
 }`}
-      >
+style={{ background: "var(--background-secondary)" }}
+>
         <button
           onClick={() => setIsMobileOpen(false)}
           className="absolute top-4 right-4 p-2 rounded-lg text-[var(--text-muted)] hover:text-[var(--foreground)] hover:bg-[var(--background-secondary)] transition-colors"
