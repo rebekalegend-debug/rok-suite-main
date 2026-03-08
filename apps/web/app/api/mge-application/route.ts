@@ -4,8 +4,8 @@ export async function POST(req: Request) {
 
   const formData = await req.formData();
 
-  const commanderFile = formData.get("commander") as File;
-  const gearFile = formData.get("gear") as File;
+ const commanderFile = formData.get("commander") as File | null;
+const gearFile = formData.get("gear") as File | null;
 
   const auth = new google.auth.GoogleAuth({
     credentials: {
@@ -23,33 +23,38 @@ export async function POST(req: Request) {
 
  
 
-async function uploadFile(file: File) {
+async function uploadFile(file: File | null) {
 
-  const buffer = Buffer.from(if(!file) throw new Error("File missing"));
+if (!file) throw new Error("File missing");
+
+const buffer = Buffer.from(await file.arrayBuffer());
+
+
   const stream = Readable.from(buffer);
 
- const res = await drive.files.create({
-  requestBody: {
-    name: file.name,
-    parents: [process.env.GOOGLE_DRIVE_FOLDER_ID!]
-  },
-  media: {
-    mimeType: file.type,
-    body: stream
-  },
-  supportsAllDrives: true
-});
+  const res = await drive.files.create({
+    requestBody: {
+      name: file.name,
+      parents: [process.env.GOOGLE_DRIVE_FOLDER_ID!]
+    },
+    media: {
+      mimeType: file.type,
+      body: stream
+    },
+    supportsAllDrives: true
+  });
 
   const fileId = res.data.id!;
 
- await drive.permissions.create({
-  fileId: fileId,
-  requestBody:{
-    role:"reader",
-    type:"anyone"
-  },
-  supportsAllDrives: true
-});
+  await drive.permissions.create({
+    fileId,
+    requestBody: {
+      role: "reader",
+      type: "anyone"
+    },
+    supportsAllDrives: true
+  });
+
   return `https://drive.google.com/file/d/${fileId}/view`;
 }
 
