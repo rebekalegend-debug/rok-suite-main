@@ -35,7 +35,7 @@ export async function POST(req: Request) {
       }
     });
 
-    const fileId = res.data.id;
+   const fileId = res.data.id!;
 
     await drive.permissions.create({
       fileId,
