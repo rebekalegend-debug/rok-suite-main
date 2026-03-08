@@ -51,7 +51,7 @@ document.documentElement.setAttribute("data-theme","light");
       --notice-tip-border-color: var(--success);
       --notice-warn-background: #fffbeb;
       --notice-warn-border-color: var(--warning);
-     --search-background: #ffffff;
+     --search-background: #fffaf5;
       --search-result-keyword-background: #fef3c7;
     }
 
@@ -98,7 +98,7 @@ document.documentElement.setAttribute("data-theme","light");
 
 .markdown-section pre,
 .markdown-section table {
-  background: #ffffff;
+  background: #fffaf5;
   box-shadow: 0 6px 20px rgba(0,0,0,0.04);
   border-radius: 10px;
 }
@@ -153,8 +153,15 @@ document.documentElement.setAttribute("data-theme","light");
        ========================================== */
     .sidebar {
       border-right: 1px solid var(--sidebar-border-color);
+     background: linear-gradient(
+    180deg,
+    #fff6f8 0%,
+    #fdf3ea 45%,
+    #f7efe5 100%
+  );
     }
 
+ 
     .sidebar-nav li {
       margin: 0.25rem 0;
     }
