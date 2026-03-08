@@ -98,16 +98,7 @@ const touchStartY = useRef<number | null>(null);
   activeColor: 'text-white',
   activeBg: 'bg-gradient-to-r from-yellow-500 to-amber-500'
 },
-{
-  labelKey: 'rokMail',
-  href: '/rok-mail',
-  icon: <ScrollText size={20} className="text-blue-500" />,
-  hoverColor: 'group-hover:text-blue-500',
-  hoverBg: 'hover:bg-blue-500/10',
-  activeColor: 'text-white',
-  activeBg: 'bg-gradient-to-r from-blue-500 to-indigo-500'
-},
-        
+  
    {
   labelKey: 'kingdomStats',
   href: '/kingdom/kingdom-stats',
@@ -116,6 +107,15 @@ const touchStartY = useRef<number | null>(null);
   hoverBg: 'hover:bg-green-500/10',
   activeColor: 'text-white',
   activeBg: 'bg-gradient-to-r from-green-500 to-emerald-500'
+},
+        {
+  labelKey: 'rokMail',
+  href: '/rok-mail',
+  icon: <ScrollText size={20} className="text-blue-500" />,
+  hoverColor: 'group-hover:text-blue-500',
+  hoverBg: 'hover:bg-blue-500/10',
+  activeColor: 'text-white',
+  activeBg: 'bg-gradient-to-r from-blue-500 to-indigo-500'
 },
       ],
     },
