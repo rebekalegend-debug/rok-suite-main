@@ -24,8 +24,7 @@ interface RosterMember {
 
 const KINGDOM_HEADER = `<size=30px><color=#4d0000>KINGDOM 3923</color> <color=#cc0000>—</color> <color=#4d0000>A</color><color=#660000>N</color><color=#800000>G</color><color=#990000>M</color><color=#b30000>A</color><color=#cc0000>R</color> <color=#4d0000>N</color><color=#660000>A</color><color=#800000>Z</color><color=#990000>G</color><color=#b30000>U</color><color=#cc0000>L</color> <color=#e60000>G</color><color=#ff0000>U</color><color=#ff0000>A</color><color=#cc0000>R</color><color=#990000>D</color><color=#800000>S</color></size>`;
 const KINGDOM_DIVIDER = '►═════════❂❂❂════════◄';
-const [commanderFile,setCommanderFile] = useState<File | null>(null)
-const [gearFile,setGearFile] = useState<File | null>(null)
+
 
 function formatDate(dateStr: string): string {
   const d = new Date(dateStr + 'T00:00:00');
@@ -190,7 +189,8 @@ const [form, setForm] = useState({
   pair: '',
   comment: ''
 });
-
+const [commanderFile,setCommanderFile] = useState<File | null>(null)
+const [gearFile,setGearFile] = useState<File | null>(null)
 async function submitApplication(){
 
  const data = new FormData()
@@ -384,17 +384,11 @@ className="w-full border px-3 py-2 rounded"
 onChange={e=>setForm({...form,id:e.target.value})}
 />
 
-<input
-type="file"
-accept="image/*"
-onChange={(e)=>setCommanderFile(e.target.files?.[0] || null)}
-/>
+<label className="text-sm font-medium">Commander Screenshot</label>
+<input type="file" accept="image/*" onChange={(e)=>setCommanderFile(e.target.files?.[0] || null)} />
 
-<input
-type="file"
-accept="image/*"
-onChange={(e)=>setGearFile(e.target.files?.[0] || null)}
-/>
+<label className="text-sm font-medium">Gear Screenshot</label>
+<input type="file" accept="image/*" onChange={(e)=>setGearFile(e.target.files?.[0] || null)} />
 
 <select
 className="w-full border px-3 py-2 rounded"
