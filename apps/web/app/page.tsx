@@ -177,8 +177,23 @@ const tools = [
                   <Link key={tool.href} href={tool.href}>
                     <div className={`group p-4 rounded-xl bg-[var(--background-card)] border border-[var(--border)] shadow-[var(--card-shadow)] ${tool.hoverBorder} hover:bg-[var(--background-hover)] hover:-translate-y-0.5 hover:shadow-[var(--card-shadow-hover)] ${tool.hoverShadow} transition-all duration-200 cursor-pointer h-full`}>
                       <div className="flex items-start gap-3">
-                        <div className={`p-2 rounded-lg bg-[var(--background-secondary)] ${tool.iconHoverBg} transition-colors duration-200 flex-shrink-0`}>
-                          <Icon className={`w-4 h-4 text-[var(--text-muted)] ${tool.iconHoverColor} transition-colors duration-200`} />
+                        <div className={`
+p-2 rounded-lg
+bg-[var(--background-secondary)]
+${tool.iconHoverBg}
+group-hover:scale-110
+transition-all duration-200
+flex-shrink-0
+`}>
+                          <Icon
+  className={`
+    w-5 h-5
+    ${tool.iconColor}
+    ${tool.iconGlow}
+    ${tool.iconHoverColor}
+    transition-all duration-200
+  `}
+/>
                         </div>
 
                         <div className="flex-1 min-w-0">
