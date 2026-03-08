@@ -4,7 +4,51 @@
  * Modern dark/light theme
  * Clean, professional design inspired by ROKstats
  */
+.light {
 
+  /* BACKGROUND — creamy luxury white */
+  --background: #fdfaf6;
+
+  /* panels / sidebar */
+  --background-secondary: #f6efe7;
+
+  /* cards */
+  --background-card: #fffaf5;
+
+  /* hover */
+  --background-hover: #f7efe5;
+
+  /* PRIMARY — soft rose gold */
+  --primary: #e11d8a;
+  --primary-light: #f472b6;
+
+  /* accent gold */
+  --info: #d4af37;
+  --info-light: #f6d365;
+
+  /* success */
+  --success: #10b981;
+  --success-light: #34d399;
+
+  /* warning */
+  --warning: #f59e0b;
+
+  /* error */
+  --error: #ef4444;
+
+  /* text — warm not harsh */
+  --foreground: #2a1f1a;
+  --text-secondary: #5c4a42;
+  --text-muted: #7a6a61;
+
+  /* borders */
+  --border: rgba(0,0,0,0.08);
+  --border-hover: rgba(0,0,0,0.15);
+
+  /* luxury soft shadows */
+  --card-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  --card-shadow-hover: 0 12px 30px rgba(0,0,0,0.12);
+}
 /* Default to dark theme, then override with .light class */
 .dark {
   /* Background colors - deeper, more sophisticated */
@@ -45,44 +89,7 @@
   --card-shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
-.light {
-  /* Background colors - slightly gray for better contrast */
-  --background: #e9ecef;
-  --background-secondary: #dee2e6;
-  --background-card: #ffffff;
-  --background-hover: #f8f9fa;
 
-  /* Primary gradient colors */
-  --primary: #4318ff;
-  --primary-light: #9f7aea;
-
-  /* Info/accent */
-  --info: #0ea5e9;
-  --info-light: #38bdf8;
-
-  /* Success */
-  --success: #10b981;
-  --success-light: #34d399;
-
-  /* Warning */
-  --warning: #f59e0b;
-
-  /* Error */
-  --error: #ef4444;
-
-  /* Text colors */
-  --foreground: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #64748b;
-
-  /* Border - stronger for light mode */
-  --border: rgba(0, 0, 0, 0.12);
-  --border-hover: rgba(0, 0, 0, 0.2);
-
-  /* Card shadow for light mode */
-  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
-  --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.1);
-}
 
 @theme inline {
   --color-background: var(--background);
@@ -92,7 +99,12 @@
 }
 
 body {
-  background: var(--background);
+  background: linear-gradient(
+    180deg,
+    #fff8fb 0%,
+    #fdfaf6 35%,
+    #f6efe6 100%
+  );
   color: var(--foreground);
   font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
