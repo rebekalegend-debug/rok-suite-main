@@ -198,16 +198,38 @@ console.log("ZONES:", zones);
     setZoneVertices((prev) => prev.slice(0, -1));
   }, []);
 
-  const handleFinishDrawing = useCallback(async () => {
-    if (zoneVertices.length < 3 || !selectedZone) return;
-    const success = await updateMapZone(selectedZone.id, { polygon: zoneVertices });
-    if (success) {
-      await refetchZones();
-      setIsDrawingZone(false);
-      setZoneVertices([]);
-      setSelectedZoneId(null);
+const handleFinishDrawing = useCallback(async () => {
+  if (zoneVertices.length < 3) return;
+
+  if (selectedZoneId === 'new') {
+
+    const { error } = await supabase
+      .from('kvk_map_zones')
+      .insert([
+        {
+          map_id: map.id,
+          zone_number: zones.length + 1,
+          name: `Zone ${zones.length + 1}`,
+          color: '#3b82f6',
+          polygon: zoneVertices
+        }
+      ]);
+
+    if (error) {
+      console.error(error);
+      return;
     }
-  }, [zoneVertices, selectedZone, refetchZones]);
+
+  } else if (selectedZone) {
+    await updateMapZone(selectedZone.id, { polygon: zoneVertices });
+  }
+
+  await refetchZones();
+  setIsDrawingZone(false);
+  setZoneVertices([]);
+  setSelectedZoneId(null);
+
+}, [zoneVertices, selectedZoneId, selectedZone, zones, map, refetchZones]);
 
   const handleCancelDrawing = useCallback(() => {
     setIsDrawingZone(false);
