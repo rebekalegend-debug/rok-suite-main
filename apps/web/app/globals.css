@@ -15,7 +15,12 @@
   );
 
   /* SIDEBAR */
-  --background-secondary: #f9f2f7;
+  --background-secondary: linear-gradient(
+  180deg,
+  #ffd6e8 0%,
+  #ffe9f4 40%,
+  #ffe8c2 100%
+);
 
   /* CARDS */
   --background-card: #ffffff;
