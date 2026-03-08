@@ -24,28 +24,6 @@ interface RosterMember {
 
 const KINGDOM_HEADER = `<size=30px><color=#4d0000>KINGDOM 3923</color> <color=#cc0000>—</color> <color=#4d0000>A</color><color=#660000>N</color><color=#800000>G</color><color=#990000>M</color><color=#b30000>A</color><color=#cc0000>R</color> <color=#4d0000>N</color><color=#660000>A</color><color=#800000>Z</color><color=#990000>G</color><color=#b30000>U</color><color=#cc0000>L</color> <color=#e60000>G</color><color=#ff0000>U</color><color=#ff0000>A</color><color=#cc0000>R</color><color=#990000>D</color><color=#800000>S</color></size>`;
 const KINGDOM_DIVIDER = '►═════════❂❂❂════════◄';
-const [form, setForm] = useState({
-  id: '',
-  commander: '',
-  equipment: '',
-  rank: '',
-  kvkSpending: '',
-  purpose: '',
-  troopType: '',
-  pair: '',
-  comment: ''
-});
-async function submitApplication() {
-  await fetch('/api/mge-application', {
-    method: 'POST',
-    body: JSON.stringify(form),
-  });
-
-  alert('Application submitted');
-}
-
-
-
 
 
 function formatDate(dateStr: string): string {
@@ -199,8 +177,28 @@ function generateRankingsMail(evt: MgeEvent): string {
 type StatusFilter = 'all' | 'active' | 'past';
 
 export default function MgePage() {
-  const { events, loading, error, refetch } = useMgeEvents();
+const { events, loading, error, refetch } = useMgeEvents();
+const [form, setForm] = useState({
+  id: '',
+  commander: '',
+  equipment: '',
+  rank: '',
+  kvkSpending: '',
+  purpose: '',
+  troopType: '',
+  pair: '',
+  comment: ''
+});
 
+async function submitApplication() {
+  await fetch('/api/mge-application', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(form),
+  });
+
+  alert('Application submitted');
+}
   // Two-level auth
   const [isAdmin, setIsAdmin] = useState(false);
   const [isOfficer, setIsOfficer] = useState(false);
