@@ -24,7 +24,8 @@ interface RosterMember {
 
 const KINGDOM_HEADER = `<size=30px><color=#4d0000>KINGDOM 3923</color> <color=#cc0000>—</color> <color=#4d0000>A</color><color=#660000>N</color><color=#800000>G</color><color=#990000>M</color><color=#b30000>A</color><color=#cc0000>R</color> <color=#4d0000>N</color><color=#660000>A</color><color=#800000>Z</color><color=#990000>G</color><color=#b30000>U</color><color=#cc0000>L</color> <color=#e60000>G</color><color=#ff0000>U</color><color=#ff0000>A</color><color=#cc0000>R</color><color=#990000>D</color><color=#800000>S</color></size>`;
 const KINGDOM_DIVIDER = '►═════════❂❂❂════════◄';
-
+const [commanderFile,setCommanderFile] = useState<File | null>(null)
+const [gearFile,setGearFile] = useState<File | null>(null)
 
 function formatDate(dateStr: string): string {
   const d = new Date(dateStr + 'T00:00:00');
@@ -190,14 +191,32 @@ const [form, setForm] = useState({
   comment: ''
 });
 
-async function submitApplication() {
-  await fetch('/api/mge-application', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(form),
-  });
+async function submitApplication(){
 
-  alert('Application submitted');
+ const data = new FormData()
+
+ if(commanderFile){
+   data.append("commander", commanderFile)
+ }
+
+ if(gearFile){
+   data.append("gear", gearFile)
+ }
+
+ data.append("id", form.id)
+ data.append("rank", form.rank)
+ data.append("kvkSpending", form.kvkSpending)
+ data.append("troopType", form.troopType)
+ data.append("pair", form.pair)
+ data.append("comment", form.comment)
+
+ await fetch("/api/mge-application",{
+   method:"POST",
+   body:data
+ })
+
+ alert("Application submitted")
+
 }
   // Two-level auth
   const [isAdmin, setIsAdmin] = useState(false);
@@ -366,15 +385,15 @@ onChange={e=>setForm({...form,id:e.target.value})}
 />
 
 <input
-placeholder="Commander Screenshot URL"
-className="w-full border px-3 py-2 rounded"
-onChange={e=>setForm({...form,commander:e.target.value})}
+type="file"
+accept="image/*"
+onChange={(e)=>setCommanderFile(e.target.files?.[0] || null)}
 />
 
 <input
-placeholder="Equipment Screenshot URL"
-className="w-full border px-3 py-2 rounded"
-onChange={e=>setForm({...form,equipment:e.target.value})}
+type="file"
+accept="image/*"
+onChange={(e)=>setGearFile(e.target.files?.[0] || null)}
 />
 
 <select
