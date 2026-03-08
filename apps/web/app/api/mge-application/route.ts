@@ -27,27 +27,28 @@ async function uploadFile(file: File) {
   const buffer = Buffer.from(await file.arrayBuffer());
   const stream = Readable.from(buffer);
 
-  const res = await drive.files.create({
-    requestBody:{
-      name:file.name,
-      parents:[process.env.GOOGLE_DRIVE_FOLDER_ID!]
-    },
-    media:{
-      mimeType:file.type,
-      body:stream
-    }
-  });
+ const res = await drive.files.create({
+  requestBody: {
+    name: file.name,
+    parents: [process.env.GOOGLE_DRIVE_FOLDER_ID!]
+  },
+  media: {
+    mimeType: file.type,
+    body: stream
+  },
+  supportsAllDrives: true
+});
 
   const fileId = res.data.id!;
 
-  await drive.permissions.create({
-    fileId:fileId,
-    requestBody:{
-      role:"reader",
-      type:"anyone"
-    }
-  });
-
+ await drive.permissions.create({
+  fileId: fileId,
+  requestBody:{
+    role:"reader",
+    type:"anyone"
+  },
+  supportsAllDrives: true
+});
   return `https://drive.google.com/file/d/${fileId}/view`;
 }
 
