@@ -250,7 +250,7 @@ useEffect(() => {
                     } ${isCollapsed ? 'justify-center' : ''}`}
                     title={isCollapsed ? t(item.labelKey) : undefined}
                   >
-                    <span className={`flex-shrink-0 ${active ? (item.activeColor || 'text-white') : `text-[var(--text-muted)] ${item.hoverColor || 'group-hover:text-[var(--foreground)]'}`}`}>
+                    <span className={`flex-shrink-0 ${active ? (item.activeColor || 'text-white') : `${item.hoverColor?.replace('group-hover:', '') || 'text-pink-400'} opacity-80 group-hover:opacity-100`}`}>
                       {item.icon}
                     </span>
                     {!isCollapsed && (
@@ -288,7 +288,7 @@ useEffect(() => {
     <div className="min-h-screen bg-[var(--background)] flex">
       {/* Desktop Sidebar */}
       <aside
-        className={`hidden lg:flex flex-col fixed left-0 top-0 h-screen bg-[var(--background-card)] border-r border-[var(--border)] transition-all duration-300 z-40 ${
+      className={`hidden lg:flex flex-col fixed left-0 top-0 h-screen bg-gradient-to-b from-[#fff1f7] via-[#fff7fb] to-[#fff4e6] border-r border-pink-200/40 transition-all duration-300 z-40 ${
           isCollapsed ? 'w-[72px]' : 'w-64'
         }`}
       >
