@@ -3,7 +3,7 @@ import { google } from "googleapis";
 export async function POST(req: Request) {
 
   const formData = await req.formData();
-
+console.log("Folder ID:", process.env.GOOGLE_DRIVE_FOLDER_ID);
  const commanderFile = formData.get("commander") as File | null;
 const gearFile = formData.get("gear") as File | null;
 
