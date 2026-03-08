@@ -25,90 +25,126 @@ import { useTranslations } from 'next-intl';
 export default function Home() {
   const t = useTranslations('home');
 
-  const tools = [
-    {
-      href: '/calendar',
-      titleKey: 'tools.calendar.title',
-      descriptionKey: 'tools.calendar.description',
-      icon: Calendar,
-      hoverBorder: 'hover:border-rose-500/40',
-      hoverShadow: 'hover:shadow-rose-500/10',
-      iconHoverBg: 'group-hover:bg-rose-500/15',
-      iconHoverColor: 'group-hover:text-rose-500',
-    },
-  {
-      href: 'https://app.rokstats.online/kvk/ranking',
-      titleKey: 'tools.events.title',
-      descriptionKey: 'tools.events.description',
-      icon: Trophy,
-      hoverBorder: 'hover:border-amber-500/40',
-      hoverShadow: 'hover:shadow-amber-500/10',
-      iconHoverBg: 'group-hover:bg-amber-500/15',
-      iconHoverColor: 'group-hover:text-amber-500',
-    },
+const tools = [
+{
+  href: '/calendar',
+  titleKey: 'tools.calendar.title',
+  descriptionKey: 'tools.calendar.description',
+  icon: Calendar,
 
-   
-    {
-      href: '/rok-mail',
-      titleKey: 'tools.rokMail.title',
-      descriptionKey: 'tools.rokMail.description',
-      icon: ScrollText,
-      hoverBorder: 'hover:border-pink-500/40',
-      hoverShadow: 'hover:shadow-pink-500/10',
-      iconHoverBg: 'group-hover:bg-pink-500/15',
-      iconHoverColor: 'group-hover:text-pink-500',
-    },
-    {
-      href: '/mge',
-      titleKey: 'tools.mge.title',
-      descriptionKey: 'tools.mge.description',
-      icon: Shield,
-      hoverBorder: 'hover:border-amber-500/40',
-      hoverShadow: 'hover:shadow-amber-500/10',
-      iconHoverBg: 'group-hover:bg-amber-500/15',
-      iconHoverColor: 'group-hover:text-amber-500',
-    },
-    {
-      href: '/kingdom/migration-tracker',
-      titleKey: 'tools.migrationTracker.title',
-      descriptionKey: 'tools.migrationTracker.description',
-      icon: Radar,
-      hoverBorder: 'hover:border-teal-500/40',
-      hoverShadow: 'hover:shadow-teal-500/10',
-      iconHoverBg: 'group-hover:bg-teal-500/15',
-      iconHoverColor: 'group-hover:text-teal-500',
-    },
-   
-    {
-      href: '/kingdom/wanted',
-      titleKey: 'tools.wanted.title',
-      descriptionKey: 'tools.wanted.description',
-      icon: Crosshair,
-      hoverBorder: 'hover:border-red-500/40',
-      hoverShadow: 'hover:shadow-red-500/10',
-      iconHoverBg: 'group-hover:bg-red-500/15',
-      iconHoverColor: 'group-hover:text-red-500',
-    },
-    {
-      href: '/kvk-map',
-      titleKey: 'tools.kvkMap.title',
-      descriptionKey: 'tools.kvkMap.description',
-      icon: Map,
-      hoverBorder: 'hover:border-orange-500/40',
-      hoverShadow: 'hover:shadow-orange-500/10',
-      iconHoverBg: 'group-hover:bg-orange-500/15',
-      iconHoverColor: 'group-hover:text-orange-500',
-    },
-    {
-      href: '/kingdom/kingdom-stats',
-      titleKey: 'tools.kingdomStats.title',
-      descriptionKey: 'tools.kingdomStats.description',
-      icon: BarChart3,
-      hoverBorder: 'hover:border-green-500/40',
-      hoverShadow: 'hover:shadow-green-500/10',
-      iconHoverBg: 'group-hover:bg-green-500/15',
-      iconHoverColor: 'group-hover:text-green-500',
-    },
+  iconColor: 'text-rose-500',
+  iconGlow: 'drop-shadow-[0_0_6px_rgba(244,63,94,0.45)]',
+
+  hoverBorder: 'hover:border-rose-500/40',
+  hoverShadow: 'hover:shadow-rose-500/10',
+  iconHoverBg: 'group-hover:bg-rose-500/15',
+  iconHoverColor: 'group-hover:text-rose-600',
+},
+
+{
+  href: 'https://app.rokstats.online/kvk/ranking',
+  titleKey: 'tools.events.title',
+  descriptionKey: 'tools.events.description',
+  icon: Trophy,
+
+  iconColor: 'text-amber-500',
+  iconGlow: 'drop-shadow-[0_0_6px_rgba(251,191,36,0.45)]',
+
+  hoverBorder: 'hover:border-amber-500/40',
+  hoverShadow: 'hover:shadow-amber-500/10',
+  iconHoverBg: 'group-hover:bg-amber-500/15',
+  iconHoverColor: 'group-hover:text-amber-600',
+},
+
+{
+  href: '/rok-mail',
+  titleKey: 'tools.rokMail.title',
+  descriptionKey: 'tools.rokMail.description',
+  icon: ScrollText,
+
+  iconColor: 'text-pink-500',
+  iconGlow: 'drop-shadow-[0_0_6px_rgba(236,72,153,0.45)]',
+
+  hoverBorder: 'hover:border-pink-500/40',
+  hoverShadow: 'hover:shadow-pink-500/10',
+  iconHoverBg: 'group-hover:bg-pink-500/15',
+  iconHoverColor: 'group-hover:text-pink-600',
+},
+
+{
+  href: '/mge',
+  titleKey: 'tools.mge.title',
+  descriptionKey: 'tools.mge.description',
+  icon: Shield,
+
+  iconColor: 'text-amber-500',
+  iconGlow: 'drop-shadow-[0_0_6px_rgba(251,191,36,0.45)]',
+
+  hoverBorder: 'hover:border-amber-500/40',
+  hoverShadow: 'hover:shadow-amber-500/10',
+  iconHoverBg: 'group-hover:bg-amber-500/15',
+  iconHoverColor: 'group-hover:text-amber-600',
+},
+
+{
+  href: '/kingdom/migration-tracker',
+  titleKey: 'tools.migrationTracker.title',
+  descriptionKey: 'tools.migrationTracker.description',
+  icon: Radar,
+
+  iconColor: 'text-teal-500',
+  iconGlow: 'drop-shadow-[0_0_6px_rgba(20,184,166,0.45)]',
+
+  hoverBorder: 'hover:border-teal-500/40',
+  hoverShadow: 'hover:shadow-teal-500/10',
+  iconHoverBg: 'group-hover:bg-teal-500/15',
+  iconHoverColor: 'group-hover:text-teal-600',
+},
+
+{
+  href: '/kingdom/wanted',
+  titleKey: 'tools.wanted.title',
+  descriptionKey: 'tools.wanted.description',
+  icon: Crosshair,
+
+  iconColor: 'text-red-500',
+  iconGlow: 'drop-shadow-[0_0_6px_rgba(239,68,68,0.45)]',
+
+  hoverBorder: 'hover:border-red-500/40',
+  hoverShadow: 'hover:shadow-red-500/10',
+  iconHoverBg: 'group-hover:bg-red-500/15',
+  iconHoverColor: 'group-hover:text-red-600',
+},
+
+{
+  href: '/kvk-map',
+  titleKey: 'tools.kvkMap.title',
+  descriptionKey: 'tools.kvkMap.description',
+  icon: Map,
+
+  iconColor: 'text-orange-500',
+  iconGlow: 'drop-shadow-[0_0_6px_rgba(249,115,22,0.45)]',
+
+  hoverBorder: 'hover:border-orange-500/40',
+  hoverShadow: 'hover:shadow-orange-500/10',
+  iconHoverBg: 'group-hover:bg-orange-500/15',
+  iconHoverColor: 'group-hover:text-orange-600',
+},
+
+{
+  href: '/kingdom/kingdom-stats',
+  titleKey: 'tools.kingdomStats.title',
+  descriptionKey: 'tools.kingdomStats.description',
+  icon: BarChart3,
+
+  iconColor: 'text-green-500',
+  iconGlow: 'drop-shadow-[0_0_6px_rgba(34,197,94,0.45)]',
+
+  hoverBorder: 'hover:border-green-500/40',
+  hoverShadow: 'hover:shadow-green-500/10',
+  iconHoverBg: 'group-hover:bg-green-500/15',
+  iconHoverColor: 'group-hover:text-green-600',
+},
   ] as const;
 
   return (
