@@ -71,20 +71,7 @@ const tools = [
   iconHoverColor: 'group-hover:text-pink-600',
 },
 
-{
-  href: '/mge',
-  titleKey: 'tools.mge.title',
-  descriptionKey: 'tools.mge.description',
-  icon: Shield,
 
-  iconColor: 'text-amber-500',
-  iconGlow: 'drop-shadow-[0_0_6px_rgba(251,191,36,0.45)]',
-
-  hoverBorder: 'hover:border-amber-500/40',
-  hoverShadow: 'hover:shadow-amber-500/10',
-  iconHoverBg: 'group-hover:bg-amber-500/15',
-  iconHoverColor: 'group-hover:text-amber-600',
-},
 
 {
   href: '/kingdom/migration-tracker',
