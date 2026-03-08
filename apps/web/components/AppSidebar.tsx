@@ -65,7 +65,15 @@ const touchStartY = useRef<number | null>(null);
       // Kingdom section (no title, top level)
       items: [
         { labelKey: 'home', href: '/', icon: <Home size={20} />, hoverColor: 'group-hover:text-violet-400', hoverBg: 'hover:bg-violet-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-[#4318ff] to-[#7c3aed]' },
-        { labelKey: 'calendar', href: '/calendar', icon: <Calendar size={20} />, hoverColor: 'group-hover:text-rose-500', hoverBg: 'hover:bg-rose-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-rose-500 to-pink-500' },
+      
+        { labelKey: 'calendar',
+  href: '/calendar',
+  icon: <Calendar size={20} className="text-red-500" />,
+  hoverColor: 'group-hover:text-red-500',
+  hoverBg: 'hover:bg-red-500/10',
+  activeColor: 'text-white',
+  activeBg: 'bg-gradient-to-r from-red-500 to-pink-500'
+},
        // { labelKey: 'rosters', href: '/rosters', icon: <Users size={20} />, hoverColor: 'group-hover:text-sky-500', hoverBg: 'hover:bg-sky-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-sky-500 to-blue-500' },
        // { labelKey: 'recognition', href: '/recognition', icon: <Crown size={20} />, hoverColor: 'group-hover:text-violet-500', hoverBg: 'hover:bg-violet-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-violet-500 to-purple-500' },
        // { labelKey: 'aooPlanner', href: '/aoo-strategy', icon: <Swords size={20} />, hoverColor: 'group-hover:text-emerald-500', hoverBg: 'hover:bg-emerald-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-emerald-500 to-teal-500' },
@@ -73,8 +81,23 @@ const touchStartY = useRef<number | null>(null);
      //    { labelKey: 'mge', href: '/mge', icon: <Shield size={20} />, hoverColor: 'group-hover:text-amber-500', hoverBg: 'hover:bg-amber-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-amber-500 to-yellow-500' },
       // { labelKey: 'migrationTracker', href: '/kingdom/migration-tracker', icon: <Radar size={20} />, hoverColor: 'group-hover:text-teal-500', hoverBg: 'hover:bg-teal-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-teal-500 to-cyan-500' },
      //   { labelKey: 'wanted', href: '/kingdom/wanted', icon: <Crosshair size={20} />, hoverColor: 'group-hover:text-red-500', hoverBg: 'hover:bg-red-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-red-500 to-rose-500' },
-        { labelKey: 'kvkMap', href: '/kvk-map', icon: <Map size={20} />, hoverColor: 'group-hover:text-orange-500', hoverBg: 'hover:bg-orange-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-orange-500 to-red-500' },
-           { labelKey: 'rokMail', href: '/rok-mail', icon: <ScrollText size={20} />, hoverColor: 'group-hover:text-pink-500', hoverBg: 'hover:bg-pink-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-pink-500 to-fuchsia-500' },
+        { labelKey: 'kvkMap',
+  href: '/kvk-map',
+  icon: <Map size={20} className="text-orange-500" />,
+  hoverColor: 'group-hover:text-orange-500',
+  hoverBg: 'hover:bg-orange-500/10',
+  activeColor: 'text-white',
+  activeBg: 'bg-gradient-to-r from-orange-500 to-red-500'
+},
+          { labelKey: 'rokMail',
+  href: '/rok-mail',
+  icon: <ScrollText size={20} className="text-blue-500" />,
+  hoverColor: 'group-hover:text-blue-500',
+  hoverBg: 'hover:bg-blue-500/10',
+  activeColor: 'text-white',
+  activeBg: 'bg-gradient-to-r from-blue-500 to-indigo-500'
+},
+        
         { labelKey: 'kingdomStats', href: '/kingdom/kingdom-stats', icon: <BarChart3 size={20} />, hoverColor: 'group-hover:text-green-500', hoverBg: 'hover:bg-green-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-green-500 to-emerald-500' },
       ],
     },
