@@ -15,7 +15,7 @@ export async function POST(req: Request) {
 
   await sheets.spreadsheets.values.append({
     spreadsheetId: process.env.GOOGLE_SHEET_ID,
-    range: "'MGE Aplly'!A1",
+    range: "'MGE Apply'!A1",
     valueInputOption: "USER_ENTERED",
     requestBody: {
       values: [[
