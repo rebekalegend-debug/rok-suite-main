@@ -198,38 +198,16 @@ console.log("ZONES:", zones);
     setZoneVertices((prev) => prev.slice(0, -1));
   }, []);
 
-const handleFinishDrawing = useCallback(async () => {
-  if (zoneVertices.length < 3) return;
-
-  if (selectedZoneId === 'new') {
-
-    const { error } = await supabase
-      .from('kvk_map_zones')
-      .insert([
-        {
-          map_id: map.id,
-          zone_number: zones.length + 1,
-          name: `Zone ${zones.length + 1}`,
-          color: '#3b82f6',
-          polygon: zoneVertices
-        }
-      ]);
-
-    if (error) {
-      console.error(error);
-      return;
+  const handleFinishDrawing = useCallback(async () => {
+    if (zoneVertices.length < 3 || !selectedZone) return;
+    const success = await updateMapZone(selectedZone.id, { polygon: zoneVertices });
+    if (success) {
+      await refetchZones();
+      setIsDrawingZone(false);
+      setZoneVertices([]);
+      setSelectedZoneId(null);
     }
-
-  } else if (selectedZone) {
-    await updateMapZone(selectedZone.id, { polygon: zoneVertices });
-  }
-
-  await refetchZones();
-  setIsDrawingZone(false);
-  setZoneVertices([]);
-  setSelectedZoneId(null);
-
-}, [zoneVertices, selectedZoneId, selectedZone, zones, map, refetchZones]);
+  }, [zoneVertices, selectedZone, refetchZones]);
 
   const handleCancelDrawing = useCallback(() => {
     setIsDrawingZone(false);
@@ -434,33 +412,20 @@ const handleFinishDrawing = useCallback(async () => {
             onClose={() => setSelectedFeatureId(null)}
           />
         ) : (
-         <div
-  className="rounded-xl p-4 border text-center space-y-3"
-  style={{
-    backgroundColor: 'var(--background-card)',
-    borderColor: 'var(--border)',
-    color: 'var(--text-muted)',
-  }}
->
-  <p className="text-sm">
-    No zones yet. Create one to start drawing.
-  </p>
-
-  <button
-    onClick={() => {
-      setSelectedZoneId('new');
-      setIsDrawingZone(true);
-      setZoneVertices([]);
-    }}
-    className="px-3 py-1.5 rounded text-sm"
-    style={{
-      background: '#3b82f6',
-      color: '#fff'
-    }}
-  >
-    Create Zone
-  </button>
-</div>
+          <div
+            className="rounded-xl p-4 border text-center"
+            style={{
+              backgroundColor: 'var(--background-card)',
+              borderColor: 'var(--border)',
+              color: 'var(--text-muted)',
+            }}
+          >
+            <p className="text-sm">
+              {isPlacing
+                ? 'Click on the map to place a feature'
+                : 'Click a marker to edit, or a zone to redraw its boundary'}
+            </p>
+          </div>
         )}
       </div>
     </div>
