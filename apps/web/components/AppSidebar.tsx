@@ -72,7 +72,7 @@ const touchStartY = useRef<number | null>(null);
   hoverBg: 'hover:bg-red-500/10',
   activeColor: 'text-white',
   activeBg: 'bg-gradient-to-r from-red-500 to-rose-500'
-}
+},
   {
   labelKey: 'calendar',
   href: '/calendar',
@@ -81,7 +81,7 @@ const touchStartY = useRef<number | null>(null);
   hoverBg: 'hover:bg-orange-500/10',
   activeColor: 'text-white',
   activeBg: 'bg-gradient-to-r from-orange-500 to-amber-500'
-}
+},
        // { labelKey: 'rosters', href: '/rosters', icon: <Users size={20} />, hoverColor: 'group-hover:text-sky-500', hoverBg: 'hover:bg-sky-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-sky-500 to-blue-500' },
        // { labelKey: 'recognition', href: '/recognition', icon: <Crown size={20} />, hoverColor: 'group-hover:text-violet-500', hoverBg: 'hover:bg-violet-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-violet-500 to-purple-500' },
        // { labelKey: 'aooPlanner', href: '/aoo-strategy', icon: <Swords size={20} />, hoverColor: 'group-hover:text-emerald-500', hoverBg: 'hover:bg-emerald-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-emerald-500 to-teal-500' },
@@ -97,7 +97,7 @@ const touchStartY = useRef<number | null>(null);
   hoverBg: 'hover:bg-yellow-500/10',
   activeColor: 'text-white',
   activeBg: 'bg-gradient-to-r from-yellow-500 to-amber-500'
-}
+},
 {
   labelKey: 'rokMail',
   href: '/rok-mail',
@@ -106,7 +106,7 @@ const touchStartY = useRef<number | null>(null);
   hoverBg: 'hover:bg-blue-500/10',
   activeColor: 'text-white',
   activeBg: 'bg-gradient-to-r from-blue-500 to-indigo-500'
-}
+},
         
    {
   labelKey: 'kingdomStats',
