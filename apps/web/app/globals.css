@@ -63,12 +63,7 @@
 .dark {
 
 /* MAIN BACKGROUND */
---background: linear-gradient(
-135deg,
-#0b0c10 0%,
-#0f1117 40%,
-#12141c 100%
-);
+--background: #1A1C1F;
 
 /* SIDEBAR */
 --background-secondary: linear-gradient(
@@ -79,10 +74,10 @@
 );
 
 /* CARDS */
---background-card: #141826;
+--background-card: #22252A;
 
 /* HOVER */
---background-hover: #1a1f2e;
+--background-hover: #262A30;
 
 /* PRIMARY (keep Quinn identity) */
 --primary: #e11d8a;
