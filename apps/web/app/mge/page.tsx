@@ -121,7 +121,8 @@ MGE Registration
 </h2>
 
 <p className="mge-info">
-To ensure your registration is processed correctly, all fields in this form must be completed correctly. Missing information may result in your registration not being considered properly and could affect your ranking!
+To ensure your registration is processed correctly, all fields in this form must be completed correctly. 
+Missing information may result in your registration not being considered properly and could affect your ranking!
 </p>
 
 <div className="space-y-2">
