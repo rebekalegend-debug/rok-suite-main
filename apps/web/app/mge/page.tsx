@@ -116,15 +116,13 @@ style={{
   borderColor: "var(--border)"
 }}
 >
-<h2
-className="text-center text-xl font-semibold pb-3 mb-4 border-b"
-style={{
-  color: "#FFC94A",
-  borderColor: "var(--border)"
-}}
->
+<h2 className="mge-title border-b pb-2 mb-2">
 MGE Registration
 </h2>
+
+<p className="mge-info">
+To ensure your registration is processed correctly, all fields in this form must be completed correctly. Missing information may result in your registration not being considered properly and could affect your ranking!
+</p>
 
 <div className="space-y-2">
 
@@ -294,9 +292,9 @@ color: isMax ? "#FFC94A" : "var(--foreground)"
 </div>
 
   </div>
-<div className="pt-4 border-t border-[var(--border)]">
-<label className="text-sm font-medium mb-2 block">
-  ⚙️ Gear/equipment you will use for the commander!
+<div className="pt-3 border-t border-[var(--border)]">
+<label className="text-sm font-medium mb-1 block">
+⚙️ Gear/equipment you will use for the commander!
 </label>
 
 <label className="flex items-center gap-3 rounded-lg px-4 py-3 cursor-pointer gold-input hover:gold-glow transition">
