@@ -251,7 +251,7 @@ style={{
      }`}
    />
  ))}
-
+</div>
 <div className="flex justify-center gap-3 mb-4 text-sm">
 
 <button
