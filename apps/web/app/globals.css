@@ -342,7 +342,13 @@ opacity:0.9;
   border-radius: 0.5rem;
   transition: all 0.2s;
 }
+/* form labels muted like hint text */
 
+.form-label{
+color:#9aa3af;
+font-size:14px;
+font-weight:500;
+}
 .btn-primary {
   background: var(--primary);
   color: white;
