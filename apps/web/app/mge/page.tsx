@@ -141,68 +141,49 @@ onChange={e=>setSelectedCommander(e.target.value)}
 
 </select>
 
+  {/* Commander Skill Select */}
+  
 <label className="text-sm font-medium">Commander Skills</label>
 
 <div className="grid grid-cols-4 gap-3">
 
-{Object.entries(skills).map(([key,value],i)=>(
+{Object.entries(skills).map(([key,value],i)=>{
+
+const isMax = value === 5
+
+return (
 <div
 key={key}
-className="rounded-lg border border-yellow-500/40 bg-yellow-900/30 p-3 text-center"
+onClick={()=>setSkills({
+...skills,
+[key]: value === 5 ? 0 : value + 1
+})}
+className={`cursor-pointer rounded-lg border p-3 text-center select-none transition
+${isMax
+? "bg-green-600/20 border-green-500 text-green-400"
+: "bg-slate-900 border-slate-700 text-slate-200"}
+`}
 >
 
-<div className="text-yellow-400 text-xl font-bold">
+<div className="text-xl font-bold">
 {value}
 </div>
 
-<div className="text-xs text-yellow-200 mb-1">
+<div className="text-xs opacity-80">
 Skill {i+1}
 </div>
 
-<div className="flex justify-center gap-1 text-yellow-400 text-xs mb-2">
-{Array.from({length:value}).map((_,s)=>(
-<span key={s}>★</span>
-))}
 </div>
-<div className="flex gap-2 mt-2">
+)
 
-<button
-onClick={()=>setSkills({skill1:5,skill2:5,skill3:5,skill4:5})}
-className="px-2 py-1 text-xs bg-yellow-500/20 rounded"
->
-MAX
-</button>
-
-<button
-onClick={()=>setSkills({skill1:5,skill2:5,skill3:5,skill4:1})}
-className="px-2 py-1 text-xs bg-yellow-500/20 rounded"
->
-5551
-</button>
-
-<button
-onClick={()=>setSkills({skill1:5,skill2:5,skill3:1,skill4:1})}
-className="px-2 py-1 text-xs bg-yellow-500/20 rounded"
->
-5511
-</button>
-
-</div>
-<input
-type="range"
-min="0"
-max="5"
-value={value}
-className="w-full"
-onChange={e=>setSkills({
-...skills,
-[key]:Number(e.target.value)
 })}
-/>
 
 </div>
-))}
 
+
+
+
+  
 </div>
 <label className="text-sm font-medium">Commander Gear / Equipment</label>
 <input
