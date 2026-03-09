@@ -308,11 +308,12 @@ Uploaded: {commanderFile.name}
 </div>
 )}
 </div>
-        <div className="pt-4 border-t border-[var(--border)]">
+      
+{/* PURPOSE */}
+<div className="pt-4 border-t border-[var(--border)]">
 <label className="text-sm font-medium">Commander Purpose</label>
 
-<select
-className="w-full border px-3 py-2 rounded"
+<select className="w-full border px-3 py-2 rounded"
 style={{
   background: "var(--background-card)",
   color: "var(--foreground)",
@@ -326,8 +327,11 @@ onChange={e=>setForm({...form,purpose:e.target.value})}
 <option>Garrison</option>
 <option>Mixed</option>
 </select>
-<select
-className="w-full border px-3 py-2 rounded"
+</div>
+
+{/* RANK */}
+<div className="pt-4 border-t border-[var(--border)]">
+<select className="w-full border px-3 py-2 rounded"
 style={{
   background: "var(--background-card)",
   color: "var(--foreground)",
@@ -342,9 +346,11 @@ onChange={e=>setForm({...form,rank:e.target.value})}
 <option>Rank 4-10</option>
 <option>Free for all</option>
 </select>
+</div>
 
-<select
-className="w-full border px-3 py-2 rounded"
+{/* SPENDING */}
+<div className="pt-4 border-t border-[var(--border)]">
+<select className="w-full border px-3 py-2 rounded"
 style={{
   background: "var(--background-card)",
   color: "var(--foreground)",
@@ -358,9 +364,11 @@ onChange={e=>setForm({...form,kvkSpending:e.target.value})}
 <option>Buy Popups</option>
 <option>Max Tech</option>
 </select>
+</div>
 
-<select
-className="w-full border px-3 py-2 rounded"
+{/* TROOP */}
+<div className="pt-4 border-t border-[var(--border)]">
+<select className="w-full border px-3 py-2 rounded"
 style={{
   background: "var(--background-card)",
   color: "var(--foreground)",
@@ -372,7 +380,10 @@ onChange={e=>setForm({...form,troopType:e.target.value})}
 <option>ARCH</option>
 <option>CAV</option>
 </select>
+</div>
 
+{/* PAIR */}
+<div className="pt-4 border-t border-[var(--border)]">
 <input
 placeholder="Commander Pair"
 className="w-full border px-3 py-2 rounded"
@@ -383,7 +394,10 @@ style={{
 }}
 onChange={e=>setForm({...form,pair:e.target.value})}
 />
+</div>
 
+{/* COMMENT */}
+<div className="pt-4 border-t border-[var(--border)]">
 <textarea
 placeholder="Comment"
 className="w-full border px-3 py-2 rounded"
@@ -394,7 +408,7 @@ style={{
 }}
 onChange={e=>setForm({...form,comment:e.target.value})}
 />
-
+</div>
 <button
 disabled={submitting}
 onClick={submitApplication}
