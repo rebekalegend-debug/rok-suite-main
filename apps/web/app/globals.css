@@ -183,7 +183,15 @@ html {
 .leaflet-tooltip-bottom::before {
   border-bottom-color: rgba(0, 0, 0, 0.8) !important;
 }
+.gold-glow {
+  box-shadow: 0 0 0 1px rgba(230,185,74,0.35),
+              0 0 12px rgba(230,185,74,0.15),
+              0 0 30px rgba(230,185,74,0.08);
+}
 
+.gold-glow-soft {
+  box-shadow: 0 0 6px rgba(230,185,74,0.15);
+}
 /* Feature badge hover: semi-transparent → opaque */
 .kvk-badge:hover {
   background-color: var(--c) !important;
