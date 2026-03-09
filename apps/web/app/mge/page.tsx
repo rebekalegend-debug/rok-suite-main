@@ -102,16 +102,16 @@ async function submitApplication(){
   
 return (
 <AppSidebar>
-<div className="max-w-4xl mx-auto p-4 md:p-8">
+<div className="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
 <div
-className="p-6 rounded-lg border space-y-4"
+className="p-4 sm:p-6 rounded-xl border space-y-5"
 style={{background:'var(--background-card)', borderColor:'var(--border)'}}
 >
 <h2 className="text-lg font-semibold">MGE Registration</h2>
 
 <div className="space-y-2">
 
-<div className="flex gap-2">
+<div className="flex flex-col sm:flex-row gap-3">
 
 <input
 type="text"
@@ -136,7 +136,7 @@ onChange={(e)=>{
 <button
 type="button"
 onClick={()=>setSearchMode(!searchMode)}
-className="px-3 py-2 bg-amber-500/20 border border-amber-400 text-amber-300 rounded text-sm"
+className="px-3 py-2 w-full sm:w-auto bg-amber-500/20 border border-amber-400 text-amber-300 rounded text-sm"
 >
 Search your ID by name
 </button>
@@ -188,7 +188,12 @@ onClick={()=>{
 <label className="text-sm font-medium">Select Commander</label>
 
 <select
-className="w-full border px-3 py-2 rounded bg-slate-900 text-slate-200 border-slate-700"
+className="w-full border px-3 py-2 rounded"
+style={{
+  background: "var(--background-card)",
+  color: "var(--foreground)",
+  borderColor: "var(--border)"
+}}
 value={selectedCommander}
 onChange={e=>setSelectedCommander(e.target.value)}
 >
@@ -206,7 +211,7 @@ onChange={e=>setSelectedCommander(e.target.value)}
   Commander Skill lvl <span className="text-xs opacity-60">(tap to change)</span>
 </label>
 
-<div className="grid grid-cols-4 gap-3">
+<div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
   {Object.entries(skills).map(([key, value], i) => {
     const isMax = value === 5;
 
@@ -253,7 +258,12 @@ onChange={(e)=>setGearFile(e.target.files?.[0] || null)}
 <label className="text-sm font-medium">Commander Purpose</label>
 
 <select
-className="w-full border px-3 py-2 rounded bg-slate-900 text-slate-200 border-slate-700"
+className="w-full border px-3 py-2 rounded"
+style={{
+  background: "var(--background-card)",
+  color: "var(--foreground)",
+  borderColor: "var(--border)"
+}}
 onChange={e=>setForm({...form,purpose:e.target.value})}
 >
 <option value="">Select Purpose</option>
@@ -263,7 +273,12 @@ onChange={e=>setForm({...form,purpose:e.target.value})}
 <option>Mixed</option>
 </select>
 <select
-className="w-full border px-3 py-2 rounded bg-slate-900 text-slate-200 border-slate-700"
+className="w-full border px-3 py-2 rounded"
+style={{
+  background: "var(--background-card)",
+  color: "var(--foreground)",
+  borderColor: "var(--border)"
+}}
 onChange={e=>setForm({...form,rank:e.target.value})}
 >
 <option>Select Rank</option>
@@ -275,7 +290,12 @@ onChange={e=>setForm({...form,rank:e.target.value})}
 </select>
 
 <select
-className="w-full border px-3 py-2 rounded bg-slate-900 text-slate-200 border-slate-700"
+className="w-full border px-3 py-2 rounded"
+style={{
+  background: "var(--background-card)",
+  color: "var(--foreground)",
+  borderColor: "var(--border)"
+}}
 onChange={e=>setForm({...form,kvkSpending:e.target.value})}
 >
 <option>F2P</option>
@@ -286,7 +306,12 @@ onChange={e=>setForm({...form,kvkSpending:e.target.value})}
 </select>
 
 <select
-className="w-full border px-3 py-2 rounded bg-slate-900 text-slate-200 border-slate-700"
+className="w-full border px-3 py-2 rounded"
+style={{
+  background: "var(--background-card)",
+  color: "var(--foreground)",
+  borderColor: "var(--border)"
+}}
 onChange={e=>setForm({...form,troopType:e.target.value})}
 >
 <option>INF</option>
@@ -296,13 +321,23 @@ onChange={e=>setForm({...form,troopType:e.target.value})}
 
 <input
 placeholder="Commander Pair"
-className="w-full border px-3 py-2 rounded bg-slate-900 text-slate-200 border-slate-700"
+className="w-full border px-3 py-2 rounded"
+style={{
+  background: "var(--background-card)",
+  color: "var(--foreground)",
+  borderColor: "var(--border)"
+}}
 onChange={e=>setForm({...form,pair:e.target.value})}
 />
 
 <textarea
 placeholder="Comment"
-className="w-full border px-3 py-2 rounded bg-slate-900 text-slate-200 border-slate-700"
+className="w-full border px-3 py-2 rounded"
+style={{
+  background: "var(--background-card)",
+  color: "var(--foreground)",
+  borderColor: "var(--border)"
+}}
 onChange={e=>setForm({...form,comment:e.target.value})}
 />
 
