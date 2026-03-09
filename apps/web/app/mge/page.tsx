@@ -140,45 +140,68 @@ onChange={e=>setSelectedCommander(e.target.value)}
 ))}
 
 </select>
+
 <label className="text-sm font-medium">Commander Skills</label>
 
 <div className="grid grid-cols-4 gap-3">
 
+{Object.entries(skills).map(([key,value],i)=>(
+<div
+key={key}
+className="rounded-lg border border-yellow-500/40 bg-yellow-900/30 p-3 text-center"
+>
+
+<div className="text-yellow-400 text-xl font-bold">
+{value}
+</div>
+
+<div className="text-xs text-yellow-200 mb-1">
+Skill {i+1}
+</div>
+
+<div className="flex justify-center gap-1 text-yellow-400 text-xs mb-2">
+{Array.from({length:value}).map((_,s)=>(
+<span key={s}>★</span>
+))}
+</div>
+<div className="flex gap-2 mt-2">
+
+<button
+onClick={()=>setSkills({skill1:5,skill2:5,skill3:5,skill4:5})}
+className="px-2 py-1 text-xs bg-yellow-500/20 rounded"
+>
+MAX
+</button>
+
+<button
+onClick={()=>setSkills({skill1:5,skill2:5,skill3:5,skill4:1})}
+className="px-2 py-1 text-xs bg-yellow-500/20 rounded"
+>
+5551
+</button>
+
+<button
+onClick={()=>setSkills({skill1:5,skill2:5,skill3:1,skill4:1})}
+className="px-2 py-1 text-xs bg-yellow-500/20 rounded"
+>
+5511
+</button>
+
+</div>
 <input
-type="number"
+type="range"
 min="0"
 max="5"
-value={skills.skill1}
-className="border px-3 py-2 rounded"
-onChange={e=>setSkills({...skills,skill1:Number(e.target.value)})}
+value={value}
+className="w-full"
+onChange={e=>setSkills({
+...skills,
+[key]:Number(e.target.value)
+})}
 />
 
-<input
-type="number"
-min="0"
-max="5"
-value={skills.skill2}
-className="border px-3 py-2 rounded"
-onChange={e=>setSkills({...skills,skill2:Number(e.target.value)})}
-/>
-
-<input
-type="number"
-min="0"
-max="5"
-value={skills.skill3}
-className="border px-3 py-2 rounded"
-onChange={e=>setSkills({...skills,skill3:Number(e.target.value)})}
-/>
-
-<input
-type="number"
-min="0"
-max="5"
-value={skills.skill4}
-className="border px-3 py-2 rounded"
-onChange={e=>setSkills({...skills,skill4:Number(e.target.value)})}
-/>
+</div>
+))}
 
 </div>
 <label className="text-sm font-medium">Commander Gear / Equipment</label>
