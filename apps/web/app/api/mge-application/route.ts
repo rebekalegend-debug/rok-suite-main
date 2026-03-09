@@ -84,19 +84,40 @@ export async function POST(req: Request) {
   return Response.json({ success: true });
 }
 
+export async function GET(req: Request) {
 
-export async function GET() {
+  const { searchParams } = new URL(req.url)
+  const members = searchParams.get("members")
 
   const auth = new google.auth.GoogleAuth({
     credentials: {
       client_email: process.env.GOOGLE_CLIENT_EMAIL,
-      private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+      private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g,"\n"),
     },
-    scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"]
+    scopes:["https://www.googleapis.com/auth/spreadsheets.readonly"]
   });
 
-  const sheets = google.sheets({ version: "v4", auth });
+  const sheets = google.sheets({ version:"v4", auth });
 
+  // MEMBERS SEARCH
+  if (members) {
+
+    const res = await sheets.spreadsheets.values.get({
+      spreadsheetId: process.env.GOOGLE_SHEET_ID,
+      range: "MGE Apply Members!A2:B"
+    })
+
+    const rows = res.data.values || []
+
+    const list = rows.map(r => ({
+      id: r[0],
+      name: r[1]
+    }))
+
+    return Response.json(list)
+  }
+
+  // COMMANDERS DROPDOWN
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: process.env.GOOGLE_SHEET_ID,
     range: "MGE Commanders!A2:A"
