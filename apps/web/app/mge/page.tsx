@@ -121,13 +121,14 @@ MGE Registration
 </h2>
 
 <p className="mge-info">
-To ensure your registration is processed correctly, all fields in this form must be completed correctly. 
+To ensure your registration is processed correctly, all fields in this form must be completed correctly.
+<br />
 Missing information may result in your registration not being considered properly and could affect your ranking!
 </p>
 
 <div className="space-y-2">
 
-<label className="text-sm font-medium">
+<label className="form-label">
 Enter your ingame ID
 </label>
 <div className="flex flex-col sm:flex-row gap-3">
@@ -214,7 +215,7 @@ Selected ID: <span className="text-amber-300">{form.id}</span>
 
 )}
 <div className="pt-4 border-t border-[var(--border)]">
-<label className="text-sm font-medium">Select wanted commander</label>
+<label className="form-label">Select wanted commander</label>
 
 <select
 className="w-full px-3 py-2 rounded gold-input"
@@ -337,7 +338,7 @@ Uploaded: {commanderFile.name}
       
 {/* PURPOSE */}
 <div className="pt-4 border-t border-[var(--border)]">
-<label className="text-sm font-medium">🎯 For what purpose you need the commander? </label>
+<label className="form-label">🎯 For what purpose you need the commander? </label>
 
 <select
 className="w-full px-3 py-2 rounded gold-input"
@@ -353,7 +354,7 @@ onChange={e=>setForm({...form,purpose:e.target.value})}
 
 {/* RANK */}
 <div className="pt-4 border-t border-[var(--border)]">
-  <label className="text-sm font-medium">🏅 What rank you would like to get? </label>
+  <label className="form-label">🏅 What rank you would like to get? </label>
 <select
 className="w-full px-3 py-2 rounded gold-input"
 onChange={e=>setForm({...form,rank:e.target.value})}
@@ -369,7 +370,7 @@ onChange={e=>setForm({...form,rank:e.target.value})}
 
 {/* SPENDING */}
 <div className="pt-4 border-t border-[var(--border)]">
- <label className="text-sm font-medium">🤑 Do you spend in KvK? </label>
+ <label className="form-label">🤑 Do you spend in KvK? </label>
   
   <select
 className="w-full px-3 py-2 rounded gold-input"
@@ -385,7 +386,7 @@ onChange={e=>setForm({...form,kvkSpending:e.target.value})}
 
 {/* TROOP */}
 <div className="pt-4 border-t border-[var(--border)]">
-   <label className="text-sm font-medium">🤔 What is your main troop type? </label>
+   <label className="form-label">🤔 What is your main troop type? </label>
 <select
 className="w-full px-3 py-2 rounded gold-input"
 onChange={e=>setForm({...form,troopType:e.target.value})}
@@ -398,7 +399,7 @@ onChange={e=>setForm({...form,troopType:e.target.value})}
 
 {/* PAIR */}
 <div className="pt-4 border-t border-[var(--border)]">
-<label className="text-sm font-medium">🤔 For what commander/pair you need the commander: </label>
+<label className="form-label">🤔 For what commander/pair you need the commander: </label>
   <input
 placeholder="Commander Pair"
 className="w-full px-3 py-2 rounded gold-input"
@@ -409,7 +410,7 @@ onChange={e=>setForm({...form,pair:e.target.value})}
 
 {/* COMMENT */}
 <div className="pt-4 border-t border-[var(--border)]">
-<label className="text-sm font-medium">🤔 💬Additional personal comment?!: </label>
+<label className="form-label">🤔 💬Additional personal comment?!: </label>
 <textarea
 placeholder="Comment"
 className="w-full px-3 py-2 rounded gold-input"
