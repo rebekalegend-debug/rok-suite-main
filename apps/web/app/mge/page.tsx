@@ -96,7 +96,7 @@ style={{background:'var(--background-card)', borderColor:'var(--border)'}}
 
 <input
 placeholder="Your ingame name"
-className="w-full border px-3 py-2 rounded"
+className="w-full border px-3 py-2 rounded bg-slate-900 text-slate-200 border-slate-700"
 onChange={e=>setForm({...form,id:e.target.value})}
 />
 
@@ -104,7 +104,7 @@ onChange={e=>setForm({...form,id:e.target.value})}
 <label className="text-sm font-medium">Select Commander</label>
 
 <select
-className="w-full border px-3 py-2 rounded"
+className="w-full border px-3 py-2 rounded bg-slate-900 text-slate-200 border-slate-700"
 value={selectedCommander}
 onChange={e=>setSelectedCommander(e.target.value)}
 >
@@ -169,7 +169,7 @@ onChange={(e)=>setGearFile(e.target.files?.[0] || null)}
 <label className="text-sm font-medium">Commander Purpose</label>
 
 <select
-className="w-full border px-3 py-2 rounded"
+className="w-full border px-3 py-2 rounded bg-slate-900 text-slate-200 border-slate-700"
 onChange={e=>setForm({...form,purpose:e.target.value})}
 >
 <option value="">Select Purpose</option>
@@ -179,7 +179,7 @@ onChange={e=>setForm({...form,purpose:e.target.value})}
 <option>Mixed</option>
 </select>
 <select
-className="w-full border px-3 py-2 rounded"
+className="w-full border px-3 py-2 rounded bg-slate-900 text-slate-200 border-slate-700"
 onChange={e=>setForm({...form,rank:e.target.value})}
 >
 <option>Select Rank</option>
@@ -191,7 +191,7 @@ onChange={e=>setForm({...form,rank:e.target.value})}
 </select>
 
 <select
-className="w-full border px-3 py-2 rounded"
+className="w-full border px-3 py-2 rounded bg-slate-900 text-slate-200 border-slate-700"
 onChange={e=>setForm({...form,kvkSpending:e.target.value})}
 >
 <option>F2P</option>
@@ -202,7 +202,7 @@ onChange={e=>setForm({...form,kvkSpending:e.target.value})}
 </select>
 
 <select
-className="w-full border px-3 py-2 rounded"
+className="w-full border px-3 py-2 rounded bg-slate-900 text-slate-200 border-slate-700"
 onChange={e=>setForm({...form,troopType:e.target.value})}
 >
 <option>INF</option>
@@ -212,13 +212,13 @@ onChange={e=>setForm({...form,troopType:e.target.value})}
 
 <input
 placeholder="Commander Pair"
-className="w-full border px-3 py-2 rounded"
+className="w-full border px-3 py-2 rounded bg-slate-900 text-slate-200 border-slate-700"
 onChange={e=>setForm({...form,pair:e.target.value})}
 />
 
 <textarea
 placeholder="Comment"
-className="w-full border px-3 py-2 rounded"
+className="w-full border px-3 py-2 rounded bg-slate-900 text-slate-200 border-slate-700"
 onChange={e=>setForm({...form,comment:e.target.value})}
 />
 
