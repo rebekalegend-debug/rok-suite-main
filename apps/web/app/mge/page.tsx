@@ -191,7 +191,7 @@ Selected ID: <span className="text-amber-300">{form.id}</span>
 </div>
 
 )}
-
+<div className="pt-4 border-t border-[var(--border)]">
 <label className="text-sm font-medium">Select Commander</label>
 
 <select
@@ -213,47 +213,14 @@ onChange={e=>setSelectedCommander(e.target.value)}
 ))}
 
 </select>
-
-<label className="text-sm font-medium">
-  Commander Skill lvl <span className="text-xs opacity-60">(tap to change)</span>
+<div className="pt-4 border-t border-[var(--border)]">
+<label className="text-sm font-medium flex items-center gap-2">
+  Commander Skill lvl
+  <span className="text-xs opacity-60 flex items-center gap-1">
+    (👆 tap to change)
+  </span>
 </label>
 
-{/* PRESET BUTTONS */}
-<div className="flex flex-wrap justify-center gap-3 mb-4 text-sm">
-
-<button
-type="button"
-onClick={() => setSkills({skill1:5,skill2:5,skill3:5,skill4:5})}
-className="px-3 py-1 rounded bg-amber-500/20 border border-amber-400 text-amber-300"
->
-Max
-</button>
-
-<button
-type="button"
-onClick={() => setSkills({skill1:5,skill2:5,skill3:1,skill4:1})}
-className="px-3 py-1 rounded border border-slate-600 text-slate-300"
->
-5511
-</button>
-
-<button
-type="button"
-onClick={() => setSkills({skill1:5,skill2:1,skill3:1,skill4:1})}
-className="px-3 py-1 rounded border border-slate-600 text-slate-300"
->
-5111
-</button>
-
-<button
-type="button"
-onClick={() => setSkills({skill1:0,skill2:0,skill3:0,skill4:0})}
-className="px-3 py-1 rounded border border-slate-600 text-slate-300"
->
-New
-</button>
-
-</div>
 
 {/* SKILL GRID */}
 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -299,16 +266,26 @@ New
     );
   })}
 </div>
-
+<div className="pt-4 border-t border-[var(--border)]">
 <label className="text-sm font-medium">
   Commander Screenshot (optional)
 </label>
 
 <label className="flex items-center gap-3 border border-slate-700 rounded-lg px-4 py-3 cursor-pointer hover:border-amber-400 transition">
 
-<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
-<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-<circle cx="12" cy="13" r="4"/>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="22"
+  height="22"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  strokeWidth="2"
+  strokeLinecap="round"
+  strokeLinejoin="round"
+>
+  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4l2-2h6l2 2h4a2 2 0 0 1 2 2z"/>
+  <circle cx="12" cy="13" r="4"/>
 </svg>
 
 <span className="text-sm text-slate-300">
@@ -328,7 +305,7 @@ Uploaded: {commanderFile.name}
 </div>
 )}
 
-        
+        <div className="pt-4 border-t border-[var(--border)]">
 <label className="text-sm font-medium">Commander Purpose</label>
 
 <select
