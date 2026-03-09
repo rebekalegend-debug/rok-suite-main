@@ -114,12 +114,12 @@
 
 
 
-@theme inline {
+/* @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
+} */
 
 body {
   background: var(--background);
@@ -295,10 +295,6 @@ box-shadow:
 color: var(--foreground);
 font-size:14px;
 font-weight:500;
-input::placeholder,
-textarea::placeholder{
-color:#9aa3af;
-opacity:1;
 }
 /* Glassmorphism - now more subtle */
 .glass {
@@ -311,7 +307,23 @@ opacity:1;
   background: var(--background-hover);
   border-color: var(--border-hover);
 }
+/* placeholder text */
 
+input::placeholder,
+textarea::placeholder{
+color:#9aa3af;
+opacity:1;
+}
+
+/* select placeholder */
+
+select{
+color:#9aa3af;
+}
+
+select:valid{
+color:var(--foreground);
+}
 /* Gradient text utility */
 .gradient-text {
   background: linear-gradient(135deg, #4318ff 0%, #9f7aea 100%);
