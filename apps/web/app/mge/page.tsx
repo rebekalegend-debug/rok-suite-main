@@ -15,15 +15,14 @@ const [form, setForm] = useState({
   comment: ''
 });
 const [skills,setSkills] = useState({
-  skill1:5,
-  skill2:5,
-  skill3:5,
-  skill4:5
+ skill1:0,
+  skill2:0,
+  skill3:0,
+  skill4:0
 })
 const [commanderFile,setCommanderFile] = useState<File | null>(null)
 const [gearFile,setGearFile] = useState<File | null>(null)
 const [loadingCommanders,setLoadingCommanders] = useState(false)
-const [mgeType,setMgeType] = useState("")
 const [commanders,setCommanders] = useState<string[]>([])
 const [selectedCommander,setSelectedCommander] = useState("")
 const [submitting,setSubmitting] = useState(false)
@@ -31,15 +30,13 @@ const [submitting,setSubmitting] = useState(false)
   
   
   
-  useEffect(() => {
-
- if (!mgeType) return;
+useEffect(() => {
 
  async function loadCommanders() {
 
    setLoadingCommanders(true)
 
-   const res = await fetch(`/api/get-commanders?type=${mgeType}`)
+   const res = await fetch("/api/get-commanders")
    const data = await res.json()
 
    setCommanders(data)
@@ -48,13 +45,8 @@ const [submitting,setSubmitting] = useState(false)
 
  loadCommanders()
 
-}, [mgeType])
+}, [])
 async function submitApplication(){
-
- if(!form.id || !selectedCommander || !mgeType){
-   alert("Please fill required fields")
-   return
- }
 
  const data = new FormData()
 
@@ -108,21 +100,6 @@ className="w-full border px-3 py-2 rounded"
 onChange={e=>setForm({...form,id:e.target.value})}
 />
 
-<label className="text-sm font-medium">Select MGE</label>
-
-<select
-className="w-full border px-3 py-2 rounded"
-value={mgeType}
-onChange={e=>setMgeType(e.target.value)}
->
-<option value="">Select MGE</option>
-<option>INF</option>
-<option>CAV</option>
-<option>ARCH</option>
-<option>SIEGE</option>
-<option>LEADER</option>
-<option>NEW</option>
-</select>
 
 <label className="text-sm font-medium">Select Commander</label>
 
@@ -141,7 +118,9 @@ onChange={e=>setSelectedCommander(e.target.value)}
 
 </select>
 
-<label className="text-sm font-medium">Commander Skills</label>
+<label className="text-sm font-medium">
+  Commander Skill lvl <span className="text-xs opacity-60">(tap to change)</span>
+</label>
 
 <div className="grid grid-cols-4 gap-3">
   {Object.entries(skills).map(([key, value], i) => {
