@@ -289,7 +289,14 @@ box-shadow:
   border-color: var(--border-hover);
   box-shadow: var(--card-shadow-hover);
 }
+/* form labels */
 
+.form-label{
+color: var(--text-secondary);
+font-size:14px;
+font-weight:500;
+opacity:0.9;
+}
 /* Glassmorphism - now more subtle */
 .glass {
   background: var(--background-card);
