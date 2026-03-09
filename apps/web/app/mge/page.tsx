@@ -238,7 +238,8 @@ style={{
   border: "1px solid var(--border)"
 }}
 >
-<label className="text-sm font-medium flex items-center gap-2 mb-3">
+<label className="form-label flex items-center gap-2 mb-3">
+
   Commander Skill lvl
   <span className="text-xs opacity-60 flex items-center gap-1">
     (👆 tap to change)
@@ -295,7 +296,8 @@ color: isMax ? "#FFC94A" : "var(--foreground)"
 
   </div>
 <div className="pt-3 border-t border-[var(--border)]">
-<label className="text-sm font-medium mb-1 block">
+<label className="form-label mb-1 block">
+
 ⚙️ Gear/equipment you will use for the commander!
 </label>
 
@@ -356,15 +358,16 @@ onChange={e=>setForm({...form,purpose:e.target.value})}
 <div className="pt-4 border-t border-[var(--border)]">
   <label className="form-label">🏅 What rank you would like to get? </label>
 <select
-className="w-full px-3 py-2 rounded gold-input"
+className="w-full px-3 py-2 rounded gold-input select-placeholder"
+value={form.rank}
 onChange={e=>setForm({...form,rank:e.target.value})}
 >
-<option>Select Rank</option>
-<option>Rank 1</option>
-<option>Rank 2</option>
-<option>Rank 3</option>
-<option>Rank 4-10</option>
-<option>Free for all</option>
+<option value="">Select Rank</option>
+<option value="1">Rank 1</option>
+<option value="2">Rank 2</option>
+<option value="3">Rank 3</option>
+<option value="4-10">Rank 4-10</option>
+<option value="ffa">Free for all</option>
 </select>
 </div>
 
@@ -388,12 +391,14 @@ onChange={e=>setForm({...form,kvkSpending:e.target.value})}
 <div className="pt-4 border-t border-[var(--border)]">
    <label className="form-label">🤔 What is your main troop type? </label>
 <select
-className="w-full px-3 py-2 rounded gold-input"
+className="w-full px-3 py-2 rounded gold-input select-placeholder"
+value={form.troopType}
 onChange={e=>setForm({...form,troopType:e.target.value})}
 >
-<option>INF</option>
-<option>ARCH</option>
-<option>CAV</option>
+<option value="">Select Troop Type</option>
+<option value="inf">INF</option>
+<option value="arch">ARCH</option>
+<option value="cav">CAV</option>
 </select>
 </div>
 
