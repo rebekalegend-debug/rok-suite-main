@@ -215,7 +215,7 @@ onChange={e=>setSelectedCommander(e.target.value)}
 </select>
   </div>
 <div className="pt-4 border-t border-[var(--border)]">
-<label className="text-sm font-medium flex items-center gap-2">
+<label className="text-sm font-medium flex items-center gap-2 mb-3">
   Commander Skill lvl
   <span className="text-xs opacity-60 flex items-center gap-1">
     (👆 tap to change)
@@ -237,11 +237,13 @@ onChange={e=>setSelectedCommander(e.target.value)}
             [key]: value === 5 ? 0 : value + 1,
           })
         }
-        className="cursor-pointer rounded-lg border p-3 text-center select-none transition"
+      className="cursor-pointer rounded-lg border p-3 text-center select-none transition shadow-[0_0_8px_rgba(255,215,120,0.15)]"
         style={{
-          background: isMax ? "rgba(245,158,11,0.15)" : "var(--background-card)",
-          borderColor: isMax ? "#f59e0b" : "var(--border)",
-          color: isMax ? "#f59e0b" : "var(--foreground)"
+background: isMax
+  ? "linear-gradient(135deg, rgba(255,215,120,0.18), rgba(255,185,70,0.12))"
+  : "var(--background-card)",
+borderColor: isMax ? "#FFD76B" : "var(--border)",
+color: isMax ? "#FFC94A" : "var(--foreground)"
         }}
       >
         <div className="text-xl font-bold">{value}</div>
@@ -256,7 +258,7 @@ onChange={e=>setSelectedCommander(e.target.value)}
               <div
                 key={dot}
                 className={`w-1.5 h-1.5 rounded-full ${
-                  dot <= value ? "bg-amber-400" : "bg-slate-600"
+                  dot <= value ? "bg-[#FFD76B]" : "bg-slate-600"
                 }`}
               />
             );
@@ -409,13 +411,17 @@ style={{
 onChange={e=>setForm({...form,comment:e.target.value})}
 />
 </div>
+<div className="flex justify-center pt-4">
 <button
 disabled={submitting}
 onClick={submitApplication}
-className="px-4 py-2 bg-blue-500 text-white rounded"
+className="px-6 py-2 rounded-lg text-black font-semibold
+bg-gradient-to-r from-[#FFD76B] via-[#FFC94A] to-[#FFB347]
+hover:brightness-110 transition shadow-[0_4px_14px_rgba(255,200,90,0.35)]"
 >
 {submitting ? "Submitting..." : "Submit Application"}
 </button>
+</div>
 
 
 </div> {/* closes space-y-2 */}
