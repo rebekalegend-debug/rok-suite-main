@@ -6,27 +6,28 @@
  */
 .light {
 
-  /* MAIN BACKGROUND */
-  --background: linear-gradient(
-    135deg,
-    #ffffff 0%,
-    #fff6fb 40%,
-    #ffeef7 100%
-  );
-
-  /* SIDEBAR */
-  --background-secondary: linear-gradient(
-  180deg,
-  #ffd6e8 0%,
-  #ffe9f4 40%,
-  #ffe8c2 100%
+  /* PAGE BACKGROUND */
+--background: linear-gradient(
+ 180deg,
+ #fff6fb 0%,
+ #fff2f7 40%,
+ #fff4e8 100%
+);
+/* SIDEBAR */
+--background-secondary: linear-gradient(
+ 180deg,
+ #f8d9e6 0%,
+ #faedf3 40%,
+ #f7e9cc 100%
 );
 
-  /* CARDS */
-  --background-card: #ffffff;
+/* CARDS */
+--background-card: #fff7fb;
 
-  /* HOVER */
-  --background-hover: #fff3f9;
+/* HOVER */
+--background-hover: #f3e9f1;
+
+
 
   /* PRIMARY — soft rose gold */
   --primary: #e11d8a;
