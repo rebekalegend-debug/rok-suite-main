@@ -110,7 +110,11 @@ style={{ background: "var(--background)" }}
 <div className="max-w-4xl mx-auto p-4 md:p-8">
 
 <div
-className="p-6 rounded-lg border space-y-4 shadow-sm"
+className="p-6 rounded-lg border space-y-4 gold-glow"
+style={{
+  background:'var(--background-card)',
+  borderColor:'#e6b94a30'
+}}
 style={{
  background:'var(--background-card)',
  borderColor:'var(--border)'
@@ -150,7 +154,7 @@ onChange={(e)=>{
 <button
 type="button"
 onClick={()=>setSearchMode(!searchMode)}
-className="px-3 py-2 w-full sm:w-auto bg-amber-500/20 border border-amber-400 text-amber-300 rounded text-sm"
+className="px-4 py-2 bg-gradient-to-r from-[#e6b94a] to-[#ffcf63] text-black rounded gold-glow hover:scale-[1.02] transition"
 >
 Search your ID by name
 </button>
@@ -204,7 +208,7 @@ Selected ID: <span className="text-amber-300">{form.id}</span>
 <label className="text-sm font-medium">Select Commander</label>
 
 <select
-className="w-full border px-3 py-2 rounded"
+className="w-full border px-3 py-2 rounded gold-glow-soft focus:gold-glow transition"
 style={{
   background: "var(--background-card)",
   color: "var(--foreground)",
@@ -223,7 +227,7 @@ onChange={e=>setSelectedCommander(e.target.value)}
 
 </select>
   </div>
-<div className="pt-4 border-t border-[var(--border)]">
+<div className="border rounded-lg p-4 gold-glow-soft hover:gold-glow transition cursor-pointer">
 <label className="text-sm font-medium flex items-center gap-2 mb-3">
   Commander Skill lvl
   <span className="text-xs opacity-60 flex items-center gap-1">
@@ -324,7 +328,11 @@ Uploaded: {commanderFile.name}
 <div className="pt-4 border-t border-[var(--border)]">
 <label className="text-sm font-medium">Commander Purpose</label>
 
-<select className="w-full border px-3 py-2 rounded"
+<select className="w-full border px-3 py-2 rounded 
+focus:shadow-[0_0_0_3px_rgba(230,185,74,0.15)]
+focus:ring-[#e6b94a]/70 
+focus:ring-amber-400/60 
+focus:border-[#e6b94a]
 style={{
   background: "var(--background-card)",
   color: "var(--foreground)",
@@ -342,7 +350,11 @@ onChange={e=>setForm({...form,purpose:e.target.value})}
 
 {/* RANK */}
 <div className="pt-4 border-t border-[var(--border)]">
-<select className="w-full border px-3 py-2 rounded"
+<select className="w-full border px-3 py-2 rounded 
+focus:shadow-[0_0_0_3px_rgba(230,185,74,0.15)]
+focus:ring-[#e6b94a]/70 
+focus:ring-amber-400/60 
+focus:border-[#e6b94a]
 style={{
   background: "var(--background-card)",
   color: "var(--foreground)",
@@ -361,7 +373,11 @@ onChange={e=>setForm({...form,rank:e.target.value})}
 
 {/* SPENDING */}
 <div className="pt-4 border-t border-[var(--border)]">
-<select className="w-full border px-3 py-2 rounded"
+<select className="w-full border px-3 py-2 rounded 
+focus:shadow-[0_0_0_3px_rgba(230,185,74,0.15)]
+focus:ring-[#e6b94a]/70 
+focus:ring-amber-400/60 
+focus:border-[#e6b94a]
 style={{
   background: "var(--background-card)",
   color: "var(--foreground)",
@@ -379,7 +395,11 @@ onChange={e=>setForm({...form,kvkSpending:e.target.value})}
 
 {/* TROOP */}
 <div className="pt-4 border-t border-[var(--border)]">
-<select className="w-full border px-3 py-2 rounded"
+<select className="w-full border px-3 py-2 rounded 
+focus:shadow-[0_0_0_3px_rgba(230,185,74,0.15)]
+focus:ring-[#e6b94a]/70 
+focus:ring-amber-400/60 
+focus:border-[#e6b94a]
 style={{
   background: "var(--background-card)",
   color: "var(--foreground)",
@@ -397,7 +417,11 @@ onChange={e=>setForm({...form,troopType:e.target.value})}
 <div className="pt-4 border-t border-[var(--border)]">
 <input
 placeholder="Commander Pair"
-className="w-full border px-3 py-2 rounded"
+className="w-full border px-3 py-2 rounded 
+focus:shadow-[0_0_0_3px_rgba(230,185,74,0.15)]
+focus:ring-[#e6b94a]/70 
+focus:ring-amber-400/60 
+focus:border-[#e6b94a]
 style={{
   background: "var(--background-card)",
   color: "var(--foreground)",
@@ -411,7 +435,11 @@ onChange={e=>setForm({...form,pair:e.target.value})}
 <div className="pt-4 border-t border-[var(--border)]">
 <textarea
 placeholder="Comment"
-className="w-full border px-3 py-2 rounded"
+className="w-full border px-3 py-2 rounded 
+focus:shadow-[0_0_0_3px_rgba(230,185,74,0.15)]
+focus:ring-[#e6b94a]/70 
+focus:ring-amber-400/60 
+focus:border-[#e6b94a]
 style={{
   background: "var(--background-card)",
   color: "var(--foreground)",
