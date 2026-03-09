@@ -116,12 +116,22 @@ style={{
   borderColor: "var(--border)"
 }}
 >
-<h2 className="text-lg font-semibold">MGE Registration</h2>
+<h2
+className="text-center text-xl font-semibold pb-3 mb-4 border-b"
+style={{
+  color: "#FFC94A",
+  borderColor: "var(--border)"
+}}
+>
+MGE Registration
+</h2>
 
 <div className="space-y-2">
 
+<label className="text-sm font-medium">
+Enter your ingame ID
+</label>
 <div className="flex flex-col sm:flex-row gap-3">
-
 <input
 type="text"
 inputMode="numeric"
@@ -156,11 +166,17 @@ Search your ID by name
 </div>
 {searchMode && (
 
-<div className="border border-slate-700 rounded bg-slate-900 p-2">
+<div
+className="rounded p-2"
+style={{
+  background: "var(--background-card)",
+  border: "1px solid var(--border)"
+}}
+>
 
 <input
 placeholder="Search name..."
-className="w-full mb-2 px-2 py-1 bg-slate-800 text-slate-200 rounded"
+className="w-full mb-2 px-2 py-1 rounded gold-input"
 value={search}
 onChange={e=>setSearch(e.target.value)}
 />
@@ -199,7 +215,7 @@ Selected ID: <span className="text-amber-300">{form.id}</span>
 
 )}
 <div className="pt-4 border-t border-[var(--border)]">
-<label className="text-sm font-medium">Select Commander</label>
+<label className="text-sm font-medium">Select wanted commander</label>
 
 <select
 className="w-full px-3 py-2 rounded gold-input"
@@ -216,7 +232,12 @@ onChange={e=>setSelectedCommander(e.target.value)}
 
 </select>
   </div>
-<div className="border rounded-lg p-4 gold-glow-soft hover:gold-glow transition cursor-pointer">
+<div
+className="rounded-lg p-4 gold-glow-soft hover:gold-glow transition cursor-pointer"
+style={{
+  border: "1px solid var(--border)"
+}}
+>
 <label className="text-sm font-medium flex items-center gap-2 mb-3">
   Commander Skill lvl
   <span className="text-xs opacity-60 flex items-center gap-1">
@@ -274,11 +295,11 @@ color: isMax ? "#FFC94A" : "var(--foreground)"
 
   </div>
 <div className="pt-4 border-t border-[var(--border)]">
-<label className="text-sm font-medium">
-  Commander Screenshot (optional)
+<label className="text-sm font-medium mb-2 block">
+  ⚙️ Gear/equipment you will use for the commander!
 </label>
 
-<label className="flex items-center gap-3 border border-slate-700 rounded-lg px-4 py-3 cursor-pointer hover:border-amber-400 transition">
+<label className="flex items-center gap-3 rounded-lg px-4 py-3 cursor-pointer gold-input hover:gold-glow transition">
 
 <svg
   xmlns="http://www.w3.org/2000/svg"
@@ -306,6 +327,8 @@ className="hidden"
 onChange={(e)=>setCommanderFile(e.target.files?.[0] || null)}
 />
 </label>
+
+  
 {commanderFile && (
 <div className="text-xs text-green-400 mt-1">
 Uploaded: {commanderFile.name}
@@ -315,7 +338,7 @@ Uploaded: {commanderFile.name}
       
 {/* PURPOSE */}
 <div className="pt-4 border-t border-[var(--border)]">
-<label className="text-sm font-medium">Commander Purpose</label>
+<label className="text-sm font-medium">🎯 For what purpose you need the commander? </label>
 
 <select
 className="w-full px-3 py-2 rounded gold-input"
@@ -331,6 +354,7 @@ onChange={e=>setForm({...form,purpose:e.target.value})}
 
 {/* RANK */}
 <div className="pt-4 border-t border-[var(--border)]">
+  <label className="text-sm font-medium">🏅 What rank you would like to get? </label>
 <select
 className="w-full px-3 py-2 rounded gold-input"
 onChange={e=>setForm({...form,rank:e.target.value})}
@@ -346,7 +370,9 @@ onChange={e=>setForm({...form,rank:e.target.value})}
 
 {/* SPENDING */}
 <div className="pt-4 border-t border-[var(--border)]">
-<select
+ <label className="text-sm font-medium">🤑 Do you spend in KvK? </label>
+  
+  <select
 className="w-full px-3 py-2 rounded gold-input"
 onChange={e=>setForm({...form,kvkSpending:e.target.value})}
 >
@@ -360,6 +386,7 @@ onChange={e=>setForm({...form,kvkSpending:e.target.value})}
 
 {/* TROOP */}
 <div className="pt-4 border-t border-[var(--border)]">
+   <label className="text-sm font-medium">🤔 What is your main troop type? </label>
 <select
 className="w-full px-3 py-2 rounded gold-input"
 onChange={e=>setForm({...form,troopType:e.target.value})}
@@ -372,7 +399,8 @@ onChange={e=>setForm({...form,troopType:e.target.value})}
 
 {/* PAIR */}
 <div className="pt-4 border-t border-[var(--border)]">
-<input
+<label className="text-sm font-medium">🤔 For what commander/pair you need the commander: </label>
+  <input
 placeholder="Commander Pair"
 className="w-full px-3 py-2 rounded gold-input"
 
@@ -382,6 +410,7 @@ onChange={e=>setForm({...form,pair:e.target.value})}
 
 {/* COMMENT */}
 <div className="pt-4 border-t border-[var(--border)]">
+<label className="text-sm font-medium">🤔 💬Additional personal comment?!: </label>
 <textarea
 placeholder="Comment"
 className="w-full px-3 py-2 rounded gold-input"
