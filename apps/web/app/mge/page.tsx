@@ -26,9 +26,24 @@ const [loadingCommanders,setLoadingCommanders] = useState(false)
 const [commanders,setCommanders] = useState<string[]>([])
 const [selectedCommander,setSelectedCommander] = useState("")
 const [submitting,setSubmitting] = useState(false)
+  const [members,setMembers] = useState<{id:string,name:string}[]>([])
+const [searchMode,setSearchMode] = useState(false)
+const [search,setSearch] = useState("")
   
-  
-  
+  useEffect(()=>{
+
+ async function loadMembers(){
+
+  const res = await fetch("/api/mge-application?members=true")
+  const data = await res.json()
+
+  setMembers(data)
+
+ }
+
+ loadMembers()
+
+},[])
   
 useEffect(() => {
 
@@ -94,12 +109,75 @@ style={{background:'var(--background-card)', borderColor:'var(--border)'}}
 >
 <h2 className="text-lg font-semibold">MGE Registration</h2>
 
+<div className="space-y-2">
+
+<div className="flex gap-2">
+
 <input
-placeholder="Your ingame name"
-className="w-full border px-3 py-2 rounded bg-slate-900 text-slate-200 border-slate-700"
+type="text"
+inputMode="numeric"
+pattern="[0-9]*"
+placeholder="Enter your ID"
+className="flex-1 border px-3 py-2 rounded bg-slate-900 border-slate-700 text-slate-200"
 onChange={e=>setForm({...form,id:e.target.value})}
 />
 
+<span className="text-sm text-slate-400 self-center">or</span>
+
+<button
+type="button"
+onClick={()=>setSearchMode(!searchMode)}
+className="px-3 py-2 bg-amber-500/20 border border-amber-400 text-amber-300 rounded text-sm"
+>
+Search your ID by name
+</button>
+
+</div>
+{searchMode && (
+
+<div className="border border-slate-700 rounded bg-slate-900 p-2">
+
+<input
+placeholder="Search name..."
+className="w-full mb-2 px-2 py-1 bg-slate-800 text-slate-200 rounded"
+value={search}
+onChange={e=>{
+ const value = e.target.value.replace(/\D/g,"")
+ setForm({...form,id:value})
+}}
+/>
+{form.id && (
+<div className="text-xs text-slate-400">
+Selected ID: <span className="text-amber-300">{form.id}</span>
+</div>
+)}
+<div className="max-h-40 overflow-y-auto">
+
+{members
+.filter(m=>m.name.toLowerCase().includes(search.toLowerCase()))
+.slice(0,20)
+.map(m=>(
+<div
+key={m.id}
+className="px-2 py-1 hover:bg-slate-700 cursor-pointer rounded"
+onClick={()=>{
+ setForm({...form,id:m.id})
+ setSearch(m.name)
+ setSearchMode(false)
+}}
+>
+<div className="flex justify-between">
+<span>{m.name}</span>
+<span className="text-xs text-slate-400">{m.id}</span>
+</div>
+</div>
+))}
+
+</div>
+
+</div>
+
+)}
 
 <label className="text-sm font-medium">Select Commander</label>
 
@@ -138,8 +216,8 @@ onChange={e=>setSelectedCommander(e.target.value)}
         className={`cursor-pointer rounded-lg border p-3 text-center select-none transition
         ${
           isMax
-            ? "bg-green-600/20 border-green-500 text-green-400"
-            : "bg-slate-900 border-slate-700 text-slate-200"
+  ? "bg-amber-500/20 border-amber-400 text-amber-300"
+  : "bg-slate-900 border-slate-700 text-slate-200"
         }`}
       >
         <div className="text-xl font-bold">{value}</div>
