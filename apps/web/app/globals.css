@@ -292,10 +292,9 @@ box-shadow:
 /* form labels */
 
 .form-label{
-color: var(--text-secondary);
+color: var(--foreground);
 font-size:14px;
 font-weight:500;
-opacity:0.9;
 }
 /* Glassmorphism - now more subtle */
 .glass {
@@ -344,11 +343,7 @@ opacity:0.9;
 }
 /* form labels muted like hint text */
 
-.form-label{
-color:#9aa3af;
-font-size:14px;
-font-weight:500;
-}
+
 .btn-primary {
   background: var(--primary);
   color: white;
