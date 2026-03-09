@@ -216,6 +216,44 @@ onChange={e=>setSelectedCommander(e.target.value)}
   Commander Skill lvl <span className="text-xs opacity-60">(tap to change)</span>
 </label>
 
+{/* PRESET BUTTONS */}
+<div className="flex flex-wrap justify-center gap-3 mb-4 text-sm">
+
+<button
+type="button"
+onClick={() => setSkills({skill1:5,skill2:5,skill3:5,skill4:5})}
+className="px-3 py-1 rounded bg-amber-500/20 border border-amber-400 text-amber-300"
+>
+Max
+</button>
+
+<button
+type="button"
+onClick={() => setSkills({skill1:5,skill2:5,skill3:1,skill4:1})}
+className="px-3 py-1 rounded border border-slate-600 text-slate-300"
+>
+5511
+</button>
+
+<button
+type="button"
+onClick={() => setSkills({skill1:5,skill2:1,skill3:1,skill4:1})}
+className="px-3 py-1 rounded border border-slate-600 text-slate-300"
+>
+5111
+</button>
+
+<button
+type="button"
+onClick={() => setSkills({skill1:0,skill2:0,skill3:0,skill4:0})}
+className="px-3 py-1 rounded border border-slate-600 text-slate-300"
+>
+New
+</button>
+
+</div>
+
+{/* SKILL GRID */}
 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
   {Object.entries(skills).map(([key, value], i) => {
     const isMax = value === 5;
@@ -229,62 +267,33 @@ onChange={e=>setSelectedCommander(e.target.value)}
             [key]: value === 5 ? 0 : value + 1,
           })
         }
-className="cursor-pointer rounded-lg border p-3 text-center select-none transition"
-style={{
-  background: isMax ? "rgba(245,158,11,0.15)" : "var(--background-card)",
-  borderColor: isMax ? "#f59e0b" : "var(--border)",
-  color: isMax ? "#f59e0b" : "var(--foreground)"
-}}
+        className="cursor-pointer rounded-lg border p-3 text-center select-none transition"
+        style={{
+          background: isMax ? "rgba(245,158,11,0.15)" : "var(--background-card)",
+          borderColor: isMax ? "#f59e0b" : "var(--border)",
+          color: isMax ? "#f59e0b" : "var(--foreground)"
+        }}
       >
-       <div className="text-xl font-bold">{value}</div>
+        <div className="text-xl font-bold">{value}</div>
 
-<div className="text-xs opacity-80 mb-1">Skill {i + 1}</div>
+        <div className="text-xs opacity-80 mb-1">Skill {i + 1}</div>
 
-<div className="flex justify-center gap-1 mt-1">
- {[1,2,3,4,5].map(dot => (
-   <div
-     key={dot}
-     className={`w-1.5 h-1.5 rounded-full ${
-       dot <= value
-         ? "bg-amber-400"
-         : "bg-slate-600"
-     }`}
-   />
- ))}
-</div>
-<div className="flex justify-center gap-3 mb-4 text-sm">
+        <div className="flex justify-center gap-1 mt-1">
+          {[1,2,3,4,5].map(dot => (
+            <div
+              key={dot}
+              className={`w-1.5 h-1.5 rounded-full ${
+                dot <= value ? "bg-amber-400" : "bg-slate-600"
+              }`}
+            />
+          ))}
+        </div>
 
-<button
-onClick={() => setSkills({skill1:5,skill2:5,skill3:5,skill4:5})}
-className="px-3 py-1 rounded bg-amber-500/20 border border-amber-400 text-amber-300"
->
-Max
-</button>
-
-<button
-onClick={() => setSkills({skill1:5,skill2:5,skill3:1,skill4:1})}
-className="px-3 py-1 rounded border border-slate-600 text-slate-300"
->
-5511
-</button>
-
-<button
-onClick={() => setSkills({skill1:5,skill2:1,skill3:1,skill4:1})}
-className="px-3 py-1 rounded border border-slate-600 text-slate-300"
->
-5111
-</button>
-
-<button
-onClick={() => setSkills({skill1:0,skill2:0,skill3:0,skill4:0})}
-className="px-3 py-1 rounded border border-slate-600 text-slate-300"
->
-New
-</button>
-
+      </div>
+    );
+  })}
 </div>
 
-</div>
 <label className="text-sm font-medium">Commander Screenshot (optional)</label>
 
 <label className="flex items-center gap-3 border border-slate-700 rounded-lg px-4 py-3 cursor-pointer hover:border-amber-400 transition">
