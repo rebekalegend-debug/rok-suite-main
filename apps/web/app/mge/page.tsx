@@ -141,45 +141,34 @@ onChange={e=>setSelectedCommander(e.target.value)}
 
 </select>
 
-  {/* Commander Skill Select */}
-  
 <label className="text-sm font-medium">Commander Skills</label>
 
 <div className="grid grid-cols-4 gap-3">
+  {Object.entries(skills).map(([key, value], i) => {
+    const isMax = value === 5;
 
-{Object.entries(skills).map(([key,value],i)=>{
+    return (
+      <div
+        key={key}
+        onClick={() =>
+          setSkills({
+            ...skills,
+            [key]: value === 5 ? 0 : value + 1,
+          })
+        }
+        className={`cursor-pointer rounded-lg border p-3 text-center select-none transition
+        ${
+          isMax
+            ? "bg-green-600/20 border-green-500 text-green-400"
+            : "bg-slate-900 border-slate-700 text-slate-200"
+        }`}
+      >
+        <div className="text-xl font-bold">{value}</div>
 
-const isMax = value === 5
-
-return (
-<div
-key={key}
-onClick={()=>setSkills({
-...skills,
-[key]: value === 5 ? 0 : value + 1
-})}
-className={`cursor-pointer rounded-lg border p-3 text-center select-none transition
-${isMax
-? "bg-green-600/20 border-green-500 text-green-400"
-: "bg-slate-900 border-slate-700 text-slate-200"}
-`}
->
-
-<div className="text-xl font-bold">
-{value}
-</div>
-
-<div className="text-xs opacity-80">
-Skill {i+1}
-</div>
-
-</div>
-)
-
-})}
-
-</div>
-
+        <div className="text-xs opacity-80">Skill {i + 1}</div>
+     </div>
+    );
+  })}
 
 
 
