@@ -123,7 +123,12 @@ value={
   ? `${form.id} (${selectedMember.name})`
   : form.id
 }
-className="flex-1 border px-3 py-2 rounded bg-slate-900 border-slate-700 text-slate-200"
+className="flex-1 border px-3 py-2 rounded"
+style={{
+  background: "var(--background-card)",
+  color: "var(--foreground)",
+  borderColor: "var(--border)"
+}}
 onChange={(e)=>{
  const value = e.target.value.replace(/\D/g,"")
  setSelectedMember(null)
@@ -224,37 +229,89 @@ onChange={e=>setSelectedCommander(e.target.value)}
             [key]: value === 5 ? 0 : value + 1,
           })
         }
-        className={`cursor-pointer rounded-lg border p-3 text-center select-none transition
-        ${
-          isMax
-  ? "bg-amber-500/20 border-amber-400 text-amber-300"
-  : "bg-slate-900 border-slate-700 text-slate-200"
-        }`}
+className="cursor-pointer rounded-lg border p-3 text-center select-none transition"
+style={{
+  background: isMax ? "rgba(245,158,11,0.15)" : "var(--background-card)",
+  borderColor: isMax ? "#f59e0b" : "var(--border)",
+  color: isMax ? "#f59e0b" : "var(--foreground)"
+}}
       >
-        <div className="text-xl font-bold">{value}</div>
+       <div className="text-xl font-bold">{value}</div>
 
-        <div className="text-xs opacity-80">Skill {i + 1}</div>
-     </div>
-    );
-  })}
+<div className="text-xs opacity-80 mb-1">Skill {i + 1}</div>
 
+<div className="flex justify-center gap-1 mt-1">
+ {[1,2,3,4,5].map(dot => (
+   <div
+     key={dot}
+     className={`w-1.5 h-1.5 rounded-full ${
+       dot <= value
+         ? "bg-amber-400"
+         : "bg-slate-600"
+     }`}
+   />
+ ))}
 
+<div className="flex justify-center gap-3 mb-4 text-sm">
 
-  
+<button
+onClick={() => setSkills({skill1:5,skill2:5,skill3:5,skill4:5})}
+className="px-3 py-1 rounded bg-amber-500/20 border border-amber-400 text-amber-300"
+>
+Max
+</button>
+
+<button
+onClick={() => setSkills({skill1:5,skill2:5,skill3:1,skill4:1})}
+className="px-3 py-1 rounded border border-slate-600 text-slate-300"
+>
+5511
+</button>
+
+<button
+onClick={() => setSkills({skill1:5,skill2:1,skill3:1,skill4:1})}
+className="px-3 py-1 rounded border border-slate-600 text-slate-300"
+>
+5111
+</button>
+
+<button
+onClick={() => setSkills({skill1:0,skill2:0,skill3:0,skill4:0})}
+className="px-3 py-1 rounded border border-slate-600 text-slate-300"
+>
+New
+</button>
+
 </div>
-<label className="text-sm font-medium">Commander Gear / Equipment</label>
+
+</div>
+<label className="text-sm font-medium">Commander Screenshot (optional)</label>
+
+<label className="flex items-center gap-3 border border-slate-700 rounded-lg px-4 py-3 cursor-pointer hover:border-amber-400 transition">
+
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
+<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+<circle cx="12" cy="13" r="4"/>
+</svg>
+
+<span className="text-sm text-slate-300">
+Tap to upload screenshot
+</span>
+
 <input
 type="file"
 accept="image/*"
+className="hidden"
 onChange={(e)=>setCommanderFile(e.target.files?.[0] || null)}
 />
+</label>
+{commanderFile && (
+<div className="text-xs text-green-400 mt-1">
+Uploaded: {commanderFile.name}
+</div>
+)}
 
-<label className="text-sm font-medium">Gear Screenshot</label>
-<input
-type="file"
-accept="image/*"
-onChange={(e)=>setGearFile(e.target.files?.[0] || null)}
-/>
+        
 <label className="text-sm font-medium">Commander Purpose</label>
 
 <select
