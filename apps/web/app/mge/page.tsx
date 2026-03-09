@@ -29,7 +29,7 @@ const [submitting,setSubmitting] = useState(false)
   const [members,setMembers] = useState<{id:string,name:string}[]>([])
 const [searchMode,setSearchMode] = useState(false)
 const [search,setSearch] = useState("")
-  
+  const [selectedMember,setSelectedMember] = useState<{id:string,name:string} | null>(null)
   useEffect(()=>{
 
  async function loadMembers(){
@@ -118,8 +118,17 @@ type="text"
 inputMode="numeric"
 pattern="[0-9]*"
 placeholder="Enter your ID"
+value={
+ selectedMember
+  ? `${form.id} (${selectedMember.name})`
+  : form.id
+}
 className="flex-1 border px-3 py-2 rounded bg-slate-900 border-slate-700 text-slate-200"
-onChange={e=>setForm({...form,id:e.target.value})}
+onChange={(e)=>{
+ const value = e.target.value.replace(/\D/g,"")
+ setSelectedMember(null)
+ setForm({...form,id:value})
+}}
 />
 
 <span className="text-sm text-slate-400 self-center">or</span>
@@ -141,10 +150,7 @@ Search your ID by name
 placeholder="Search name..."
 className="w-full mb-2 px-2 py-1 bg-slate-800 text-slate-200 rounded"
 value={search}
-onChange={e=>{
- const value = e.target.value.replace(/\D/g,"")
- setForm({...form,id:value})
-}}
+onChange={e=>setSearch(e.target.value)}
 />
 {form.id && (
 <div className="text-xs text-slate-400">
@@ -162,7 +168,7 @@ key={m.id}
 className="px-2 py-1 hover:bg-slate-700 cursor-pointer rounded"
 onClick={()=>{
  setForm({...form,id:m.id})
- setSearch(m.name)
+ setSelectedMember(m)
  setSearchMode(false)
 }}
 >
