@@ -213,6 +213,7 @@ onChange={e=>setSelectedCommander(e.target.value)}
 ))}
 
 </select>
+  </div>
 <div className="pt-4 border-t border-[var(--border)]">
 <label className="text-sm font-medium flex items-center gap-2">
   Commander Skill lvl
@@ -266,6 +267,8 @@ onChange={e=>setSelectedCommander(e.target.value)}
     );
   })}
 </div>
+
+  </div>
 <div className="pt-4 border-t border-[var(--border)]">
 <label className="text-sm font-medium">
   Commander Screenshot (optional)
@@ -304,7 +307,7 @@ onChange={(e)=>setCommanderFile(e.target.files?.[0] || null)}
 Uploaded: {commanderFile.name}
 </div>
 )}
-
+</div>
         <div className="pt-4 border-t border-[var(--border)]">
 <label className="text-sm font-medium">Commander Purpose</label>
 
