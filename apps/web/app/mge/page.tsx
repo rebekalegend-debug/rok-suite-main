@@ -36,7 +36,7 @@ useEffect(() => {
 
    setLoadingCommanders(true)
 
-   const res = await fetch("/api/get-commanders")
+   const res = await fetch("/api/mge-application")
    const data = await res.json()
 
    setCommanders(data)
