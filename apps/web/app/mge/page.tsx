@@ -136,12 +136,10 @@ value={
   ? `${form.id} (${selectedMember.name})`
   : form.id
 }
-className="flex-1 border px-3 py-2 rounded"
-style={{
-  background: "var(--background-card)",
-  color: "var(--foreground)",
-  borderColor: "var(--border)"
-}}
+className="flex-1 px-3 py-2 rounded gold-input"
+
+
+  
 onChange={(e)=>{
  const value = e.target.value.replace(/\D/g,"")
  setSelectedMember(null)
@@ -208,12 +206,7 @@ Selected ID: <span className="text-amber-300">{form.id}</span>
 <label className="text-sm font-medium">Select Commander</label>
 
 <select
-className="w-full border px-3 py-2 rounded gold-glow-soft focus:gold-glow transition"
-style={{
-  background: "var(--background-card)",
-  color: "var(--foreground)",
-  borderColor: "var(--border)"
-}}
+className="w-full px-3 py-2 rounded gold-input"
 value={selectedCommander}
 onChange={e=>setSelectedCommander(e.target.value)}
 >
@@ -328,16 +321,8 @@ Uploaded: {commanderFile.name}
 <div className="pt-4 border-t border-[var(--border)]">
 <label className="text-sm font-medium">Commander Purpose</label>
 
-<select className="w-full border px-3 py-2 rounded 
-focus:shadow-[0_0_0_3px_rgba(230,185,74,0.15)]
-focus:ring-[#e6b94a]/70 
-focus:ring-amber-400/60 
-focus:border-[#e6b94a]
-style={{
-  background: "var(--background-card)",
-  color: "var(--foreground)",
-  borderColor: "var(--border)"
-}}
+<select
+className="w-full px-3 py-2 rounded gold-input"
 onChange={e=>setForm({...form,purpose:e.target.value})}
 >
 <option value="">Select Purpose</option>
@@ -350,16 +335,8 @@ onChange={e=>setForm({...form,purpose:e.target.value})}
 
 {/* RANK */}
 <div className="pt-4 border-t border-[var(--border)]">
-<select className="w-full border px-3 py-2 rounded 
-focus:shadow-[0_0_0_3px_rgba(230,185,74,0.15)]
-focus:ring-[#e6b94a]/70 
-focus:ring-amber-400/60 
-focus:border-[#e6b94a]
-style={{
-  background: "var(--background-card)",
-  color: "var(--foreground)",
-  borderColor: "var(--border)"
-}}
+<select
+className="w-full px-3 py-2 rounded gold-input"
 onChange={e=>setForm({...form,rank:e.target.value})}
 >
 <option>Select Rank</option>
@@ -373,16 +350,8 @@ onChange={e=>setForm({...form,rank:e.target.value})}
 
 {/* SPENDING */}
 <div className="pt-4 border-t border-[var(--border)]">
-<select className="w-full border px-3 py-2 rounded 
-focus:shadow-[0_0_0_3px_rgba(230,185,74,0.15)]
-focus:ring-[#e6b94a]/70 
-focus:ring-amber-400/60 
-focus:border-[#e6b94a]
-style={{
-  background: "var(--background-card)",
-  color: "var(--foreground)",
-  borderColor: "var(--border)"
-}}
+<select
+className="w-full px-3 py-2 rounded gold-input"
 onChange={e=>setForm({...form,kvkSpending:e.target.value})}
 >
 <option>F2P</option>
@@ -395,16 +364,8 @@ onChange={e=>setForm({...form,kvkSpending:e.target.value})}
 
 {/* TROOP */}
 <div className="pt-4 border-t border-[var(--border)]">
-<select className="w-full border px-3 py-2 rounded 
-focus:shadow-[0_0_0_3px_rgba(230,185,74,0.15)]
-focus:ring-[#e6b94a]/70 
-focus:ring-amber-400/60 
-focus:border-[#e6b94a]
-style={{
-  background: "var(--background-card)",
-  color: "var(--foreground)",
-  borderColor: "var(--border)"
-}}
+<select
+className="w-full px-3 py-2 rounded gold-input"
 onChange={e=>setForm({...form,troopType:e.target.value})}
 >
 <option>INF</option>
@@ -417,16 +378,8 @@ onChange={e=>setForm({...form,troopType:e.target.value})}
 <div className="pt-4 border-t border-[var(--border)]">
 <input
 placeholder="Commander Pair"
-className="w-full border px-3 py-2 rounded 
-focus:shadow-[0_0_0_3px_rgba(230,185,74,0.15)]
-focus:ring-[#e6b94a]/70 
-focus:ring-amber-400/60 
-focus:border-[#e6b94a]
-style={{
-  background: "var(--background-card)",
-  color: "var(--foreground)",
-  borderColor: "var(--border)"
-}}
+className="w-full px-3 py-2 rounded gold-input"
+
 onChange={e=>setForm({...form,pair:e.target.value})}
 />
 </div>
@@ -435,19 +388,13 @@ onChange={e=>setForm({...form,pair:e.target.value})}
 <div className="pt-4 border-t border-[var(--border)]">
 <textarea
 placeholder="Comment"
-className="w-full border px-3 py-2 rounded 
-focus:shadow-[0_0_0_3px_rgba(230,185,74,0.15)]
-focus:ring-[#e6b94a]/70 
-focus:ring-amber-400/60 
-focus:border-[#e6b94a]
-style={{
-  background: "var(--background-card)",
-  color: "var(--foreground)",
-  borderColor: "var(--border)"
-}}
+className="w-full px-3 py-2 rounded gold-input"
+  
 onChange={e=>setForm({...form,comment:e.target.value})}
 />
+  
 </div>
+  
 <div className="flex justify-center pt-4">
 <button
 disabled={submitting}
