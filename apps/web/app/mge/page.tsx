@@ -165,24 +165,26 @@ Selected ID: <span className="text-amber-300">{form.id}</span>
 <div className="max-h-40 overflow-y-auto">
 
 {members
-.filter(m=>m.name.toLowerCase().includes(search.toLowerCase()))
-.slice(0,20)
-.map(m=>(
-<div
-key={m.id}
-className="px-2 py-1 hover:bg-slate-700 cursor-pointer rounded"
-onClick={()=>{
- setForm({...form,id:m.id})
- setSelectedMember(m)
- setSearchMode(false)
-}}
->
-<div className="flex justify-between">
-<span>{m.name}</span>
-<span className="text-xs text-slate-400">{m.id}</span>
-</div>
-</div>
-))}
+  .filter(m => m.name.toLowerCase().includes(search.toLowerCase()))
+  .slice(0, 20)
+  .map((m) => {
+    return (
+      <div
+        key={m.id}
+        className="px-2 py-1 hover:bg-slate-700 cursor-pointer rounded"
+        onClick={() => {
+          setForm({ ...form, id: m.id })
+          setSelectedMember(m)
+          setSearchMode(false)
+        }}
+      >
+        <div className="flex justify-between">
+          <span>{m.name}</span>
+          <span className="text-xs text-slate-400">{m.id}</span>
+        </div>
+      </div>
+    )
+  })}
 
 </div>
 
@@ -276,17 +278,21 @@ New
       >
         <div className="text-xl font-bold">{value}</div>
 
-        <div className="text-xs opacity-80 mb-1">Skill {i + 1}</div>
+        <div className="text-xs opacity-80 mb-1">
+          Skill {i + 1}
+        </div>
 
         <div className="flex justify-center gap-1 mt-1">
-          {[1,2,3,4,5].map(dot => (
-            <div
-              key={dot}
-              className={`w-1.5 h-1.5 rounded-full ${
-                dot <= value ? "bg-amber-400" : "bg-slate-600"
-              }`}
-            />
-          ))}
+          {[1,2,3,4,5].map((dot) => {
+            return (
+              <div
+                key={dot}
+                className={`w-1.5 h-1.5 rounded-full ${
+                  dot <= value ? "bg-amber-400" : "bg-slate-600"
+                }`}
+              />
+            );
+          })}
         </div>
 
       </div>
@@ -294,7 +300,9 @@ New
   })}
 </div>
 
-<label className="text-sm font-medium">Commander Screenshot (optional)</label>
+<label className="text-sm font-medium">
+  Commander Screenshot (optional)
+</label>
 
 <label className="flex items-center gap-3 border border-slate-700 rounded-lg px-4 py-3 cursor-pointer hover:border-amber-400 transition">
 
