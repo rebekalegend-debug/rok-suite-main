@@ -112,12 +112,8 @@ style={{ background: "var(--background)" }}
 <div
 className="p-6 rounded-lg border space-y-4 gold-glow"
 style={{
-  background:'var(--background-card)',
-  borderColor:'#e6b94a30'
-}}
-style={{
- background:'var(--background-card)',
- borderColor:'var(--border)'
+  background: "var(--background-card)",
+  borderColor: "var(--border)"
 }}
 >
 <h2 className="text-lg font-semibold">MGE Registration</h2>
