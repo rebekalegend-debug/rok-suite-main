@@ -219,7 +219,37 @@ box-shadow:
   background-color: var(--c) !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
 }
+.mge-title{
+text-align:center;
+font-size:28px;
+font-weight:700;
+letter-spacing:0.5px;
 
+background: linear-gradient(
+90deg,
+#FFD76B 0%,
+#FFC94A 30%,
+#FFF1A8 50%,
+#FFC94A 70%,
+#FFB347 100%
+);
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+
+text-shadow:
+0 0 8px rgba(255,215,120,0.35),
+0 0 18px rgba(255,200,90,0.25);
+
+animation: goldShimmer 6s linear infinite;
+border-color: var(--border);
+}
+
+/* subtle shimmer */
+@keyframes goldShimmer{
+0%{ background-position:0% }
+100%{ background-position:200% }
+}
 /* Card styles */
 .card {
   background: var(--background-card);
