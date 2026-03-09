@@ -295,6 +295,10 @@ box-shadow:
 color: var(--foreground);
 font-size:14px;
 font-weight:500;
+input::placeholder,
+textarea::placeholder{
+color:#9aa3af;
+opacity:1;
 }
 /* Glassmorphism - now more subtle */
 .glass {
