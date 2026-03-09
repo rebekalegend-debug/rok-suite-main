@@ -183,14 +183,36 @@ html {
 .leaflet-tooltip-bottom::before {
   border-bottom-color: rgba(0, 0, 0, 0.8) !important;
 }
-.gold-glow {
-  box-shadow: 0 0 0 1px rgba(230,185,74,0.35),
-              0 0 12px rgba(230,185,74,0.15),
-              0 0 30px rgba(230,185,74,0.08);
+.gold-glow-soft{
+box-shadow:
+0 0 0 1px rgba(230,185,74,0.15),
+0 4px 12px rgba(230,185,74,0.12),
+0 0 14px rgba(255,210,120,0.12);
 }
 
-.gold-glow-soft {
-  box-shadow: 0 0 6px rgba(230,185,74,0.15);
+.gold-glow{
+box-shadow:
+0 0 0 1px rgba(230,185,74,0.25),
+0 6px 18px rgba(230,185,74,0.25),
+0 0 24px rgba(255,210,120,0.18);
+}
+
+.gold-input{
+background: var(--background-card);
+color: var(--foreground);
+border: 1px solid var(--border);
+box-shadow:
+0 0 0 1px rgba(230,185,74,0.12),
+0 3px 10px rgba(230,185,74,0.10);
+transition: all .15s ease;
+}
+
+.gold-input:focus{
+outline:none;
+border-color:#e6b94a;
+box-shadow:
+0 0 0 2px rgba(230,185,74,0.35),
+0 6px 18px rgba(230,185,74,0.25);
 }
 /* Feature badge hover: semi-transparent → opaque */
 .kvk-badge:hover {
