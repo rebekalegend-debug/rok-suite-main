@@ -102,10 +102,19 @@ async function submitApplication(){
   
 return (
 <AppSidebar>
-<div className="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
 <div
-className="p-4 sm:p-6 rounded-xl border space-y-5"
-style={{background:'var(--background-card)', borderColor:'var(--border)'}}
+className="min-h-screen"
+style={{ background: "var(--background)" }}
+>
+
+<div className="max-w-4xl mx-auto p-4 md:p-8">
+
+<div
+className="p-6 rounded-lg border space-y-4 shadow-sm"
+style={{
+ background:'var(--background-card)',
+ borderColor:'var(--border)'
+}}
 >
 <h2 className="text-lg font-semibold">MGE Registration</h2>
 
