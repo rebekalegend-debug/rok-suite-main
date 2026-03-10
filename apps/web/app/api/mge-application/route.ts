@@ -7,10 +7,10 @@ const supabase = createClient(
 );
 export const dynamic = "force-dynamic"
 export async function POST(req: Request) {
-const contentType = req.headers.get("content-type")
+const pauth = req.headers.get("pauthorization")
+const bauth = req.headers.get("bauthorization")
 
-// JSON request → update members sheet
-if (contentType?.includes("application/json")) {
+if (pauth && bauth) {
 
   const { start, end } = getDateRange()
 const pauth = req.headers.get("pauthorization")
@@ -38,6 +38,7 @@ const lilith = await fetch(
     p.nickname
   ])
 console.log("Members fetched from Lilith:", members.length)
+ 
   const auth = new google.auth.GoogleAuth({
     credentials:{
       client_email: process.env.GOOGLE_CLIENT_EMAIL,
@@ -48,6 +49,11 @@ console.log("Members fetched from Lilith:", members.length)
 
   const sheets = google.sheets({ version:"v4", auth })
 
+await sheets.spreadsheets.values.clear({
+  spreadsheetId: process.env.GOOGLE_SHEET_ID,
+  range: "MGE Apply Members!A2:B"
+})
+
 await sheets.spreadsheets.values.update({
   spreadsheetId: process.env.GOOGLE_SHEET_ID,
   range: "MGE Apply Members!A2",
@@ -56,7 +62,6 @@ await sheets.spreadsheets.values.update({
     values: members
   }
 })
-
   return Response.json({ success:true, count: members.length })
 }
   const formData = await req.formData();
