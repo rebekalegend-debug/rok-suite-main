@@ -6,74 +6,68 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 export const dynamic = "force-dynamic"
+
+
+
 export async function POST(req: Request) {
-console.log("POST /api/mge-application START")
-  
-const pauth = req.headers.get("pauthorization")
-const bauth = req.headers.get("bauthorization")
-console.log("TOKENS:", {
-  pauth: !!pauth,
-  bauth: !!bauth
-})
-if (!pauth || !bauth) {
-  return Response.json({ error: "Missing Lilith tokens" }, { status: 401 })
-}
 
-const { start, end } = getDateRange()
+  const pauth = req.headers.get("pauthorization")
+  const bauth = req.headers.get("bauthorization")
 
-console.log("CALLING LILITH API", { start, end })
+  // ADMIN UPDATE
+  if (pauth && bauth) {
 
-const lilith = await fetch(
-  `https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?server_id=2554&start=${start}&end=${end}`,
-  {
-    headers: {
-      pauthorization: pauth,
-      bauthorization: bauth,
-      lang: "en_US"
-    }
+    const { start, end } = getDateRange()
+
+    const lilith = await fetch(
+      `https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?server_id=2554&start=${start}&end=${end}`,
+      {
+        headers:{
+          pauthorization: pauth,
+          bauthorization: bauth,
+          lang:"en_US"
+        }
+      }
+    )
+
+    const data = await lilith.json()
+
+    const members = (data?.data || []).map((p:any)=>[
+      p.uid,
+      p.nickname
+    ])
+
+    const auth = new google.auth.GoogleAuth({
+      credentials:{
+        client_email: process.env.GOOGLE_CLIENT_EMAIL,
+        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g,"\n")
+      },
+      scopes:["https://www.googleapis.com/auth/spreadsheets"]
+    })
+
+    const sheets = google.sheets({ version:"v4", auth })
+
+    await sheets.spreadsheets.values.clear({
+      spreadsheetId: process.env.GOOGLE_SHEET_ID,
+      range:"MGE Apply Members!A2:B"
+    })
+
+    await sheets.spreadsheets.values.append({
+      spreadsheetId: process.env.GOOGLE_SHEET_ID,
+      range:"MGE Apply Members!A2",
+      valueInputOption:"RAW",
+      requestBody:{ values: members }
+    })
+
+    return Response.json({ success:true, count:members.length })
   }
-)
 
-const data = await lilith.json()
+  // USER SUBMISSION
+  const formData = await req.formData()
 
-console.log("LILITH MEMBERS:", data?.data?.length)
+  const id = formData.get("id")
 
-const members = (data?.data || []).map((p:any)=>({
-  id: p.uid,
-  name: p.nickname
-}))
-
-console.log("MEMBERS ARRAY SIZE:", members.length)
-console.log("FIRST MEMBER:", members[0])
-  const auth = new google.auth.GoogleAuth({
-    credentials:{
-      client_email: process.env.GOOGLE_CLIENT_EMAIL,
-      private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g,"\n")
-    },
-    scopes:["https://www.googleapis.com/auth/spreadsheets"]
-  })
-
-  const sheets = google.sheets({ version:"v4", auth })
-
-const clearRes = await sheets.spreadsheets.values.clear({
-  spreadsheetId: process.env.GOOGLE_SHEET_ID,
-  range:"MGE Apply Members!A2:B",
-})
-
-console.log("CLEAR RESPONSE:", clearRes.data)
-console.log("APPENDING MEMBERS:", members.length)
-const appendRes = await sheets.spreadsheets.values.append({
-  spreadsheetId: process.env.GOOGLE_SHEET_ID,
- range:"MGE Apply Members!A2",
-  valueInputOption: "RAW",
-  requestBody: {
-    values: members.map((m:any)=>[m.id,m.name])
-  }
-})
-console.log("GET /api/mge-application")
-
-console.log("APPEND RESPONSE:", appendRes.data)
-  return Response.json({ success:true, count: members.length })
+  return Response.json({ success:true })
 }
   const formData = await req.formData();
 
