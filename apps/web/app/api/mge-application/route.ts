@@ -13,15 +13,28 @@ const contentType = req.headers.get("content-type")
 if (contentType?.includes("application/json")) {
 
   const { start, end } = getDateRange()
+const pauth = req.headers.get("pauthorization")
+const bauth = req.headers.get("bauthorization")
 
-  const lilith = await fetch(
-    `https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?server_id=2554&start=${start}&end=${end}`
-  )
+if (!pauth || !bauth) {
+  return Response.json({ error: "Missing Lilith tokens" }, { status: 401 })
+}
+
+const lilith = await fetch(
+  `https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?server_id=2554&start=${start}&end=${end}`,
+  {
+    headers: {
+      pauthorization: pauth,
+      bauthorization: bauth,
+      lang: "en_US"
+    }
+  }
+)
 
   const data = await lilith.json()
 
   const members = (data?.data || []).map((p:any)=>[
-    p.governor_id,
+    p.uid,
     p.nickname
   ])
 
