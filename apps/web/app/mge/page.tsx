@@ -32,14 +32,23 @@ const [search,setSearch] = useState("")
   const [selectedMember,setSelectedMember] = useState<{id:string,name:string} | null>(null)
   useEffect(()=>{
 
- async function loadMembers(){
+async function loadMembers() {
 
-  const res = await fetch("/api/mge-application?members=true")
+  const auth = JSON.parse(localStorage.getItem("auth-storage") || "{}")
+
+  const pauth = auth?.state?.token
+  const bauth = auth?.state?.access_token
+
+  const res = await fetch("/api/mge-application?members=true", {
+    headers:{
+      pauthorization:`Bearer ${pauth}`,
+      bauthorization:`Bearer ${bauth}`
+    }
+  })
+
   const data = await res.json()
-
   setMembers(data)
-
- }
+}
 
  loadMembers()
 
