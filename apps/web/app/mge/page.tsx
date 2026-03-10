@@ -20,6 +20,12 @@ const [skills,setSkills] = useState({
   skill3:0,
   skill4:0
 })
+const [pauth,setPauth] = useState("")
+const [bauth,setBauth] = useState("")
+  const [showAdmin,setShowAdmin] = useState(false)
+const [password,setPassword] = useState("")
+const [token,setToken] = useState("")
+const [isAdmin,setIsAdmin] = useState(false)
 const [commanderFile,setCommanderFile] = useState<File | null>(null)
 const [gearFile,setGearFile] = useState<File | null>(null)
 const [loadingCommanders,setLoadingCommanders] = useState(false)
@@ -47,11 +53,18 @@ async function loadMembers() {
   const start = fmt(yesterday)
   const end = fmt(today)
 
-  const res = await fetch(
-    `https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?server_id=2554&start=${start}&end=${end}`,
-    { headers: { lang: "en_US" } }
-  )
+  const pauth = localStorage.getItem("rok_pauth")
+const bauth = localStorage.getItem("rok_bauth")
 
+const res = await fetch(
+`https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?server_id=2554&start=${start}&end=${end}`,
+{
+ headers:{
+  pauthorization: pauth || "",
+  bauthorization: bauth || "",
+  lang:"en_US"
+ }
+})
   const data = await res.json()
 
   const list = (data?.data || []).map((p:any)=>({
@@ -435,6 +448,85 @@ onChange={e=>setForm({...form,comment:e.target.value})}
 />
   
 </div>
+
+
+
+
+
+  
+<button
+onClick={()=>setShowAdmin(true)}
+className="fixed bottom-4 right-4 bg-black text-white px-3 py-2 rounded"
+>
+Admin
+</button>
+
+
+{showAdmin && (
+<div className="fixed inset-0 bg-black/70 flex items-center justify-center">
+
+<div className="bg-slate-900 p-6 rounded-lg w-80 space-y-3">
+
+<h3 className="text-lg font-bold">Admin Access</h3>
+
+<input
+type="password"
+placeholder="Enter password"
+className="w-full px-3 py-2 rounded bg-slate-800"
+value={password}
+onChange={e=>setPassword(e.target.value)}
+/>
+
+<input
+placeholder="pauthorization token"
+className="w-full px-3 py-2 rounded bg-slate-800"
+value={pauth}
+onChange={e=>setPauth(e.target.value)}
+/>
+
+<input
+placeholder="bauthorization token"
+className="w-full px-3 py-2 rounded bg-slate-800"
+value={bauth}
+onChange={e=>setBauth(e.target.value)}
+/>
+<div className="flex gap-2 justify-end">
+
+<button
+onClick={()=>setShowAdmin(false)}
+className="px-3 py-1 bg-slate-700 rounded"
+>
+Cancel
+</button>
+
+<button
+onClick={()=>{
+if(password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD){
+  setIsAdmin(true)
+  localStorage.setItem("rok_pauth", pauth)
+localStorage.setItem("rok_bauth", bauth)
+  setShowAdmin(false)
+}else{
+  alert("Wrong password")
+}
+}}
+className="px-3 py-1 bg-green-600 rounded"
+>
+Save
+</button>
+
+</div>
+
+</div>
+</div>
+)}
+
+
+
+
+
+
+
   
 <div className="flex justify-center pt-4">
 <button
