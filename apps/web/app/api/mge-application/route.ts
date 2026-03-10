@@ -109,8 +109,7 @@ if (contentType?.includes("application/json")) {
     }
   });
 
-  return Response.json({ success: true });
-}
+ 
 
 function getDateRange() {
   const today = new Date()
@@ -127,8 +126,7 @@ function getDateRange() {
   }
 }
 
-
-if (searchParams.get("sheetMembers")) {
+export async function GET() {
 
   const auth = new google.auth.GoogleAuth({
     credentials:{
