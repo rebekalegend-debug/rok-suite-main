@@ -7,16 +7,19 @@ const supabase = createClient(
 );
 export const dynamic = "force-dynamic"
 export async function POST(req: Request) {
+console.log("POST /api/mge-application START")
+  
 const pauth = req.headers.get("pauthorization")
 const bauth = req.headers.get("bauthorization")
-
-if (pauth && bauth) {
-
-  const { start, end } = getDateRange()
-
+console.log("TOKENS:", {
+  pauth: !!pauth,
+  bauth: !!bauth
+})
 if (!pauth || !bauth) {
   return Response.json({ error: "Missing Lilith tokens" }, { status: 401 })
 }
+
+console.log("CALLING LILITH API", { start, end })
 
 const lilith = await fetch(
   `https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?server_id=2554&start=${start}&end=${end}`,
@@ -29,15 +32,16 @@ const lilith = await fetch(
   }
 )
 
- 
-
 const data = await lilith.json()
 
+console.log("LILITH RESPONSE LENGTH:", data?.data?.length)
+console.log("FIRST MEMBER:", data?.data?.[0])
 const members = (data?.data || []).map((p:any)=>({
   id: p.uid,
   name: p.nickname
 }))
- 
+ console.log("MEMBERS ARRAY SIZE:", members.length)
+console.log("FIRST MEMBER:", members[0])
   const auth = new google.auth.GoogleAuth({
     credentials:{
       client_email: process.env.GOOGLE_CLIENT_EMAIL,
@@ -50,11 +54,11 @@ const members = (data?.data || []).map((p:any)=>({
 
 const clearRes = await sheets.spreadsheets.values.clear({
   spreadsheetId: process.env.GOOGLE_SHEET_ID,
-  range: "MGE Apply Members!A2:B"
+  range:"MGE Apply Members!A2",
 })
 
 console.log("CLEAR RESPONSE:", clearRes.data)
-
+console.log("APPENDING MEMBERS:", members.length)
 const appendRes = await sheets.spreadsheets.values.append({
   spreadsheetId: process.env.GOOGLE_SHEET_ID,
  range:"MGE Apply Members!A2:B",
@@ -63,7 +67,9 @@ const appendRes = await sheets.spreadsheets.values.append({
     values: members.map((m:any)=>[m.id,m.name])
   }
 })
-
+console.log("GET /api/mge-application")
+console.log("ROWS FROM SHEET:", rows.length)
+console.log("FIRST ROW:", rows[0])
 console.log("APPEND RESPONSE:", appendRes.data)
   return Response.json({ success:true, count: members.length })
 }
