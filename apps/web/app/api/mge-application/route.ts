@@ -55,7 +55,7 @@ console.log("MEMBERS ARRAY LENGTH:", members.length)
 
    const appendRes = await sheets.spreadsheets.values.append({
   spreadsheetId: process.env.GOOGLE_SHEET_ID,
-  range: "MGE Apply Members!A2",
+  range:"MGE Apply Members!A:B",
   valueInputOption: "RAW",
   requestBody: { values: members }
 })
