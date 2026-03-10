@@ -69,13 +69,18 @@ const res = await fetch(
 })
 
 const data = await res.json()
+console.log("Lilith response:", data)
+if(!data?.data){
+ console.log("API returned no members", data)
+ return
+}
 
-const list = (data?.data || []).map((p:any)=>({
-  id: String(p.uid),
-  name: p.nickname
+const list = data.data.map((p:any)=>({
+ id: String(p.uid),
+ name: p.nickname
 }))
-
 setMembers(list)
+  console.log("Members loaded:", list.length)
   // send list to your API so it updates Google Sheet
   await fetch("/api/mge-application",{
     method:"POST",
