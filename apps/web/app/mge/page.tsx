@@ -358,16 +358,16 @@ onChange={e=>setForm({...form,purpose:e.target.value})}
 <div className="pt-4 border-t border-[var(--border)]">
   <label className="form-label">🏅 What rank you would like to get? </label>
 <select
-className="w-full px-3 py-2 rounded gold-input select-placeholder"
+className="w-full px-3 py-2 rounded gold-input"
 value={form.rank}
 onChange={e=>setForm({...form,rank:e.target.value})}
 >
+
 <option value="">Select Rank</option>
 <option value="1">Rank 1</option>
 <option value="2">Rank 2</option>
 <option value="3">Rank 3</option>
-<option value="4-10">Rank 4-10</option>
-<option value="ffa">Free for all</option>
+
 </select>
 </div>
 
