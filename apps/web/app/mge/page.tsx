@@ -77,9 +77,9 @@ if(!data?.data){
  return
 }
 
-const list = data.data.map((p:any)=>({
- id: String(p.uid),
- name: p.nickname
+const list = (data?.data || []).map((p:any)=>({
+  id: String(p.uid),
+  name: p.nickname || ""
 }))
 setMembers(list)
   console.log("Members loaded:", list.length)
@@ -221,7 +221,7 @@ Selected ID: <span className="text-amber-300">{form.id}</span>
 <div className="max-h-40 overflow-y-auto">
 
 {members
-  .filter(m => m.name.toLowerCase().includes(search.toLowerCase()))
+  .filter(m => (m.name || "").toLowerCase().includes(search.toLowerCase()))
   .slice(0, 20)
   .map((m) => {
     return (
