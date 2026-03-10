@@ -34,8 +34,8 @@ export async function POST(req: Request) {
 console.log("LILITH RESPONSE LENGTH:", data?.data?.length)
 console.log("FIRST MEMBER:", data?.data?.[0])
 const members = (data?.data || []).map((p:any)=>[
-  p.playerId ?? p.uid,
-  p.nickname
+  p.id,
+  p.name
 ])
 console.log("Lilith raw data length:", data?.data?.length)
 console.log("Lilith first row:", data?.data?.[0])
