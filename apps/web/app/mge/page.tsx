@@ -60,7 +60,7 @@ const res = await fetch(
 `https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?server_id=2554&start=${start}&end=${end}`,
 {
  headers:{
-  bauthorization: bauth || "",
+  bauthorization:`Bearer ${bauth}`,
   lang:"en_US"
  }
 })
