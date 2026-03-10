@@ -7,7 +7,35 @@ const supabase = createClient(
 );
 export const dynamic = "force-dynamic"
 export async function POST(req: Request) {
+const contentType = req.headers.get("content-type")
 
+// JSON request → update members sheet
+if (contentType?.includes("application/json")) {
+
+  const body = await req.json()
+  const members = body.members || []
+
+  const auth = new google.auth.GoogleAuth({
+    credentials:{
+      client_email: process.env.GOOGLE_CLIENT_EMAIL,
+      private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g,"\n")
+    },
+    scopes:["https://www.googleapis.com/auth/spreadsheets"]
+  })
+
+  const sheets = google.sheets({ version:"v4", auth })
+
+  await sheets.spreadsheets.values.update({
+    spreadsheetId: process.env.GOOGLE_SHEET_ID,
+    range:"MGE Apply Members!A2:B",
+    valueInputOption:"RAW",
+    requestBody:{
+      values: members.map((m:any)=>[m.id,m.name])
+    }
+  })
+
+  return Response.json({ success:true })
+}
   const formData = await req.formData();
 
   // files
