@@ -12,8 +12,18 @@ const contentType = req.headers.get("content-type")
 // JSON request → update members sheet
 if (contentType?.includes("application/json")) {
 
-  const body = await req.json()
-  const members = body.members || []
+  const { start, end } = getDateRange()
+
+  const lilith = await fetch(
+    `https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?server_id=2554&start=${start}&end=${end}`
+  )
+
+  const data = await lilith.json()
+
+  const members = (data?.data || []).map((p:any)=>[
+    p.governor_id,
+    p.nickname
+  ])
 
   const auth = new google.auth.GoogleAuth({
     credentials:{
@@ -34,12 +44,10 @@ if (contentType?.includes("application/json")) {
     spreadsheetId: process.env.GOOGLE_SHEET_ID,
     range:"MGE Apply Members!A2:B",
     valueInputOption:"RAW",
-    requestBody:{
-      values: members.map((m:any)=>[m.id,m.name])
-    }
+    requestBody:{ values: members }
   })
 
-  return Response.json({ success:true })
+  return Response.json({ success:true, count: members.length })
 }
   const formData = await req.formData();
 
