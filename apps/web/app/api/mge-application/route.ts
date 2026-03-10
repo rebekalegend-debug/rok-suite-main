@@ -49,12 +49,14 @@ console.log("Members fetched from Lilith:", members.length)
 
   const sheets = google.sheets({ version:"v4", auth })
 
-await sheets.spreadsheets.values.clear({
+const clearRes = await sheets.spreadsheets.values.clear({
   spreadsheetId: process.env.GOOGLE_SHEET_ID,
   range: "MGE Apply Members!A2:B"
 })
 
-await sheets.spreadsheets.values.append({
+console.log("CLEAR RESPONSE:", clearRes.data)
+
+const appendRes = await sheets.spreadsheets.values.append({
   spreadsheetId: process.env.GOOGLE_SHEET_ID,
   range: "MGE Apply Members!A2",
   valueInputOption: "RAW",
@@ -62,6 +64,8 @@ await sheets.spreadsheets.values.append({
     values: members
   }
 })
+
+console.log("APPEND RESPONSE:", appendRes.data)
   return Response.json({ success:true, count: members.length })
 }
   const formData = await req.formData();
