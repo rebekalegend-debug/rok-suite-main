@@ -34,7 +34,6 @@ const [commanders,setCommanders] = useState<string[]>([])
 const [selectedCommander,setSelectedCommander] = useState("")
 const [submitting,setSubmitting] = useState(false)
   const [members,setMembers] = useState<{id:string,name:string}[]>([])
-const [searchMode,setSearchMode] = useState(false)
 const [search,setSearch] = useState("")
   const [selectedMember,setSelectedMember] = useState<{id:string,name:string} | null>(null)
 
@@ -144,91 +143,81 @@ Missing information may result in your registration not being considered properl
 <div className="space-y-2">
 
 <label className="form-label">
-Enter your ingame ID
+Enter your ingame ID or search by name
 </label>
-<div className="flex flex-col sm:flex-row gap-3">
+
 <input
 type="text"
-inputMode="numeric"
-pattern="[0-9]*"
-placeholder="Enter your ID"
+  autoComplete="off"
+placeholder="Search name or enter ID..."
+className="w-full px-3 py-2 rounded gold-input"
 value={
- selectedMember
-  ? `${form.id} (${selectedMember.name})`
-  : form.id
+  selectedMember
+    ? selectedMember.name
+    : search || form.id
 }
-className="flex-1 px-3 py-2 rounded gold-input"
-
-
-  
 onChange={(e)=>{
- const value = e.target.value.replace(/\D/g,"")
- setSelectedMember(null)
- setForm({...form,id:value})
+  const value = e.target.value
+  setSelectedMember(null)
+
+  // if numbers → treat as ID
+  if (/^\d+$/.test(value)) {
+    setForm({...form,id:value})
+    setSearch("")
+  } else {
+    // text → search names
+    setSearch(value)
+    setForm({...form,id:""})
+  }
 }}
 />
 
-<span className="text-sm text-slate-400 self-center">or</span>
-
-<button
-type="button"
-onClick={()=>setSearchMode(!searchMode)}
-className="px-4 py-2 bg-gradient-to-r from-[#e6b94a] to-[#ffcf63] text-black rounded gold-glow hover:scale-[1.02] transition"
->
-Search your ID by name
-</button>
-
-</div>
-{searchMode && (
-
+{/* SEARCH RESULTS */}
+{search && !/^\d+$/.test(search) && (
 <div
-className="rounded p-2"
+className="rounded mt-2 p-2 max-h-40 overflow-y-auto"
 style={{
-  background: "var(--background-card)",
-  border: "1px solid var(--border)"
+  background:"var(--background-card)",
+  border:"1px solid var(--border)"
 }}
 >
-
-<input
-placeholder="Search name..."
-className="w-full mb-2 px-2 py-1 rounded gold-input"
-value={search}
-onChange={e=>setSearch(e.target.value)}
-/>
-{form.id && (
-<div className="text-xs text-slate-400">
-Selected ID: <span className="text-amber-300">{form.id}</span>
-</div>
-)}
-<div className="max-h-40 overflow-y-auto">
 
 {members
-  .filter(m => (m.name || "").toLowerCase().includes(search.toLowerCase()))
-  .slice(0, 20)
-  .map((m) => {
-    return (
-      <div
-        key={m.id}
-        className="px-2 py-1 hover:bg-slate-700 cursor-pointer rounded"
-        onClick={() => {
-          setForm({ ...form, id: m.id })
-          setSelectedMember(m)
-          setSearchMode(false)
-        }}
-      >
-        <div className="flex justify-between">
-          <span>{m.name}</span>
-          <span className="text-xs text-slate-400">{m.id}</span>
-        </div>
-      </div>
-    )
-  })}
+  .filter(m =>
+    search &&
+    m.name &&
+    m.name.toLowerCase().includes(search.toLowerCase())
+  )
+  .slice(0,20)
+  .map(m => (
 
+<div
+key={m.id}
+className="px-2 py-1 hover:bg-slate-700 cursor-pointer rounded"
+onClick={()=>{
+  setForm({...form,id:m.id})
+  setSelectedMember(m)
+  setSearch("")
+}}
+>
+
+<div className="flex justify-between">
+<span>{m.name}</span>
+<span className="text-xs text-slate-400">{m.id}</span>
 </div>
 
 </div>
 
+))}
+
+</div>
 )}
+
+</div>
+
+
+
+
 <div className="pt-4 border-t border-[var(--border)]">
 <label className="form-label">Select wanted commander</label>
 
