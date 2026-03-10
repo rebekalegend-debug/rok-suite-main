@@ -317,10 +317,13 @@ opacity:1;
 
 /* select placeholder */
 
-select{
-color:#9aa3af;
-}
 
+select{
+color: var(--text-secondary);
+}
+select:not(:has(option:checked[value=""])) {
+color: var(--foreground);
+}
 select:valid{
 color:var(--foreground);
 }
