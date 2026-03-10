@@ -21,6 +21,7 @@ const [skills,setSkills] = useState({
   skill4:0
 })
 
+const [pauth,setPauth] = useState("")
 const [bauth,setBauth] = useState("")
   const [showAdmin,setShowAdmin] = useState(false)
 const [password,setPassword] = useState("")
@@ -54,25 +55,27 @@ async function loadMembers() {
   const end = fmt(today)
 
   
+const pauth = localStorage.getItem("rok_pauth")
 const bauth = localStorage.getItem("rok_bauth")
 
 const res = await fetch(
 `https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?server_id=2554&start=${start}&end=${end}`,
 {
  headers:{
+  pauthorization:`Bearer ${pauth}`,
   bauthorization:`Bearer ${bauth}`,
   lang:"en_US"
  }
 })
-  const data = await res.json()
 
-  const list = (data?.data || []).map((p:any)=>({
-    id: String(p.uid),
-    name: p.nickname
-  }))
+const data = await res.json()
 
-  setMembers(list)
+const list = (data?.data || []).map((p:any)=>({
+  id: String(p.uid),
+  name: p.nickname
+}))
 
+setMembers(list)
   // send list to your API so it updates Google Sheet
   await fetch("/api/mge-application",{
     method:"POST",
@@ -476,7 +479,12 @@ value={password}
 onChange={e=>setPassword(e.target.value)}
 />
 
-
+<input
+placeholder="pauthorization token"
+className="w-full px-3 py-2 rounded bg-slate-800"
+value={pauth}
+onChange={e=>setPauth(e.target.value)}
+/>
 
 <input
 placeholder="bauthorization token"
@@ -495,13 +503,17 @@ Cancel
 
 <button
 onClick={()=>{
-if(password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD){
+ if(password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD){
+
+  localStorage.setItem("rok_pauth", pauth)
+  localStorage.setItem("rok_bauth", bauth)
+
   setIsAdmin(true)
-localStorage.setItem("rok_bauth", bauth)
   setShowAdmin(false)
-}else{
+
+ }else{
   alert("Wrong password")
-}
+ }
 }}
 className="px-3 py-1 bg-green-600 rounded"
 >
