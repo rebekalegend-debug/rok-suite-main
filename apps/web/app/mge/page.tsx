@@ -39,59 +39,18 @@ const [search,setSearch] = useState("")
   const [selectedMember,setSelectedMember] = useState<{id:string,name:string} | null>(null)
 useEffect(() => {
 
-async function loadMembers() {
-  const today = new Date()
-today.setDate(today.getDate() - 1)
+async function loadMembers(){
 
-const startDate = new Date()
-startDate.setDate(today.getDate() - 1)
+  const res = await fetch("/api/mge-application?sheetMembers=true")
 
-  const fmt = (d: Date) => {
-    const y = d.getFullYear()
-    const m = String(d.getMonth()+1).padStart(2,"0")
-    const day = String(d.getDate()).padStart(2,"0")
-    return `${y}-${m}-${day}`
-  }
+  const list = await res.json()
 
- const start = fmt(startDate)
-const end = fmt(today)
+  console.log("Members from sheet:", list.length)
 
-  
-const pauth = localStorage.getItem("rok_pauth")
-const bauth = localStorage.getItem("rok_bauth")
-
-const res = await fetch(
-`https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?server_id=3237&start=${start}&end=${end}`,
-{
- headers:{
-  pauthorization:`Bearer ${pauth}`,
-  bauthorization:`Bearer ${bauth}`,
-  lang:"en_US"
- }
-})
-
-const data = await res.json()
-console.log("Lilith response:", data)
-if(!data?.data){
- console.log("API returned no members", data)
- return
+  setMembers(list)
 }
 
-const list = (data?.data || []).map((p:any)=>({
-  id: String(p.id),
-  name: p.name
-}))
-setMembers(list)
-  console.log("Members loaded:", list.length)
-  // send list to your API so it updates Google Sheet
-  await fetch("/api/mge-application",{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify({ members:list })
-  })
-}
-
-  loadMembers()
+loadMembers()
 
 }, [])
 async function submitApplication(){
