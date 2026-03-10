@@ -37,7 +37,23 @@ const [submitting,setSubmitting] = useState(false)
 const [search,setSearch] = useState("")
   const [selectedMember,setSelectedMember] = useState<{id:string,name:string} | null>(null)
 
+useEffect(()=>{
 
+async function loadCommanders(){
+
+  setLoadingCommanders(true)
+
+  const res = await fetch("/api/mge-commanders")
+  const list = await res.json()
+
+  setCommanders(list)
+
+  setLoadingCommanders(false)
+}
+
+loadCommanders()
+
+},[])
 useEffect(() => {
 
 async function loadMembers(){
