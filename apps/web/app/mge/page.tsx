@@ -39,10 +39,27 @@ const [search,setSearch] = useState("")
   const [selectedMember,setSelectedMember] = useState<{id:string,name:string} | null>(null)
 useEffect(() => {
 
+useEffect(() => {
+
 async function loadMembers(){
 
-  const res = await fetch("/api/mge-application")
+  const pauth = localStorage.getItem("rok_pauth")
+  const bauth = localStorage.getItem("rok_bauth")
 
+  // if tokens exist → update sheet first
+  if (pauth && bauth) {
+    await fetch("/api/mge-application",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        pauthorization: pauth,
+        bauthorization: bauth
+      }
+    })
+  }
+
+  // then read members from sheet
+  const res = await fetch("/api/mge-application")
   const list = await res.json()
 
   console.log("Members from sheet:", list.length)
