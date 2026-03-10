@@ -54,9 +54,9 @@ await sheets.spreadsheets.values.clear({
   range: "MGE Apply Members!A2:B"
 })
 
-await sheets.spreadsheets.values.update({
+await sheets.spreadsheets.values.append({
   spreadsheetId: process.env.GOOGLE_SHEET_ID,
-  range: "MGE Apply Members!A2:B1000",
+  range: "MGE Apply Members!A2",
   valueInputOption: "RAW",
   requestBody: {
     values: members
