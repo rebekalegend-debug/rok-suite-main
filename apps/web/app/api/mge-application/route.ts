@@ -13,8 +13,6 @@ const bauth = req.headers.get("bauthorization")
 if (pauth && bauth) {
 
   const { start, end } = getDateRange()
-const pauth = req.headers.get("pauthorization")
-const bauth = req.headers.get("bauthorization")
 
 if (!pauth || !bauth) {
   return Response.json({ error: "Missing Lilith tokens" }, { status: 401 })
@@ -31,13 +29,14 @@ const lilith = await fetch(
   }
 )
 
-  const data = await lilith.json()
+ 
 
-  const members = (data?.data || []).map((p:any)=>[
-    p.uid,
-    p.nickname
-  ])
-console.log("Members fetched from Lilith:", members.length)
+const data = await lilith.json()
+
+const members = (data?.data || []).map((p:any)=>({
+  id: p.uid,
+  name: p.nickname
+}))
  
   const auth = new google.auth.GoogleAuth({
     credentials:{
@@ -58,10 +57,10 @@ console.log("CLEAR RESPONSE:", clearRes.data)
 
 const appendRes = await sheets.spreadsheets.values.append({
   spreadsheetId: process.env.GOOGLE_SHEET_ID,
-  range: "MGE Apply Members!A2",
+ range:"MGE Apply Members!A2:B",
   valueInputOption: "RAW",
   requestBody: {
-    values: members
+    values: members.map((m:any)=>[m.id,m.name])
   }
 })
 
