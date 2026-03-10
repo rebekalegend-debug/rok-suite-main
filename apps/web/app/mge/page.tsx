@@ -61,7 +61,7 @@ const pauth = localStorage.getItem("rok_pauth")
 const bauth = localStorage.getItem("rok_bauth")
 
 const res = await fetch(
-`https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?server_id=2554&start=${start}&end=${end}`,
+`https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?server_id=3237&start=${start}&end=${end}`,
 {
  headers:{
   pauthorization:`Bearer ${pauth}`,
@@ -78,8 +78,8 @@ if(!data?.data){
 }
 
 const list = (data?.data || []).map((p:any)=>({
-  id: String(p.uid),
-  name: p.nickname || ""
+  id: String(p.id),
+  name: p.name
 }))
 setMembers(list)
   console.log("Members loaded:", list.length)
