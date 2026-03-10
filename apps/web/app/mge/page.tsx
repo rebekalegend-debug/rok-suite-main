@@ -67,10 +67,15 @@ async function loadMembers(){
 const res = await fetch("/api/mge-application")
 const data = await res.json()
 
-console.log("Members from sheet:", data.members.length)
+if (data.members) {
+  console.log("Members from sheet:", data.members.length)
+  setMembers(data.members)
+}
 
-setMembers(data.members)
-setCommanders(data.commanders)
+if (data.commanders) {
+  console.log("Commanders:", data.commanders.length)
+  setCommanders(data.commanders)
+}
 }
 
 loadMembers()
@@ -502,8 +507,8 @@ fetch("/api/mge-application",{
 const res = await fetch("/api/mge-application")
 const result = await res.json()
 
-setMembers(result.members)
-setCommanders(result.commanders)
+setMembers(result.members || [])
+setCommanders(result.commanders || [])
 })
 
 setIsAdmin(true)
