@@ -31,12 +31,13 @@ export async function POST(req: Request) {
     )
 
     const data = await lilith.json()
-
+console.log("LILITH RESPONSE LENGTH:", data?.data?.length)
+console.log("FIRST MEMBER:", data?.data?.[0])
     const members = (data?.data || []).map((p:any)=>[
       p.uid,
       p.nickname
     ])
-
+console.log("MEMBERS ARRAY LENGTH:", members.length)
     const auth = new google.auth.GoogleAuth({
       credentials:{
         client_email: process.env.GOOGLE_CLIENT_EMAIL,
@@ -58,7 +59,7 @@ export async function POST(req: Request) {
       valueInputOption:"RAW",
       requestBody:{ values: members }
     })
-
+console.log("APPEND RESPONSE:", appendRes.data)
     return Response.json({ success:true, count:members.length })
   }
 
