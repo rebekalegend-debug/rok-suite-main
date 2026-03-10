@@ -48,17 +48,14 @@ const lilith = await fetch(
 
   const sheets = google.sheets({ version:"v4", auth })
 
-  await sheets.spreadsheets.values.clear({
-    spreadsheetId: process.env.GOOGLE_SHEET_ID,
-    range:"MGE Apply Members!A2:B"
-  })
-
-  await sheets.spreadsheets.values.append({
-    spreadsheetId: process.env.GOOGLE_SHEET_ID,
-    range:"MGE Apply Members!A2:B",
-    valueInputOption:"RAW",
-    requestBody:{ values: members }
-  })
+ await sheets.spreadsheets.values.update({
+  spreadsheetId: process.env.GOOGLE_SHEET_ID,
+  range: "MGE Apply Members!A2",
+  valueInputOption: "RAW",
+  requestBody: {
+    values: members
+  }
+})
 
   return Response.json({ success:true, count: members.length })
 }
