@@ -127,20 +127,28 @@ return Response.json({ success: true });
  
 
 function getDateRange() {
+
   const today = new Date()
 
-  const yesterday = new Date()
-  yesterday.setDate(today.getDate() - 1)
+  const end = new Date()
+  end.setDate(today.getDate() - 1)   // yesterday
 
-  const format = (d: Date) =>
-    d.toISOString().slice(0,10)
+  const start = new Date()
+  start.setDate(today.getDate() - 3) // 3 days before yesterday
+
+  const format = (d: Date) => {
+    const y = d.getFullYear()
+    const m = String(d.getMonth() + 1).padStart(2,"0")
+    const day = String(d.getDate()).padStart(2,"0")
+    return `${y}-${m}-${day}`
+  }
 
   return {
-    start: format(yesterday),
-    end: format(today)
+    start: format(start),
+    end: format(end)
   }
-}
 
+}
 export async function GET() {
 
   const auth = new google.auth.GoogleAuth({
