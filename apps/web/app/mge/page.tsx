@@ -541,7 +541,7 @@ hover:brightness-110 transition shadow-[0_4px_14px_rgba(255,200,90,0.35)]"
 </div>
 
 
-</div> {/* closes space-y-2 */}
+
 </div> {/* closes card */}
 </div> {/* closes page container */}
 </div> {/* closes min-h-screen */}
