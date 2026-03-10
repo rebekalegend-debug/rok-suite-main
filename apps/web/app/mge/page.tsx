@@ -471,12 +471,29 @@ Cancel
 onClick={()=>{
  if(password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD){
 
-  localStorage.setItem("rok_pauth", pauth)
-  localStorage.setItem("rok_bauth", bauth)
+localStorage.setItem("rok_pauth", pauth)
+localStorage.setItem("rok_bauth", bauth)
 
-  setIsAdmin(true)
-  setShowAdmin(false)
+fetch("/api/mge-application",{
+ method:"POST",
+ headers:{
+  "Content-Type":"application/json",
+  pauthorization: pauth,
+  bauthorization: bauth
+ }
+})
+.then(r=>r.json())
+.then(async data=>{
+ console.log("Members updated:",data)
 
+ const res = await fetch("/api/mge-application")
+ const list = await res.json()
+
+ setMembers(list)
+})
+
+setIsAdmin(true)
+setShowAdmin(false)
  }else{
   alert("Wrong password")
  }
