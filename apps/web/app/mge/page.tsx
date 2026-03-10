@@ -65,11 +65,12 @@ async function loadMembers(){
 
   // NOW fetch members
 const res = await fetch("/api/mge-application")
-const list = await res.json()
+const data = await res.json()
 
-console.log("Members from sheet:", list.length)
-setCommanders(list)
-setMembers(list)
+console.log("Members from sheet:", data.members.length)
+
+setMembers(data.members)
+setCommanders(data.commanders)
 }
 
 loadMembers()
@@ -499,10 +500,10 @@ fetch("/api/mge-application",{
  console.log("Members updated:",data)
 
 const res = await fetch("/api/mge-application")
-const list = await res.json()
+const result = await res.json()
 
-setCommanders(list)
-setMembers(list)
+setMembers(result.members)
+setCommanders(result.commanders)
 })
 
 setIsAdmin(true)
