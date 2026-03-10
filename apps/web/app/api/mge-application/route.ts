@@ -127,54 +127,30 @@ function getDateRange() {
   }
 }
 
-export async function GET(req: Request) {
 
-  const { searchParams } = new URL(req.url)
-  const members = searchParams.get("members")
+if (searchParams.get("sheetMembers")) {
 
-  if (members) {
+  const auth = new google.auth.GoogleAuth({
+    credentials:{
+      client_email: process.env.GOOGLE_CLIENT_EMAIL,
+      private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g,"\n")
+    },
+    scopes:["https://www.googleapis.com/auth/spreadsheets.readonly"]
+  })
 
-    const pauth = req.headers.get("pauthorization")
-    const bauth = req.headers.get("bauthorization")
+  const sheets = google.sheets({ version:"v4", auth })
 
-    if (!pauth || !bauth) {
-      return Response.json(
-        { error:"Missing auth tokens" },
-        { status:401 }
-      )
-    }
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId: process.env.GOOGLE_SHEET_ID,
+    range:"MGE Apply Members!A2:B"
+  })
 
-    const { start, end } = getDateRange()
+  const rows = res.data.values || []
 
-    const res = await fetch(
-      `https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?server_id=2554&start=${start}&end=${end}`,
-      {
-        headers:{
-          pauthorization: pauth,
-          bauthorization: bauth,
-          lang:"en_US"
-        }
-      }
-    )
+  const members = rows.map((r:any)=>({
+    id: r[0],
+    name: r[1]
+  }))
 
-    if (!res.ok) {
-      return Response.json(
-        { error:"Lilith API failed" },
-        { status:500 }
-      )
-    }
-
-    const data = await res.json()
-
-    const list = (data?.data || [])
-      .slice(0,2000)
-      .map((p:any)=>({
-        id: String(p.uid),
-        name: p.nickname
-      }))
-
-    return Response.json(list)
-  }
-
-  return Response.json({ error:"invalid request" },{ status:400 })
+  return Response.json(members)
 }
