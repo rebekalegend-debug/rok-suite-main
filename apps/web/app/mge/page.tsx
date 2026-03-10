@@ -41,8 +41,10 @@ useEffect(() => {
 
 async function loadMembers() {
   const today = new Date()
-  const yesterday = new Date()
-  yesterday.setDate(today.getDate() - 1)
+today.setDate(today.getDate() - 1)
+
+const startDate = new Date()
+startDate.setDate(today.getDate() - 1)
 
   const fmt = (d: Date) => {
     const y = d.getFullYear()
@@ -51,8 +53,8 @@ async function loadMembers() {
     return `${y}-${m}-${day}`
   }
 
-  const start = fmt(yesterday)
-  const end = fmt(today)
+ const start = fmt(startDate)
+const end = fmt(today)
 
   
 const pauth = localStorage.getItem("rok_pauth")
