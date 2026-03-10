@@ -31,17 +31,10 @@ export async function POST(req: Request) {
     )
 
     const data = await lilith.json()
-console.log("LILITH RESPONSE LENGTH:", data?.data?.length)
-console.log("FIRST MEMBER:", data?.data?.[0])
 const members = (data?.data || []).map((p:any)=>[
   p.id,
   p.name
 ])
-console.log("Lilith raw data length:", data?.data?.length)
-console.log("Lilith first row:", data?.data?.[0])
-
-console.log("Members array length:", members.length)
-console.log("First 5 members:", members.slice(0,5))
     const auth = new google.auth.GoogleAuth({
       credentials:{
         client_email: process.env.GOOGLE_CLIENT_EMAIL,
@@ -64,8 +57,22 @@ console.log("First 5 members:", members.slice(0,5))
   requestBody: { values: members }
 })
 
+// COMMANDERS
+const commandersRes = await sheets.spreadsheets.values.get({
+  spreadsheetId: process.env.GOOGLE_SHEET_ID,
+  range: "MGE commanders!A2:A"
+})
+
+const commanders = (commandersRes.data.values || []).map((r:any)=>r[0])
+
+
+    
 console.log("APPEND RESPONSE:", appendRes.data)
-    return Response.json({ success:true, count:members.length })
+  return Response.json({
+  success: true,
+  count: members.length,
+  commanders
+})
   }
 
   // USER FORM SUBMISSION
