@@ -109,6 +109,8 @@ if (contentType?.includes("application/json")) {
     }
   });
 
+return Response.json({ success: true });
+}
  
 
 function getDateRange() {
