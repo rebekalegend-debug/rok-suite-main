@@ -5,7 +5,7 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
-
+export const dynamic = "force-dynamic"
 export async function POST(req: Request) {
 
   const formData = await req.formData();
@@ -84,50 +84,69 @@ export async function POST(req: Request) {
   return Response.json({ success: true });
 }
 
+function getDateRange() {
+  const today = new Date()
+
+  const yesterday = new Date()
+  yesterday.setDate(today.getDate() - 1)
+
+  const format = (d: Date) =>
+    d.toISOString().slice(0,10)
+
+  return {
+    start: format(yesterday),
+    end: format(today)
+  }
+}
+
 export async function GET(req: Request) {
 
   const { searchParams } = new URL(req.url)
   const members = searchParams.get("members")
 
-  const auth = new google.auth.GoogleAuth({
-    credentials: {
-      client_email: process.env.GOOGLE_CLIENT_EMAIL,
-      private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g,"\n"),
-    },
-    scopes:["https://www.googleapis.com/auth/spreadsheets.readonly"]
-  });
-
-  const sheets = google.sheets({ version:"v4", auth });
-
-  // MEMBERS SEARCH
   if (members) {
 
-    const res = await sheets.spreadsheets.values.get({
-      spreadsheetId: process.env.GOOGLE_SHEET_ID,
-      range: "MGE Apply Members!A2:B"
-    })
+    const pauth = req.headers.get("pauthorization")
+    const bauth = req.headers.get("bauthorization")
 
-    const rows = res.data.values || []
+    if (!pauth || !bauth) {
+      return Response.json(
+        { error:"Missing auth tokens" },
+        { status:401 }
+      )
+    }
 
-    const list = rows.map(r => ({
-      id: r[0],
-      name: r[1]
-    }))
+    const { start, end } = getDateRange()
+
+    const res = await fetch(
+      `https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?server_id=2554&start=${start}&end=${end}`,
+      {
+        headers:{
+          pauthorization: pauth,
+          bauthorization: bauth,
+          lang:"en_US"
+        }
+      }
+    )
+
+    if (!res.ok) {
+      return Response.json(
+        { error:"Lilith API failed" },
+        { status:500 }
+      )
+    }
+
+    const data = await res.json()
+
+    const list = (data?.data || [])
+      .slice(0,2000)
+      .map((p:any)=>({
+        id: String(p.uid),
+        name: p.nickname
+      }))
 
     return Response.json(list)
   }
 
-  // COMMANDERS DROPDOWN
-  const res = await sheets.spreadsheets.values.get({
-    spreadsheetId: process.env.GOOGLE_SHEET_ID,
-    range: "MGE Commanders!A2:A"
-  });
-
-  const rows = res.data.values || [];
-
-  const commanders = rows
-    .map(r => r[0])
-    .filter(Boolean);
-
-  return Response.json(commanders);
+  return Response.json({ error:"invalid request" },{ status:400 })
 }
