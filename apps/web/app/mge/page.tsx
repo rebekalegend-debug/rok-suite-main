@@ -33,43 +33,41 @@ const [search,setSearch] = useState("")
   useEffect(()=>{
 
 async function loadMembers() {
+  const today = new Date()
+  const yesterday = new Date()
+  yesterday.setDate(today.getDate() - 1)
 
-  const auth = JSON.parse(localStorage.getItem("auth-storage") || "{}")
+  const fmt = (d: Date) => {
+    const y = d.getFullYear()
+    const m = String(d.getMonth()+1).padStart(2,"0")
+    const day = String(d.getDate()).padStart(2,"0")
+    return `${y}-${m}-${day}`
+  }
 
-  const pauth = auth?.state?.token
-  const bauth = auth?.state?.access_token
+  const start = fmt(yesterday)
+  const end = fmt(today)
 
-  const res = await fetch("/api/mge-application?members=true", {
-    headers:{
-      pauthorization:`Bearer ${pauth}`,
-      bauthorization:`Bearer ${bauth}`
-    }
-  })
+  const res = await fetch(
+    `https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?server_id=2554&start=${start}&end=${end}`,
+    { headers: { lang: "en_US" } }
+  )
 
   const data = await res.json()
-  setMembers(data)
+
+  const list = (data?.data || []).map((p:any)=>({
+    id: String(p.uid),
+    name: p.nickname
+  }))
+
+  setMembers(list)
+
+  // send list to your API so it updates Google Sheet
+  await fetch("/api/mge-application",{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({ members:list })
+  })
 }
-
- loadMembers()
-
-},[])
-  
-useEffect(() => {
-
- async function loadCommanders() {
-
-   setLoadingCommanders(true)
-
-   const res = await fetch("/api/mge-application")
-   const data = await res.json()
-
-   setCommanders(data)
-   setLoadingCommanders(false)
- }
-
- loadCommanders()
-
-}, [])
 async function submitApplication(){
 
  const data = new FormData()
