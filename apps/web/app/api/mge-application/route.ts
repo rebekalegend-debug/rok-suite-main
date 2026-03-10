@@ -19,6 +19,8 @@ if (!pauth || !bauth) {
   return Response.json({ error: "Missing Lilith tokens" }, { status: 401 })
 }
 
+const { start, end } = getDateRange()
+
 console.log("CALLING LILITH API", { start, end })
 
 const lilith = await fetch(
@@ -34,13 +36,14 @@ const lilith = await fetch(
 
 const data = await lilith.json()
 
-console.log("LILITH RESPONSE LENGTH:", data?.data?.length)
-console.log("FIRST MEMBER:", data?.data?.[0])
+console.log("LILITH MEMBERS:", data?.data?.length)
+
 const members = (data?.data || []).map((p:any)=>({
   id: p.uid,
   name: p.nickname
 }))
- console.log("MEMBERS ARRAY SIZE:", members.length)
+
+console.log("MEMBERS ARRAY SIZE:", members.length)
 console.log("FIRST MEMBER:", members[0])
   const auth = new google.auth.GoogleAuth({
     credentials:{
@@ -54,22 +57,21 @@ console.log("FIRST MEMBER:", members[0])
 
 const clearRes = await sheets.spreadsheets.values.clear({
   spreadsheetId: process.env.GOOGLE_SHEET_ID,
-  range:"MGE Apply Members!A2",
+  range:"MGE Apply Members!A2:B",
 })
 
 console.log("CLEAR RESPONSE:", clearRes.data)
 console.log("APPENDING MEMBERS:", members.length)
 const appendRes = await sheets.spreadsheets.values.append({
   spreadsheetId: process.env.GOOGLE_SHEET_ID,
- range:"MGE Apply Members!A2:B",
+ range:"MGE Apply Members!A2",
   valueInputOption: "RAW",
   requestBody: {
     values: members.map((m:any)=>[m.id,m.name])
   }
 })
 console.log("GET /api/mge-application")
-console.log("ROWS FROM SHEET:", rows.length)
-console.log("FIRST ROW:", rows[0])
+
 console.log("APPEND RESPONSE:", appendRes.data)
   return Response.json({ success:true, count: members.length })
 }
