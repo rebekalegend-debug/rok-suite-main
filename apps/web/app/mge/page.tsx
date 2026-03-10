@@ -37,7 +37,7 @@ const [submitting,setSubmitting] = useState(false)
 const [searchMode,setSearchMode] = useState(false)
 const [search,setSearch] = useState("")
   const [selectedMember,setSelectedMember] = useState<{id:string,name:string} | null>(null)
-useEffect(() => {
+
 
 useEffect(() => {
 
