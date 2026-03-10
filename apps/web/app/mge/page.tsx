@@ -476,12 +476,7 @@ value={password}
 onChange={e=>setPassword(e.target.value)}
 />
 
-<input
-placeholder="pauthorization token"
-className="w-full px-3 py-2 rounded bg-slate-800"
-value={pauth}
-onChange={e=>setPauth(e.target.value)}
-/>
+
 
 <input
 placeholder="bauthorization token"
@@ -502,7 +497,6 @@ Cancel
 onClick={()=>{
 if(password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD){
   setIsAdmin(true)
-  localStorage.setItem("rok_pauth", pauth)
 localStorage.setItem("rok_bauth", bauth)
   setShowAdmin(false)
 }else{
