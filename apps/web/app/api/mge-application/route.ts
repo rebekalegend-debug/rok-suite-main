@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     const { start, end } = getDateRange()
 
     const lilith = await fetch(
-      `https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?server_id=2554&start=${start}&end=${end}`,
+      `https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?server_id=3237&start=${start}&end=${end}`,
       {
         headers:{
           pauthorization: pauth,
