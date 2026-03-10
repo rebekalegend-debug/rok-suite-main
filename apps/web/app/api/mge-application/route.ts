@@ -62,72 +62,61 @@ export async function POST(req: Request) {
     return Response.json({ success:true, count:members.length })
   }
 
-  // USER SUBMISSION
+  // USER FORM SUBMISSION
   const formData = await req.formData()
 
-  const id = formData.get("id")
+  const commanderFile = formData.get("commander") as File | null
+  const gearFile = formData.get("equipment") as File | null
 
-  return Response.json({ success:true })
-}
-  const formData = await req.formData();
-
-  // files
-  const commanderFile = formData.get("commander") as File | null;
-  const gearFile = formData.get("equipment") as File | null;
-
-  // text fields
-  const id = formData.get("id") as string;
-  const commander = formData.get("commander") as string;
-  const rank = formData.get("desiredRank") as string;
-  const kvkSpending = formData.get("kvkSpending") as string;
-  const purpose = formData.get("purpose") as string;
-  const troopType = formData.get("troopType") as string;
-  const pair = formData.get("pair") as string;
-  const comment = formData.get("comment") as string;
-  const skills = formData.get("skills") as string;
+  const id = formData.get("id") as string
+  const commander = formData.get("commander") as string
+  const rank = formData.get("desiredRank") as string
+  const kvkSpending = formData.get("kvkSpending") as string
+  const purpose = formData.get("purpose") as string
+  const troopType = formData.get("troopType") as string
+  const pair = formData.get("pair") as string
+  const comment = formData.get("comment") as string
+  const skills = formData.get("skills") as string
 
   async function uploadFile(file: File | null) {
+    if (!file) return ""
 
-    if (!file) return "";
-
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const fileName = `${Date.now()}-${file.name}`;
+    const buffer = Buffer.from(await file.arrayBuffer())
+    const fileName = `${Date.now()}-${file.name}`
 
     const { error } = await supabase.storage
       .from("mge-screenshots")
-      .upload(fileName, buffer, {
-        contentType: file.type
-      });
+      .upload(fileName, buffer, { contentType: file.type })
 
-    if (error) throw error;
+    if (error) throw error
 
     const { data } = supabase.storage
       .from("mge-screenshots")
-      .getPublicUrl(fileName);
+      .getPublicUrl(fileName)
 
-    return data.publicUrl;
+    return data.publicUrl
   }
 
-  const commanderUrl = await uploadFile(commanderFile);
-  const gearUrl = await uploadFile(gearFile);
+  const commanderUrl = await uploadFile(commanderFile)
+  const gearUrl = await uploadFile(gearFile)
 
   const auth = new google.auth.GoogleAuth({
-    credentials: {
+    credentials:{
       client_email: process.env.GOOGLE_CLIENT_EMAIL,
-      private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+      private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g,"\n")
     },
-    scopes: ["https://www.googleapis.com/auth/spreadsheets"]
-  });
+    scopes:["https://www.googleapis.com/auth/spreadsheets"]
+  })
 
-  const sheets = google.sheets({ version: "v4", auth });
+  const sheets = google.sheets({ version:"v4", auth })
 
   await sheets.spreadsheets.values.append({
     spreadsheetId: process.env.GOOGLE_SHEET_ID,
-    range: "MGE Apply!A1",
-    valueInputOption: "USER_ENTERED",
-    requestBody: {
-      values: [[
-        new Date().toISOString(), // Timestamp
+    range:"MGE Apply!A1",
+    valueInputOption:"USER_ENTERED",
+    requestBody:{
+      values:[[
+        new Date().toISOString(),
         id,
         commander,
         gearUrl,
@@ -140,11 +129,10 @@ export async function POST(req: Request) {
         skills
       ]]
     }
-  });
+  })
 
-return Response.json({ success: true });
+  return Response.json({ success:true })
 }
- 
 
 function getDateRange() {
 
