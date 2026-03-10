@@ -500,7 +500,7 @@ fetch("/api/mge-application",{
 
  const res = await fetch("/api/mge-application")
  const list = await res.json()
-
+setCommanders(data.commanders)
  setMembers(list)
 })
 
