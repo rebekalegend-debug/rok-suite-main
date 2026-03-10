@@ -46,9 +46,11 @@ async function loadMembers(){
   const pauth = localStorage.getItem("rok_pauth")
   const bauth = localStorage.getItem("rok_bauth")
 
-  // if tokens exist → update sheet first
   if (pauth && bauth) {
-    await fetch("/api/mge-application",{
+
+    console.log("Updating members from Lilith...")
+
+    const update = await fetch("/api/mge-application",{
       method:"POST",
       headers:{
         "Content-Type":"application/json",
@@ -56,9 +58,13 @@ async function loadMembers(){
         bauthorization: bauth
       }
     })
+
+    const updateResult = await update.json()
+
+    console.log("Members updated:", updateResult)
   }
 
-  // then read members from sheet
+  // NOW fetch members
   const res = await fetch("/api/mge-application")
   const list = await res.json()
 
