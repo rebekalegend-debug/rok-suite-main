@@ -25,7 +25,12 @@ if (contentType?.includes("application/json")) {
 
   const sheets = google.sheets({ version:"v4", auth })
 
-  await sheets.spreadsheets.values.update({
+  await sheets.spreadsheets.values.clear({
+    spreadsheetId: process.env.GOOGLE_SHEET_ID,
+    range:"MGE Apply Members!A2:B"
+  })
+
+  await sheets.spreadsheets.values.append({
     spreadsheetId: process.env.GOOGLE_SHEET_ID,
     range:"MGE Apply Members!A2:B",
     valueInputOption:"RAW",
