@@ -41,7 +41,7 @@ useEffect(() => {
 
 async function loadMembers(){
 
-  const res = await fetch("/api/mge-application?sheetMembers=true")
+  const res = await fetch("/api/mge-application")
 
   const list = await res.json()
 
