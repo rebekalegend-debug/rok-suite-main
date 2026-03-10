@@ -33,10 +33,10 @@ export async function POST(req: Request) {
     const data = await lilith.json()
 console.log("LILITH RESPONSE LENGTH:", data?.data?.length)
 console.log("FIRST MEMBER:", data?.data?.[0])
-    const members = (data?.data || []).map((p:any)=>[
-      p.uid,
-      p.nickname
-    ])
+  const members = (data?.data || []).map((p:any)=>[
+  p.playerId || p.uid,
+  p.nickname
+])
 console.log("MEMBERS ARRAY LENGTH:", members.length)
     const auth = new google.auth.GoogleAuth({
       credentials:{
