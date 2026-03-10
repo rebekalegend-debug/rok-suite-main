@@ -37,7 +37,7 @@ const lilith = await fetch(
     p.uid,
     p.nickname
   ])
-
+console.log("Members fetched from Lilith:", members.length)
   const auth = new google.auth.GoogleAuth({
     credentials:{
       client_email: process.env.GOOGLE_CLIENT_EMAIL,
@@ -48,7 +48,7 @@ const lilith = await fetch(
 
   const sheets = google.sheets({ version:"v4", auth })
 
- await sheets.spreadsheets.values.update({
+await sheets.spreadsheets.values.update({
   spreadsheetId: process.env.GOOGLE_SHEET_ID,
   range: "MGE Apply Members!A2",
   valueInputOption: "RAW",
