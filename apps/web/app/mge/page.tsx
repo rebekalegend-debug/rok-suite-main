@@ -20,7 +20,7 @@ const [skills,setSkills] = useState({
   skill3:0,
   skill4:0
 })
-const [pauth,setPauth] = useState("")
+
 const [bauth,setBauth] = useState("")
   const [showAdmin,setShowAdmin] = useState(false)
 const [password,setPassword] = useState("")
@@ -53,14 +53,13 @@ async function loadMembers() {
   const start = fmt(yesterday)
   const end = fmt(today)
 
-  const pauth = localStorage.getItem("rok_pauth")
+  
 const bauth = localStorage.getItem("rok_bauth")
 
 const res = await fetch(
 `https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?server_id=2554&start=${start}&end=${end}`,
 {
  headers:{
-  pauthorization: pauth || "",
   bauthorization: bauth || "",
   lang:"en_US"
  }
