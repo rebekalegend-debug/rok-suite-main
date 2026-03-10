@@ -166,7 +166,25 @@ html {
 .leaflet-interactive:focus {
   outline: none;
 }
+/* dropdown text default like placeholder */
 
+select{
+color:#9aa3af; /* same grey as placeholders */
+}
+
+/* when user selected something */
+
+select:focus,
+select:active{
+color:var(--foreground);
+}
+
+/* dropdown options */
+
+select option{
+color:var(--foreground);
+background:var(--background-card);
+}
 /* Compact, dark-themed Leaflet tooltips */
 .leaflet-tooltip {
   background: rgba(0, 0, 0, 0.8) !important;
@@ -315,18 +333,7 @@ color:#9aa3af;
 opacity:1;
 }
 
-/* select placeholder */
 
-
-select{
-color: var(--text-secondary);
-}
-select:not(:has(option:checked[value=""])) {
-color: var(--foreground);
-}
-select:valid{
-color:var(--foreground);
-}
 /* Gradient text utility */
 .gradient-text {
   background: linear-gradient(135deg, #4318ff 0%, #9f7aea 100%);
