@@ -198,10 +198,9 @@ className="rounded mt-2 p-2 max-h-40 overflow-y-auto"
 style={{
   background:"var(--background-card)",
   border:"1px solid var(--border)"
-  </div>
 }}
 >
-
+</div>
 {members
   .filter(m => {
     const q = search.toLowerCase()
