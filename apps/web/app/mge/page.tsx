@@ -136,7 +136,16 @@ if(!selectedMember){
  alert("Application submitted")
 }
 
-  
+ const filteredMembers = members
+  .filter(m => {
+    const q = search.toLowerCase()
+    return (
+      m.name?.toLowerCase().includes(q) ||
+      m.id?.includes(q)
+    )
+  })
+  .slice(0,20)
+
 return (
 <AppSidebar>
 <div
@@ -212,7 +221,7 @@ onChange={(e)=>{
 </div>
 
 {/* SEARCH RESULTS */}
-{search && (
+{search && filteredMembers.length > 0 && (
 <div
 className="rounded mt-2 p-2 max-h-40 overflow-y-auto"
 style={{
@@ -221,16 +230,7 @@ style={{
 }}
 >
 
-{members
-  .filter(m => {
-    const q = search.toLowerCase()
-    return (
-      m.name?.toLowerCase().includes(q) ||
-      m.id?.includes(q)
-    )
-  })
-  .slice(0,20)
-  .map(m => (
+{filteredMembers.map(m => (
 
 <div
 key={m.id}
@@ -241,8 +241,6 @@ onClick={()=>{
   setSelectedMember(m)
   setSearch("")
   setMemberError(false)
-  setMemberTouched(false)
-  setMemberBlurred(false)
 
 }}
 >
@@ -258,6 +256,11 @@ onClick={()=>{
 
 </div>
 )}
+
+
+
+
+  
 </div>
 
 <div className="pt-4 border-t border-[var(--border)]">
