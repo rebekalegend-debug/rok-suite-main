@@ -208,7 +208,12 @@ onChange={(e)=>{
 />
 
 {memberTouched && memberBlurred && !selectedMember && (
-<div className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full border-2 border-red-500 text-red-500 flex items-center justify-center text-xs font-bold">
+<div className="absolute right-3 top-1/2 -translate-y-1/2
+w-6 h-6 rounded-full
+border-2 flex items-center justify-center
+text-sm font-bold
+text-[#ff4b4b] border-[#ff4b4b]
+shadow-[0_0_8px_rgba(255,75,75,0.9)]">
 !
 </div>
 )}
