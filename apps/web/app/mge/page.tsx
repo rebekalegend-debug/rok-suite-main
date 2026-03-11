@@ -20,6 +20,11 @@ const [skills,setSkills] = useState({
   skill3:0,
   skill4:0
 })
+
+
+const [commanderSearch,setCommanderSearch] = useState("")
+const [selectedCommander,setSelectedCommander] = useState("")
+  
 const [memberBlurred,setMemberBlurred] = useState(false)
   const [memberTouched,setMemberTouched] = useState(false)
 const [memberError,setMemberError] = useState(false)
@@ -136,6 +141,13 @@ if(!selectedMember){
  alert("Application submitted")
 }
 
+  
+  const filteredCommanders = commanders
+  .filter(c =>
+    c.toLowerCase().includes(commanderSearch.toLowerCase())
+  )
+  .slice(0,15)
+  
  const filteredMembers = members
   .filter(m => {
     const q = search.toLowerCase()
@@ -268,21 +280,58 @@ setSearch("")
 <div className="pt-4 border-t border-[var(--border)]">
 <label className="form-label">Select wanted commander</label>
 
-<select
-className="w-full px-3 py-2 rounded gold-input"
-value={selectedCommander}
-onChange={e=>setSelectedCommander(e.target.value)}
->
-<option value="">
-{loadingCommanders ? "Loading commanders..." : "Select Commander"}
-</option>
+<div className="relative">
 
-{commanders.map(c => (
-<option key={c} value={c}>{c}</option>
+<input
+type="text"
+autoComplete="off"
+placeholder="Search commander..."
+className={`w-full px-3 py-2 rounded ${
+  selectedCommander
+    ? "border-green-500 shadow-[0_0_10px_rgba(80,255,120,0.55)]"
+    : "gold-input"
+}`}
+value={selectedCommander || commanderSearch}
+onChange={(e)=>{
+  setCommanderSearch(e.target.value)
+  setSelectedCommander("")
+}}
+/>
+
+</div>
+
+{commanderSearch && !selectedCommander && filteredCommanders.length > 0 && (
+
+<div
+className="rounded mt-2 p-2 max-h-40 overflow-y-auto"
+style={{
+  background:"var(--background-card)",
+  border:"1px solid var(--border)"
+}}
+>
+
+{filteredCommanders.map(c => (
+
+<div
+key={c}
+className="px-2 py-1 hover:bg-slate-700 cursor-pointer rounded"
+onClick={()=>{
+  setSelectedCommander(c)
+  setCommanderSearch("")
+}}
+>
+
+{c}
+
+</div>
+
 ))}
 
-</select>
-  </div>
+</div>
+
+)}
+
+</div>
 <div
 className="rounded-lg p-4 gold-glow-soft hover:gold-glow transition cursor-pointer"
 style={{
