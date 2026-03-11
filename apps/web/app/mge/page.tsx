@@ -20,7 +20,7 @@ const [skills,setSkills] = useState({
   skill3:0,
   skill4:0
 })
-
+const [commanderBlurred,setCommanderBlurred] = useState(false)
 const memberInputRef = useRef<HTMLInputElement>(null)
 const commanderInputRef = useRef<HTMLInputElement>(null)
 const [commanderSearch,setCommanderSearch] = useState("")
@@ -311,19 +311,20 @@ focus:border-[#FFD76B]
 focus:shadow-[0_0_12px_rgba(255,215,107,0.45)]
 caret-[#FFD76B]
 ${
-  selectedCommander
-    ? "border-green-400 shadow-[0_0_12px_rgba(120,255,160,0.45)]"
-    : commanderTouched && !selectedCommander
-    ? "border-red-500 shadow-[0_0_10px_rgba(255,60,60,0.55)]"
-    : "gold-input"
+ selectedCommander
+  ? "border-green-400 shadow-[0_0_12px_rgba(120,255,160,0.45)]"
+  : commanderTouched && commanderBlurred && !selectedCommander
+  ? "border-red-500 shadow-[0_0_10px_rgba(255,60,60,0.55)]"
+  : "gold-input"
 }`}
 value={selectedCommander || commanderSearch}
 
 onFocus={(e)=>{
   setCommanderTouched(true)
+  setCommanderBlurred(false)
   setCommanderFocus(true)
 
-  e.target.setSelectionRange(e.target.value.length, e.target.value.length)
+  e.target.setSelectionRange(e.target.value.length,e.target.value.length)
 
   setTimeout(()=>{
     commanderInputRef.current?.scrollIntoView({
@@ -333,8 +334,10 @@ onFocus={(e)=>{
   },200)
 }}
 
-onBlur={()=>setTimeout(()=>setCommanderFocus(false),150)}
-
+onBlur={()=>{
+  setCommanderBlurred(true)
+  setTimeout(()=>setCommanderFocus(false),150)
+}}
 onChange={(e)=>{
   setCommanderSearch(e.target.value)
   setSelectedCommander("")
