@@ -52,10 +52,10 @@ console.log("First 5 members:", members.slice(0,5))
 
     const sheets = google.sheets({ version:"v4", auth })
 
-    await sheets.spreadsheets.values.clear({
-      spreadsheetId: process.env.GOOGLE_SHEET_ID,
-      range:"MGE Apply Members!A2:B"
-    })
+   //  await sheets.spreadsheets.values.clear({
+    //   spreadsheetId: process.env.GOOGLE_SHEET_ID,
+   //    range:"MGE Apply Members!A2:B"
+   //  })
 
    const appendRes = await sheets.spreadsheets.values.append({
   spreadsheetId: process.env.GOOGLE_SHEET_ID,
