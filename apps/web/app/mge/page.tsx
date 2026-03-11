@@ -20,6 +20,8 @@ const [skills,setSkills] = useState({
   skill3:0,
   skill4:0
 })
+const [memberBlurred,setMemberBlurred] = useState(false)
+  const [memberTouched,setMemberTouched] = useState(false)
 const [memberError,setMemberError] = useState(false)
 const [pauth,setPauth] = useState("")
 const [bauth,setBauth] = useState("")
@@ -167,22 +169,34 @@ Missing information may result in your registration not being considered properl
 Enter your ingame ID or search by name
 </label>
 
+<div className="relative">
+
 <input
 type="text"
 autoComplete="off"
-required
 placeholder="Search your name or ID..."
-className={`w-full px-3 py-2 rounded gold-input ${memberError ? "border-red-500" : ""}`}
+className={`w-full px-3 py-2 rounded gold-input pr-10 ${
+  memberTouched && !selectedMember ? "border-red-500" : ""
+}`}
 value={
   selectedMember
     ? `${selectedMember.name} (${selectedMember.id})`
     : search
 }
+
+onFocus={()=>{
+  setMemberTouched(true)
+  setMemberBlurred(false)
+}}
+
 onBlur={()=>{
+  setMemberBlurred(true)
+
   if(!selectedMember){
     setMemberError(true)
   }
 }}
+
 onChange={(e)=>{
   const value = e.target.value
   setSelectedMember(null)
@@ -190,6 +204,14 @@ onChange={(e)=>{
   setForm({...form,id:""})
 }}
 />
+
+{memberTouched && memberBlurred && !selectedMember && (
+<div className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full border-2 border-red-500 text-red-500 flex items-center justify-center text-xs font-bold">
+!
+</div>
+)}
+
+</div>
 
 {/* SEARCH RESULTS */}
 {search && (
@@ -221,6 +243,8 @@ onClick={()=>{
   setSelectedMember(m)
   setSearch("")
   setMemberError(false)
+  setMemberTouched(false)
+  setMemberBlurred(false)
 
 }}
 >
