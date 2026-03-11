@@ -221,8 +221,9 @@ box-shadow:
 
 .gold-input{
 background: var(--background-card);
-color: var(--foreground);
 border: 1px solid var(--border);
+color: var(--foreground);
+
 box-shadow:
 0 0 0 1px rgba(230,185,74,0.12),
 0 3px 10px rgba(230,185,74,0.10);
