@@ -23,7 +23,8 @@ const [skills,setSkills] = useState({
 
 
 const [commanderSearch,setCommanderSearch] = useState("")
-
+const [memberFocus,setMemberFocus] = useState(false)
+const [commanderFocus,setCommanderFocus] = useState(false)
   
 const [memberBlurred,setMemberBlurred] = useState(false)
   const [memberTouched,setMemberTouched] = useState(false)
@@ -198,7 +199,7 @@ Enter your ingame ID or search by name
 type="text"
 autoComplete="off"
 placeholder="Search your name or ID..."
-className={`w-full px-3 py-2 rounded pr-10 ${
+className={`w-full px-3 py-2 rounded focus:outline-none focus:ring-0 ${
   selectedMember
     ? "border-green-400 shadow-[0_0_12px_rgba(120,255,160,0.45)]"
     : memberTouched && memberBlurred && !selectedMember
@@ -214,11 +215,12 @@ value={
 onFocus={()=>{
   setMemberTouched(true)
   setMemberBlurred(false)
+  setMemberFocus(true)
 }}
 
 onBlur={()=>{
   setMemberBlurred(true)
-
+setTimeout(()=>setMemberFocus(false),150)
   if(!selectedMember){
     setMemberError(true)
   }
@@ -237,7 +239,7 @@ onChange={(e)=>{
 </div>
 
 {/* SEARCH RESULTS */}
-{!selectedMember && filteredMembers.length > 0 && (
+{memberFocus && !selectedMember && filteredMembers.length > 0 && (
   <div
 className="rounded mt-2 p-2 max-h-40 overflow-y-auto"
 style={{
@@ -288,7 +290,7 @@ setSearch("")
 type="text"
 autoComplete="off"
 placeholder="Search commander..."
-className={`w-full px-3 py-2 rounded ${
+className={`w-full px-3 py-2 rounded focus:outline-none focus:ring-0 ${
   selectedCommander
     ? "border-green-400 shadow-[0_0_12px_rgba(120,255,160,0.45)]"
     : commanderSearch
@@ -304,7 +306,7 @@ onChange={(e)=>{
 
 </div>
 
-{!selectedCommander && filteredCommanders.length > 0 && (
+{commanderFocus && !selectedCommander && filteredCommanders.length > 0 && (
 
 <div
 className="rounded mt-2 p-2 max-h-40 overflow-y-auto"
