@@ -212,8 +212,8 @@ onChange={(e)=>{
 w-6 h-6 rounded-full
 border-2 flex items-center justify-center
 text-sm font-bold
-text-[#ff4b4b] border-[#ff4b4b]
-shadow-[0_0_8px_rgba(255,75,75,0.9)]">
+text-[rgba(255,75,75,0.85)] border-[rgba(255,75,75,0.85)]
+shadow-[0_0_10px_rgba(255,75,75,0.55)]">
 !
 </div>
 )}
