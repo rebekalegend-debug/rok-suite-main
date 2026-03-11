@@ -200,7 +200,7 @@ style={{
   border:"1px solid var(--border)"
 }}
 >
-</div>
+
 {members
   .filter(m => {
     const q = search.toLowerCase()
@@ -236,8 +236,7 @@ onClick={()=>{
 
 </div>
 )}
-
-
+</div>
 
 <div className="pt-4 border-t border-[var(--border)]">
 <label className="form-label">Select wanted commander</label>
