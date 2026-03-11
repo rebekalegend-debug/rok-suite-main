@@ -185,7 +185,9 @@ type="text"
 autoComplete="off"
 placeholder="Search your name or ID..."
 className={`w-full px-3 py-2 rounded pr-10 ${
-  memberTouched && memberBlurred && !selectedMember
+  selectedMember
+    ? "border-green-500 shadow-[0_0_10px_rgba(80,255,120,0.55)]"
+    : memberTouched && memberBlurred && !selectedMember
     ? "border-red-500 shadow-[0_0_10px_rgba(255,60,60,0.55)]"
     : "gold-input"
 }`}
@@ -239,7 +241,7 @@ onClick={()=>{
 
   setForm({...form,id:m.id})
   setSelectedMember(m)
-  setSearch("")
+ // setSearch("")
   setMemberError(false)
 
 }}
