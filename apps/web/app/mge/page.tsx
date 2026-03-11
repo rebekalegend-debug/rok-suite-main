@@ -162,6 +162,14 @@ const filteredCommanders = commanders
   })
   .slice(0,20)
 
+const skillsFilled =
+skills.skill1 > 0 &&
+skills.skill2 > 0 &&
+skills.skill3 > 0 &&
+skills.skill4 > 00
+
+
+  
 return (
 <AppSidebar>
 <div
@@ -379,10 +387,11 @@ onClick={()=>{
 
 </div>
 <div
-className="rounded-lg p-4 gold-glow-soft hover:gold-glow transition cursor-pointer"
-style={{
-  border: "1px solid var(--border)"
-}}
+className={`rounded-lg p-4 transition cursor-pointer ${
+  skillsFilled
+    ? "border border-[#FFD76B] shadow-[0_0_14px_rgba(255,215,107,0.35)]"
+    : "gold-glow-soft hover:gold-glow"
+}`}
 >
 <label className="form-label flex items-center gap-2 mb-3">
 
@@ -464,8 +473,13 @@ color: isMax ? "#FFC94A" : "var(--foreground)"
   <circle cx="12" cy="13" r="4"/>
 </svg>
 
-<span className="text-sm text-slate-300">
-Tap to upload screenshot
+<span className={`flex items-center gap-3 rounded-lg px-4 py-3 cursor-pointer transition ${
+  commanderFile
+    ? "border border-[#FFD76B] shadow-[0_0_10px_rgba(255,215,107,0.35)]"
+    : "gold-input hover:gold-glow"
+}`}
+  >
+{commanderFile ? commanderFile.name : "Tap to upload screenshot"}
 </span>
 
 <input
@@ -477,11 +491,7 @@ onChange={(e)=>setCommanderFile(e.target.files?.[0] || null)}
 </label>
 
   
-{commanderFile && (
-<div className="text-xs text-green-400 mt-1">
-Uploaded: {commanderFile.name}
-</div>
-)}
+
 </div>
       
 {/* PURPOSE */}
@@ -489,14 +499,27 @@ Uploaded: {commanderFile.name}
 <label className="form-label">🎯 For what purpose you need the commander? </label>
 
 <select
-className="w-full px-3 py-2 rounded gold-input"
+className={`w-full px-3 py-2 rounded
+focus:outline-none focus:ring-0 focus:ring-offset-0
+focus:border-[#FFD76B]
+focus:shadow-[0_0_12px_rgba(255,215,107,0.45)]
+${
+  form.purpose
+    ? "border-[#FFD76B] shadow-[0_0_12px_rgba(255,215,107,0.35)]"
+    : "gold-input"
+}`}
+value={form.purpose}
 onChange={e=>setForm({...form,purpose:e.target.value})}
 >
 <option value="">Select Purpose</option>
-<option>Open Field</option>
-<option>Rally</option>
-<option>Garrison</option>
-<option>Mixed</option>
+
+<option value="meta_rg">Meta R\G Leader</option>
+<option value="non_meta_rg">Non-Meta R\G Leader</option>
+<option value="field">Field fight</option>
+<option value="city_garrison">Own city garrison</option>
+<option value="slow_build">Slow building it</option>
+<option value="unlock">Just unlock</option>
+
 </select>
 </div>
 
@@ -504,15 +527,29 @@ onChange={e=>setForm({...form,purpose:e.target.value})}
 <div className="pt-4 border-t border-[var(--border)]">
   <label className="form-label">🏅 What rank you would like to get? </label>
 <select
-className="w-full px-3 py-2 rounded gold-input"
+className={`w-full px-3 py-2 rounded
+focus:outline-none focus:ring-0 focus:ring-offset-0
+focus:border-[#FFD76B]
+focus:shadow-[0_0_12px_rgba(255,215,107,0.45)]
+${
+  form.rank
+    ? "border-[#FFD76B] shadow-[0_0_12px_rgba(255,215,107,0.35)]"
+    : "gold-input"
+}`}
 value={form.rank}
 onChange={e=>setForm({...form,rank:e.target.value})}
 >
 
 <option value="">Select Rank</option>
-<option value="1">Rank 1</option>
-<option value="2">Rank 2</option>
-<option value="3">Rank 3</option>
+
+<option value="1">1 = 180GH</option>
+<option value="2">2 = 90GH</option>
+<option value="3">3 = 60GH</option>
+<option value="4">4 = 50GH</option>
+<option value="5">5 = 40GH</option>
+<option value="6">6 = 30GH</option>
+<option value="7-10">7 - 10 = 20GH</option>
+<option value="11-15">11 - 15 = 10GH</option>
 
 </select>
 </div>
@@ -522,14 +559,27 @@ onChange={e=>setForm({...form,rank:e.target.value})}
  <label className="form-label">🤑 Do you spend in KvK? </label>
   
   <select
-className="w-full px-3 py-2 rounded gold-input"
+className={`w-full px-3 py-2 rounded
+focus:outline-none focus:ring-0 focus:ring-offset-0
+focus:border-[#FFD76B]
+focus:shadow-[0_0_12px_rgba(255,215,107,0.45)]
+${
+  form.kvkSpending
+    ? "border-[#FFD76B] shadow-[0_0_12px_rgba(255,215,107,0.35)]"
+    : "gold-input"
+}`}
+value={form.kvkSpending}
 onChange={e=>setForm({...form,kvkSpending:e.target.value})}
 >
-<option>F2P</option>
-<option>Crystal Mine +50%</option>
-<option>Crystal Quest</option>
-<option>Buy Popups</option>
-<option>Max Tech</option>
+
+<option value="">Select Spending</option>
+
+<option value="mine_boost">Only 50% Mine Boost</option>
+<option value="crystal_quest">Only Crystal Quest</option>
+<option value="mine_cq">50% Boost + Crystal Quest</option>
+<option value="mine_cq_popups">50% + C.Q. + Few pop up bundles</option>
+<option value="max_spend">Buy all, max tech!</option>
+
 </select>
 </div>
 
@@ -537,24 +587,43 @@ onChange={e=>setForm({...form,kvkSpending:e.target.value})}
 <div className="pt-4 border-t border-[var(--border)]">
    <label className="form-label">🤔 What is your main troop type? </label>
 <select
-className="w-full px-3 py-2 rounded gold-input select-placeholder"
+className={`w-full px-3 py-2 rounded
+focus:outline-none focus:ring-0 focus:ring-offset-0
+focus:border-[#FFD76B]
+focus:shadow-[0_0_12px_rgba(255,215,107,0.45)]
+${
+  form.troopType
+    ? "border-[#FFD76B] shadow-[0_0_12px_rgba(255,215,107,0.35)]"
+    : "gold-input"
+}`}
 value={form.troopType}
 onChange={e=>setForm({...form,troopType:e.target.value})}
 >
+
 <option value="">Select Troop Type</option>
-<option value="inf">INF</option>
-<option value="arch">ARCH</option>
-<option value="cav">CAV</option>
+
+<option value="infantry">Infantry</option>
+<option value="cavalry">Cavalry</option>
+<option value="archer">Archer</option>
+<option value="siege">Siege</option>
+
 </select>
 </div>
 
 {/* PAIR */}
 <div className="pt-4 border-t border-[var(--border)]">
 <label className="form-label">🤔 For what commander/pair you need the commander: </label>
-  <input
+<input
 placeholder="Commander Pair"
-className="w-full px-3 py-2 rounded gold-input"
-
+className={`w-full px-3 py-2 rounded
+focus:outline-none focus:ring-0 focus:ring-offset-0
+focus:border-[#FFD76B]
+focus:shadow-[0_0_12px_rgba(255,215,107,0.45)]
+${
+  form.pair
+    ? "border-[#FFD76B] shadow-[0_0_12px_rgba(255,215,107,0.35)]"
+    : "gold-input"
+}`}
 onChange={e=>setForm({...form,pair:e.target.value})}
 />
 </div>
@@ -564,8 +633,15 @@ onChange={e=>setForm({...form,pair:e.target.value})}
 <label className="form-label">🤔 💬Additional personal comment?!: </label>
 <textarea
 placeholder="Comment"
-className="w-full px-3 py-2 rounded gold-input"
-  
+className={`w-full px-3 py-2 rounded
+focus:outline-none focus:ring-0 focus:ring-offset-0
+focus:border-[#FFD76B]
+focus:shadow-[0_0_12px_rgba(255,215,107,0.45)]
+${
+  form.comment
+    ? "border-[#FFD76B] shadow-[0_0_12px_rgba(255,215,107,0.35)]"
+    : "gold-input"
+}`}
 onChange={e=>setForm({...form,comment:e.target.value})}
 />
   
