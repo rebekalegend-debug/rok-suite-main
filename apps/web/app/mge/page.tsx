@@ -186,7 +186,7 @@ autoComplete="off"
 placeholder="Search your name or ID..."
 className={`w-full px-3 py-2 rounded pr-10 ${
   selectedMember
-    ? "border-green-500 shadow-[0_0_10px_rgba(80,255,120,0.55)]"
+    ? "border-green-400 shadow-[0_0_12px_rgba(120,255,160,0.45)]"
     : memberTouched && memberBlurred && !selectedMember
     ? "border-red-500 shadow-[0_0_10px_rgba(255,60,60,0.55)]"
     : "gold-input"
