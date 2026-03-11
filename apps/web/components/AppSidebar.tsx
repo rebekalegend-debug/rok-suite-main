@@ -89,15 +89,7 @@ const touchStartY = useRef<number | null>(null);
         { labelKey: 'mge', href: '/mge', icon: <Shield size={20} />, hoverColor: 'group-hover:text-amber-500', hoverBg: 'hover:bg-amber-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-amber-500 to-yellow-500' },
       // { labelKey: 'migrationTracker', href: '/kingdom/migration-tracker', icon: <Radar size={20} />, hoverColor: 'group-hover:text-teal-500', hoverBg: 'hover:bg-teal-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-teal-500 to-cyan-500' },
      //   { labelKey: 'wanted', href: '/kingdom/wanted', icon: <Crosshair size={20} />, hoverColor: 'group-hover:text-red-500', hoverBg: 'hover:bg-red-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-red-500 to-rose-500' },
- {
-  labelKey: 'kvkMap',
-  href: '/kvk-map',
-  icon: <Map size={20} className="text-yellow-500" />,
-  hoverColor: 'group-hover:text-yellow-500',
-  hoverBg: 'hover:bg-yellow-500/10',
-  activeColor: 'text-white',
-  activeBg: 'bg-gradient-to-r from-yellow-500 to-amber-500'
-},
+ // {labelKey: 'kvkMap',href: '/kvk-map',icon: <Map size={20} className="text-yellow-500" />, hoverColor: 'group-hover:text-yellow-500',hoverBg: 'hover:bg-yellow-500/10',activeColor: 'text-white',activeBg: 'bg-gradient-to-r from-yellow-500 to-amber-500'},
   
    {
   labelKey: 'kingdomStats',
