@@ -458,7 +458,7 @@ color: isMax ? "#FFC94A" : "var(--foreground)"
 ⚙️ Gear/equipment you will use for the commander!
 </label>
 
-<label className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:gold-glow transition">
+<label className="flex items-center gap-3 rounded-lg px-4 py-3 cursor-pointer gold-input hover:gold-glow transition">
 <svg
   xmlns="http://www.w3.org/2000/svg"
   width="22"
@@ -475,14 +475,11 @@ color: isMax ? "#FFC94A" : "var(--foreground)"
 </svg>
 
 <span className={`text-sm ${
-  commanderFile
-    ? "text-[#FFD76B]"
-    : "text-slate-400"
+  commanderFile ? "text-[#FFD76B]" : "text-white"
 }`}>
-  
 {commanderFile ? commanderFile.name : "Tap to upload screenshot"}
 </span>
-
+  
 <input
 type="file"
 accept="image/*"
