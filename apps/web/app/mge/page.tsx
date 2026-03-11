@@ -142,8 +142,9 @@ if(!selectedMember){
 }
 
   
-  const filteredCommanders = commanders
+const filteredCommanders = commanders
   .filter(c =>
+    !commanderSearch ||
     c.toLowerCase().includes(commanderSearch.toLowerCase())
   )
   .slice(0,15)
@@ -152,6 +153,7 @@ if(!selectedMember){
   .filter(m => {
     const q = search.toLowerCase()
     return (
+      !search ||
       m.name?.toLowerCase().includes(q) ||
       m.id?.includes(q)
     )
@@ -235,7 +237,7 @@ onChange={(e)=>{
 </div>
 
 {/* SEARCH RESULTS */}
-{search && !selectedMember && filteredMembers.length > 0 && (
+{!selectedMember && filteredMembers.length > 0 && (
   <div
 className="rounded mt-2 p-2 max-h-40 overflow-y-auto"
 style={{
@@ -288,8 +290,10 @@ autoComplete="off"
 placeholder="Search commander..."
 className={`w-full px-3 py-2 rounded ${
   selectedCommander
-    ? "border-green-500 shadow-[0_0_10px_rgba(80,255,120,0.55)]"
-    : "gold-input"
+    ? "border-green-400 shadow-[0_0_12px_rgba(120,255,160,0.45)]"
+    : commanderSearch
+    ? "gold-input"
+    : "border-red-500 shadow-[0_0_10px_rgba(255,60,60,0.55)]"
 }`}
 value={selectedCommander || commanderSearch}
 onChange={(e)=>{
@@ -300,7 +304,7 @@ onChange={(e)=>{
 
 </div>
 
-{commanderSearch && !selectedCommander && filteredCommanders.length > 0 && (
+{!selectedCommander && filteredCommanders.length > 0 && (
 
 <div
 className="rounded mt-2 p-2 max-h-40 overflow-y-auto"
