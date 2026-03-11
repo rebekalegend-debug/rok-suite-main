@@ -201,7 +201,12 @@ ref={memberInputRef}
 type="text"
 autoComplete="off"
 placeholder="Search your name or ID..."
-className={`w-full px-3 py-2 rounded focus:outline-none focus:ring-0 ${
+className={`w-full px-3 py-2 rounded
+focus:outline-none
+focus:border-[#FFD76B]
+focus:shadow-[0_0_12px_rgba(255,215,107,0.45)]
+caret-[#FFD76B]
+${
   selectedMember
     ? "border-green-400 shadow-[0_0_12px_rgba(120,255,160,0.45)]"
     : memberTouched && memberBlurred && !selectedMember
@@ -300,7 +305,12 @@ ref={commanderInputRef}
 type="text"
 autoComplete="off"
 placeholder="Search commander..."
-className={`w-full px-3 py-2 rounded focus:outline-none focus:ring-0 ${
+className={`w-full px-3 py-2 rounded
+focus:outline-none
+focus:border-[#FFD76B]
+focus:shadow-[0_0_12px_rgba(255,215,107,0.45)]
+caret-[#FFD76B]
+${
   selectedCommander
     ? "border-green-400 shadow-[0_0_12px_rgba(120,255,160,0.45)]"
     : commanderTouched && !selectedCommander
