@@ -166,7 +166,7 @@ const skillsFilled =
 skills.skill1 > 0 &&
 skills.skill2 > 0 &&
 skills.skill3 > 0 &&
-skills.skill4 > 00
+skills.skill4 > 0
 
 
   
