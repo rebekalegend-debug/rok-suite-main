@@ -20,7 +20,7 @@ const [skills,setSkills] = useState({
   skill3:0,
   skill4:0
 })
-
+const [memberError,setMemberError] = useState(false)
 const [pauth,setPauth] = useState("")
 const [bauth,setBauth] = useState("")
   const [showAdmin,setShowAdmin] = useState(false)
@@ -93,6 +93,11 @@ loadMembers()
 }, [])
 async function submitApplication(){
 
+if(!selectedMember){
+  setMemberError(true)
+  alert("Please select your name from the list.")
+  return
+}
  const data = new FormData()
 
  if(commanderFile){
@@ -164,32 +169,30 @@ Enter your ingame ID or search by name
 
 <input
 type="text"
-  autoComplete="off"
-placeholder="Search name or enter ID..."
-className="w-full px-3 py-2 rounded gold-input"
+autoComplete="off"
+required
+placeholder="Search your name or ID..."
+className={`w-full px-3 py-2 rounded gold-input ${memberError ? "border-red-500" : ""}`}
 value={
   selectedMember
-    ? selectedMember.name
-    : search || form.id
+    ? `${selectedMember.name} (${selectedMember.id})`
+    : search
 }
+onBlur={()=>{
+  if(!selectedMember){
+    setMemberError(true)
+  }
+}}
 onChange={(e)=>{
   const value = e.target.value
   setSelectedMember(null)
-
-  // if numbers → treat as ID
-  if (/^\d+$/.test(value)) {
-    setForm({...form,id:value})
-    setSearch("")
-  } else {
-    // text → search names
-    setSearch(value)
-    setForm({...form,id:""})
-  }
+  setSearch(value)
+  setForm({...form,id:""})
 }}
 />
 
 {/* SEARCH RESULTS */}
-{search && !/^\d+$/.test(search) && (
+{search && (
 <div
 className="rounded mt-2 p-2 max-h-40 overflow-y-auto"
 style={{
@@ -199,11 +202,13 @@ style={{
 >
 
 {members
-  .filter(m =>
-    search &&
-    m.name &&
-    m.name.toLowerCase().includes(search.toLowerCase())
-  )
+  .filter(m => {
+    const q = search.toLowerCase()
+    return (
+      m.name?.toLowerCase().includes(q) ||
+      m.id?.includes(q)
+    )
+  })
   .slice(0,20)
   .map(m => (
 
@@ -211,9 +216,12 @@ style={{
 key={m.id}
 className="px-2 py-1 hover:bg-slate-700 cursor-pointer rounded"
 onClick={()=>{
+
   setForm({...form,id:m.id})
   setSelectedMember(m)
   setSearch("")
+  setMemberError(false)
+
 }}
 >
 
@@ -228,9 +236,6 @@ onClick={()=>{
 
 </div>
 )}
-
-</div>
-
 
 
 
