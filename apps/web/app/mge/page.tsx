@@ -209,11 +209,12 @@ onChange={(e)=>{
 
 {memberTouched && memberBlurred && !selectedMember && (
 <div className="absolute right-3 top-1/2 -translate-y-1/2
-w-6 h-6 rounded-full
+w-5 h-5 rounded-full
 border-2 flex items-center justify-center
-text-sm font-bold
-text-[rgba(255,75,75,0.85)] border-[rgba(255,75,75,0.85)]
-shadow-[0_0_10px_rgba(255,75,75,0.55)]">
+text-[11px] font-bold
+text-[rgba(255,110,110,0.85)]
+border-[rgba(255,110,110,0.85)]
+shadow-[0_0_10px_rgba(255,110,110,0.65)]">
 !
 </div>
 )}
