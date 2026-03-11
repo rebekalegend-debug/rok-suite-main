@@ -171,7 +171,11 @@ html {
 select{
 color:#9aa3af; /* same grey as placeholders */
 }
-
+input::selection,
+textarea::selection {
+  background: rgba(255, 215, 107, 0.35);
+  color: #fff;
+}
 /* when user selected something */
 
 select:focus,
