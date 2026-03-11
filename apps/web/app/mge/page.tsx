@@ -223,8 +223,8 @@ onChange={(e)=>{
 </div>
 
 {/* SEARCH RESULTS */}
-{search && filteredMembers.length > 0 && (
-<div
+{search && !selectedMember && filteredMembers.length > 0 && (
+  <div
 className="rounded mt-2 p-2 max-h-40 overflow-y-auto"
 style={{
   background:"var(--background-card)",
@@ -238,10 +238,10 @@ style={{
 key={m.id}
 className="px-2 py-1 hover:bg-slate-700 cursor-pointer rounded"
 onClick={()=>{
-
-  setForm({...form,id:m.id})
+setForm(prev => ({ ...prev, id: m.id }))
+ // setForm({...form,id:m.id})
   setSelectedMember(m)
- // setSearch("")
+setSearch("")
   setMemberError(false)
 
 }}
