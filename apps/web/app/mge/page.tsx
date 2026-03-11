@@ -25,7 +25,7 @@ const [skills,setSkills] = useState({
 const [commanderSearch,setCommanderSearch] = useState("")
 const [memberFocus,setMemberFocus] = useState(false)
 const [commanderFocus,setCommanderFocus] = useState(false)
-  
+  const [commanderTouched,setCommanderTouched] = useState(false)
 const [memberBlurred,setMemberBlurred] = useState(false)
   const [memberTouched,setMemberTouched] = useState(false)
 const [memberError,setMemberError] = useState(false)
@@ -293,11 +293,19 @@ placeholder="Search commander..."
 className={`w-full px-3 py-2 rounded focus:outline-none focus:ring-0 ${
   selectedCommander
     ? "border-green-400 shadow-[0_0_12px_rgba(120,255,160,0.45)]"
-    : commanderSearch
-    ? "gold-input"
-    : "border-red-500 shadow-[0_0_10px_rgba(255,60,60,0.55)]"
+    : commanderTouched && !selectedCommander
+    ? "border-red-500 shadow-[0_0_10px_rgba(255,60,60,0.55)]"
+    : "gold-input"
 }`}
 value={selectedCommander || commanderSearch}
+
+onFocus={()=>{
+  setCommanderTouched(true)
+  setCommanderFocus(true)
+}}
+
+onBlur={()=>setTimeout(()=>setCommanderFocus(false),150)}
+
 onChange={(e)=>{
   setCommanderSearch(e.target.value)
   setSelectedCommander("")
