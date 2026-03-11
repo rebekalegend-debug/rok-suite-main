@@ -319,9 +319,11 @@ ${
 }`}
 value={selectedCommander || commanderSearch}
 
-onFocus={()=>{
+onFocus={(e)=>{
   setCommanderTouched(true)
   setCommanderFocus(true)
+
+  e.target.setSelectionRange(e.target.value.length, e.target.value.length)
 
   setTimeout(()=>{
     commanderInputRef.current?.scrollIntoView({
