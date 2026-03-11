@@ -163,9 +163,9 @@ const filteredCommanders = commanders
   .slice(0,20)
 
 const skillsFilled =
-skills.skill1 > 0 &&
-skills.skill2 > 0 &&
-skills.skill3 > 0 &&
+skills.skill1 > 0 ||
+skills.skill2 > 0 ||
+skills.skill3 > 0 ||
 skills.skill4 > 0
 
 
@@ -214,6 +214,7 @@ focus:outline-none focus:ring-0 focus:ring-offset-0
 focus:border-[#FFD76B]
 focus:shadow-[0_0_12px_rgba(255,215,107,0.45)]
 caret-[#FFD76B]
+${selectedMember ? "text-slate-400" : "text-white"}
 ${
   selectedMember
   ? "border-[#FFD76B] shadow-[0_0_12px_rgba(255,215,107,0.45)]"
@@ -318,6 +319,7 @@ focus:outline-none focus:ring-0 focus:ring-offset-0
 focus:border-[#FFD76B]
 focus:shadow-[0_0_12px_rgba(255,215,107,0.45)]
 caret-[#FFD76B]
+${selectedCommander ? "text-slate-400" : "text-white"}
 ${
  selectedCommander
   ? "border-[#FFD76B] shadow-[0_0_12px_rgba(255,215,107,0.45)]"
@@ -456,8 +458,7 @@ color: isMax ? "#FFC94A" : "var(--foreground)"
 ⚙️ Gear/equipment you will use for the commander!
 </label>
 
-<label className="flex items-center gap-3 rounded-lg px-4 py-3 cursor-pointer gold-input hover:gold-glow transition">
-
+<label className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:gold-glow transition">
 <svg
   xmlns="http://www.w3.org/2000/svg"
   width="22"
@@ -473,12 +474,12 @@ color: isMax ? "#FFC94A" : "var(--foreground)"
   <circle cx="12" cy="13" r="4"/>
 </svg>
 
-<span className={`flex items-center gap-3 rounded-lg px-4 py-3 cursor-pointer transition ${
+<span className={`text-sm ${
   commanderFile
-    ? "border border-[#FFD76B] shadow-[0_0_10px_rgba(255,215,107,0.35)]"
-    : "gold-input hover:gold-glow"
-}`}
-  >
+    ? "text-[#FFD76B]"
+    : "text-slate-400"
+}`}>
+  
 {commanderFile ? commanderFile.name : "Tap to upload screenshot"}
 </span>
 
@@ -621,8 +622,8 @@ focus:border-[#FFD76B]
 focus:shadow-[0_0_12px_rgba(255,215,107,0.45)]
 ${
   form.pair
-    ? "border-[#FFD76B] shadow-[0_0_12px_rgba(255,215,107,0.35)]"
-    : "gold-input"
+    ? "text-slate-400 border-[#FFD76B] shadow-[0_0_12px_rgba(255,215,107,0.35)]"
+    : "gold-input text-white"
 }`}
 onChange={e=>setForm({...form,pair:e.target.value})}
 />
@@ -639,8 +640,8 @@ focus:border-[#FFD76B]
 focus:shadow-[0_0_12px_rgba(255,215,107,0.45)]
 ${
   form.comment
-    ? "border-[#FFD76B] shadow-[0_0_12px_rgba(255,215,107,0.35)]"
-    : "gold-input"
+    ? "text-slate-400 border-[#FFD76B] shadow-[0_0_12px_rgba(255,215,107,0.35)]"
+    : "gold-input text-white"
 }`}
 onChange={e=>setForm({...form,comment:e.target.value})}
 />
