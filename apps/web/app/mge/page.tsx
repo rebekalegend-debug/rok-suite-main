@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AppSidebar } from '@/components/AppSidebar';
 
 export default function MgePage() {
@@ -21,7 +21,8 @@ const [skills,setSkills] = useState({
   skill4:0
 })
 
-
+const memberInputRef = useRef<HTMLInputElement>(null)
+const commanderInputRef = useRef<HTMLInputElement>(null)
 const [commanderSearch,setCommanderSearch] = useState("")
 const [memberFocus,setMemberFocus] = useState(false)
 const [commanderFocus,setCommanderFocus] = useState(false)
@@ -196,6 +197,7 @@ Enter your ingame ID or search by name
 <div className="relative">
 
 <input
+ref={memberInputRef}
 type="text"
 autoComplete="off"
 placeholder="Search your name or ID..."
@@ -216,6 +218,13 @@ onFocus={()=>{
   setMemberTouched(true)
   setMemberBlurred(false)
   setMemberFocus(true)
+
+  setTimeout(()=>{
+    memberInputRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    })
+  },200)
 }}
 
 onBlur={()=>{
@@ -287,6 +296,7 @@ setSearch("")
 <div className="relative">
 
 <input
+ref={commanderInputRef}
 type="text"
 autoComplete="off"
 placeholder="Search commander..."
@@ -302,6 +312,13 @@ value={selectedCommander || commanderSearch}
 onFocus={()=>{
   setCommanderTouched(true)
   setCommanderFocus(true)
+
+  setTimeout(()=>{
+    commanderInputRef.current?.scrollIntoView({
+      behavior:"smooth",
+      block:"center"
+    })
+  },200)
 }}
 
 onBlur={()=>setTimeout(()=>setCommanderFocus(false),150)}
