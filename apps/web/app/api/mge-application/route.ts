@@ -11,20 +11,20 @@ export const dynamic = "force-dynamic"
 
 export async function POST(req: Request) {
 
-  const pauth = req.headers.get("pauthorization")
-  const bauth = req.headers.get("bauthorization")
+  const psheetAuth = req.headers.get("pauthorization")
+  const bsheetAuth = req.headers.get("bauthorization")
 
   // ADMIN UPDATE
-  if (pauth && bauth) {
+  if (psheetAuth && bsheetAuth) {
 
-    const { start, end } = getDateRange()
+    
 
     const lilith = await fetch(
-      `https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?server_id=3237&start=${start}&end=${end}`,
+      `https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?server_id=3237&page=1&limit=1000`,
       {
         headers:{
-          pauthorization: pauth,
-          bauthorization: bauth,
+          pauthorization: psheetAuth,
+          bauthorization: bsheetAuth,
           lang:"en_US"
         }
       }
@@ -42,31 +42,94 @@ console.log("Lilith first row:", data?.data?.[0])
 
 console.log("Members array length:", members.length)
 console.log("First 5 members:", members.slice(0,5))
-    const auth = new google.auth.GoogleAuth({
-      credentials:{
-        client_email: process.env.GOOGLE_CLIENT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g,"\n")
-      },
-      scopes:["https://www.googleapis.com/auth/spreadsheets"]
-    })
-
-    const sheets = google.sheets({ version:"v4", auth })
-
-   //  await sheets.spreadsheets.values.clear({
-    //   spreadsheetId: process.env.GOOGLE_SHEET_ID,
-   //    range:"MGE Apply Members!A2:B"
-   //  })
-
-   const appendRes = await sheets.spreadsheets.values.append({
-  spreadsheetId: process.env.GOOGLE_SHEET_ID,
-  range:"MGE Apply Members!A:B",
-  valueInputOption: "RAW",
-  requestBody: { values: members }
+   const sheetAuth = new google.auth.GoogleAuth({
+  credentials:{
+    client_email: process.env.GOOGLE_CLIENT_EMAIL,
+    private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g,"\n")
+  },
+  scopes:["https://www.googleapis.com/auth/spreadsheets"]
 })
 
-console.log("APPEND RESPONSE:", appendRes.data)
-    return Response.json({ success:true, count:members.length })
+const sheets = google.sheets({
+  version:"v4",
+  auth: sheetAuth
+})
+// 1️⃣ read existing sheet
+const sheet = await sheets.spreadsheets.values.get({
+  spreadsheetId: process.env.GOOGLE_SHEET_ID,
+  range: "MGE Apply Members!A2:B"
+})
+
+const rows = sheet.data.values || []
+
+// 2️⃣ map existing IDs
+const idMap = new Map<string, number>()
+
+rows.forEach((r, i) => {
+  const id = String(r[0])
+  idMap.set(id, i + 2)
+})
+
+// 3️⃣ prepare updates / inserts
+const updates:any[] = []
+const inserts:any[] = []
+
+for (const m of members) {
+
+  const id = String(m[0])
+  const name = m[1]
+
+  if (idMap.has(id)) {
+
+    const row = idMap.get(id)!
+
+    updates.push({
+      range:`MGE Apply Members!A${row}:B${row}`,
+      values:[[id,name]]
+    })
+
+  } else {
+
+    inserts.push([id,name])
+
   }
+
+}
+
+// 4️⃣ update existing rows
+if(updates.length > 0){
+
+  await sheets.spreadsheets.values.batchUpdate({
+    spreadsheetId: process.env.GOOGLE_SHEET_ID,
+    requestBody:{
+      valueInputOption:"RAW",
+      data:updates
+    }
+  })
+
+}
+
+// 5️⃣ insert new rows
+if(inserts.length > 0){
+
+  await sheets.spreadsheets.values.append({
+    spreadsheetId: process.env.GOOGLE_SHEET_ID,
+    range:"MGE Apply Members!A:B",
+    valueInputOption:"RAW",
+    requestBody:{ values: inserts }
+  })
+
+}
+
+return Response.json({
+  success:true,
+  updated:updates.length,
+  inserted:inserts.length
+})
+
+} // ← CLOSE ADMIN BLOCK
+
+
 
   // USER FORM SUBMISSION
   const formData = await req.formData()
@@ -106,15 +169,18 @@ console.log("APPEND RESPONSE:", appendRes.data)
   const commanderUrl = await uploadFile(commanderFile)
   const gearUrl = await uploadFile(gearFile)
 
-  const auth = new google.auth.GoogleAuth({
-    credentials:{
-      client_email: process.env.GOOGLE_CLIENT_EMAIL,
-      private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g,"\n")
-    },
-    scopes:["https://www.googleapis.com/auth/spreadsheets"]
-  })
+ const sheetAuth = new google.auth.GoogleAuth({
+  credentials:{
+    client_email: process.env.GOOGLE_CLIENT_EMAIL,
+    private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g,"\n")
+  },
+  scopes:["https://www.googleapis.com/auth/spreadsheets"]
+})
 
-  const sheets = google.sheets({ version:"v4", auth })
+const sheets = google.sheets({
+  version:"v4",
+  auth: sheetAuth
+})
 
   await sheets.spreadsheets.values.append({
     spreadsheetId: process.env.GOOGLE_SHEET_ID,
@@ -140,32 +206,10 @@ console.log("APPEND RESPONSE:", appendRes.data)
   return Response.json({ success:true })
 }
 
-function getDateRange() {
 
-  const today = new Date()
-
-  const end = new Date()
-  end.setDate(today.getDate() - 1)   // yesterday
-
-  const start = new Date()
-  start.setDate(today.getDate() - 3) // 3 days before yesterday
-
-  const format = (d: Date) => {
-    const y = d.getFullYear()
-    const m = String(d.getMonth() + 1).padStart(2,"0")
-    const day = String(d.getDate()).padStart(2,"0")
-    return `${y}-${m}-${day}`
-  }
-
-  return {
-    start: format(start),
-    end: format(end)
-  }
-
-}
 export async function GET() {
 
-  const auth = new google.auth.GoogleAuth({
+  const sheetAuth = new google.auth.GoogleAuth({
     credentials:{
       client_email: process.env.GOOGLE_CLIENT_EMAIL,
       private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g,"\n")
@@ -173,7 +217,10 @@ export async function GET() {
     scopes:["https://www.googleapis.com/auth/spreadsheets.readonly"]
   })
 
-  const sheets = google.sheets({ version:"v4", auth })
+  const sheets = google.sheets({
+    version:"v4",
+    auth: sheetAuth
+  })
 
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: process.env.GOOGLE_SHEET_ID,
