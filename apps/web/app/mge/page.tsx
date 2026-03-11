@@ -23,7 +23,7 @@ const [skills,setSkills] = useState({
 
 
 const [commanderSearch,setCommanderSearch] = useState("")
-const [selectedCommander,setSelectedCommander] = useState("")
+
   
 const [memberBlurred,setMemberBlurred] = useState(false)
   const [memberTouched,setMemberTouched] = useState(false)
