@@ -277,20 +277,20 @@ ${eq==="Legendary" ? "bg-yellow-500"
 
 {showEq && (
 
-className="absolute z-50 bottom-full mb-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto"
+<div className="absolute z-50 bottom-full mb-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto">
 
-{["Legendary","Leg.Purple","Purple","Bad/Low"].map(v=>(
+{["Legendary","Leg.Purple","Purple","Bad/Low"].map(v => (
 
-<div
-key={v}
-className="cursor-pointer hover:text-yellow-400"
-onClick={()=>{
-setEq(v)
-setShowEq(false)
-}}
->
-{v}
-</div>
+  <div
+    key={v}
+    className="cursor-pointer hover:text-yellow-400"
+    onClick={()=>{
+      setEq(v)
+      setShowEq(false)
+    }}
+  >
+    {v}
+  </div>
 
 ))}
 
