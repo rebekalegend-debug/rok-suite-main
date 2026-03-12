@@ -188,7 +188,13 @@ const sheets = google.sheets({
     valueInputOption:"USER_ENTERED",
     requestBody:{
     values:[[
- new Date().toISOString(),
+new Date().toLocaleString("en-US",{
+  month:"short",
+  day:"numeric",
+  hour:"2-digit",
+  minute:"2-digit",
+  hour12:false
+}).replace(",", " -"),
  id,
  name,
  commander,
