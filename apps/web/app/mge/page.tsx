@@ -389,7 +389,7 @@ onClick={()=>{
 </div>
 
   
-<div
+
 <label className="form-label flex items-center gap-2 mb-3">
 🔢 Commander skill lvl:
 <span className="text-xs opacity-60 flex items-center gap-1">
