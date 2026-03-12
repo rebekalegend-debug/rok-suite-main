@@ -475,7 +475,7 @@ color: isMax ? "#FFC94A" : "var(--foreground)"
 </svg>
 
 <span className={`text-sm ${
-  commanderFile ? "text-[#FFD76B]" : "text-white"
+  commanderFile ? "text-[#FFD76B]" : "text-slate-400"
 }`}>
 {commanderFile ? commanderFile.name : "Tap to upload screenshot"}
 </span>
