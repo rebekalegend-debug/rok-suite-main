@@ -352,7 +352,13 @@ export default function MgeRanklistPage() {
 const [mail,setMail] = useState("")
   const [players,setPlayers] = useState<Player[]>([])
   const [loading,setLoading] = useState(true)
-  const [autoOrder,setAutoOrder] = useState(true)
+ const [autoOrder,setAutoOrder] = useState(() => {
+  if (typeof window !== "undefined") {
+    const saved = localStorage.getItem("mge_auto")
+    return saved === "false" ? false : true
+  }
+  return true
+})
 function handleDragEnd(event:any){
 
   const {active,over} = event
@@ -423,7 +429,9 @@ async function saveList(updated:any[]) {
   })
 
 }
-
+useEffect(()=>{
+  localStorage.setItem("mge_auto", String(autoOrder))
+},[autoOrder])
 useEffect(()=>{
   const saved = localStorage.getItem("mge_mail")
   if(saved) setMail(saved)
@@ -446,9 +454,15 @@ useEffect(()=>{
     const res = await fetch("/api/mge-apply-data-get")
     const json = await res.json()
 
-    if(json.success){
-      setPlayers(json.data)
-    }
+  if(json.success){
+
+  const ordered = json.data.sort((a:any,b:any)=>{
+    return a.rank - b.rank
+  })
+
+  setPlayers(ordered)
+
+}
 
     setLoading(false)
   }
@@ -481,7 +495,7 @@ style={{
 
 <DndContext
 collisionDetection={closestCenter}
-onDragEnd={autoOrder ? handleDragEnd : undefined}
+onDragEnd={!autoOrder ? handleDragEnd : undefined}
 >
 
 <SortableContext
@@ -528,20 +542,7 @@ rank={rank}
 
 </table>
 
-<div className="flex justify-end mt-6">
 
-<button
-className={`px-6 py-2 rounded-lg text-sm font-semibold shadow-md
-${autoOrder
-? "bg-green-600 hover:bg-green-500"
-: "bg-red-600 hover:bg-red-500"}
-`}
-onClick={()=>setAutoOrder(!autoOrder)}
->
-{autoOrder ? "AUTO ORDER ON" : "AUTO ORDER OFF"}
-</button>
-
-</div>
 
 </SortableContext>
 </DndContext>
@@ -549,24 +550,27 @@ onClick={()=>setAutoOrder(!autoOrder)}
 
 <div className="mt-6">
 
-<div className="flex justify-between text-sm text-zinc-300 mb-2">
+<div className="flex justify-between items-center text-sm mb-2">
 
-<span className="font-semibold">Mail</span>
+<span className="font-semibold text-zinc-300">
+Mail
+</span>
 
-<div className="flex gap-4">
+<div className="flex gap-4 items-center">
 
-<button
-className="text-yellow-400 hover:underline"
+<span
+className="text-yellow-400 cursor-pointer hover:text-yellow-300"
 onClick={copyRanks}
 >
 Copy: [Ranks]
-</button>
+</span>
 
 <span
 className="cursor-pointer"
 onClick={()=>setAutoOrder(!autoOrder)}
 >
-Auto rank: <span className={autoOrder ? "text-green-400" : "text-red-400"}>
+Auto rank:
+<span className={`ml-1 ${autoOrder ? "text-green-400" : "text-red-400"}`}>
 [{autoOrder ? "ON" : "OFF"}]
 </span>
 </span>
@@ -578,8 +582,22 @@ Auto rank: <span className={autoOrder ? "text-green-400" : "text-red-400"}>
 <textarea
 value={mail}
 onChange={(e)=>setMail(e.target.value)}
-className="w-full h-64 p-4 rounded-lg border border-zinc-700 bg-zinc-900 text-sm resize-none"
 placeholder="Write your in-game mail..."
+className="
+w-full
+h-[260px]
+p-4
+rounded-lg
+border
+resize-none
+text-sm
+text-zinc-200
+bg-[#11161c]
+border-yellow-500/30
+focus:border-yellow-400
+outline-none
+shadow-inner
+"
 />
 
 </div>
