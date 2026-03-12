@@ -109,27 +109,26 @@ if(!selectedMember){
 }
  const data = new FormData()
 
- if(commanderFile){
-  data.append("commander", commanderFile)
- }
+data.append("id", selectedMember!.id)
+data.append("name", selectedMember!.name)
 
- if(gearFile){
-  data.append("equipment", gearFile)
- }
+data.append("commander", selectedCommander)
 
- data.append("id", form.id)
- data.append("commander", selectedCommander)
- data.append("desiredRank", form.rank)
- data.append("kvkSpending", form.kvkSpending)
- data.append("purpose", form.purpose)
- data.append("troopType", form.troopType)
- data.append("pair", form.pair)
- data.append("comment", form.comment)
+data.append("desiredRank", form.rank)
+data.append("kvkSpending", form.kvkSpending)
+data.append("purpose", form.purpose)
+data.append("troopType", form.troopType)
+data.append("pair", form.pair || "")
+data.append("comment", form.comment || "")
 
- data.append(
-  "skills",
-  `${skills.skill1}${skills.skill2}${skills.skill3}${skills.skill4}`
- )
+data.append(
+ "skills",
+ `${skills.skill1}${skills.skill2}${skills.skill3}${skills.skill4}`
+)
+
+if(commanderFile){
+ data.append("equipment", commanderFile)
+}
 
  setSubmitting(true)
 
