@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef } from "react"
-import { getHeads, getPoints, kvkContributionPercent } from "@/utils/
+import { getHeads, getPoints, kvkContributionPercent } from "@/utils/mgeRankLogic"
 
 import {
   DndContext,
@@ -548,4 +548,6 @@ setAutoOrder(!autoOrder)
 </div>
 </div>
 </div>
+
 )
+}
