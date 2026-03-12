@@ -174,7 +174,7 @@ const [editing,setEditing] = useState(false)
 
 {showRg && (
 
-className="absolute z-50 bottom-full mb-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto animate-in fade-in zoom-in-95"
+<div className="absolute z-50 bottom-full mb-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto">
 
 {rgOptions.map(o=>{
 
@@ -277,7 +277,7 @@ ${eq==="Legendary" ? "bg-yellow-500"
 
 {showEq && (
 
-className="absolute z-50 bottom-full mb-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto animate-in fade-in zoom-in-95"
+className="absolute z-50 bottom-full mb-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto"
 
 {["Legendary","Leg.Purple","Purple","Bad/Low"].map(v=>(
 
