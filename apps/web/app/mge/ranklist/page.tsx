@@ -204,7 +204,7 @@ const [editing,setEditing] = useState(false)
 
 {showRg && (
 
-<div className="absolute z-[999] -top-2 translate-y-[-100%] mb-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto">
+<div className="absolute z-[9999] top-0 left-0 translate-y-[-100%] mb-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto">
 
 {rgOptions.map(o=>{
 
@@ -319,7 +319,7 @@ ${eq==="Legendary" ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
 
 {showEq && (
 
-<div className="absolute z-[999] -top-2 translate-y-[-100%] mb-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto">
+<div className="absolute z-[9999] top-0 left-0 translate-y-[-100%] mb-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto">
 
 {["Legendary","Leg.Purple","Purple","Bad/Low"].map(v => (
 
@@ -441,20 +441,22 @@ async function saveList(updated:any[]) {
   }
 
 return (
-<div className="min-h-screen p-6 flex justify-center">
+<div className="max-w-6xl mx-auto p-4 md:p-8">
 
-<div className="w-full max-w-6xl rounded-2xl border border-yellow-500/40 bg-gradient-to-b from-[#1e2430] to-[#161b22] shadow-[0_0_25px_rgba(255,215,107,0.25)] p-6">
+<div
+className="p-6 rounded-lg border space-y-4 gold-glow"
+style={{
+  background: "var(--background-card)",
+  borderColor: "var(--border)"
+}}
+>
 
-{/* Header */}
-<h1 className="text-3xl font-bold text-center tracking-wide
-bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-300
-bg-clip-text text-transparent
-drop-shadow-[0_0_10px_rgba(255,215,107,0.5)]">
-MGE Ranklist
-</h1>
+<h2 className="mge-title border-b pb-2 mb-4">
+.˳·˖✶𓆩MGE Ranklist𓆪✶˖·˳.
+</h2>
 
 {/* Table */}
-<div className="overflow-x-auto mt-6 rounded-lg border border-zinc-800 bg-[#0f141a]">
+<div className="relative overflow-visible mt-6 rounded-lg border border-zinc-800 bg-[#0f141a]">
 
 <DndContext
 collisionDetection={closestCenter}
@@ -466,9 +468,9 @@ items={players.map(p => p.id)}
 strategy={verticalListSortingStrategy}
 >
 
-<table className="w-full text-sm">
+<table className="w-full text-sm relative z-0">
 
-<thead className="bg-zinc-900">
+<thead className="bg-zinc-900 sticky top-0 z-20">
 <tr className="text-left">
 
 <th className="p-3">Heads</th>
