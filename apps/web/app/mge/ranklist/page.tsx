@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { getHeads, getPoints, kvkContributionPercent } from "@/utils/mgeRankLogic"
 
 import {
@@ -40,10 +40,31 @@ function Row({ player, rank }: any) {
   const stop = (e:any) => e.stopPropagation()
 const [rg,setRg] = useState<string[]>([])
 const [showRg,setShowRg] = useState(false)
-
+const rgRef = useRef<any>(null)
+const eqRef = useRef<any>(null)
 const [eq,setEq] = useState("N/A")
 const [showEq,setShowEq] = useState(false)
+useEffect(() => {
 
+  function handleClickOutside(e:any) {
+
+    if (rgRef.current && !rgRef.current.contains(e.target)) {
+      setShowRg(false)
+    }
+
+    if (eqRef.current && !eqRef.current.contains(e.target)) {
+      setShowEq(false)
+    }
+
+  }
+
+  document.addEventListener("mousedown", handleClickOutside)
+
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside)
+  }
+
+}, [])
   const rgOptions = [
   { label: "Garrison", value:"Garrison", color: "green" },
   { label: "Rally", value:"Rally", color: "green" },
@@ -114,7 +135,7 @@ const [editing,setEditing] = useState(false)
   ⋮⋮ {player.name}
 </td>
       <td className="p-3" onPointerDown={stop}>{player.commander}</td>
-    <td className="p-3 relative" onPointerDown={stop}>
+  <td ref={rgRef} className="p-3 relative" onPointerDown={stop}>
 
 <div
   className="flex flex-wrap gap-1 cursor-pointer"
@@ -153,7 +174,7 @@ const [editing,setEditing] = useState(false)
 
 {showRg && (
 
-<div className="absolute z-20 mt-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs">
+className="absolute z-50 bottom-full mb-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto animate-in fade-in zoom-in-95"
 
 {rgOptions.map(o=>{
 
@@ -228,7 +249,7 @@ const [editing,setEditing] = useState(false)
   })()
 }
 </td>
-     <td className="p-3 relative" onPointerDown={stop}>
+  <td ref={eqRef} className="p-3 relative" onPointerDown={stop}>
 
 <div
   className="cursor-pointer"
@@ -256,7 +277,7 @@ ${eq==="Legendary" ? "bg-yellow-500"
 
 {showEq && (
 
-<div className="absolute z-20 mt-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs">
+className="absolute z-50 bottom-full mb-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto animate-in fade-in zoom-in-95"
 
 {["Legendary","Leg.Purple","Purple","Bad/Low"].map(v=>(
 
@@ -349,7 +370,6 @@ async function saveList(updated:any[]) {
 
 
 
-  
   useEffect(()=>{
     load()
   },[])
