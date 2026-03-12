@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef } from "react"
-import { getHeads, getPoints, kvkContributionPercent } from "@/utils/mgeRankLogic"
+import { getHeads, getPoints, kvkContributionPercent } from "@/utils/
 
 import {
   DndContext,
@@ -233,34 +233,28 @@ const [editing,setEditing] = useState(false)
 )}
 
 </td>
-     <td className="p-3" onPointerDown={stop}>
+<td className="p-3" onPointerDown={stop}>
 {
-  (() => {
-    const kvk = kvkContributionPercent(player.kvkContribution)
+(() => {
 
-    const colors:any = {
-      green: "bg-green-600",
-      yellow: "bg-yellow-500",
-      orange: "bg-orange-500",
-      red: "bg-red-600"
-    }
+const percent = Math.round(player.kvkContribution / 1_000_000)
 
-    return (
-     <span
-  className={`${badge} ${
-    kvk.color === "green"
-      ? "border-green-500 text-green-400 bg-green-500/10"
-      : kvk.color === "yellow"
-      ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
-      : kvk.color === "orange"
-      ? "border-orange-500 text-orange-400 bg-orange-500/10"
-      : "border-red-500 text-red-400 bg-red-500/10"
-  }`}
->
-        {kvk.label}
-      </span>
-    )
-  })()
+let color =
+  percent >= 300
+    ? "border-green-500 text-green-400 bg-green-500/10"
+    : percent >= 100
+    ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
+    : percent >= 50
+    ? "border-orange-500 text-orange-400 bg-orange-500/10"
+    : "border-red-500 text-red-400 bg-red-500/10"
+
+return (
+  <span className={`${badge} ${color}`}>
+    {percent}%
+  </span>
+)
+
+})()
 }
 </td>
      <td className="p-3" onPointerDown={stop}>
@@ -446,56 +440,26 @@ async function saveList(updated:any[]) {
     )
   }
 
-  return (
-    <div className="min-h-screen p-4 lg:p-8">
+ return (
+<div className="min-h-screen p-6 flex justify-center">
+
+<div className="w-full max-w-6xl rounded-2xl border border-yellow-500/40 bg-gradient-to-b from-[#1e2430] to-[#161b22] shadow-[0_0_25px_rgba(255,215,107,0.25)] p-6">
 
       {/* Header */}
-     <div className="mb-6 flex items-center justify-between">
+<h1 className="text-3xl font-bold text-center tracking-wide
+bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-300
+bg-clip-text text-transparent
+drop-shadow-[0_0_10px_rgba(255,215,107,0.5)]">
+MGE Ranklist
+</h1>
 
-<div>
-  <h1 className="text-2xl font-bold flex items-center gap-2">
-    📊 MGE Ranklist
-  </h1>
-
-  <p className="text-sm opacity-60">
-    Drag players to reorder ranking
-  </p>
 </div>
 
-<button
-className={`px-4 py-2 rounded text-sm font-semibold
-${autoOrder ? "bg-green-600" : "bg-red-600"}`}
-onClick={async ()=>{
 
-const pass = prompt("Enter admin password")
-
-if(!pass) return
-
-const res = await fetch("/api/admin-check",{
-method:"POST",
-headers:{ "Content-Type":"application/json"},
-body: JSON.stringify({password:pass})
-})
-
-const json = await res.json()
-
-if(!json.success){
-alert("Wrong password")
-return
-}
-
-setAutoOrder(!autoOrder)
-
-}}
->
-
-{autoOrder ? "AUTO ORDER ON" : "AUTO ORDER OFF"}
-
-</button>
 
 </div>
       {/* Table */}
-    <div className="relative overflow-x-auto overflow-y-visible rounded-xl border border-zinc-700 z-50">
+    <div className="overflow-x-auto rounded-lg border border-zinc-800 bg-[#0f141a]">
 
   <DndContext
 collisionDetection={closestCenter}
@@ -547,14 +511,50 @@ onDragEnd={autoOrder ? handleDragEnd : undefined}
   </tbody>
 
 </table>
+<div className="flex justify-end mt-6">
 
+<button
+className={`px-6 py-2 rounded-lg text-sm font-semibold shadow-md
+${autoOrder
+  ? "bg-green-600 hover:bg-green-500"
+  : "bg-red-600 hover:bg-red-500"}
+`}
+onClick={async ()=>{
+
+const pass = prompt("Enter admin password")
+if(!pass) return
+
+const res = await fetch("/api/admin-check",{
+method:"POST",
+headers:{ "Content-Type":"application/json"},
+body: JSON.stringify({password:pass})
+})
+
+const json = await res.json()
+
+if(!json.success){
+alert("Wrong password")
+return
+}
+
+setAutoOrder(!autoOrder)
+
+}}
+>
+
+{autoOrder ? "AUTO ORDER ON" : "AUTO ORDER OFF"}
+
+</button>
+
+</div>
 </SortableContext>
 </DndContext>
 
      
 
       </div>
-
+</div>
+</div>
     </div>
   )
 }
