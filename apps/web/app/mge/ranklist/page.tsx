@@ -293,17 +293,62 @@ function handleDragEnd(event:any){
       const oldIndex = players.findIndex(p => p.id === active.id)
       const newIndex = players.findIndex(p => p.id === over.id)
 
-      return arrayMove(players, oldIndex, newIndex)
+      const updated = arrayMove(players, oldIndex, newIndex)
+
+saveList(updated)
+
+return updated
 
     })
 
   }
 
 }
+
+async function saveList(updated:any[]) {
+
+  const rows = updated.map((p,index)=>{
+
+    const rank = index+1
+
+    return [
+      getHeads(rank),
+      getPoints(rank),
+      rank,
+      p.desiredRank,
+      p.name,
+      p.commander,
+      "", // R&G (we will add later)
+      p.kvkContribution,
+      p.spend,
+      "", // EQ
+      p.skills,
+      p.main
+    ]
+
+  })
+
+  await fetch("/api/mge-save-list",{
+    method:"POST",
+    headers:{ "Content-Type":"application/json"},
+    body:JSON.stringify({rows})
+  })
+
+}
+
+
+
+
+  
   useEffect(()=>{
     load()
   },[])
 
+
+
+
+
+  
   async function load(){
     const res = await fetch("/api/mge-apply-data-get")
     const json = await res.json()
