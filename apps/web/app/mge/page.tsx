@@ -510,12 +510,12 @@ onChange={e=>setForm({...form,purpose:e.target.value})}
 >
 <option value="">Select Purpose</option>
 
-<option value="meta_rg">Meta R\G Leader</option>
-<option value="non_meta_rg">Non-Meta R\G Leader</option>
-<option value="field">Field fight</option>
-<option value="city_garrison">Own city garrison</option>
-<option value="slow_build">Slow building it</option>
-<option value="unlock">Just unlock</option>
+<option value="Meta R/G Leader">Meta R/G Leader</option>
+<option value="Non-Meta R/G Leader">Non-Meta R/G Leader</option>
+<option value="Field fight">Field fight</option>
+<option value="Own city garrison">Own city garrison</option>
+<option value="Slow building it">Slow building it</option>
+<option value="Just unlock">Just unlock</option>>
 
 </select>
 </div>
@@ -571,11 +571,11 @@ onChange={e=>setForm({...form,kvkSpending:e.target.value})}
 
 <option value="">Select Spending</option>
 
-<option value="mine_boost">Only 50% Mine Boost</option>
-<option value="crystal_quest">Only Crystal Quest</option>
-<option value="mine_cq">50% Boost + Crystal Quest</option>
-<option value="mine_cq_popups">50% + C.Q. + Few pop up bundles</option>
-<option value="max_spend">Buy all, max tech!</option>
+<option value="Only 50% Mine Boost">Only 50% Mine Boost</option>
+<option value="Only Crystal Quest">Only Crystal Quest</option>
+<option value="50% Boost + Crystal Quest">50% Boost + Crystal Quest</option>
+<option value="50% + C.Q. + Few pop up bundles">50% + C.Q. + Few pop up bundles</option>
+<option value="Buy all, max tech!">Buy all, max tech!</option>
 
 </select>
 </div>
