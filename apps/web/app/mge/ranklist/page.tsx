@@ -591,9 +591,10 @@ placeholder="Write your in-game mail..."
 </div>
 
 </div>
-</div>
-</div>
-</div>
+
+
+</div> {/* main card */}
+</div> {/* page container */}
 
 )
 }
