@@ -491,7 +491,7 @@ style={{
 </h2>
 
 {/* Table */}
-<div className="relative overflow-visible mt-6 rounded-lg border border-zinc-800 bg-[#0f141a]">
+<div className="relative overflow-visible mt-6 rounded-lg border border-yellow-500/40 bg-[#0f141a] shadow-[0_0_20px_rgba(255,215,107,0.25)]">
 
 <DndContext
 collisionDetection={closestCenter}
@@ -548,9 +548,9 @@ rank={rank}
 </DndContext>
 {/* MAIL SECTION */}
 
-<div className="mt-6">
+<div className="mt-10">
 
-<div className="flex justify-between items-center text-sm mb-2">
+<div className="flex justify-between items-center text-sm text-zinc-300 mb-2">
 
 <span className="font-semibold text-zinc-300">
 Mail
@@ -578,27 +578,16 @@ Auto rank:
 </div>
 
 </div>
+<div className="relative border border-yellow-500/40 rounded-lg shadow-[0_0_20px_rgba(255,215,107,0.2)] bg-[#0f141a]">
 
 <textarea
 value={mail}
 onChange={(e)=>setMail(e.target.value)}
+className="w-full h-64 p-4 rounded-lg bg-transparent text-sm font-mono leading-relaxed resize-none outline-none text-zinc-200"
 placeholder="Write your in-game mail..."
-className="
-w-full
-h-[260px]
-p-4
-rounded-lg
-border
-resize-none
-text-sm
-text-zinc-200
-bg-[#11161c]
-border-yellow-500/30
-focus:border-yellow-400
-outline-none
-shadow-inner
-"
 />
+
+</div>
 
 </div>
 </div>
