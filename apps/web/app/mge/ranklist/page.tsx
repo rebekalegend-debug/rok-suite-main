@@ -27,7 +27,7 @@ type Player = {
   spend: string
   kvkContribution: number
 }
-
+const badge = "px-3 py-1 rounded-md text-xs font-semibold border"
 function Row({ player, rank }: any) {
 
   const {
@@ -92,14 +92,33 @@ const [editing,setEditing] = useState(false)
   }
 
   return (
-   <tr
+  <tr
   ref={setNodeRef}
   style={style}
   {...attributes}
-      className="border-t border-zinc-800 hover:bg-zinc-900 cursor-grab"
-    >
+  className="border-t border-zinc-800 hover:bg-zinc-900"
+>
 
-      <td className="p-3" onPointerDown={stop}>{getHeads(rank)}</td>
+   <td className="p-3" onPointerDown={stop}>
+  {(() => {
+
+    const heads = getHeads(rank)
+
+    let color = "bg-zinc-700"
+
+    if (heads >= 90) color = "bg-green-600"
+    else if (heads >= 60) color = "bg-yellow-500"
+    else if (heads >= 30) color = "bg-orange-500"
+    else if (heads > 0) color = "bg-red-500"
+
+    return (
+     <span className={`px-3 py-1 rounded-md text-xs font-semibold text-white ${color}`}>
+        {heads}
+      </span>
+    )
+
+  })()}
+</td>
      <td className="p-3" onPointerDown={stop}>
 
 {editing ? (
@@ -116,7 +135,7 @@ const [editing,setEditing] = useState(false)
 ) : (
   <span
     onClick={()=>setEditing(true)}
-    className="cursor-pointer hover:text-yellow-400"
+    className="cursor-pointer text-white hover:underline"
   >
     {value === Infinity ? "∞" : value + "M"}
   </span>
@@ -129,10 +148,10 @@ const [editing,setEditing] = useState(false)
 </td>
 
 <td
-  className="p-3 font-semibold cursor-grab flex items-center gap-2"
+  className="p-3 font-semibold cursor-grab"
   {...listeners}
 >
-  ⋮⋮ {player.name}
+  {player.name}
 </td>
       <td className="p-3" onPointerDown={stop}>{player.commander}</td>
   <td ref={rgRef} className="p-3 relative" onPointerDown={stop}>
@@ -182,7 +201,7 @@ const [editing,setEditing] = useState(false)
 
     <div
       key={o.value}
-      className="cursor-pointer hover:text-yellow-400"
+   className="cursor-pointer text-white hover:text-green-400"
       onClick={()=>{
         if(rg.includes(o.value)){
           setRg(rg.filter(x=>x!==o.value))
@@ -216,9 +235,17 @@ const [editing,setEditing] = useState(false)
     }
 
     return (
-      <span
-        className={`px-2 py-1 rounded text-xs text-white ${colors[kvk.color]}`}
-      >
+     <span
+  className={`${badge} ${
+    kvk.color === "green"
+      ? "border-green-500 text-green-400 bg-green-500/10"
+      : kvk.color === "yellow"
+      ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
+      : kvk.color === "orange"
+      ? "border-orange-500 text-orange-400 bg-orange-500/10"
+      : "border-red-500 text-red-400 bg-red-500/10"
+  }`}
+>
         {kvk.label}
       </span>
     )
@@ -241,7 +268,17 @@ const [editing,setEditing] = useState(false)
     const color = map[player.spend] || "bg-zinc-600"
 
     return (
-      <span className={`px-2 py-1 rounded text-xs text-white ${color}`}>
+      <span
+  className={`${badge} ${
+    player.spend === "Buy all, max tech!"
+      ? "border-green-500 text-green-400 bg-green-500/10"
+      : player.spend.includes("Few")
+      ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
+      : player.spend.includes("Crystal")
+      ? "border-orange-500 text-orange-400 bg-orange-500/10"
+      : "border-red-500 text-red-400 bg-red-500/10"
+  }`}
+>
         {player.spend}
       </span>
     )
@@ -262,11 +299,11 @@ const [editing,setEditing] = useState(false)
 
 {eq !== "N/A" && (
 
-<span className={`px-2 py-1 rounded text-xs text-white
-${eq==="Legendary" ? "bg-yellow-500"
-: eq==="Leg.Purple" ? "bg-purple-600"
-: eq==="Purple" ? "bg-purple-500"
-: "bg-blue-500"}
+<span className={`px-3 py-1 rounded-md text-xs font-semibold border
+${eq==="Legendary" ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
+: eq==="Leg.Purple" ? "border-purple-500 text-purple-400 bg-purple-500/10"
+: eq==="Purple" ? "border-blue-500 text-blue-400 bg-blue-500/10"
+: "border-blue-500 text-blue-400 bg-blue-500/10"}
 `}>
 {eq}
 </span>
@@ -283,7 +320,7 @@ ${eq==="Legendary" ? "bg-yellow-500"
 
   <div
     key={v}
-    className="cursor-pointer hover:text-yellow-400"
+ className="cursor-pointer text-white hover:text-green-400"
     onClick={()=>{
       setEq(v)
       setShowEq(false)
@@ -447,7 +484,7 @@ setAutoOrder(!autoOrder)
 
 </div>
       {/* Table */}
-      <div className="overflow-x-auto rounded-xl border border-zinc-700">
+    <div className="relative overflow-x-auto overflow-y-visible rounded-xl border border-zinc-700 z-50">
 
   <DndContext
 collisionDetection={closestCenter}
