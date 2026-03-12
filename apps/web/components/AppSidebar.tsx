@@ -93,7 +93,7 @@ const touchStartY = useRef<number | null>(null);
   
    {
   labelKey: 'kingdomStats',
-  href: '/kingdom/kingdom-stats',
+  href: 'mge/ranklist',
   icon: <BarChart3 size={20} className="text-green-500" />,
   hoverColor: 'group-hover:text-green-500',
   hoverBg: 'hover:bg-green-500/10',
