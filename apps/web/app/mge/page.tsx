@@ -573,7 +573,8 @@ onChange={e=>setForm({...form,kvkSpending:e.target.value})}
 >
 
 <option value="">Select Spending</option>
-
+    
+<option value="F2P">F2P</option>
 <option value="Only 50% Mine Boost">Only 50% Mine Boost</option>
 <option value="Only Crystal Quest">Only Crystal Quest</option>
 <option value="50% Boost + Crystal Quest">50% Boost + Crystal Quest</option>
