@@ -38,6 +38,21 @@ function Row({ player, rank }: any) {
     transform,
     transition
   } = useSortable({ id: player.id })
+const [rg,setRg] = useState<string[]>([])
+  const [showRg,setShowRg] = useState(false)
+
+  const rgOptions = [
+  { label: "Garrison", value:"Garrison", color: "green" },
+  { label: "Rally", value:"Rally", color: "green" },
+  { label: "Both", value:"Both", color: "green" },
+  { label: "R4", value:"R4", color: "green" },
+  { label: "R5", value:"R5", color: "green" },
+
+  { label: "Garrison", value:"Garrison-Y", color: "yellow" },
+  { label: "Rally", value:"Rally-Y", color: "yellow" },
+
+  { label: "No", value:"No", color: "red" }
+]
 const defaultPoints = getPoints(rank)
 
 const initial =
@@ -89,7 +104,74 @@ const [editing,setEditing] = useState(false)
       <td className="p-3">{player.desiredRank}</td>
       <td className="p-3 font-semibold">{player.name}</td>
       <td className="p-3">{player.commander}</td>
-      <td className="p-3">N/A</td>
+    <td className="p-3 relative">
+
+<div
+  className="flex flex-wrap gap-1 cursor-pointer"
+  onClick={()=>setShowRg(!showRg)}
+>
+
+{rg.length === 0 && (
+  <span className="text-zinc-400 text-xs">N/A</span>
+)}
+
+{rg.map(v=>{
+
+  let color="bg-zinc-600"
+
+  if(v==="Garrison" || v==="Rally" || v==="Both" || v==="R4" || v==="R5")
+    color="bg-green-600"
+
+  if(v.includes("-Y"))
+    color="bg-yellow-500"
+
+  if(v==="No")
+    color="bg-red-600"
+
+  return (
+    <span
+      key={v}
+      className={`px-2 py-0.5 rounded text-xs text-white ${color}`}
+    >
+      {v.replace("-Y","")}
+    </span>
+  )
+
+})}
+
+</div>
+
+{showRg && (
+
+<div className="absolute z-20 mt-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs">
+
+{rgOptions.map(o=>{
+
+  return (
+
+    <div
+      key={o.value}
+      className="cursor-pointer hover:text-yellow-400"
+      onClick={()=>{
+        if(rg.includes(o.value)){
+          setRg(rg.filter(x=>x!==o.value))
+        }else{
+          setRg([...rg,o.value])
+        }
+      }}
+    >
+      {o.label}
+    </div>
+
+  )
+
+})}
+
+</div>
+
+)}
+
+</td>
      <td className="p-3">
 {
   (() => {
