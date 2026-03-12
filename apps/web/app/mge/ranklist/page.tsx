@@ -542,10 +542,11 @@ rank={rank}
 
 </table>
 
-
-
 </SortableContext>
 </DndContext>
+
+</div>   {/* CLOSE TABLE CONTAINER */}
+
 {/* MAIL SECTION */}
 
 <div className="mt-12 pt-6 border-t border-yellow-500/20">
