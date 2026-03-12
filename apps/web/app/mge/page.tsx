@@ -186,7 +186,7 @@ style={{
 }}
 >
 <h2 className="mge-title border-b pb-2 mb-2">
-MGE Registration
+.˳·˖✶𓆩MGE Registration𓆪✶˖·˳.
 </h2>
 
 <p className="mge-info">
@@ -198,7 +198,7 @@ Missing information may result in your registration not being considered properl
 <div className="space-y-2">
 
 <label className="form-label">
-Enter your ingame ID or search by name
+🪪 Name or ID 
 </label>
 
 <div className="relative">
@@ -304,7 +304,7 @@ setSearch("")
 </div>
 
 <div className="pt-4 border-t border-[var(--border)]">
-<label className="form-label">Select wanted commander</label>
+<label className="form-label">👲 Wanted Commander</label>
 
 <div className="relative">
 
@@ -396,7 +396,7 @@ className={`rounded-lg p-4 transition cursor-pointer ${
 >
 <label className="form-label flex items-center gap-2 mb-3">
 
-  Commander Skill lvl
+ 🔢 Commander skill lvl:
   <span className="text-xs opacity-60 flex items-center gap-1">
     (👆 tap to change)
   </span>
@@ -454,7 +454,7 @@ color: isMax ? "#FFC94A" : "var(--foreground)"
 <div className="pt-3 border-t border-[var(--border)]">
 <label className="form-label mb-1 block">
 
-⚙️ Gear/equipment you will use for the commander!
+🥋 Equipment!
 </label>
 
 <label className="flex items-center gap-3 rounded-lg px-4 py-3 cursor-pointer gold-input hover:gold-glow transition">
@@ -493,7 +493,7 @@ onChange={(e)=>setCommanderFile(e.target.files?.[0] || null)}
       
 {/* PURPOSE */}
 <div className="pt-4 border-t border-[var(--border)]">
-<label className="form-label">🎯 For what purpose you need the commander? </label>
+<label className="form-label">🎯 Commander purpose: </label>
 
 <select
 className={`w-full px-3 py-2 rounded
@@ -522,7 +522,7 @@ onChange={e=>setForm({...form,purpose:e.target.value})}
 
 {/* RANK */}
 <div className="pt-4 border-t border-[var(--border)]">
-  <label className="form-label">🏅 What rank you would like to get? </label>
+  <label className="form-label">🏅 Waanted Rank: </label>
 <select
 className={`w-full px-3 py-2 rounded
 focus:outline-none focus:ring-0 focus:ring-offset-0
@@ -553,7 +553,7 @@ onChange={e=>setForm({...form,rank:e.target.value})}
 
 {/* SPENDING */}
 <div className="pt-4 border-t border-[var(--border)]">
- <label className="form-label">🤑 Do you spend in KvK? </label>
+ <label className="form-label">💸 Spender lvl in KvK: </label>
   
   <select
 className={`w-full px-3 py-2 rounded
@@ -582,7 +582,7 @@ onChange={e=>setForm({...form,kvkSpending:e.target.value})}
 
 {/* TROOP */}
 <div className="pt-4 border-t border-[var(--border)]">
-   <label className="form-label">🤔 What is your main troop type? </label>
+   <label className="form-label">⚖️ Main troop type? </label>
 <select
 className={`w-full px-3 py-2 rounded
 focus:outline-none focus:ring-0 focus:ring-offset-0
@@ -609,9 +609,9 @@ onChange={e=>setForm({...form,troopType:e.target.value})}
 
 {/* PAIR */}
 <div className="pt-4 border-t border-[var(--border)]">
-<label className="form-label">🤔 For what commander/pair you need the commander: </label>
+<label className="form-label">🤔 Commander Pair: </label>
 <input
-placeholder="Commander Pair"
+placeholder="For what commander\pair you need the wanted commander?"
 className={`w-full px-3 py-2 rounded
 focus:outline-none focus:ring-0 focus:ring-offset-0
 focus:border-[#FFD76B]
@@ -627,7 +627,7 @@ onChange={e=>setForm({...form,pair:e.target.value})}
 
 {/* COMMENT */}
 <div className="pt-4 border-t border-[var(--border)]">
-<label className="form-label">🤔 💬Additional personal comment?!: </label>
+<label className="form-label">💭 Additional personal comment?!: </label>
 <textarea
 placeholder="Comment"
 className={`w-full px-3 py-2 rounded
