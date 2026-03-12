@@ -279,6 +279,7 @@ setShowEq(false)
 }
   const [players,setPlayers] = useState<Player[]>([])
   const [loading,setLoading] = useState(true)
+  const [autoOrder,setAutoOrder] = useState(true)
 function handleDragEnd(event:any){
 
   const {active,over} = event
@@ -326,19 +327,57 @@ function handleDragEnd(event:any){
     <div className="min-h-screen p-4 lg:p-8">
 
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold flex items-center gap-2">
-          📊 MGE Ranklist
-        </h1>
-        <p className="text-sm opacity-60">
-          Drag players to reorder ranking
-        </p>
-      </div>
+     <div className="mb-6 flex items-center justify-between">
 
+<div>
+  <h1 className="text-2xl font-bold flex items-center gap-2">
+    📊 MGE Ranklist
+  </h1>
+
+  <p className="text-sm opacity-60">
+    Drag players to reorder ranking
+  </p>
+</div>
+
+<button
+className={`px-4 py-2 rounded text-sm font-semibold
+${autoOrder ? "bg-green-600" : "bg-red-600"}`}
+onClick={async ()=>{
+
+const pass = prompt("Enter admin password")
+
+if(!pass) return
+
+const res = await fetch("/api/admin-check",{
+method:"POST",
+headers:{ "Content-Type":"application/json"},
+body: JSON.stringify({password:pass})
+})
+
+const json = await res.json()
+
+if(!json.success){
+alert("Wrong password")
+return
+}
+
+setAutoOrder(!autoOrder)
+
+}}
+>
+
+{autoOrder ? "AUTO ORDER ON" : "AUTO ORDER OFF"}
+
+</button>
+
+</div>
       {/* Table */}
       <div className="overflow-x-auto rounded-xl border border-zinc-700">
 
-    <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+  <DndContext
+collisionDetection={closestCenter}
+onDragEnd={autoOrder ? handleDragEnd : undefined}
+>
 
 <SortableContext
   items={players.map(p => p.id)}
