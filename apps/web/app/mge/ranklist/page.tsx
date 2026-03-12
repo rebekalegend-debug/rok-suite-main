@@ -440,12 +440,12 @@ async function saveList(updated:any[]) {
     )
   }
 
- return (
+return (
 <div className="min-h-screen p-6 flex justify-center">
 
 <div className="w-full max-w-6xl rounded-2xl border border-yellow-500/40 bg-gradient-to-b from-[#1e2430] to-[#161b22] shadow-[0_0_25px_rgba(255,215,107,0.25)] p-6">
 
-      {/* Header */}
+{/* Header */}
 <h1 className="text-3xl font-bold text-center tracking-wide
 bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-300
 bg-clip-text text-transparent
@@ -453,71 +453,65 @@ drop-shadow-[0_0_10px_rgba(255,215,107,0.5)]">
 MGE Ranklist
 </h1>
 
-</div>
+{/* Table */}
+<div className="overflow-x-auto mt-6 rounded-lg border border-zinc-800 bg-[#0f141a]">
 
-
-
-</div>
-      {/* Table */}
-    <div className="overflow-x-auto rounded-lg border border-zinc-800 bg-[#0f141a]">
-
-  <DndContext
+<DndContext
 collisionDetection={closestCenter}
 onDragEnd={autoOrder ? handleDragEnd : undefined}
 >
 
 <SortableContext
-  items={players.map(p => p.id)}
-  strategy={verticalListSortingStrategy}
+items={players.map(p => p.id)}
+strategy={verticalListSortingStrategy}
 >
 
-<table className="w-full text-sm relative">
+<table className="w-full text-sm">
 
-  <thead className="bg-zinc-900">
-    <tr className="text-left">
+<thead className="bg-zinc-900">
+<tr className="text-left">
 
-      <th className="p-3">Heads</th>
-      <th className="p-3">Points</th>
-      <th className="p-3">Rank</th>
-      <th className="p-3">W.Rank</th>
-      <th className="p-3">Name</th>
-      <th className="p-3">Need</th>
-      <th className="p-3">R&G</th>
-      <th className="p-3">KvK C.</th>
-      <th className="p-3">Spend</th>
-      <th className="p-3">EQ</th>
-      <th className="p-3">Skill</th>
-      <th className="p-3">Main</th>
+<th className="p-3">Heads</th>
+<th className="p-3">Points</th>
+<th className="p-3">Rank</th>
+<th className="p-3">W.Rank</th>
+<th className="p-3">Name</th>
+<th className="p-3">Need</th>
+<th className="p-3">R&G</th>
+<th className="p-3">KvK C.</th>
+<th className="p-3">Spend</th>
+<th className="p-3">EQ</th>
+<th className="p-3">Skill</th>
+<th className="p-3">Main</th>
 
-    </tr>
-  </thead>
+</tr>
+</thead>
 
-  <tbody>
+<tbody>
+{players.map((p,index)=>{
 
-    {players.map((p,index)=>{
+const rank = index + 1
 
-      const rank = index + 1
+return (
+<Row
+key={p.id}
+player={p}
+rank={rank}
+/>
+)
 
-      return (
-        <Row
-          key={p.id}
-          player={p}
-          rank={rank}
-        />
-      )
-
-    })}
-
-  </tbody>
+})}
+</tbody>
 
 </table>
+
 <div className="flex justify-end mt-6">
 
 <button
 className={`px-6 py-2 rounded-lg text-sm font-semibold shadow-md
 ${autoOrder
-  ? "bg-green-600 hover:bg-green-500"
-  : "bg-red-600 hover:bg-red-500"}
+? "bg-green-600 hover:bg-green-500"
+: "bg-red-600 hover:bg-red-500"}
 `}
 onClick={async ()=>{
 
@@ -547,14 +541,11 @@ setAutoOrder(!autoOrder)
 </button>
 
 </div>
+
 </SortableContext>
 </DndContext>
 
-     
-
-      </div>
 </div>
 </div>
-    </div>
-  )
-}
+</div>
+)
