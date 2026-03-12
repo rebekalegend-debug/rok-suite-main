@@ -3,6 +3,20 @@
 import { useEffect, useState } from "react"
 import { getHeads, getPoints } from "@/utils/mgeRankLogic"
 
+import {
+  DndContext,
+  closestCenter
+} from "@dnd-kit/core"
+
+import {
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+  arrayMove
+} from "@dnd-kit/sortable"
+
+import { CSS } from "@dnd-kit/utilities"
+
 type Player = {
   id: string
   name: string
@@ -15,10 +29,68 @@ type Player = {
 }
 
 export default function MgeRanklistPage() {
+function Row({ player, rank }: any) {
 
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition
+  } = useSortable({ id: player.id })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition
+  }
+
+  return (
+    <tr
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className="border-t border-zinc-800 hover:bg-zinc-900 cursor-grab"
+    >
+
+      <td className="p-3">{getHeads(rank)}</td>
+      <td className="p-3">{getPoints(rank)}</td>
+      <td className="p-3 font-semibold">{rank}</td>
+      <td className="p-3">{player.desiredRank}</td>
+      <td className="p-3 font-semibold">{player.name}</td>
+      <td className="p-3">{player.commander}</td>
+      <td className="p-3">N/A</td>
+      <td className="p-3">{player.kvkContribution}</td>
+      <td className="p-3">{player.spend}</td>
+      <td className="p-3">N/A</td>
+      <td className="p-3">{player.skills}</td>
+      <td className="p-3">{player.main}</td>
+
+    </tr>
+  )
+}
   const [players,setPlayers] = useState<Player[]>([])
   const [loading,setLoading] = useState(true)
+function handleDragEnd(event:any){
 
+  const {active,over} = event
+
+  if(!over) return
+
+  if(active.id !== over.id){
+
+    setPlayers(players => {
+
+      const oldIndex = players.findIndex(p => p.id === active.id)
+      const newIndex = players.findIndex(p => p.id === over.id)
+
+      return arrayMove(players, oldIndex, newIndex)
+
+    })
+
+  }
+
+}
   useEffect(()=>{
     load()
   },[])
@@ -58,59 +130,58 @@ export default function MgeRanklistPage() {
       {/* Table */}
       <div className="overflow-x-auto rounded-xl border border-zinc-700">
 
-        <table className="w-full text-sm">
+    <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
 
-          <thead className="bg-zinc-900">
-            <tr className="text-left">
+<SortableContext
+  items={players.map(p => p.id)}
+  strategy={verticalListSortingStrategy}
+>
 
-              <th className="p-3">Heads</th>
-              <th className="p-3">Points</th>
-              <th className="p-3">Rank</th>
-              <th className="p-3">W.Rank</th>
-              <th className="p-3">Name</th>
-              <th className="p-3">Need</th>
-              <th className="p-3">R&G</th>
-              <th className="p-3">KvK C.</th>
-              <th className="p-3">Spend</th>
-              <th className="p-3">EQ</th>
-              <th className="p-3">Skill</th>
-              <th className="p-3">Main</th>
+<table className="w-full text-sm">
 
-            </tr>
-          </thead>
+  <thead className="bg-zinc-900">
+    <tr className="text-left">
 
-          <tbody>
+      <th className="p-3">Heads</th>
+      <th className="p-3">Points</th>
+      <th className="p-3">Rank</th>
+      <th className="p-3">W.Rank</th>
+      <th className="p-3">Name</th>
+      <th className="p-3">Need</th>
+      <th className="p-3">R&G</th>
+      <th className="p-3">KvK C.</th>
+      <th className="p-3">Spend</th>
+      <th className="p-3">EQ</th>
+      <th className="p-3">Skill</th>
+      <th className="p-3">Main</th>
 
-            {players.map((p,index)=>{
+    </tr>
+  </thead>
 
-              const rank = index + 1
+  <tbody>
 
-              return (
+    {players.map((p,index)=>{
 
-                <tr key={p.id} className="border-t border-zinc-800 hover:bg-zinc-900">
+      const rank = index + 1
 
-                  <td className="p-3">{getHeads(rank)}</td>
-                  <td className="p-3">{getPoints(rank)}</td>
-                  <td className="p-3 font-semibold">{rank}</td>
-                  <td className="p-3">{p.desiredRank}</td>
-                  <td className="p-3 font-semibold">{p.name}</td>
-                  <td className="p-3">{p.commander}</td>
-                  <td className="p-3">N/A</td>
-                  <td className="p-3">{p.kvkContribution}</td>
-                  <td className="p-3">{p.spend}</td>
-                  <td className="p-3">N/A</td>
-                  <td className="p-3">{p.skills}</td>
-                  <td className="p-3">{p.main}</td>
+      return (
+        <Row
+          key={p.id}
+          player={p}
+          rank={rank}
+        />
+      )
 
-                </tr>
+    })}
 
-              )
+  </tbody>
 
-            })}
+</table>
 
-          </tbody>
+</SortableContext>
+</DndContext>
 
-        </table>
+     
 
       </div>
 
