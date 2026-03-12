@@ -198,7 +198,7 @@ Missing information may result in your registration not being considered properl
 <div className="space-y-2">
 
 <label className="form-label">
-🪪 Name or ID 
+🆔 Name or ID 
 </label>
 
 <div className="relative">
@@ -387,6 +387,16 @@ onClick={()=>{
 )}
 
 </div>
+
+  
+<div
+<label className="form-label flex items-center gap-2 mb-3">
+🔢 Commander skill lvl:
+<span className="text-xs opacity-60 flex items-center gap-1">
+(👆 tap to change)
+</span>
+</label>
+
 <div
 className={`rounded-lg p-4 transition cursor-pointer ${
   skillsFilled
@@ -394,13 +404,6 @@ className={`rounded-lg p-4 transition cursor-pointer ${
     : "gold-glow-soft hover:gold-glow"
 }`}
 >
-<label className="form-label flex items-center gap-2 mb-3">
-
- 🔢 Commander skill lvl:
-  <span className="text-xs opacity-60 flex items-center gap-1">
-    (👆 tap to change)
-  </span>
-</label>
 
 
 {/* SKILL GRID */}
