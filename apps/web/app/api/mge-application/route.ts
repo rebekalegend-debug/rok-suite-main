@@ -134,11 +134,11 @@ return Response.json({
   // USER FORM SUBMISSION
   const formData = await req.formData()
 
-  const commanderFile = formData.get("commander") as File | null
-  const gearFile = formData.get("equipment") as File | null
+ const gearFile = formData.get("equipment") as File | null
 
-  const id = formData.get("id") as string
-  const commander = formData.get("commander") as string
+ const id = formData.get("id") as string
+const name = formData.get("name") as string
+const commander = formData.get("commander") as string
   const rank = formData.get("desiredRank") as string
   const kvkSpending = formData.get("kvkSpending") as string
   const purpose = formData.get("purpose") as string
@@ -166,7 +166,7 @@ return Response.json({
     return data.publicUrl
   }
 
-  const commanderUrl = await uploadFile(commanderFile)
+ 
   const gearUrl = await uploadFile(gearFile)
 
  const sheetAuth = new google.auth.GoogleAuth({
@@ -187,19 +187,20 @@ const sheets = google.sheets({
     range:"MGE Apply!A1",
     valueInputOption:"USER_ENTERED",
     requestBody:{
-      values:[[
-        new Date().toISOString(),
-        id,
-        commander,
-        gearUrl,
-        rank,
-        kvkSpending,
-        purpose,
-        troopType,
-        pair,
-        comment,
-        skills
-      ]]
+    values:[[
+ new Date().toISOString(),
+ id,
+ name,
+ commander,
+ skills,
+ gearUrl,
+ purpose,
+ rank,
+ kvkSpending,
+ troopType,
+ pair,
+ comment
+]]
     }
   })
 
