@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { getHeads, getPoints } from "@/utils/mgeRankLogic"
+import { getHeads, getPoints, kvkContributionPercent } from "@/utils/mgeRankLogic"
 
 import {
   DndContext,
@@ -38,7 +38,15 @@ function Row({ player, rank }: any) {
     transform,
     transition
   } = useSortable({ id: player.id })
+const defaultPoints = getPoints(rank)
 
+const initial =
+  defaultPoints === "∞"
+    ? Infinity
+    : Number(defaultPoints.replace("M",""))
+
+const [value,setValue] = useState<number>(initial)
+const [editing,setEditing] = useState(false)
   const style = {
     transform: CSS.Transform.toString(transform),
     transition
@@ -54,14 +62,80 @@ function Row({ player, rank }: any) {
     >
 
       <td className="p-3">{getHeads(rank)}</td>
-      <td className="p-3">{getPoints(rank)}</td>
+     <td className="p-3">
+
+{editing ? (
+  <input
+    className="w-16 bg-zinc-800 border border-zinc-600 rounded px-1 text-center"
+    autoFocus
+    defaultValue={value}
+    onBlur={(e)=>{
+      const v = Number(e.target.value) || 0
+      setValue(v)
+      setEditing(false)
+    }}
+  />
+) : (
+  <span
+    onClick={()=>setEditing(true)}
+    className="cursor-pointer hover:text-yellow-400"
+  >
+    {value === Infinity ? "∞" : value + "M"}
+  </span>
+)}
+
+</td>
       <td className="p-3 font-semibold">{rank}</td>
       <td className="p-3">{player.desiredRank}</td>
       <td className="p-3 font-semibold">{player.name}</td>
       <td className="p-3">{player.commander}</td>
       <td className="p-3">N/A</td>
-      <td className="p-3">{player.kvkContribution}</td>
-      <td className="p-3">{player.spend}</td>
+     <td className="p-3">
+{
+  (() => {
+    const kvk = kvkContributionPercent(player.kvkContribution)
+
+    const colors:any = {
+      green: "bg-green-600",
+      yellow: "bg-yellow-500",
+      orange: "bg-orange-500",
+      red: "bg-red-600"
+    }
+
+    return (
+      <span
+        className={`px-2 py-1 rounded text-xs text-white ${colors[kvk.color]}`}
+      >
+        {kvk.label}
+      </span>
+    )
+  })()
+}
+</td>
+     <td className="p-3">
+{
+  (() => {
+
+    const map:any = {
+      "F2P": "bg-red-600",
+      "Only 50% Mine Boost": "bg-orange-500",
+      "Only Crystal Quest": "bg-orange-500",
+      "50% Boost + Crystal Quest": "bg-orange-500",
+      "50% + C.Q. + Few pop up bundles": "bg-yellow-500",
+      "Buy all, max tech!": "bg-green-600"
+    }
+
+    const color = map[player.spend] || "bg-zinc-600"
+
+    return (
+      <span className={`px-2 py-1 rounded text-xs text-white ${color}`}>
+        {player.spend}
+      </span>
+    )
+
+  })()
+}
+</td>
       <td className="p-3">N/A</td>
       <td className="p-3">{player.skills}</td>
       <td className="p-3">{player.main}</td>
