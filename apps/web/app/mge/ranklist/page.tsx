@@ -349,7 +349,7 @@ ${eq==="Legendary" ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
 }
 
 export default function MgeRanklistPage() {
-
+const [mail,setMail] = useState("")
   const [players,setPlayers] = useState<Player[]>([])
   const [loading,setLoading] = useState(true)
   const [autoOrder,setAutoOrder] = useState(true)
@@ -377,7 +377,22 @@ return updated
   }
 
 }
+function copyRanks(){
 
+const text = players.map((p,index)=>{
+
+  const rank = index + 1
+  const pts = getPoints(rank)
+
+  const pointsText = pts === "∞" ? "Unlimited" : pts
+
+  return `${rank}. ${p.name} - ${pointsText}`
+
+}).join("\n")
+
+navigator.clipboard.writeText(text)
+
+}
 async function saveList(updated:any[]) {
 
   const rows = updated.map((p,index)=>{
@@ -409,8 +424,14 @@ async function saveList(updated:any[]) {
 
 }
 
+useEffect(()=>{
+  const saved = localStorage.getItem("mge_mail")
+  if(saved) setMail(saved)
+},[])
 
-
+useEffect(()=>{
+  localStorage.setItem("mge_mail",mail)
+},[mail])
 
   useEffect(()=>{
     load()
@@ -515,38 +536,53 @@ ${autoOrder
 ? "bg-green-600 hover:bg-green-500"
 : "bg-red-600 hover:bg-red-500"}
 `}
-onClick={async ()=>{
-
-const pass = prompt("Enter admin password")
-if(!pass) return
-
-const res = await fetch("/api/admin-check",{
-method:"POST",
-headers:{ "Content-Type":"application/json"},
-body: JSON.stringify({password:pass})
-})
-
-const json = await res.json()
-
-if(!json.success){
-alert("Wrong password")
-return
-}
-
-setAutoOrder(!autoOrder)
-
-}}
+onClick={()=>setAutoOrder(!autoOrder)}
 >
-
 {autoOrder ? "AUTO ORDER ON" : "AUTO ORDER OFF"}
-
 </button>
 
 </div>
 
 </SortableContext>
 </DndContext>
+{/* MAIL SECTION */}
 
+<div className="mt-6">
+
+<div className="flex justify-between text-sm text-zinc-300 mb-2">
+
+<span className="font-semibold">Mail</span>
+
+<div className="flex gap-4">
+
+<button
+className="text-yellow-400 hover:underline"
+onClick={copyRanks}
+>
+Copy: [Ranks]
+</button>
+
+<span
+className="cursor-pointer"
+onClick={()=>setAutoOrder(!autoOrder)}
+>
+Auto rank: <span className={autoOrder ? "text-green-400" : "text-red-400"}>
+[{autoOrder ? "ON" : "OFF"}]
+</span>
+</span>
+
+</div>
+
+</div>
+
+<textarea
+value={mail}
+onChange={(e)=>setMail(e.target.value)}
+className="w-full h-64 p-4 rounded-lg border border-zinc-700 bg-zinc-900 text-sm resize-none"
+placeholder="Write your in-game mail..."
+/>
+
+</div>
 </div>
 </div>
 </div>
