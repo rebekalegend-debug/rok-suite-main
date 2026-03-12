@@ -599,10 +599,10 @@ onChange={e=>setForm({...form,troopType:e.target.value})}
 
 <option value="">Select Troop Type</option>
 
-<option value="infantry">Infantry</option>
-<option value="cavalry">Cavalry</option>
-<option value="archer">Archer</option>
-<option value="siege">Siege</option>
+<option value="Infantry">Infantry</option>
+<option value="Cavalry">Cavalry</option>
+<option value="Archer">Archer</option>
+<option value="Siege">Siege</option>
 
 </select>
 </div>
