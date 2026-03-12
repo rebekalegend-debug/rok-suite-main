@@ -103,8 +103,10 @@ const [editing,setEditing] = useState(false)
 
 </td>
       <td className="p-3 font-semibold">{rank}</td>
-      <td className="p-3" onPointerDown={stop}>{player.desiredRank}</td>
-     <td
+      <td className="p-3" onPointerDown={stop}>
+  {player.desiredRank}
+</td>
+
 <td
   className="p-3 font-semibold cursor-grab flex items-center gap-2"
   {...listeners}
