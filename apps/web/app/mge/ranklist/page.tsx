@@ -28,7 +28,6 @@ type Player = {
   kvkContribution: number
 }
 
-export default function MgeRanklistPage() {
 function Row({ player, rank }: any) {
 
   const {
@@ -38,6 +37,7 @@ function Row({ player, rank }: any) {
     transform,
     transition
   } = useSortable({ id: player.id })
+  const stop = (e:any) => e.stopPropagation()
 const [rg,setRg] = useState<string[]>([])
 const [showRg,setShowRg] = useState(false)
 
@@ -71,16 +71,15 @@ const [editing,setEditing] = useState(false)
   }
 
   return (
-    <tr
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
+   <tr
+  ref={setNodeRef}
+  style={style}
+  {...attributes}
       className="border-t border-zinc-800 hover:bg-zinc-900 cursor-grab"
     >
 
-      <td className="p-3">{getHeads(rank)}</td>
-     <td className="p-3">
+      <td className="p-3" onPointerDown={stop}>{getHeads(rank)}</td>
+     <td className="p-3" onPointerDown={stop}>
 
 {editing ? (
   <input
@@ -104,10 +103,16 @@ const [editing,setEditing] = useState(false)
 
 </td>
       <td className="p-3 font-semibold">{rank}</td>
-      <td className="p-3">{player.desiredRank}</td>
-      <td className="p-3 font-semibold">{player.name}</td>
-      <td className="p-3">{player.commander}</td>
-    <td className="p-3 relative">
+      <td className="p-3" onPointerDown={stop}>{player.desiredRank}</td>
+     <td
+ <td
+  className="p-3 font-semibold cursor-grab active:cursor-grabbing flex items-center gap-2"
+  {...listeners}
+>
+  ⋮⋮ {player.name}
+</td>
+      <td className="p-3" onPointerDown={stop}>{player.commander}</td>
+    <td className="p-3 relative" onPointerDown={stop}>
 
 <div
   className="flex flex-wrap gap-1 cursor-pointer"
@@ -175,7 +180,7 @@ const [editing,setEditing] = useState(false)
 )}
 
 </td>
-     <td className="p-3">
+     <td className="p-3" onPointerDown={stop}>
 {
   (() => {
     const kvk = kvkContributionPercent(player.kvkContribution)
@@ -197,7 +202,7 @@ const [editing,setEditing] = useState(false)
   })()
 }
 </td>
-     <td className="p-3">
+     <td className="p-3" onPointerDown={stop}>
 {
   (() => {
 
@@ -221,7 +226,7 @@ const [editing,setEditing] = useState(false)
   })()
 }
 </td>
-     <td className="p-3 relative">
+     <td className="p-3 relative" onPointerDown={stop}>
 
 <div
   className="cursor-pointer"
@@ -271,12 +276,15 @@ setShowEq(false)
 )}
 
 </td>
-      <td className="p-3">{player.skills}</td>
-      <td className="p-3">{player.main}</td>
+      <td className="p-3" onPointerDown={stop}>{player.skills}</td>
+      <td className="p-3" onPointerDown={stop}>{player.main}</td>
 
     </tr>
   )
 }
+
+export default function MgeRanklistPage() {
+
   const [players,setPlayers] = useState<Player[]>([])
   const [loading,setLoading] = useState(true)
   const [autoOrder,setAutoOrder] = useState(true)
