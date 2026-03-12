@@ -99,25 +99,30 @@ const [editing,setEditing] = useState(false)
   className="border-t border-zinc-800 hover:bg-zinc-900"
 >
 
-   <td className="p-3" onPointerDown={stop}>
-  {(() => {
+ <td className="p-3" onPointerDown={stop}>
+{(() => {
 
-    const heads = getHeads(rank)
+  const heads = getHeads(rank)
 
-    let color = "bg-zinc-700"
+  return (
+    <span
+      className={`${badge} ${
+        heads >= 90
+          ? "border-green-500 text-green-400 bg-green-500/10"
+          : heads >= 60
+          ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
+          : heads >= 30
+          ? "border-orange-500 text-orange-400 bg-orange-500/10"
+          : heads > 0
+          ? "border-red-500 text-red-400 bg-red-500/10"
+          : "border-zinc-500 text-zinc-400 bg-zinc-500/10"
+      }`}
+    >
+      {heads}
+    </span>
+  )
 
-    if (heads >= 90) color = "bg-green-600"
-    else if (heads >= 60) color = "bg-yellow-500"
-    else if (heads >= 30) color = "bg-orange-500"
-    else if (heads > 0) color = "bg-red-500"
-
-    return (
-     <span className={`px-3 py-1 rounded-md text-xs font-semibold text-white ${color}`}>
-        {heads}
-      </span>
-    )
-
-  })()}
+})()}
 </td>
      <td className="p-3" onPointerDown={stop}>
 
@@ -178,14 +183,20 @@ const [editing,setEditing] = useState(false)
   if(v==="No")
     color="bg-red-600"
 
-  return (
-    <span
-      key={v}
-      className={`px-2 py-0.5 rounded text-xs text-white ${color}`}
-    >
-      {v.replace("-Y","")}
-    </span>
-  )
+ return (
+<span
+  key={v}
+  className={`${badge} ${
+    v==="No"
+      ? "border-red-500 text-red-400 bg-red-500/10"
+      : v.includes("-Y")
+      ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
+      : "border-green-500 text-green-400 bg-green-500/10"
+  }`}
+>
+  {v.replace("-Y","")}
+</span>
+)
 
 })}
 
@@ -193,7 +204,7 @@ const [editing,setEditing] = useState(false)
 
 {showRg && (
 
-<div className="absolute z-50 bottom-full mb-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto">
+<div className="absolute z-[999] -top-2 translate-y-[-100%] mb-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto">
 
 {rgOptions.map(o=>{
 
@@ -302,7 +313,7 @@ const [editing,setEditing] = useState(false)
 <span className={`px-3 py-1 rounded-md text-xs font-semibold border
 ${eq==="Legendary" ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
 : eq==="Leg.Purple" ? "border-purple-500 text-purple-400 bg-purple-500/10"
-: eq==="Purple" ? "border-blue-500 text-blue-400 bg-blue-500/10"
+: eq==="Purple" ? "border-purple-500 text-purple-400 bg-purple-500/10"
 : "border-blue-500 text-blue-400 bg-blue-500/10"}
 `}>
 {eq}
@@ -314,7 +325,7 @@ ${eq==="Legendary" ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
 
 {showEq && (
 
-<div className="absolute z-50 bottom-full mb-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto">
+<div className="absolute z-[999] -top-2 translate-y-[-100%] mb-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto">
 
 {["Legendary","Leg.Purple","Purple","Bad/Low"].map(v => (
 
@@ -496,7 +507,7 @@ onDragEnd={autoOrder ? handleDragEnd : undefined}
   strategy={verticalListSortingStrategy}
 >
 
-<table className="w-full text-sm">
+<table className="w-full text-sm relative">
 
   <thead className="bg-zinc-900">
     <tr className="text-left">
