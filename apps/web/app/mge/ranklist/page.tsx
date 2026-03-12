@@ -39,7 +39,10 @@ function Row({ player, rank }: any) {
     transition
   } = useSortable({ id: player.id })
 const [rg,setRg] = useState<string[]>([])
-  const [showRg,setShowRg] = useState(false)
+const [showRg,setShowRg] = useState(false)
+
+const [eq,setEq] = useState("N/A")
+const [showEq,setShowEq] = useState(false)
 
   const rgOptions = [
   { label: "Garrison", value:"Garrison", color: "green" },
@@ -218,7 +221,56 @@ const [editing,setEditing] = useState(false)
   })()
 }
 </td>
-      <td className="p-3">N/A</td>
+     <td className="p-3 relative">
+
+<div
+  className="cursor-pointer"
+  onClick={()=>setShowEq(!showEq)}
+>
+
+{eq === "N/A" && (
+  <span className="text-zinc-400 text-xs">N/A</span>
+)}
+
+{eq !== "N/A" && (
+
+<span className={`px-2 py-1 rounded text-xs text-white
+${eq==="Legendary" ? "bg-yellow-500"
+: eq==="Leg.Purple" ? "bg-purple-600"
+: eq==="Purple" ? "bg-purple-500"
+: "bg-blue-500"}
+`}>
+{eq}
+</span>
+
+)}
+
+</div>
+
+{showEq && (
+
+<div className="absolute z-20 mt-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs">
+
+{["Legendary","Leg.Purple","Purple","Bad/Low"].map(v=>(
+
+<div
+key={v}
+className="cursor-pointer hover:text-yellow-400"
+onClick={()=>{
+setEq(v)
+setShowEq(false)
+}}
+>
+{v}
+</div>
+
+))}
+
+</div>
+
+)}
+
+</td>
       <td className="p-3">{player.skills}</td>
       <td className="p-3">{player.main}</td>
 
