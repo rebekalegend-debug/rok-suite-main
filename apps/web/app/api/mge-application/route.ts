@@ -182,33 +182,50 @@ const sheets = google.sheets({
   auth: sheetAuth
 })
 
-  await sheets.spreadsheets.values.append({
-    spreadsheetId: process.env.GOOGLE_SHEET_ID,
-    range:"MGE Apply!A1",
-    valueInputOption:"USER_ENTERED",
-    requestBody:{
-    values:[[
-new Date().toLocaleString("en-US",{
+ // 1️⃣ Read header row
+const headerRes = await sheets.spreadsheets.values.get({
+  spreadsheetId: process.env.GOOGLE_SHEET_ID,
+  range: "MGE Apply!1:1"
+})
+
+const headers = headerRes.data.values?.[0] || []
+
+// 2️⃣ Map header -> column index
+const col = (name:string) => headers.indexOf(name)
+
+// 3️⃣ Prepare row array
+const row = new Array(headers.length).fill("")
+
+row[col("Time UTC")] = new Date().toLocaleString("en-US",{
   month:"short",
   day:"numeric",
   hour:"2-digit",
   minute:"2-digit",
-  hour12:false
-}).replace(",", " -"),
- id,
- name,
- commander,
- skills,
- gearUrl,
- purpose,
- rank,
- kvkSpending,
- troopType,
- pair,
- comment
-]]
-    }
-  })
+  hour12:false,
+  timeZone:"UTC"
+}).replace(",", " -")
+
+row[col("ID")] = id
+row[col("Name")] = name
+row[col("Commander")] = commander
+row[col("Skills")] = skills
+row[col("Equipment")] = gearUrl
+row[col("Commander Purpose")] = purpose
+row[col("Desired Rank")] = rank
+row[col("KvK Spending")] = kvkSpending
+row[col("Main Troop Type")] = troopType
+row[col("Commander Pair")] = pair
+row[col("Comment")] = comment
+
+// 4️⃣ Append row
+await sheets.spreadsheets.values.append({
+  spreadsheetId: process.env.GOOGLE_SHEET_ID,
+  range:"MGE Apply!A1",
+  valueInputOption:"USER_ENTERED",
+  requestBody:{
+    values:[row]
+  }
+})
 
   return Response.json({ success:true })
 }
