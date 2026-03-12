@@ -515,7 +515,7 @@ onChange={e=>setForm({...form,purpose:e.target.value})}
 <option value="Field fight">Field fight</option>
 <option value="Own city garrison">Own city garrison</option>
 <option value="Slow building it">Slow building it</option>
-<option value="Just unlock">Just unlock</option>>
+<option value="Just unlock">Just unlock</option>
 
 </select>
 </div>
