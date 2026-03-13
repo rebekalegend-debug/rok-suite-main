@@ -672,7 +672,7 @@ onInput={(e)=>{
   const raw = e.currentTarget.innerText
   setMail(raw)
 }}
-/>
+></div>
   {/* close mail box */}
 
 </div>
