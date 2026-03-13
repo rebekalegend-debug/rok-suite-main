@@ -457,13 +457,17 @@ useEffect(()=>{
   
 async function load(){
 
-  const saved = localStorage.getItem("mge_order")
+const saved = localStorage.getItem("mge_order")
 
-  if(saved){
-    setPlayers(JSON.parse(saved))
+if(saved){
+  const parsed = JSON.parse(saved)
+
+  if(parsed.length > 0){
+    setPlayers(parsed)
     setLoading(false)
     return
   }
+}
 
   const res = await fetch("/api/mge-apply-data-get")
   const json = await res.json()
