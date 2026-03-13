@@ -208,29 +208,30 @@ const [editing,setEditing] = useState(false)
 
 {rgOptions.map(o=>{
 
-  return (
+let color="text-white"
+
+if(o.color==="green") color="text-green-400"
+if(o.color==="yellow") color="text-yellow-400"
+if(o.color==="red") color="text-red-400"
+
+return (
 
 <div
 key={o.value}
-className={`cursor-pointer px-2 py-1 rounded
-
-${rg.includes(o.value) && o.color==="green" && "text-green-400"}
-${rg.includes(o.value) && o.color==="yellow" && "text-yellow-400"}
-${rg.includes(o.value) && o.color==="red" && "text-red-400"}
-
-${!rg.includes(o.value) && "text-white"}
-
-${!rg.includes(o.value) && o.color==="green" && "hover:text-green-400"}
-${!rg.includes(o.value) && o.color==="yellow" && "hover:text-yellow-400"}
-${!rg.includes(o.value) && o.color==="red" && "hover:text-red-400"}
-
-hover:bg-zinc-800
-`}
+className={`cursor-pointer px-2 py-1 rounded hover:bg-zinc-800 ${color}`}
+onPointerDown={(e)=>e.stopPropagation()}
+onClick={()=>{
+  if(rg.includes(o.value)){
+    setRg(rg.filter(x=>x!==o.value))
+  }else{
+    setRg([...rg,o.value])
+  }
+}}
 >
 {o.label}
 </div>
 
-  )
+)
 
 })}
 
@@ -327,36 +328,31 @@ ${eq==="Legendary" ? "border-green-500 text-green-400 bg-green-500/10"
 
 <div className="absolute z-[9999] bottom-full left-0 mb-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto">
 
-{["Legendary","Leg.Purple","Purple","Bad/Low"].map(v => (
+{["Legendary","Leg.Purple","Purple","Bad/Low"].map(v => {
 
-  <div
-    key={v}
-className={`cursor-pointer px-2 py-1 rounded
+let color="text-white"
 
-${eq==="Legendary" && "text-yellow-400"}
-${eq==="Leg.Purple" && "text-purple-400"}
-${eq==="Purple" && "text-purple-400"}
-${eq==="Bad/Low" && "text-red-400"}
+if(v==="Legendary") color="text-yellow-400"
+if(v==="Leg.Purple") color="text-purple-400"
+if(v==="Purple") color="text-purple-400"
+if(v==="Bad/Low") color="text-green-400"
 
-${eq!==v && "text-white"}
+return (
 
-${eq!==v && v==="Legendary" && "hover:text-yellow-400"}
-${eq!==v && v==="Leg.Purple" && "hover:text-purple-400"}
-${eq!==v && v==="Purple" && "hover:text-purple-400"}
-${eq!==v && v==="Bad/Low" && "hover:text-red-400"}
+<div
+key={v}
+className={`cursor-pointer px-2 py-1 rounded hover:bg-zinc-800 ${color}`}
+onClick={()=>{
+  setEq(v)
+  setShowEq(false)
+}}
+>
+{v}
+</div>
 
-hover:bg-zinc-800
-`}
-    onClick={()=>{
-      setEq(v)
-      setShowEq(false)
-    }}
-  >
-    {v}
-  </div>
+)
 
-))}
-
+})}
 </div>
 
 )}
