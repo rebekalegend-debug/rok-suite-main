@@ -373,16 +373,12 @@ function parseRokMail(text:string){
 
   html = html.replace(/<b>(.*?)<\/b>/g,"<strong>$1</strong>")
 
-  html = html.replace(/<color=orange>(.*?)<\/color>/g,
-    `<span style="color:#f59e0b">$1</span>`
-  )
-
-  html = html.replace(/<color=#ff007b>(.*?)<\/color>/g,
-    `<span style="color:#ff007b">$1</span>`
-  )
-
   html = html.replace(/<size=(\d+)>(.*?)<\/size>/g,
     (_,size,content)=>`<span style="font-size:${size}px">${content}</span>`
+  )
+
+  html = html.replace(/<color=(.*?)>(.*?)<\/color>/g,
+    (_,color,content)=>`<span style="color:${color}">${content}</span>`
   )
 
   return html
@@ -471,7 +467,13 @@ async function saveList(updated:any[]) {
 
 }
 
+const editorRef = useRef<HTMLDivElement>(null)
 
+useEffect(()=>{
+  if(editorRef.current){
+    editorRef.current.innerHTML = parseRokMail(mail)
+  }
+},[mail])
   
 useEffect(()=>{
   localStorage.setItem("mge_auto", String(autoOrder))
@@ -645,15 +647,13 @@ Auto rank:
 <div className="border border-yellow-500/40 rounded-lg shadow-[0_0_20px_rgba(255,215,107,0.2)] bg-[#0f141a]">
 
 <div
+ref={editorRef}
 contentEditable
 suppressContentEditableWarning
 className="w-full min-h-[260px] p-4 rounded-lg bg-[#070c12] text-sm leading-relaxed outline-none text-zinc-200 whitespace-pre-wrap"
 onInput={(e)=>{
-  const raw = e.currentTarget.textContent || ""
+ const raw = e.currentTarget.textContent || ""
   setMail(raw)
-}}
-dangerouslySetInnerHTML={{
-  __html: parseRokMail(mail)
 }}
 />
 
