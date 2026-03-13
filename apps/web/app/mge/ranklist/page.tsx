@@ -212,7 +212,11 @@ const [editing,setEditing] = useState(false)
 
     <div
       key={o.value}
-   className="cursor-pointer text-white hover:text-green-400"
+   className={`cursor-pointer
+${o.color==="green" && "hover:text-green-400"}
+${o.color==="yellow" && "hover:text-yellow-400"}
+${o.color==="red" && "hover:text-red-400"}
+`}
       onClick={()=>{
         if(rg.includes(o.value)){
           setRg(rg.filter(x=>x!==o.value))
@@ -325,7 +329,12 @@ ${eq==="Legendary" ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
 
   <div
     key={v}
- className="cursor-pointer text-white hover:text-green-400"
+className={`cursor-pointer
+${v==="Legendary" && "hover:text-yellow-400"}
+${v==="Leg.Purple" && "hover:text-purple-400"}
+${v==="Purple" && "hover:text-purple-400"}
+${v==="Bad/Low" && "hover:text-red-400"}
+`}
     onClick={()=>{
       setEq(v)
       setShowEq(false)
@@ -372,7 +381,9 @@ function handleDragEnd(event:any){
       const oldIndex = players.findIndex(p => p.id === active.id)
       const newIndex = players.findIndex(p => p.id === over.id)
 
-      const updated = arrayMove(players, oldIndex, newIndex)
+     const updated = arrayMove(players, oldIndex, newIndex)
+
+localStorage.setItem("mge_order", JSON.stringify(updated))
 
 saveList(updated)
 
@@ -430,9 +441,7 @@ async function saveList(updated:any[]) {
 
 }
 
-useEffect(()=>{
-  localStorage.setItem("mge_order", JSON.stringify(players))
-},[players])
+
   
 useEffect(()=>{
   localStorage.setItem("mge_auto", String(autoOrder))
@@ -506,8 +515,7 @@ style={{
 </h2>
 
 {/* TABLE BOX */}
-<div className="relative overflow-hidden mt-6 rounded-lg border border-yellow-500/40 bg-[#0f141a] backdrop-blur-sm shadow-[0_0_20px_rgba(255,215,107,0.25)]">
-
+<div className="relative overflow-visible mt-6 rounded-lg border border-yellow-500/40 bg-[#0f141a] backdrop-blur-sm shadow-[0_0_20px_rgba(255,215,107,0.25)]">
 <DndContext
 collisionDetection={closestCenter}
 onDragEnd={!autoOrder ? handleDragEnd : undefined}
