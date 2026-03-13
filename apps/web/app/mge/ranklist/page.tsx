@@ -17,6 +17,7 @@ import {
 
 import { CSS } from "@dnd-kit/utilities"
 
+
 type Player = {
   id: string
   name: string
