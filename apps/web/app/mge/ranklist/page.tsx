@@ -365,17 +365,21 @@ onClick={()=>{
     </tr>
   )
 }
-function renderMailPreview(text:string){
+
+
+function parseRokMail(text:string){
 
   let html = text
 
   html = html.replace(/<b>(.*?)<\/b>/g,"<strong>$1</strong>")
 
   html = html.replace(/<color=orange>(.*?)<\/color>/g,
-    `<span style="color:orange">$1</span>`)
+    `<span style="color:#f59e0b">$1</span>`
+  )
 
   html = html.replace(/<color=#ff007b>(.*?)<\/color>/g,
-    `<span style="color:#ff007b">$1</span>`)
+    `<span style="color:#ff007b">$1</span>`
+  )
 
   html = html.replace(/<size=(\d+)>(.*?)<\/size>/g,
     (_,size,content)=>`<span style="font-size:${size}px">${content}</span>`
@@ -642,20 +646,16 @@ Auto rank:
 
 <div className="border border-yellow-500/40 rounded-lg shadow-[0_0_20px_rgba(255,215,107,0.2)] bg-[#0f141a]">
 
-<textarea
-value={mail}
-onChange={(e)=>setMail(e.target.value)}
-className="w-full h-64 p-4 rounded-lg bg-transparent text-sm font-mono leading-relaxed resize-none outline-none text-zinc-200"
-placeholder="Write your in-game mail..."
-/>
-
-</div>
-
-{/* MAIL PREVIEW */}
 <div
-className="mt-4 border border-zinc-700 rounded-lg p-4 bg-[#090e14] text-sm leading-relaxed text-zinc-200"
+contentEditable
+suppressContentEditableWarning
+className="w-full min-h-[260px] p-4 rounded-lg bg-[#070c12] text-sm leading-relaxed outline-none text-zinc-200 whitespace-pre-wrap"
+onInput={(e)=>{
+  const raw = e.currentTarget.innerText
+  setMail(raw)
+}}
 dangerouslySetInnerHTML={{
-  __html: renderMailPreview(mail)
+  __html: parseRokMail(mail)
 }}
 />
 
