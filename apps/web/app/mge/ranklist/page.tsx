@@ -332,10 +332,10 @@ ${eq==="Legendary" ? "border-green-500 text-green-400 bg-green-500/10"
 
 let color="text-white"
 
-if(v==="Legendary") color="text-yellow-400"
-if(v==="Leg.Purple") color="text-purple-400"
-if(v==="Purple") color="text-purple-400"
-if(v==="Bad/Low") color="text-green-400"
+if(v==="Legendary") color="text-green-400"
+if(v==="Leg.Purple") color="text-yellow-400"
+if(v==="Purple") color="text-orange-400"
+if(v==="Bad/Low") color="text-red-400"
 
 return (
 
