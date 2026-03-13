@@ -210,23 +210,25 @@ const [editing,setEditing] = useState(false)
 
   return (
 
-    <div
-      key={o.value}
-   className={`cursor-pointer
-${o.color==="green" && "hover:text-green-400"}
-${o.color==="yellow" && "hover:text-yellow-400"}
-${o.color==="red" && "hover:text-red-400"}
+<div
+key={o.value}
+className={`cursor-pointer px-2 py-1 rounded
+
+${rg.includes(o.value) && o.color==="green" && "text-green-400"}
+${rg.includes(o.value) && o.color==="yellow" && "text-yellow-400"}
+${rg.includes(o.value) && o.color==="red" && "text-red-400"}
+
+${!rg.includes(o.value) && "text-white"}
+
+${!rg.includes(o.value) && o.color==="green" && "hover:text-green-400"}
+${!rg.includes(o.value) && o.color==="yellow" && "hover:text-yellow-400"}
+${!rg.includes(o.value) && o.color==="red" && "hover:text-red-400"}
+
+hover:bg-zinc-800
 `}
-      onClick={()=>{
-        if(rg.includes(o.value)){
-          setRg(rg.filter(x=>x!==o.value))
-        }else{
-          setRg([...rg,o.value])
-        }
-      }}
-    >
-      {o.label}
-    </div>
+>
+{o.label}
+</div>>
 
   )
 
@@ -309,10 +311,10 @@ return (
 {eq !== "N/A" && (
 
 <span className={`px-3 py-1 rounded-md text-xs font-semibold border
-${eq==="Legendary" ? "border-yellow-500 text-yellow-400 bg-green-500/10"
-: eq==="Leg.Purple" ? "border-purple-500 text-purple-400 bg-yellow-500/10"
-: eq==="Purple" ? "border-purple-500 text-purple-400 bg-orange-500/10"
-: "border-blue-500 text-blue-400 bg-red-500/10"}
+${eq==="Legendary" ? "border-green-500 text-green-400 bg-green-500/10"
+: eq==="Leg.Purple" ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
+: eq==="Purple" ? "border-orange-500 text-orange-400 bg-orange-500/10"
+: "border-red-500 text-red-400 bg-red-500/10"}
 `}>
 {eq}
 </span>
@@ -329,11 +331,21 @@ ${eq==="Legendary" ? "border-yellow-500 text-yellow-400 bg-green-500/10"
 
   <div
     key={v}
-className={`cursor-pointer
-${v==="Legendary" && "hover:text-green-400"}
-${v==="Leg.Purple" && "hover:text-yellow-400"}
-${v==="Purple" && "hover:text-orange-400"}
-${v==="Bad/Low" && "hover:text-red-400"}
+className={`cursor-pointer px-2 py-1 rounded
+
+${eq==="Legendary" && "text-yellow-400"}
+${eq==="Leg.Purple" && "text-purple-400"}
+${eq==="Purple" && "text-purple-400"}
+${eq==="Bad/Low" && "text-red-400"}
+
+${eq!==v && "text-white"}
+
+${eq!==v && v==="Legendary" && "hover:text-yellow-400"}
+${eq!==v && v==="Leg.Purple" && "hover:text-purple-400"}
+${eq!==v && v==="Purple" && "hover:text-purple-400"}
+${eq!==v && v==="Bad/Low" && "hover:text-red-400"}
+
+hover:bg-zinc-800
 `}
     onClick={()=>{
       setEq(v)
@@ -485,7 +497,12 @@ if(saved){
     const ordered = json.data.sort((a:any,b:any)=>{
       return a.rank - b.rank
     })
-    setPlayers(ordered)
+    setPlayers(
+  ordered.map((p:any)=>({
+    ...p,
+    main: p["Main Troop Type"] || p.main
+  }))
+)
   }
 
   setLoading(false)
