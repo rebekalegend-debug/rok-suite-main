@@ -336,30 +336,28 @@ eq==="Legendary"
 <div className="absolute z-[9999] bottom-full left-0 mb-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto">
 
 {["Legendary","Leg.Purple","Purple","Bad/Low"].map(v => {
+  let color = "text-white"
 
-let color="text-white"
+  if (v === "Legendary") color = "text-green-400"
+  if (v === "Leg.Purple") color = "text-yellow-400"
+  if (v === "Purple") color = "text-orange-400"
+  if (v === "Bad/Low") color = "text-red-400"
 
-if(v==="Legendary") color="text-green-400"
-if(v==="Leg.Purple") color="text-yellow-400"
-if(v==="Purple") color="text-orange-400"
-if(v==="Bad/Low") color="text-red-400"
-
-return (
-
-<div
-key={v}
-className={`cursor-pointer px-2 py-1 rounded hover:bg-zinc-800 ${color}`}
-onClick={()=>{
-  setEq(v)
-  setShowEq(false)
-}}
->
-{v}
-</div>
-
-)
-
+  return (
+    <div
+      key={v}
+      className={`cursor-pointer px-2 py-1 rounded hover:bg-zinc-800 ${color}`}
+      onClick={() => {
+        setEq(v)
+        setShowEq(false)
+      }}
+    >
+      {v}
+    </div>
+  )
 })}
+
+  
 </div>
 
 )}
