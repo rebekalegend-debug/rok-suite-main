@@ -43,7 +43,8 @@ const [rg,setRg] = useState<string[]>([])
 const [showRg,setShowRg] = useState(false)
 const rgRef = useRef<any>(null)
 const eqRef = useRef<any>(null)
-const [eq,setEq] = useState("N/A")
+
+  const [eq,setEq] = useState("N/A")
 const [showEq,setShowEq] = useState(false)
 useEffect(() => {
 
@@ -367,9 +368,21 @@ onClick={()=>{
 }
 
 
-function parseRokMail(text:string){
+function parseRokMail(text:string, players:Player[]){
 
   let html = text
+
+  const ranks = players.map((p,index)=>{
+
+    const rank = index + 1
+    const pts = getPoints(rank)
+    const pointsText = pts === "∞" ? "Unlimited" : pts
+
+    return `${rank}. ${p.name} - ${pointsText}`
+
+  }).join("<br>")
+
+  html = html.replace(/{{RANKS}}/g, ranks)
 
   html = html.replace(/<b>(.*?)<\/b>/g,"<strong>$1</strong>")
 
@@ -385,6 +398,7 @@ function parseRokMail(text:string){
 }
 export default function MgeRanklistPage() {
 const [mail,setMail] = useState("")
+  const editorRef = useRef<HTMLDivElement>(null)
   const [players,setPlayers] = useState<Player[]>([])
   const [loading,setLoading] = useState(true)
  const [autoOrder,setAutoOrder] = useState(() => {
@@ -467,14 +481,7 @@ async function saveList(updated:any[]) {
 
 }
 
-const editorRef = useRef<HTMLDivElement>(null)
 
-useEffect(()=>{
-  if(editorRef.current){
-    editorRef.current.innerHTML = parseRokMail(mail)
-  }
-},[mail])
-  
 useEffect(()=>{
   localStorage.setItem("mge_auto", String(autoOrder))
 },[autoOrder])
@@ -482,7 +489,17 @@ useEffect(()=>{
   const saved = localStorage.getItem("mge_mail")
   if(saved) setMail(saved)
 },[])
+useEffect(()=>{
 
+  if(!editorRef.current) return
+
+  const html = parseRokMail(mail, players)
+
+  if(editorRef.current.innerHTML !== html){
+    editorRef.current.innerHTML = html
+  }
+
+},[mail,players])
 useEffect(()=>{
   localStorage.setItem("mge_mail",mail)
 },[mail])
@@ -652,12 +669,10 @@ contentEditable
 suppressContentEditableWarning
 className="w-full min-h-[260px] p-4 rounded-lg bg-[#070c12] text-sm leading-relaxed outline-none text-zinc-200 whitespace-pre-wrap"
 onInput={(e)=>{
- const raw = e.currentTarget.textContent || ""
+  const raw = e.currentTarget.innerText
   setMail(raw)
 }}
 />
-
-</div>
   {/* close mail box */}
 
 </div>
