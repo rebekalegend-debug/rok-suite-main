@@ -204,7 +204,7 @@ const [editing,setEditing] = useState(false)
 
 {showRg && (
 
-<div className="absolute z-[9999] top-0 left-0 translate-y-[-100%] mb-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto">
+<div className="absolute z-[9999] bottom-full left-0 mb-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto">
 
 {rgOptions.map(o=>{
 
@@ -319,7 +319,7 @@ ${eq==="Legendary" ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
 
 {showEq && (
 
-<div className="absolute z-[9999] top-0 left-0 translate-y-[-100%] mb-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto">
+<div className="absolute z-[9999] bottom-full left-0 mb-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto">
 
 {["Legendary","Leg.Purple","Purple","Bad/Low"].map(v => (
 
@@ -429,6 +429,11 @@ async function saveList(updated:any[]) {
   })
 
 }
+
+useEffect(()=>{
+  localStorage.setItem("mge_order", JSON.stringify(players))
+},[players])
+  
 useEffect(()=>{
   localStorage.setItem("mge_auto", String(autoOrder))
 },[autoOrder])
@@ -450,22 +455,15 @@ useEffect(()=>{
 
 
   
-  async function load(){
-    const res = await fetch("/api/mge-apply-data-get")
-    const json = await res.json()
+async function load(){
 
-  if(json.success){
+const saved = localStorage.getItem("mge_order")
 
-  const ordered = json.data.sort((a:any,b:any)=>{
-    return a.rank - b.rank
-  })
-
-  setPlayers(ordered)
-
+if(saved){
+  setPlayers(JSON.parse(saved))
+  setLoading(false)
+  return
 }
-
-    setLoading(false)
-  }
 
   if(loading){
     return (
