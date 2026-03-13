@@ -364,7 +364,24 @@ onClick={()=>{
     </tr>
   )
 }
+function renderMailPreview(text:string){
 
+  let html = text
+
+  html = html.replace(/<b>(.*?)<\/b>/g,"<strong>$1</strong>")
+
+  html = html.replace(/<color=orange>(.*?)<\/color>/g,
+    `<span style="color:orange">$1</span>`)
+
+  html = html.replace(/<color=#ff007b>(.*?)<\/color>/g,
+    `<span style="color:#ff007b">$1</span>`)
+
+  html = html.replace(/<size=(\d+)>(.*?)<\/size>/g,
+    (_,size,content)=>`<span style="font-size:${size}px">${content}</span>`
+  )
+
+  return html
+}
 export default function MgeRanklistPage() {
 const [mail,setMail] = useState("")
   const [players,setPlayers] = useState<Player[]>([])
@@ -632,6 +649,14 @@ placeholder="Write your in-game mail..."
 />
 
 </div>
+
+{/* MAIL PREVIEW */}
+<div
+className="mt-4 border border-zinc-700 rounded-lg p-4 bg-[#090e14] text-sm leading-relaxed text-zinc-200"
+dangerouslySetInnerHTML={{
+  __html: renderMailPreview(mail)
+}}
+/>
 
 </div>
 
