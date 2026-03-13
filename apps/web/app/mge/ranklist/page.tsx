@@ -679,12 +679,13 @@ onInput={(e)=>{
   const raw = e.currentTarget.innerText
   setMail(raw)
 }}
-></div>
-  {/* close mail box */}
+>
+</div>
+{/* close mail box */}
 
 </div>
-  {/* close mail section */}
-<div>
+{/* close mail section */}
+
 {/* main card */}
 </div>
 
