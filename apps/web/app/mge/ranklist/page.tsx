@@ -228,7 +228,7 @@ hover:bg-zinc-800
 `}
 >
 {o.label}
-</div>>
+</div>
 
   )
 
