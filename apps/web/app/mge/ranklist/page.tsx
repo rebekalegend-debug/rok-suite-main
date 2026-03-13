@@ -309,9 +309,9 @@ return (
 {eq !== "N/A" && (
 
 <span className={`px-3 py-1 rounded-md text-xs font-semibold border
-${eq==="Legendary" ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
-: eq==="Leg.Purple" ? "border-purple-500 text-purple-400 bg-purple-500/10"
-: eq==="Purple" ? "border-purple-500 text-purple-400 bg-purple-500/10"
+${eq==="Legendary" ? "border-yellow-500 text-yellow-400 bg-green-500/10"
+: eq==="Leg.Purple" ? "border-purple-500 text-purple-400 bg-yellow-500/10"
+: eq==="Purple" ? "border-purple-500 text-purple-400 bg-orange-500/10"
 : "border-blue-500 text-blue-400 bg-red-500/10"}
 `}>
 {eq}
@@ -330,9 +330,9 @@ ${eq==="Legendary" ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
   <div
     key={v}
 className={`cursor-pointer
-${v==="Legendary" && "hover:text-yellow-400"}
-${v==="Leg.Purple" && "hover:text-purple-400"}
-${v==="Purple" && "hover:text-purple-400"}
+${v==="Legendary" && "hover:text-green-400"}
+${v==="Leg.Purple" && "hover:text-yellow-400"}
+${v==="Purple" && "hover:text-orange-400"}
 ${v==="Bad/Low" && "hover:text-red-400"}
 `}
     onClick={()=>{
