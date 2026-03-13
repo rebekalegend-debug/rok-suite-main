@@ -490,7 +490,7 @@ style={{
 .˳·˖✶𓆩MGE Ranklist𓆪✶˖·˳.
 </h2>
 
-{/* Table */}
+{/* TABLE BOX */}
 <div className="relative overflow-hidden mt-6 rounded-lg border border-yellow-500/40 bg-[#0f141a] backdrop-blur-sm shadow-[0_0_20px_rgba(255,215,107,0.25)]">
 
 <DndContext
@@ -507,7 +507,6 @@ strategy={verticalListSortingStrategy}
 
 <thead className="bg-zinc-900 sticky top-0 z-20">
 <tr className="text-left">
-
 <th className="p-3">Heads</th>
 <th className="p-3">Points</th>
 <th className="p-3">Rank</th>
@@ -520,7 +519,6 @@ strategy={verticalListSortingStrategy}
 <th className="p-3">EQ</th>
 <th className="p-3">Skill</th>
 <th className="p-3">Main</th>
-
 </tr>
 </thead>
 
@@ -545,11 +543,18 @@ rank={rank}
 </SortableContext>
 </DndContext>
 
-</div>   {/* CLOSE TABLE CONTAINER */}
+</div>
+{/* END TABLE BOX */}
+
+
+
+{/* DIVIDER LINE */}
+<div className="my-8 border-t border-yellow-500/30"></div>
+
+
 
 {/* MAIL SECTION */}
-
-<div className="mt-12 pt-6 border-t border-yellow-500/20">
+<div>
 
 <div className="flex justify-between items-center text-sm text-zinc-300 mb-2">
 
@@ -579,7 +584,9 @@ Auto rank:
 </div>
 
 </div>
-<div className="relative mt-2 border border-yellow-500/40 rounded-lg shadow-[0_0_20px_rgba(255,215,107,0.2)] bg-[#0f141a]">
+
+
+<div className="border border-yellow-500/40 rounded-lg shadow-[0_0_20px_rgba(255,215,107,0.2)] bg-[#0f141a]">
 
 <textarea
 value={mail}
@@ -592,9 +599,10 @@ placeholder="Write your in-game mail..."
 
 </div>
 
+{/* main card */}
+</div>
 
-</div> {/* main card */}
-</div> {/* page container */}
-
+{/* page container */}
+</div>
 )
 }
