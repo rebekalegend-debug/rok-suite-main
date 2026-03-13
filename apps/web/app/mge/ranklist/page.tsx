@@ -312,7 +312,7 @@ return (
 ${eq==="Legendary" ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
 : eq==="Leg.Purple" ? "border-purple-500 text-purple-400 bg-purple-500/10"
 : eq==="Purple" ? "border-purple-500 text-purple-400 bg-purple-500/10"
-: "border-blue-500 text-blue-400 bg-blue-500/10"}
+: "border-blue-500 text-blue-400 bg-red-500/10"}
 `}>
 {eq}
 </span>
