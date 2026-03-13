@@ -640,9 +640,7 @@ Auto rank:
 </span>
 
 </div>
-
 </div>
-
 
 <div className="border border-yellow-500/40 rounded-lg shadow-[0_0_20px_rgba(255,215,107,0.2)] bg-[#0f141a]">
 
@@ -651,7 +649,7 @@ contentEditable
 suppressContentEditableWarning
 className="w-full min-h-[260px] p-4 rounded-lg bg-[#070c12] text-sm leading-relaxed outline-none text-zinc-200 whitespace-pre-wrap"
 onInput={(e)=>{
-  const raw = e.currentTarget.innerText
+  const raw = e.currentTarget.textContent || ""
   setMail(raw)
 }}
 dangerouslySetInnerHTML={{
@@ -660,6 +658,10 @@ dangerouslySetInnerHTML={{
 />
 
 </div>
+  {/* close mail box */}
+
+</div>
+  {/* close mail section */}
 
 {/* main card */}
 </div>
