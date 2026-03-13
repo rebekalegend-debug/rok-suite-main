@@ -59,7 +59,7 @@ export async function GET() {
         desiredRank: record["Desired Rank"],
         commander: record["Commander"],
         skills: record["Skills"],
-        main: record["Main"],
+        main: record["Main Troop Type"],
         spend: record["KvK Spending"],
         kvkContribution: kvkMap[id] || 0
       }
