@@ -457,12 +457,25 @@ useEffect(()=>{
   
 async function load(){
 
-const saved = localStorage.getItem("mge_order")
+  const saved = localStorage.getItem("mge_order")
 
-if(saved){
-  setPlayers(JSON.parse(saved))
+  if(saved){
+    setPlayers(JSON.parse(saved))
+    setLoading(false)
+    return
+  }
+
+  const res = await fetch("/api/mge-apply-data-get")
+  const json = await res.json()
+
+  if(json.success){
+    const ordered = json.data.sort((a:any,b:any)=>{
+      return a.rank - b.rank
+    })
+    setPlayers(ordered)
+  }
+
   setLoading(false)
-  return
 }
 
   if(loading){
