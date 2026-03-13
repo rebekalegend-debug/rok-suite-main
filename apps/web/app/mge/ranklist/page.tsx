@@ -313,12 +313,17 @@ return (
 
 {eq !== "N/A" && (
 
-<span className={`px-3 py-1 rounded-md text-xs font-semibold border
-${eq==="Legendary" ? "border-green-500 text-green-400 bg-green-500/10"
-: eq==="Leg.Purple" ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
-: eq==="Purple" ? "border-orange-500 text-orange-400 bg-orange-500/10"
-: "border-red-500 text-red-400 bg-red-500/10"}
-`}>
+<span
+className={`px-3 py-1 rounded-md text-xs font-semibold border ${
+eq==="Legendary"
+? "border-green-500 text-green-400 bg-green-500/10"
+: eq==="Leg.Purple"
+? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
+: eq==="Purple"
+? "border-orange-500 text-orange-400 bg-orange-500/10"
+: "border-red-500 text-red-400 bg-red-500/10"
+}`}
+>
 {eq}
 </span>
 
