@@ -488,11 +488,14 @@ async function saveList(updated:any[]) {
 useEffect(()=>{
   localStorage.setItem("mge_auto", String(autoOrder))
 },[autoOrder])
-useEffect(()=>{
+
+  useEffect(()=>{
   const saved = localStorage.getItem("mge_mail")
   if(saved) setMail(saved)
 },[])
-useEffect(()=>{
+
+  
+  useEffect(()=>{
 
   if(!editorRef.current) return
 
@@ -503,7 +506,8 @@ useEffect(()=>{
   }
 
 },[mail,players])
-useEffect(()=>{
+
+  useEffect(()=>{
   localStorage.setItem("mge_mail",mail)
 },[mail])
 
