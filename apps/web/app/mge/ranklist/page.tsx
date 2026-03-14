@@ -684,10 +684,13 @@ onInput={(e)=>{
 {/* close mail box */}
 
 </div>
-{/* close mail section */}
+{/* close mail container */}
 
-{/* main card */}
 </div>
+{/* close MAIL SECTION */}
+
+</div>
+{/* close main card */}
 
 {/* page container */}
 </div>
