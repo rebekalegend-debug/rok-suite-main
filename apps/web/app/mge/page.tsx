@@ -62,31 +62,27 @@ const [missing,setMissing] = useState({
 
 
   
-useEffect(()=>{
+useEffect(() => {
 
 async function checkApplication(){
 
   const savedId = localStorage.getItem("mge_applied_id")
 
-  if(!savedId) return
+  if(!savedId){
+    setAlreadyApplied(false)
+    return
+  }
 
-  const res = await fetch("/api/mge-application",{
-    method:"PUT"
-  })
-
+  const res = await fetch("/api/mge-application",{ method:"PUT" })
   const applied = await res.json()
 
-  const exists = applied.some((m:any)=>m.id === savedId)
+  const exists = applied.some((m:any)=>String(m.id) === String(savedId))
 
   if(exists){
-
     setAlreadyApplied(true)
-
-  }else{
-
+  } else {
     localStorage.removeItem("mge_applied_id")
     setAlreadyApplied(false)
-
   }
 
 }
@@ -373,7 +369,7 @@ onClick={() => {
   setSearch("")
   setMemberError(false)
 
-  localStorage.setItem("mge_applied_id", m.id)
+ 
 }}
 >
 
