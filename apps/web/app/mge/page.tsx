@@ -57,7 +57,9 @@ async function checkApplication(){
 
   if(!savedId) return
 
-  const res = await fetch("/api/mge-application")
+ const res = await fetch("/api/mge-application",{
+  method:"PUT"
+})
   const members = await res.json()
 
   const exists = members.some((m:any)=>m.id === savedId)
