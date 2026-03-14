@@ -755,9 +755,18 @@ onChange={e=>setForm({...form,comment:e.target.value})}
   
 <button
 onClick={()=>setShowAdmin(true)}
-className="fixed bottom-4 right-4 bg-black text-white px-3 py-2 rounded"
+className="
+fixed top-3 right-3
+w-7 h-7
+flex items-center justify-center
+rounded-md
+bg-black/60
+hover:bg-black
+text-white
+z-50
+"
 >
-Admin
+👑
 </button>
 
 
