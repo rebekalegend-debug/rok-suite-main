@@ -21,9 +21,8 @@ const [skills,setSkills] = useState({
   skill4:0
 })
 
-
-  const [existingApplications,setExistingApplications] = useState<any[]>([])
 const [alreadyApplied,setAlreadyApplied] = useState(false)
+  
 const [commanderBlurred,setCommanderBlurred] = useState(false)
 const memberInputRef = useRef<HTMLInputElement>(null)
 const commanderInputRef = useRef<HTMLInputElement>(null)
@@ -52,6 +51,17 @@ const [search,setSearch] = useState("")
 
 useEffect(()=>{
 
+const savedId = localStorage.getItem("mge_applied_id")
+
+if(savedId){
+  setAlreadyApplied(true)
+}
+
+},[])
+
+  
+useEffect(()=>{
+
 async function loadCommanders(){
 
   setLoadingCommanders(true)
@@ -67,9 +77,6 @@ async function loadCommanders(){
 loadCommanders()
 
 },[])
-
-
-  
 useEffect(() => {
 
 async function loadMembers(){
@@ -107,28 +114,6 @@ async function loadMembers(){
 loadMembers()
 
 }, [])
-
-
-
-  useEffect(()=>{
-
-async function loadExisting(){
-
-  const res = await fetch("/api/mge-apply-data-get")
-  const json = await res.json()
-
-  if(json.success){
-    setExistingApplications(json.data)
-  }
-
-}
-
-loadExisting()
-
-},[])
-
-
-  
 async function submitApplication(){
 
 if(!selectedMember){
@@ -161,14 +146,18 @@ if(commanderFile){
 
  setSubmitting(true)
 
- await fetch("/api/mge-application",{
+await fetch("/api/mge-application",{
   method:"POST",
   body:data
- })
+})
 
- setSubmitting(false)
+localStorage.setItem("mge_applied_id", selectedMember!.id)
 
- alert("Application submitted")
+setSubmitting(false)
+
+setAlreadyApplied(true)
+
+alert("Application submitted")
 }
 
   
@@ -216,18 +205,33 @@ style={{
 .˳·˖✶𓆩MGE Registration𓆪✶˖·˳.
 </h2>
 
-{alreadyApplied && (
-  <div className="p-4 rounded border border-yellow-500 bg-yellow-500/10 text-yellow-300 mt-3">
-    Your application is already submitted.
-    <br /><br />
-    If you want to overwrite your application you can apply again.
-  </div>
-)}
-
+{alreadyApplied ? (
+<>
 <p className="mge-info">
-  To ensure your registration is processed correctly, all fields in this form must be completed correctly.
-  <br />
-  Missing information may result in your registration not being considered properly and could affect your ranking!
+Your application is already submitted.<br/>
+If you want to modify your application click on the button below.
+</p>
+
+<div className="flex justify-center pt-4">
+<button
+onClick={()=>{
+  localStorage.removeItem("mge_applied_id")
+  setAlreadyApplied(false)
+}}
+className="px-6 py-2 rounded-lg text-black font-semibold
+bg-gradient-to-r from-[#FFD76B] via-[#FFC94A] to-[#FFB347]
+hover:brightness-110 transition shadow-[0_4px_14px_rgba(255,200,90,0.35)]"
+>
+Submit New Application
+</button>
+</div>
+</>
+) : (
+<>
+<p className="mge-info">
+To ensure your registration is processed correctly, all fields in this form must be completed correctly.
+<br />
+Missing information may result in your registration not being considered properly and could affect your ranking!
 </p>
 
 <div className="space-y-2">
@@ -288,7 +292,6 @@ onChange={(e)=>{
   setSelectedMember(null)
   setSearch(value)
   setForm({...form,id:""})
-  setAlreadyApplied(false)
 }}
 />
 
@@ -313,15 +316,10 @@ key={m.id}
 className="px-2 py-1 hover:bg-slate-700 cursor-pointer rounded"
 onClick={()=>{
 setForm(prev => ({ ...prev, id: m.id }))
-setSelectedMember(m)
+ // setForm({...form,id:m.id})
+  setSelectedMember(m)
 setSearch("")
-setMemberError(false)
-
-/* CHECK IF PLAYER ALREADY APPLIED */
-
-const found = existingApplications.find(a => a.id === m.id)
-
-setAlreadyApplied(!!found)
+  setMemberError(false)
 
 }}
 >
@@ -343,8 +341,7 @@ setAlreadyApplied(!!found)
 
   
 </div>
-{!alreadyApplied && (
-<>
+
 <div className="pt-4 border-t border-[var(--border)]">
 <label className="form-label">👲 Wanted Commander</label>
 
@@ -788,8 +785,7 @@ Save
 
 
 
-  </>
-)}
+  
 <div className="flex justify-center pt-4">
 <button
 disabled={submitting}
@@ -798,16 +794,13 @@ className="px-6 py-2 rounded-lg text-black font-semibold
 bg-gradient-to-r from-[#FFD76B] via-[#FFC94A] to-[#FFB347]
 hover:brightness-110 transition shadow-[0_4px_14px_rgba(255,200,90,0.35)]"
 >
-{submitting
-  ? "Submitting..."
-  : alreadyApplied
-  ? "Submit New Application"
-  : "Submit Application"}
+{submitting ? "Submitting..." : "Submit Application"}
 </button>
 </div>
 
 
-
+</>
+)}
 </div> {/* closes card */}
 </div> {/* closes page container */}
 </div> {/* closes min-h-screen */}
