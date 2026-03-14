@@ -609,19 +609,21 @@ async function load(){
 
   const saved = localStorage.getItem("mge_order")
 
- if(saved){
+if (saved) {
 
   const savedPlayers = JSON.parse(saved)
 
-  const filtered = savedPlayers.filter((p:any)=>
-    sheetPlayers.some((s:any)=>s.id === p.id)
-  )
+  const savedOrder = savedPlayers.map((p:any)=>p.id)
+
+  const ordered = savedOrder
+    .map((id:string)=>sheetPlayers.find((s:any)=>s.id === id))
+    .filter(Boolean)
 
   const missing = sheetPlayers.filter((s:any)=>
-    !filtered.some((p:any)=>p.id === s.id)
+    !savedOrder.includes(s.id)
   )
 
-  const finalList = [...filtered, ...missing]
+  const finalList = [...ordered, ...missing]
 
   setPlayers(finalList)
 
