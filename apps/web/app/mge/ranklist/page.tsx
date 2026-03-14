@@ -79,14 +79,10 @@ useEffect(() => {
 
   { label: "No", value:"No", color: "red" }
 ]
-const defaultPoints = getPoints(rank)
-
-const initial =
-  defaultPoints === "∞"
-    ? Infinity
-    : Number(defaultPoints.replace("M",""))
-
-const [value,setValue] = useState<number>(initial)
+const [value,setValue] = useState<number>(() => {
+  const pts = getPoints(rank)
+  return pts === "∞" ? Infinity : Number(pts.replace("M",""))
+})
 const [editing,setEditing] = useState(false)
   const style = {
     transform: CSS.Transform.toString(transform),
