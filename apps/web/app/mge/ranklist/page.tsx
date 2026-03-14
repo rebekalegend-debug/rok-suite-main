@@ -538,9 +538,12 @@ useEffect(()=>{
 
   if(!autoOrder) return
 
-  setPlayers(prev => autoRankPlayers(prev))
+ setPlayers(p => {
+  const sorted = autoRankPlayers(p)
+  return JSON.stringify(sorted) === JSON.stringify(p) ? p : sorted
+})
 
-},[autoOrder])
+},[autoOrder, players.length])
 
 
 
@@ -578,7 +581,7 @@ async function load(){
 
     const finalList = [...filtered, ...missing]
 
-    setPlayers(finalList)
+   setPlayers(autoOrder ? autoRankPlayers(finalList) : finalList)
 
   } else {
 
