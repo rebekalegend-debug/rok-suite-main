@@ -31,7 +31,7 @@ type Player = {
   eq?: string
 }
 const badge = "px-3 py-1 rounded-md text-xs font-semibold border"
-function Row({ player, rank, setPlayers }: any) {
+function Row({ player, rank, setPlayers, saveList }: any) {
 
   const {
     attributes,
@@ -241,18 +241,23 @@ key={o.value}
 className={`cursor-pointer px-2 py-1 rounded hover:bg-zinc-800 ${color}`}
 onPointerDown={(e)=>e.stopPropagation()}
 onClick={()=>{
-  setPlayers((prev:any[]) =>
-    prev.map(p =>
-      p.id === player.id
-        ? {
-            ...p,
-            rg: rg.includes(o.value)
-              ? rg.filter(x => x !== o.value)
-              : [...rg, o.value]
-          }
-        : p
-    )
+setPlayers((prev:any[]) => {
+
+  const updated = prev.map(p =>
+    p.id === player.id
+      ? {
+          ...p,
+          rg: rg.includes(o.value)
+            ? rg.filter(x => x !== o.value)
+            : [...rg, o.value]
+        }
+      : p
   )
+
+  saveList(updated)
+
+  return updated
+})
 }}
 >
 {o.label}
@@ -373,13 +378,18 @@ eq==="Legendary"
       key={v}
       className={`cursor-pointer px-2 py-1 rounded hover:bg-zinc-800 ${color}`}
       onClick={() => {
-        setPlayers((prev:any[]) =>
-  prev.map(p =>
+setPlayers((prev:any[]) => {
+
+  const updated = prev.map(p =>
     p.id === player.id
       ? { ...p, eq: v }
       : p
   )
-)
+
+  saveList(updated)
+
+  return updated
+})
         setShowEq(false)
       }}
     >
@@ -487,7 +497,7 @@ function handleDragEnd(event:any){
 
 localStorage.setItem("mge_order", JSON.stringify(updated))
 
-saveList(updatedPlayers)
+saveList(updated)
 
 return updated
 
@@ -694,6 +704,7 @@ return (
   player={p}
   rank={rank}
   setPlayers={setPlayers}
+  saveList={saveList}
 />
 )
 
