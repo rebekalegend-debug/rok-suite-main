@@ -218,14 +218,49 @@ row[col("Commander Pair")] = pair
 row[col("Comment")] = comment
 
 // 4️⃣ Append row
-await sheets.spreadsheets.values.append({
+// 4️⃣ Check if player already applied
+const existing = await sheets.spreadsheets.values.get({
   spreadsheetId: process.env.GOOGLE_SHEET_ID,
-  range:"MGE Apply!A1",
-  valueInputOption:"USER_ENTERED",
-  requestBody:{
-    values:[row]
-  }
+  range: "MGE Apply!A2:Z"
 })
+
+const rows = existing.data.values || []
+
+const idIndex = headers.indexOf("ID")
+
+let existingRow = -1
+
+for(let i=0;i<rows.length;i++){
+  if(rows[i][idIndex] === id){
+    existingRow = i + 2
+    break
+  }
+}
+
+// 5️⃣ Update or insert
+if(existingRow !== -1){
+
+  await sheets.spreadsheets.values.update({
+    spreadsheetId: process.env.GOOGLE_SHEET_ID,
+    range:`MGE Apply!A${existingRow}`,
+    valueInputOption:"USER_ENTERED",
+    requestBody:{
+      values:[row]
+    }
+  })
+
+}else{
+
+  await sheets.spreadsheets.values.append({
+    spreadsheetId: process.env.GOOGLE_SHEET_ID,
+    range:"MGE Apply!A1",
+    valueInputOption:"USER_ENTERED",
+    requestBody:{
+      values:[row]
+    }
+  })
+
+}
 
   return Response.json({ success:true })
 }
