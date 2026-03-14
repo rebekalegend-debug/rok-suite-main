@@ -29,6 +29,7 @@ type Player = {
   kvkContribution: number
   rg?: string[]
   eq?: string
+  purpose?: string
 }
 const badge = "px-3 py-1 rounded-md text-xs font-semibold border"
 function Row({ player, rank, setPlayers }: any) {
