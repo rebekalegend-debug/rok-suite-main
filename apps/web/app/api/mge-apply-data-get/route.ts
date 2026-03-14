@@ -33,13 +33,14 @@ export async function GET() {
     // --- Saved list sheet ---
 const listRes = await sheets.spreadsheets.values.get({
   spreadsheetId,
-  range: "List!A1:Z"
+  range: "List!A1:M"
 })
+
+const listRows = listRes.data.values || []
 
     
     const applyRows = applyRes.data.values || []
     const kvkRows = kvkRes.data.values || []
-const listRows = listRes.data.values || []
     const headers = applyRows.shift() || []
 
     const kvkMap: Record<string, number> = {}
@@ -53,9 +54,9 @@ const listMap: Record<string, { rg: string[], eq: string }> = {}
 
 listRows.slice(1).forEach(r => {
 
-  const id = String(r[0] || "")   // column A (ID)
-  const rg = r[7] || ""           // column H (R&G)
-  const eq = r[10] || ""          // column K (EQ)
+  const id = String(r[0] || "")
+  const rg = r[7] || ""
+  const eq = r[10] || ""
 
   if (id) {
     listMap[id] = {
@@ -73,7 +74,7 @@ listRows.slice(1).forEach(r => {
         record[h] = row[i]
       })
 const id = record["ID"]
-const list = listMap[String(id)] || { rg: [], eq: "" }
+const list = listMap[id] || { rg: [], eq: "" }
 
 return {
   id,
