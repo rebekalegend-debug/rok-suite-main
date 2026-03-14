@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react"
 import { getHeads, getPoints, kvkContributionPercent } from "@/utils/mgeRankLogic"
-
+import { autoRankPlayers } from "@/utils/mgeAutoRank"
 import {
   DndContext,
   closestCenter
@@ -432,17 +432,29 @@ return `<span style="color:${c}">${content}</span>`
   return html
 }
 export default function MgeRanklistPage() {
+
 const [mail,setMail] = useState("")
-  const editorRef = useRef<HTMLDivElement>(null)
-  const [players,setPlayers] = useState<Player[]>([])
-  const [loading,setLoading] = useState(true)
- const [autoOrder,setAutoOrder] = useState(() => {
+const editorRef = useRef<HTMLDivElement>(null)
+
+const [players,setPlayers] = useState<Player[]>([])
+const [loading,setLoading] = useState(true)
+
+const [autoOrder,setAutoOrder] = useState(() => {
   if (typeof window !== "undefined") {
     const saved = localStorage.getItem("mge_auto")
     return saved === "false" ? false : true
   }
   return true
 })
+
+  useEffect(() => {
+
+  if (!autoOrder) return
+
+  setPlayers(prev => autoRankPlayers(prev))
+
+}, [autoOrder, players.length])
+  
 function handleDragEnd(event:any){
 
   const {active,over} = event
