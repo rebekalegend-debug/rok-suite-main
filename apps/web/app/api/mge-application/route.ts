@@ -310,14 +310,33 @@ export async function PUT() {
     auth: sheetAuth
   })
 
+  // 1️⃣ Read headers
+  const headerRes = await sheets.spreadsheets.values.get({
+    spreadsheetId: process.env.GOOGLE_SHEET_ID,
+    range:"MGE Apply!1:1"
+  })
+
+  const headers = headerRes.data.values?.[0] || []
+
+  // 2️⃣ Find ID column index
+  const idIndex = headers.indexOf("ID")
+
+  if(idIndex === -1){
+    return Response.json({ error:"ID column not found" },{status:500})
+  }
+
+  // 3️⃣ Read all rows
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: process.env.GOOGLE_SHEET_ID,
-    range:"MGE Apply!A2:A"
+    range:"MGE Apply!A2:Z"
   })
 
   const rows = res.data.values || []
 
-  const ids = rows.map((r:any)=>({ id:r[0] }))
+  // 4️⃣ Extract IDs dynamically
+  const ids = rows
+    .filter(r => r[idIndex])
+    .map(r => ({ id:String(r[idIndex]) }))
 
   return Response.json(ids)
 }
