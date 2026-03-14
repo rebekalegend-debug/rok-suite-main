@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react"
 import { getHeads, getPoints, kvkContributionPercent } from "@/utils/mgeRankLogic"
-import { autoRankPlayers } from "@/utils/mgeAutoRank"
+
 import {
   DndContext,
   closestCenter
@@ -79,10 +79,14 @@ useEffect(() => {
 
   { label: "No", value:"No", color: "red" }
 ]
-const [value,setValue] = useState<number>(() => {
-  const pts = getPoints(rank)
-  return pts === "∞" ? Infinity : Number(pts.replace("M",""))
-})
+const defaultPoints = getPoints(rank)
+
+const initial =
+  defaultPoints === "∞"
+    ? Infinity
+    : Number(defaultPoints.replace("M",""))
+
+const [value,setValue] = useState<number>(initial)
 const [editing,setEditing] = useState(false)
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -530,19 +534,9 @@ useEffect(()=>{
     load()
   },[])
 
-useEffect(()=>{
 
-  if(!autoOrder) return
 
-  setPlayers(prev => autoRankPlayers(prev))
 
-},[autoOrder])
-
-useEffect(() => {
-  if(editing) return
-  const pts = getPoints(rank)
-  setValue(pts === "∞" ? Infinity : Number(pts.replace("M","")))
-}, [rank])
 
   
 async function load(){
@@ -555,7 +549,9 @@ async function load(){
     return
   }
 
- const sheetPlayers = json.data.map((p:any)=>({
+  const sheetPlayers = json.data.sort((a:any,b:any)=>{
+    return a.rank - b.rank
+  }).map((p:any)=>({
     ...p,
     main: p["Main Troop Type"] || p.main
   }))
@@ -578,11 +574,11 @@ async function load(){
 
     const finalList = [...filtered, ...missing]
 
-   setPlayers(autoOrder ? autoRankPlayers(finalList) : finalList)
+    setPlayers(finalList)
 
   } else {
 
- setPlayers(autoOrder ? autoRankPlayers(sheetPlayers) : sheetPlayers)
+    setPlayers(sheetPlayers)
 
   }
 
