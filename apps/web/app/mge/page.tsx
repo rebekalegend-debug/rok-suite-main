@@ -148,7 +148,7 @@ const filteredCommanders = commanders
     !commanderSearch ||
     c.toLowerCase().includes(commanderSearch.toLowerCase())
   )
-  .slice(0,15)
+  .slice(0, commanderSearch ? 50 : commanders.length)
   
  const filteredMembers = members
   .filter(m => {
