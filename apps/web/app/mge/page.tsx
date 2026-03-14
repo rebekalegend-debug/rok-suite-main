@@ -49,6 +49,19 @@ const [submitting,setSubmitting] = useState(false)
 const [search,setSearch] = useState("")
   const [selectedMember,setSelectedMember] = useState<{id:string,name:string} | null>(null)
 
+const [submitError,setSubmitError] = useState(false)
+
+const [missing,setMissing] = useState({
+  commander:false,
+  purpose:false,
+  rank:false,
+  kvk:false,
+  troop:false,
+  equipment:false
+})
+
+
+  
 useEffect(()=>{
 
 async function checkApplication(){
@@ -136,9 +149,25 @@ loadMembers()
 }, [])
 async function submitApplication(){
 
-if(!selectedMember){
-  setMemberError(true)
-  alert("Please select your name from the list.")
+const newMissing = {
+  commander: !selectedCommander,
+  purpose: !form.purpose,
+  rank: !form.rank,
+  kvk: !form.kvkSpending,
+  troop: !form.troopType,
+  equipment: !commanderFile
+}
+
+setMissing(newMissing)
+
+const hasError = Object.values(newMissing).some(v => v)
+
+if(!selectedMember || hasError){
+
+  setSubmitError(true)
+
+  setTimeout(()=>setSubmitError(false),1200)
+
   return
 }
  const data = new FormData()
@@ -177,7 +206,7 @@ setSubmitting(false)
 
 setAlreadyApplied(true)
 
-alert("Application submitted")
+
 }
 
   
@@ -379,11 +408,11 @@ focus:shadow-[0_0_12px_rgba(255,215,107,0.45)]
 caret-[#FFD76B]
 ${selectedCommander ? "text-slate-400" : "text-white"}
 ${
- selectedCommander
-  ? "border-[#FFD76B] shadow-[0_0_12px_rgba(255,215,107,0.45)]"
-  : commanderTouched && commanderBlurred && !selectedCommander
-  ? "border-red-500 shadow-[0_0_10px_rgba(255,60,60,0.55)]"
-  : "gold-input"
+missing.commander
+? "border-red-500 shadow-[0_0_10px_rgba(255,60,60,0.7)]"
+: selectedCommander
+? "border-[#FFD76B] shadow-[0_0_12px_rgba(255,215,107,0.45)]"
+: "gold-input"
 }`}
 value={selectedCommander || commanderSearch}
 
@@ -519,7 +548,12 @@ color: isMax ? "#FFC94A" : "var(--foreground)"
 🥋 Equipment!
 </label>
 
-<label className="flex items-center gap-3 rounded-lg px-4 py-3 cursor-pointer gold-input hover:gold-glow transition">
+<label className={`flex items-center gap-3 rounded-lg px-4 py-3 cursor-pointer transition
+${missing.equipment
+? "border-red-500 shadow-[0_0_10px_rgba(255,60,60,0.7)]"
+: "gold-input hover:gold-glow"
+}`}
+  >
 <svg
   xmlns="http://www.w3.org/2000/svg"
   width="22"
@@ -563,9 +597,11 @@ focus:outline-none focus:ring-0 focus:ring-offset-0
 focus:border-[#FFD76B]
 focus:shadow-[0_0_12px_rgba(255,215,107,0.45)]
 ${
-  form.purpose
-    ? "border-[#FFD76B] shadow-[0_0_12px_rgba(255,215,107,0.35)]"
-    : "gold-input"
+missing.purpose
+? "border-red-500 shadow-[0_0_10px_rgba(255,60,60,0.7)]"
+: form.purpose
+? "border-[#FFD76B] shadow-[0_0_12px_rgba(255,215,107,0.35)]"
+: "gold-input"
 }`}
 value={form.purpose}
 onChange={e=>setForm({...form,purpose:e.target.value})}
@@ -591,9 +627,11 @@ focus:outline-none focus:ring-0 focus:ring-offset-0
 focus:border-[#FFD76B]
 focus:shadow-[0_0_12px_rgba(255,215,107,0.45)]
 ${
-  form.rank
-    ? "border-[#FFD76B] shadow-[0_0_12px_rgba(255,215,107,0.35)]"
-    : "gold-input"
+missing.rank
+? "border-red-500 shadow-[0_0_10px_rgba(255,60,60,0.7)]"
+: form.rank
+? "border-[#FFD76B] shadow-[0_0_12px_rgba(255,215,107,0.35)]"
+: "gold-input"
 }`}
 value={form.rank}
 onChange={e=>setForm({...form,rank:e.target.value})}
@@ -623,9 +661,11 @@ focus:outline-none focus:ring-0 focus:ring-offset-0
 focus:border-[#FFD76B]
 focus:shadow-[0_0_12px_rgba(255,215,107,0.45)]
 ${
-  form.kvkSpending
-    ? "border-[#FFD76B] shadow-[0_0_12px_rgba(255,215,107,0.35)]"
-    : "gold-input"
+missing.kvk
+? "border-red-500 shadow-[0_0_10px_rgba(255,60,60,0.7)]"
+: form.kvkSpending
+? "border-[#FFD76B] shadow-[0_0_12px_rgba(255,215,107,0.35)]"
+: "gold-input"
 }`}
 value={form.kvkSpending}
 onChange={e=>setForm({...form,kvkSpending:e.target.value})}
@@ -652,9 +692,11 @@ focus:outline-none focus:ring-0 focus:ring-offset-0
 focus:border-[#FFD76B]
 focus:shadow-[0_0_12px_rgba(255,215,107,0.45)]
 ${
-  form.troopType
-    ? "border-[#FFD76B] shadow-[0_0_12px_rgba(255,215,107,0.35)]"
-    : "gold-input"
+missing.troop
+? "border-red-500 shadow-[0_0_10px_rgba(255,60,60,0.7)]"
+: form.troopType
+? "border-[#FFD76B] shadow-[0_0_12px_rgba(255,215,107,0.35)]"
+: "gold-input"
 }`}
 value={form.troopType}
 onChange={e=>setForm({...form,troopType:e.target.value})}
@@ -810,9 +852,11 @@ Save
 <button
 disabled={submitting}
 onClick={submitApplication}
-className="px-6 py-2 rounded-lg text-black font-semibold
-bg-gradient-to-r from-[#FFD76B] via-[#FFC94A] to-[#FFB347]
-hover:brightness-110 transition shadow-[0_4px_14px_rgba(255,200,90,0.35)]"
+className={`px-6 py-2 rounded-lg text-black font-semibold transition
+${submitError
+  ? "bg-red-500 shadow-[0_0_16px_rgba(255,60,60,0.8)]"
+  : "bg-gradient-to-r from-[#FFD76B] via-[#FFC94A] to-[#FFB347] hover:brightness-110 shadow-[0_4px_14px_rgba(255,200,90,0.35)]"
+}`}
 >
 {submitting ? "Submitting..." : "Submit Application"}
 </button>
