@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
   await sheets.spreadsheets.values.clear({
     spreadsheetId,
-    range:"List!A2:M"
+    range:"List!A2:N"
   })
 
   await sheets.spreadsheets.values.update({
