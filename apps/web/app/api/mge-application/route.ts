@@ -283,17 +283,41 @@ export async function GET() {
 
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: process.env.GOOGLE_SHEET_ID,
-    range:"MGE Apply!A2:Z"
+    range:"MGE Apply Members!A2:B"
   })
 
   const rows = res.data.values || []
 
-const headers = rows.length ? rows[0] : []
-const idIndex = 1 // column B = ID
-
-const members = rows.map((r:any)=>({
-  id: r[idIndex]
-}))
+  const members = rows.map((r:any)=>({
+    id: r[0],
+    name: r[1]
+  }))
 
   return Response.json(members)
+}
+export async function PUT() {
+
+  const sheetAuth = new google.auth.GoogleAuth({
+    credentials:{
+      client_email: process.env.GOOGLE_CLIENT_EMAIL,
+      private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g,"\n")
+    },
+    scopes:["https://www.googleapis.com/auth/spreadsheets.readonly"]
+  })
+
+  const sheets = google.sheets({
+    version:"v4",
+    auth: sheetAuth
+  })
+
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId: process.env.GOOGLE_SHEET_ID,
+    range:"MGE Apply!B2:B"
+  })
+
+  const rows = res.data.values || []
+
+  const ids = rows.map((r:any)=>({ id:r[0] }))
+
+  return Response.json(ids)
 }
