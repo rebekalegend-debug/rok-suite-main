@@ -312,7 +312,7 @@ export async function PUT() {
 
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: process.env.GOOGLE_SHEET_ID,
-    range:"MGE Apply!B2:B"
+    range:"MGE Apply!A2:A"
   })
 
   const rows = res.data.values || []
