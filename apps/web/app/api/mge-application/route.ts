@@ -283,15 +283,17 @@ export async function GET() {
 
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: process.env.GOOGLE_SHEET_ID,
-    range:"MGE Apply Members!A2:B"
+    range:"MGE Apply!A2:Z"
   })
 
   const rows = res.data.values || []
 
-  const members = rows.map((r:any)=>({
-    id: r[0],
-    name: r[1]
-  }))
+const headers = rows.length ? rows[0] : []
+const idIndex = 1 // column B = ID
+
+const members = rows.map((r:any)=>({
+  id: r[idIndex]
+}))
 
   return Response.json(members)
 }
