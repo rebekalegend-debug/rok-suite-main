@@ -393,9 +393,25 @@ function parseRokMail(text:string, players:Player[]){
     (_,size,content)=>`<span style="font-size:${size}px">${content}</span>`
   )
 
-  html = html.replace(/<color=(.*?)>(.*?)<\/color>/g,
-    (_,color,content)=>`<span style="color:${color}">${content}</span>`
-  )
+ html = html.replace(
+/<color=(.*?)>(.*?)<\/color>/g,
+(_,color,content)=>{
+
+const map:any = {
+red:"#f87171",
+green:"#4ade80",
+yellow:"#facc15",
+orange:"#fb923c",
+purple:"#c084fc",
+blue:"#60a5fa",
+white:"#e5e7eb"
+}
+
+const c = map[color] || color
+
+return `<span style="color:${c}">${content}</span>`
+
+})
 
   return html
 }
@@ -437,20 +453,23 @@ return updated
   }
 
 }
-function copyRanks(){
+function copyMail(){
 
-const text = players.map((p,index)=>{
+let raw = mail
+
+const ranks = players.map((p,index)=>{
 
   const rank = index + 1
   const pts = getPoints(rank)
-
   const pointsText = pts === "∞" ? "Unlimited" : pts
 
   return `${rank}. ${p.name} - ${pointsText}`
 
 }).join("\n")
 
-navigator.clipboard.writeText(text)
+raw = raw.replace(/{{RANKS}}/g, ranks)
+
+navigator.clipboard.writeText(raw)
 
 }
 async function saveList(updated:any[]) {
@@ -650,11 +669,11 @@ Mail
 
 <span
 className="text-yellow-400 cursor-pointer hover:text-yellow-300"
-onClick={copyRanks}
+onClick={copyMail}
 >
-Copy: [Ranks]
+Copy Mail
 </span>
-
+  
 <span
 className="cursor-pointer"
 onClick={()=>setAutoOrder(!autoOrder)}
