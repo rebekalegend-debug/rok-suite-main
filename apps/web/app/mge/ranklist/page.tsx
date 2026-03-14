@@ -650,7 +650,7 @@ const rank = index + 1
 
 return (
 <Row
-key={p.id}
+key={`rank-${rank}`}
 player={p}
 rank={rank}
 />
