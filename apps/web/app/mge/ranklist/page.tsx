@@ -534,12 +534,9 @@ useEffect(()=>{
 
   if(!autoOrder) return
 
- setPlayers(p => {
-  const sorted = autoRankPlayers(p)
-  return JSON.stringify(sorted) === JSON.stringify(p) ? p : sorted
-})
+  setPlayers(prev => autoRankPlayers(prev))
 
-},[autoOrder, players.length])
+},[autoOrder])
 
 
 
@@ -554,7 +551,7 @@ async function load(){
     return
   }
 
-  const sheetPlayers = autoRankPlayers(json.data).map((p:any)=>({
+ const sheetPlayers = json.data.map((p:any)=>({
     ...p,
     main: p["Main Troop Type"] || p.main
   }))
@@ -650,7 +647,7 @@ const rank = index + 1
 
 return (
 <Row
-key={`rank-${rank}`}
+key={p.id}
 player={p}
 rank={rank}
 />
