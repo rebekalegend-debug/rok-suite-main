@@ -159,31 +159,57 @@ export function autoRankPlayers<T extends RankPlayer>(players:T[]):T[]{
     /* MAIN STRENGTH SCORE */
     /* ----------------------- */
 
-    const scoreA =
-      rgScore(a.rg) +
-      kvkScore(a.kvkContribution) +
-      eqScore(a.eq)
+   /* ----------------------- */
+/* R&G PRIORITY */
+/* ----------------------- */
 
-    const scoreB =
-      rgScore(b.rg) +
-      kvkScore(b.kvkContribution) +
-      eqScore(b.eq)
+const rgA = rgScore(a.rg)
+const rgB = rgScore(b.rg)
 
-    if(scoreA !== scoreB) return scoreB - scoreA
+if(rgA !== rgB) return rgB - rgA
+
+
+/* ----------------------- */
+/* KVK CONTRIBUTION */
+/* ----------------------- */
+
+const kvkA = kvkScore(a.kvkContribution)
+const kvkB = kvkScore(b.kvkContribution)
+
+if(kvkA !== kvkB) return kvkB - kvkA
+
+
+/* ----------------------- */
+/* EQUIPMENT */
+/* ----------------------- */
+
+const eqA = eqScore(a.eq)
+const eqB = eqScore(b.eq)
+
+if(eqA !== eqB) return eqB - eqA
 
     /* ----------------------- */
     /* SECONDARY FACTORS */
     /* ----------------------- */
 
-    const secA =
-      purposeScore(a.purpose) +
-      spendScore(a.spend)
+   /* ----------------------- */
+/* PURPOSE */
+/* ----------------------- */
 
-    const secB =
-      purposeScore(b.purpose) +
-      spendScore(b.spend)
+const purposeA = purposeScore(a.purpose)
+const purposeB = purposeScore(b.purpose)
 
-    if(secA !== secB) return secB - secA
+if(purposeA !== purposeB) return purposeB - purposeA
+
+
+/* ----------------------- */
+/* SPENDING */
+/* ----------------------- */
+
+const spendA = spendScore(a.spend)
+const spendB = spendScore(b.spend)
+
+if(spendA !== spendB) return spendB - spendA
 
     /* ----------------------- */
     /* DESIRED RANK LAST */
