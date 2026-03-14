@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react"
 import { getHeads, getPoints, kvkContributionPercent } from "@/utils/mgeRankLogic"
-
+import { autoRankPlayers } from "@/utils/mgeAutoRank"
 import {
   DndContext,
   closestCenter
@@ -549,9 +549,7 @@ async function load(){
     return
   }
 
-  const sheetPlayers = json.data.sort((a:any,b:any)=>{
-    return a.rank - b.rank
-  }).map((p:any)=>({
+  const sheetPlayers = autoRankPlayers(json.data).map((p:any)=>({
     ...p,
     main: p["Main Troop Type"] || p.main
   }))
