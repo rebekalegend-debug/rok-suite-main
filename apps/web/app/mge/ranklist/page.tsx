@@ -609,25 +609,23 @@ async function load(){
 
   const saved = localStorage.getItem("mge_order")
 
-  if(saved){
+ if(saved){
 
-    const savedPlayers = JSON.parse(saved)
+  const savedPlayers = JSON.parse(saved)
 
-    // keep only players that still exist in sheet
-    const filtered = savedPlayers.filter((p:any)=>
-      sheetPlayers.some((s:any)=>s.id === p.id)
-    )
+  const filtered = savedPlayers.filter((p:any)=>
+    sheetPlayers.some((s:any)=>s.id === p.id)
+  )
 
-    // add new players that were not in saved order
-    const missing = sheetPlayers.filter((s:any)=>
-      !filtered.some((p:any)=>p.id === s.id)
-    )
+  const missing = sheetPlayers.filter((s:any)=>
+    !filtered.some((p:any)=>p.id === s.id)
+  )
 
-    const finalList = [...filtered, ...missing]
+  const finalList = [...filtered, ...missing]
 
-    setPlayers(finalList)
+  setPlayers(finalList)
 
-  } else {
+} else {
 
     setPlayers(sheetPlayers)
 
