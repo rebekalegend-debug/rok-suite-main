@@ -40,7 +40,6 @@ const [password,setPassword] = useState("")
 const [token,setToken] = useState("")
 const [isAdmin,setIsAdmin] = useState(false)
 const [commanderFile,setCommanderFile] = useState<File | null>(null)
-const [gearFile,setGearFile] = useState<File | null>(null)
 const [loadingCommanders,setLoadingCommanders] = useState(false)
 const [commanders,setCommanders] = useState<string[]>([])
 const [selectedCommander,setSelectedCommander] = useState("")
@@ -52,6 +51,7 @@ const [search,setSearch] = useState("")
 const [submitError,setSubmitError] = useState(false)
 
 const [missing,setMissing] = useState({
+  member:false,
   commander:false,
   purpose:false,
   rank:false,
@@ -150,6 +150,7 @@ loadMembers()
 async function submitApplication(){
 
 const newMissing = {
+  member: !selectedMember,
   commander: !selectedCommander,
   purpose: !form.purpose,
   rank: !form.rank,
@@ -303,11 +304,11 @@ focus:shadow-[0_0_12px_rgba(255,215,107,0.45)]
 caret-[#FFD76B]
 ${selectedMember ? "text-slate-400" : "text-white"}
 ${
-  selectedMember
-  ? "border-[#FFD76B] shadow-[0_0_12px_rgba(255,215,107,0.45)]"
-    : memberTouched && memberBlurred && !selectedMember
-    ? "border-red-500 shadow-[0_0_10px_rgba(255,60,60,0.55)]"
-    : "gold-input"
+missing.member
+? "border-red-500 shadow-[0_0_10px_rgba(255,60,60,0.7)]"
+: selectedMember
+? "border-[#FFD76B] shadow-[0_0_12px_rgba(255,215,107,0.45)]"
+: "gold-input"
 }`}
 value={
   selectedMember
