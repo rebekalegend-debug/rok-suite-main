@@ -580,7 +580,7 @@ if(saved){
   }
 
 return (
-<div className="max-w-6xl mx-auto p-4 md:p-8">
+<div className="max-w-[1800px] mx-auto p-4 md:p-8">
 
 <div
 className="p-6 rounded-lg border space-y-4 gold-glow"
@@ -606,9 +606,9 @@ items={players.map(p => p.id)}
 strategy={verticalListSortingStrategy}
 >
 
-<table className="w-full text-sm relative z-0">
+<table className="w-full text-sm relative z-0 table-auto">
 
-<thead className="bg-zinc-900 sticky top-0 z-20">
+<thead className="bg-zinc-900 sticky top-0 z-20 [&>tr>th:first-child]:rounded-tl-lg [&>tr>th:last-child]:rounded-tr-lg">
 <tr className="text-left">
 <th className="p-3">Heads</th>
 <th className="p-3">Points</th>
@@ -618,7 +618,7 @@ strategy={verticalListSortingStrategy}
 <th className="p-3">Need</th>
 <th className="p-3">R&G</th>
 <th className="p-3">KvK C.</th>
-<th className="p-3">Spend</th>
+<th className="p-3 min-w-[180px]">Spend</th>
 <th className="p-3">EQ</th>
 <th className="p-3">Skill</th>
 <th className="p-3">Main</th>
