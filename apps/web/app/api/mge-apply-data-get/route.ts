@@ -53,16 +53,16 @@ const listMap: Record<string, { rg: string[], eq: string }> = {}
 
 listRows.slice(1).forEach(r => {
 
-  const id = r[0]      // Name column in List
-  const rg = r[6] || ""  // R&G column
-  const eq = r[9] || ""  // EQ column
+  const id = String(r[0] || "")   // ID column in List
+  const rg = r[7] || ""           // R&G column
+  const eq = r[10] || ""          // EQ column
 
   if (id) {
-  listMap[id] = {
-    rg: rg ? rg.split(", ") : [],
-    eq
+    listMap[id] = {
+      rg: rg ? rg.split(", ") : [],
+      eq
+    }
   }
-}
 
 })
     const data = applyRows.map(row => {
@@ -73,7 +73,7 @@ listRows.slice(1).forEach(r => {
         record[h] = row[i]
       })
 const id = record["ID"]
-     const list = listMap[id] || { rg: [], eq: "" }
+const list = listMap[String(id)] || { rg: [], eq: "" }
 
 return {
   id,
