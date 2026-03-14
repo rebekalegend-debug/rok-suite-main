@@ -85,6 +85,7 @@ return {
   main: record["Main Troop Type"],
   spend: record["KvK Spending"],
   kvkContribution: kvkMap[id] || 0,
+  purpose: record["Commander Purpose"], 
   rg: list.rg,
   eq: list.eq
 }
