@@ -51,11 +51,27 @@ const [search,setSearch] = useState("")
 
 useEffect(()=>{
 
-const savedId = localStorage.getItem("mge_applied_id")
+async function checkApplication(){
 
-if(savedId){
-  setAlreadyApplied(true)
+  const savedId = localStorage.getItem("mge_applied_id")
+
+  if(!savedId) return
+
+  const res = await fetch("/api/mge-application")
+  const members = await res.json()
+
+  const exists = members.some((m:any)=>m.id === savedId)
+
+  if(exists){
+    setAlreadyApplied(true)
+  }else{
+    localStorage.removeItem("mge_applied_id")
+    setAlreadyApplied(false)
+  }
+
 }
+
+checkApplication()
 
 },[])
 
