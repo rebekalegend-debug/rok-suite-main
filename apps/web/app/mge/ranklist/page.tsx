@@ -41,7 +41,7 @@ function Row({ player, rank, setPlayers }: any) {
     transition
   } = useSortable({ id: player.id })
   const stop = (e:any) => e.stopPropagation()
-const rg = player.rg || []
+const rg: string[] = player.rg || []
 const [showRg,setShowRg] = useState(false)
 const rgRef = useRef<any>(null)
 const eqRef = useRef<any>(null)
