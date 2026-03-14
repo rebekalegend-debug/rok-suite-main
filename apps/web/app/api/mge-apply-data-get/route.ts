@@ -55,8 +55,8 @@ const listMap: Record<string, { rg: string[], eq: string }> = {}
 listRows.slice(1).forEach(r => {
 
   const id = String(r[0] || "")
-  const rg = r[7] || ""
-  const eq = r[10] || ""
+ const rg = r[8] || ""
+const eq = r[11] || ""
 
   if (id) {
     listMap[id] = {
