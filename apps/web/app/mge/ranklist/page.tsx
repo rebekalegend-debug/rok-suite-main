@@ -538,7 +538,11 @@ useEffect(()=>{
 
 },[autoOrder])
 
-
+useEffect(() => {
+  if(editing) return
+  const pts = getPoints(rank)
+  setValue(pts === "∞" ? Infinity : Number(pts.replace("M","")))
+}, [rank])
 
   
 async function load(){
