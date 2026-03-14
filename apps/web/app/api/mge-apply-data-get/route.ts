@@ -30,9 +30,16 @@ export async function GET() {
       range: "KvK C.!A1:B"
     })
 
+    // --- Saved list sheet ---
+const listRes = await sheets.spreadsheets.values.get({
+  spreadsheetId,
+  range: "List!A1:Z"
+})
+
+    
     const applyRows = applyRes.data.values || []
     const kvkRows = kvkRes.data.values || []
-
+const listRows = listRes.data.values || []
     const headers = applyRows.shift() || []
 
     const kvkMap: Record<string, number> = {}
@@ -42,7 +49,22 @@ export async function GET() {
       const kvk = Number(r[1]) || 0
       if (id) kvkMap[id] = kvk
     })
+const listMap: Record<string, { rg: string[], eq: string }> = {}
 
+listRows.slice(1).forEach(r => {
+
+  const id = r[0]      // Name column in List
+  const rg = r[6] || ""  // R&G column
+  const eq = r[9] || ""  // EQ column
+
+  if (id) {
+  listMap[id] = {
+    rg: rg ? rg.split(", ") : [],
+    eq
+  }
+}
+
+})
     const data = applyRows.map(row => {
 
       const record: any = {}
@@ -51,18 +73,20 @@ export async function GET() {
         record[h] = row[i]
       })
 
-      const id = record["ID"]
+     const list = listMap[id] || { rg: [], eq: "" }
 
-      return {
-        id,
-        name: record["Name"],
-        desiredRank: record["Desired Rank"],
-        commander: record["Commander"],
-        skills: record["Skills"],
-        main: record["Main Troop Type"],
-        spend: record["KvK Spending"],
-        kvkContribution: kvkMap[id] || 0
-      }
+return {
+  id,
+  name: record["Name"],
+  desiredRank: record["Desired Rank"],
+  commander: record["Commander"],
+  skills: record["Skills"],
+  main: record["Main Troop Type"],
+  spend: record["KvK Spending"],
+  kvkContribution: kvkMap[id] || 0,
+  rg: list.rg,
+  eq: list.eq
+}
 
     })
 
