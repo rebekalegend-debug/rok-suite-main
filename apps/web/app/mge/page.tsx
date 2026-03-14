@@ -143,14 +143,12 @@ if(commanderFile){
 }
 
   
-const filteredCommanders = commanders
-  .filter(c =>
-    !commanderSearch ||
-    c.toLowerCase().includes(commanderSearch.toLowerCase())
-  )
-  .slice(0, commanderSearch ? 50 : commanders.length)
+const filteredCommanders = commanders.filter(c =>
+  !commanderSearch ||
+  c.toLowerCase().includes(commanderSearch.toLowerCase())
+)
   
- const filteredMembers = members
+const filteredMembers = members
   .filter(m => {
     const q = search.toLowerCase()
     return (
@@ -159,7 +157,7 @@ const filteredCommanders = commanders
       m.id?.includes(q)
     )
   })
-  .slice(0,20)
+  .sort((a,b)=>a.name.localeCompare(b.name))
 
 const skillsFilled =
 skills.skill1 > 0 ||
