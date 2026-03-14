@@ -14,18 +14,14 @@ export type RankPlayer = {
  * priority:
  * 1️⃣ Desired rank (W.Rank)
  */
-export function autoRankPlayers(players: RankPlayer[]) {
+export function autoRankPlayers<T extends { desiredRank: number }>(players: T[]): T[] {
 
   const sorted = [...players].sort((a,b)=>{
 
     const wa = Number(a.desiredRank) || 999
     const wb = Number(b.desiredRank) || 999
 
-    if(wa !== wb){
-      return wa - wb
-    }
-
-    return 0
+    return wa - wb
 
   })
 
