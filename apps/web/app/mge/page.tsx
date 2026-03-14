@@ -68,22 +68,25 @@ async function checkApplication(){
 
   const savedId = localStorage.getItem("mge_applied_id")
 
+  if(!savedId) return
+
   const res = await fetch("/api/mge-application",{
     method:"PUT"
   })
 
   const applied = await res.json()
 
-  if(savedId){
+  const exists = applied.some((m:any)=>m.id === savedId)
 
-    const exists = applied.some((m:any)=>m.id === savedId)
+  if(exists){
 
-    if(exists){
-      setAlreadyApplied(true)
-      return
-    }
+    setAlreadyApplied(true)
+
+  }else{
 
     localStorage.removeItem("mge_applied_id")
+    setAlreadyApplied(false)
+
   }
 
 }
