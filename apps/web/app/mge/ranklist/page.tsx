@@ -27,9 +27,11 @@ type Player = {
   main: string
   spend: string
   kvkContribution: number
+  rg?: string[]
+  eq?: string
 }
 const badge = "px-3 py-1 rounded-md text-xs font-semibold border"
-function Row({ player, rank }: any) {
+function Row({ player, rank, setPlayers }: any) {
 
   const {
     attributes,
@@ -39,12 +41,12 @@ function Row({ player, rank }: any) {
     transition
   } = useSortable({ id: player.id })
   const stop = (e:any) => e.stopPropagation()
-const [rg,setRg] = useState<string[]>([])
+const rg = player.rg || []
 const [showRg,setShowRg] = useState(false)
 const rgRef = useRef<any>(null)
 const eqRef = useRef<any>(null)
 
-  const [eq,setEq] = useState("N/A")
+const eq = player.eq || "N/A"
 const [showEq,setShowEq] = useState(false)
 
   const defaultPoints = getPoints(rank)
@@ -242,7 +244,13 @@ onClick={()=>{
   if(rg.includes(o.value)){
     setRg(rg.filter(x=>x!==o.value))
   }else{
-    setRg([...rg,o.value])
+    setPlayers((prev:any[]) =>
+  prev.map(p =>
+    p.id === player.id
+      ? { ...p, rg: rg.includes(o.value) ? rg.filter(x => x !== o.value) : [...rg, o.value] }
+      : p
+  )
+)
   }
 }}
 >
@@ -364,7 +372,13 @@ eq==="Legendary"
       key={v}
       className={`cursor-pointer px-2 py-1 rounded hover:bg-zinc-800 ${color}`}
       onClick={() => {
-        setEq(v)
+        setPlayers((prev:any[]) =>
+  prev.map(p =>
+    p.id === player.id
+      ? { ...p, eq: v }
+      : p
+  )
+)
         setShowEq(false)
       }}
     >
@@ -472,7 +486,7 @@ function handleDragEnd(event:any){
 
 localStorage.setItem("mge_order", JSON.stringify(updated))
 
-saveList(updated)
+saveList(updatedPlayers)
 
 return updated
 
@@ -513,10 +527,10 @@ async function saveList(updated:any[]) {
       p.desiredRank,
       p.name,
       p.commander,
-      "", // R&G (we will add later)
+      p.rg?.join(", ") || "",
       p.kvkContribution,
       p.spend,
-      "", // EQ
+      p.eq || "",
       p.skills,
       p.main
     ]
@@ -675,9 +689,10 @@ const rank = index + 1
 
 return (
 <Row
-key={p.id}
-player={p}
-rank={rank}
+  key={p.id}
+  player={p}
+  rank={rank}
+  setPlayers={setPlayers}
 />
 )
 
