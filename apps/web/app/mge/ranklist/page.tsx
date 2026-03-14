@@ -534,7 +534,13 @@ useEffect(()=>{
     load()
   },[])
 
+useEffect(()=>{
 
+  if(!autoOrder) return
+
+  setPlayers(prev => autoRankPlayers(prev))
+
+},[autoOrder])
 
 
 
@@ -576,7 +582,7 @@ async function load(){
 
   } else {
 
-    setPlayers(sheetPlayers)
+ setPlayers(autoOrder ? autoRankPlayers(sheetPlayers) : sheetPlayers)
 
   }
 
