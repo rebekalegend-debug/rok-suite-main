@@ -46,7 +46,31 @@ const eqRef = useRef<any>(null)
 
   const [eq,setEq] = useState("N/A")
 const [showEq,setShowEq] = useState(false)
-useEffect(() => {
+
+  const defaultPoints = getPoints(rank)
+
+const initial =
+  defaultPoints === "∞"
+    ? Infinity
+    : Number(defaultPoints.replace("M",""))
+
+const [value,setValue] = useState<number>(initial)
+const [editing,setEditing] = useState(false)
+  
+  useEffect(() => {
+  const pts = getPoints(rank)
+
+  const newValue =
+    pts === "∞"
+      ? Infinity
+      : Number(pts.replace("M",""))
+
+  setValue(newValue)
+
+}, [rank])
+  
+  
+  useEffect(() => {
 
   function handleClickOutside(e:any) {
 
@@ -79,15 +103,7 @@ useEffect(() => {
 
   { label: "No", value:"No", color: "red" }
 ]
-const defaultPoints = getPoints(rank)
 
-const initial =
-  defaultPoints === "∞"
-    ? Infinity
-    : Number(defaultPoints.replace("M",""))
-
-const [value,setValue] = useState<number>(initial)
-const [editing,setEditing] = useState(false)
   const style = {
     transform: CSS.Transform.toString(transform),
     transition
