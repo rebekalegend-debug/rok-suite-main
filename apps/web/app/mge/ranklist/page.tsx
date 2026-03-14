@@ -454,14 +454,14 @@ const editorRef = useRef<HTMLDivElement>(null)
 const [players,setPlayers] = useState<Player[]>([])
 useEffect(() => {
 
-  if (!players.length) return
+  if (!loaded) return
 
   saveList(players)
 
 }, [players])
   
   const [loading,setLoading] = useState(true)
-
+const [loaded,setLoaded] = useState(false)
 const [autoOrder,setAutoOrder] = useState(() => {
   if (typeof window !== "undefined") {
     const saved = localStorage.getItem("mge_auto")
@@ -633,6 +633,7 @@ async function load(){
   }
 
   setLoading(false)
+setLoaded(true)
 
 }
 
