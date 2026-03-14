@@ -55,20 +55,22 @@ async function checkApplication(){
 
   const savedId = localStorage.getItem("mge_applied_id")
 
-  if(!savedId) return
+  const res = await fetch("/api/mge-application",{
+    method:"PUT"
+  })
 
- const res = await fetch("/api/mge-application",{
-  method:"PUT"
-})
-  const members = await res.json()
+  const applied = await res.json()
 
-  const exists = members.some((m:any)=>m.id === savedId)
+  if(savedId){
 
-  if(exists){
-    setAlreadyApplied(true)
-  }else{
+    const exists = applied.some((m:any)=>m.id === savedId)
+
+    if(exists){
+      setAlreadyApplied(true)
+      return
+    }
+
     localStorage.removeItem("mge_applied_id")
-    setAlreadyApplied(false)
   }
 
 }
@@ -332,13 +334,13 @@ style={{
 <div
 key={m.id}
 className="px-2 py-1 hover:bg-slate-700 cursor-pointer rounded"
-onClick={()=>{
-setForm(prev => ({ ...prev, id: m.id }))
- // setForm({...form,id:m.id})
+onClick(()=>{
+  setForm(prev => ({ ...prev, id: m.id }))
   setSelectedMember(m)
-setSearch("")
+  setSearch("")
   setMemberError(false)
 
+  localStorage.setItem("mge_applied_id", m.id)
 }}
 >
 
