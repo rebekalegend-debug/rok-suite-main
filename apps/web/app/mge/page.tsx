@@ -364,7 +364,7 @@ style={{
 <div
 key={m.id}
 className="px-2 py-1 hover:bg-slate-700 cursor-pointer rounded"
-onClick(()=>{
+onClick={() => {
   setForm(prev => ({ ...prev, id: m.id }))
   setSelectedMember(m)
   setSearch("")
@@ -382,7 +382,6 @@ onClick(()=>{
 </div>
 
 ))}
-
 </div>
 )}
 
