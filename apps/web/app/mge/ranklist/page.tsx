@@ -169,7 +169,27 @@ const [editing,setEditing] = useState(false)
 </td>
       <td className="p-3 font-semibold">{rank}</td>
       <td className="p-3" onPointerDown={stop}>
-  {player.desiredRank}
+ {(() => {
+
+  const wr = Number(player.desiredRank)
+
+  return (
+    <span
+      className={`${badge} ${
+        wr <= 2
+          ? "border-green-500 text-green-400 bg-green-500/10"
+          : wr <= 5
+          ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
+          : wr <= 10
+          ? "border-orange-500 text-orange-400 bg-orange-500/10"
+          : "border-red-500 text-red-400 bg-red-500/10"
+      }`}
+    >
+      {player.desiredRank}
+    </span>
+  )
+
+})()}
 </td>
 
 <td
