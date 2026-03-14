@@ -528,20 +528,21 @@ async function saveList(updated:any[]) {
 
     const rank = index+1
 
-    return [
-      getHeads(rank),
-      getPoints(rank),
-      rank,
-      p.desiredRank,
-      p.name,
-      p.commander,
-      p.rg?.join(", ") || "",
-      p.kvkContribution,
-      p.spend,
-      p.eq || "",
-      p.skills,
-      p.main
-    ]
+   return [
+  p.id,                      // A ID
+  getHeads(rank),            // B Heads
+  getPoints(rank),           // C Points
+  rank,                      // D Rank
+  p.desiredRank,             // E W.Rank
+  p.name,                    // F Name
+  p.commander,               // G Need
+  p.rg?.join(", ") || "",    // H R&G
+  p.kvkContribution,         // I KvK C.
+  p.spend,                   // J Spend
+  p.eq || "",                // K EQ
+  p.skills,                  // L Skill
+  p.main                     // M Main
+]
 
   })
 
