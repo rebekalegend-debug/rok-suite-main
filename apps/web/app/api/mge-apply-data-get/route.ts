@@ -72,7 +72,7 @@ listRows.slice(1).forEach(r => {
       headers.forEach((h, i) => {
         record[h] = row[i]
       })
-
+const id = record["ID"]
      const list = listMap[id] || { rg: [], eq: "" }
 
 return {
