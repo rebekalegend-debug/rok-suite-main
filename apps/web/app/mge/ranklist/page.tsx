@@ -241,17 +241,18 @@ key={o.value}
 className={`cursor-pointer px-2 py-1 rounded hover:bg-zinc-800 ${color}`}
 onPointerDown={(e)=>e.stopPropagation()}
 onClick={()=>{
-  if(rg.includes(o.value)){
-    setRg(rg.filter(x=>x!==o.value))
-  }else{
-    setPlayers((prev:any[]) =>
-  prev.map(p =>
-    p.id === player.id
-      ? { ...p, rg: rg.includes(o.value) ? rg.filter(x => x !== o.value) : [...rg, o.value] }
-      : p
+  setPlayers((prev:any[]) =>
+    prev.map(p =>
+      p.id === player.id
+        ? {
+            ...p,
+            rg: rg.includes(o.value)
+              ? rg.filter(x => x !== o.value)
+              : [...rg, o.value]
+          }
+        : p
+    )
   )
-)
-  }
 }}
 >
 {o.label}
