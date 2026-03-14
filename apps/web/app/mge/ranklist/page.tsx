@@ -541,34 +541,49 @@ useEffect(()=>{
   
 async function load(){
 
-const saved = localStorage.getItem("mge_order")
-
-if(saved){
-  const parsed = JSON.parse(saved)
-
-  if(parsed.length > 0){
-    setPlayers(parsed)
-    setLoading(false)
-    return
-  }
-}
-
   const res = await fetch("/api/mge-apply-data-get")
   const json = await res.json()
 
-  if(json.success){
-    const ordered = json.data.sort((a:any,b:any)=>{
-      return a.rank - b.rank
-    })
-    setPlayers(
-  ordered.map((p:any)=>({
+  if(!json.success){
+    setLoading(false)
+    return
+  }
+
+  const sheetPlayers = json.data.sort((a:any,b:any)=>{
+    return a.rank - b.rank
+  }).map((p:any)=>({
     ...p,
     main: p["Main Troop Type"] || p.main
   }))
-)
+
+  const saved = localStorage.getItem("mge_order")
+
+  if(saved){
+
+    const savedPlayers = JSON.parse(saved)
+
+    // keep only players that still exist in sheet
+    const filtered = savedPlayers.filter((p:any)=>
+      sheetPlayers.some((s:any)=>s.id === p.id)
+    )
+
+    // add new players that were not in saved order
+    const missing = sheetPlayers.filter((s:any)=>
+      !filtered.some((p:any)=>p.id === s.id)
+    )
+
+    const finalList = [...filtered, ...missing]
+
+    setPlayers(finalList)
+
+  } else {
+
+    setPlayers(sheetPlayers)
+
   }
 
   setLoading(false)
+
 }
 
   if(loading){
