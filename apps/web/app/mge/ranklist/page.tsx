@@ -199,8 +199,36 @@ const [editing,setEditing] = useState(false)
 >
   {player.name}
 </td>
-      <td className="p-3" onPointerDown={stop}>{player.commander}</td>
-  <td ref={rgRef} className="p-3 relative" onPointerDown={stop}>
+     <td className="p-3" onPointerDown={stop}>{player.commander}</td>
+
+<td className="p-3" onPointerDown={stop}>
+{(() => {
+
+  const p = player.purpose
+
+  if(!p)
+    return <span className="text-zinc-400 text-xs">N/A</span>
+
+  return (
+    <span
+      className={`${badge} ${
+        p === "Meta R/G Leader"
+          ? "border-green-500 text-green-400 bg-green-500/10"
+        : p === "Non-Meta R/G Leader" || p === "Field fight"
+          ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
+        : p === "Own city garrison"
+          ? "border-orange-500 text-orange-400 bg-orange-500/10"
+        : "border-red-500 text-red-400 bg-red-500/10"
+      }`}
+    >
+      {p}
+    </span>
+  )
+
+})()}
+</td>
+
+<td ref={rgRef} className="p-3 relative" onPointerDown={stop}>
 
 <div
   className="flex flex-wrap gap-1 cursor-pointer"
@@ -549,7 +577,7 @@ async function saveList(updated:any[]) {
 
     const rank = index+1
 
-   return [
+  return [
   p.id,                      // A ID
   getHeads(rank),            // B Heads
   getPoints(rank),           // C Points
@@ -557,12 +585,13 @@ async function saveList(updated:any[]) {
   p.desiredRank,             // E W.Rank
   p.name,                    // F Name
   p.commander,               // G Need
-  p.rg?.join(", ") || "",    // H R&G
-  p.kvkContribution,         // I KvK C.
-  p.spend,                   // J Spend
-  p.eq || "",                // K EQ
-  p.skills,                  // L Skill
-  p.main                     // M Main
+  p.purpose || "",           // H Purpose
+  p.rg?.join(", ") || "",    // I R&G
+  p.kvkContribution,         // J KvK C.
+  p.spend,                   // K Spend
+  p.eq || "",                // L EQ
+  p.skills,                  // M Skill
+  p.main                     // N Main
 ]
 
   })
@@ -621,13 +650,17 @@ async function load(){
     return
   }
 
-  const sheetPlayers = json.data.sort((a:any,b:any)=>{
-    return a.rank - b.rank
-  }).map((p:any)=>({
-    ...p,
-    main: p["Main Troop Type"] || p.main
-  }))
+ const sheetPlayers = json.data
+.sort((a:any,b:any)=> a.rank - b.rank)
+.map((p:any)=>({
 
+  ...p,
+
+  main: p["Main Troop Type"] || p.main,
+
+  purpose: p["Commander Purpose"] || ""
+
+}))
   const saved = localStorage.getItem("mge_order")
 
 if (saved) {
@@ -704,6 +737,7 @@ strategy={verticalListSortingStrategy}
 <th className="p-3">W.Rank</th>
 <th className="p-3">Name</th>
 <th className="p-3">Need</th>
+  <th className="p-3">Purpose</th>
 <th className="p-3">R&G</th>
 <th className="p-3">KvK C.</th>
 <th className="p-3">Spend</th>
