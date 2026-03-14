@@ -650,15 +650,13 @@ async function load(){
     return
   }
 
- const sheetPlayers = json.data
+const sheetPlayers = json.data
 .sort((a:any,b:any)=> a.rank - b.rank)
 .map((p:any)=>({
 
   ...p,
 
-  main: p["Main Troop Type"] || p.main,
-
-  purpose: p["Commander Purpose"] || ""
+  main: p["Main Troop Type"] || p.main
 
 }))
   const saved = localStorage.getItem("mge_order")
