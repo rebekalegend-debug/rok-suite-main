@@ -22,7 +22,7 @@ const sheets = google.sheets({version:"v4",auth})
 
 const spreadsheetId = process.env.GOOGLE_SHEET_ID!
 
-const range = `'Top ${kingdom}'!A2:B`
+const range = `'${kingdom}'!A2:B`
 
 const res = await sheets.spreadsheets.values.get({
 spreadsheetId,
