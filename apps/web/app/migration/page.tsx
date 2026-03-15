@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 function addDay(date:string){
   const d = new Date(date)
@@ -19,8 +19,24 @@ export default function MigrationScanner(){
 const [pauth,setPauth] = useState("")
 const [bauth,setBauth] = useState("")
 const [start,setStart] = useState("")
-const [running,setRunning] = useState(false)
-const [log,setLog] = useState<string[]>([])
+
+  useEffect(() => {
+
+const savedP = localStorage.getItem("rok_pauth")
+const savedB = localStorage.getItem("rok_bauth")
+
+if(savedP) setPauth(savedP)
+if(savedB) setBauth(savedB)
+
+},[])
+  
+  
+  
+  
+  const [running,setRunning] = useState(false)
+
+  
+  const [log,setLog] = useState<string[]>([])
 
 function addLog(t:string){
   setLog(prev=>[...prev,t])
@@ -98,16 +114,24 @@ fontFamily:"sans-serif"
 <input
 placeholder="PAUTH token"
 value={pauth}
-onChange={e=>setPauth(e.target.value)}
+onChange={e=>{
+const v = e.target.value
+setPauth(v)
+localStorage.setItem("rok_pauth",v)
+}}
 />
 
 <input
 placeholder="BAUTH token"
 value={bauth}
-onChange={e=>setBauth(e.target.value)}
+onChange={e=>{
+const v = e.target.value
+setBauth(v)
+localStorage.setItem("rok_bauth",v)
+}}
 />
 
-<input
+  <input
 type="date"
 value={start}
 onChange={e=>setStart(e.target.value)}
