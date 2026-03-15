@@ -366,6 +366,7 @@ className="px-2 py-1 hover:bg-slate-700 cursor-pointer rounded"
 onClick={() => {
   setForm(prev => ({ ...prev, id: m.id }))
   setSelectedMember(m)
+setMissing(prev => ({...prev, member:false}))
   setSearch("")
   setMemberError(false)
 
@@ -459,6 +460,7 @@ key={c}
 className="px-2 py-1 hover:bg-slate-700 cursor-pointer rounded"
 onClick={()=>{
   setSelectedCommander(c)
+setMissing(prev => ({...prev, commander:false}))
   setCommanderSearch("")
 }}
 >
@@ -603,7 +605,11 @@ missing.purpose
 : "gold-input"
 }`}
 value={form.purpose}
-onChange={e=>setForm({...form,purpose:e.target.value})}
+onChange={e=>{
+  const value = e.target.value
+  setForm({...form,purpose:value})
+  setMissing(prev => ({...prev, purpose:false}))
+}}
 >
 <option value="">Select Purpose</option>
 
@@ -633,7 +639,11 @@ missing.rank
 : "gold-input"
 }`}
 value={form.rank}
-onChange={e=>setForm({...form,rank:e.target.value})}
+onChange={e=>{
+  const value = e.target.value
+  setForm({...form,rank:value})
+  setMissing(prev => ({...prev, rank:false}))
+}}
 >
 
 <option value="">Select Rank</option>
@@ -667,7 +677,11 @@ missing.kvk
 : "gold-input"
 }`}
 value={form.kvkSpending}
-onChange={e=>setForm({...form,kvkSpending:e.target.value})}
+onChange={e=>{
+  const value = e.target.value
+  setForm({...form,kvkSpending:value})
+  setMissing(prev => ({...prev, kvk:false}))
+}}
 >
 
 <option value="">Select Spending</option>
@@ -698,7 +712,11 @@ missing.troop
 : "gold-input"
 }`}
 value={form.troopType}
-onChange={e=>setForm({...form,troopType:e.target.value})}
+onChange={e=>{
+  const value = e.target.value
+  setForm({...form,troopType:value})
+  setMissing(prev => ({...prev, troop:false}))
+}}
 >
 
 <option value="">Select Troop Type</option>
