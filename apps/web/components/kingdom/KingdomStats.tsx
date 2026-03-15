@@ -4,7 +4,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Search, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, BarChart3, Table, TrendingUp, GitCompareArrows } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-
+import { Clock } from "lucide-react"
 
 type SortField = 'name';
 type SortDir = 'asc' | 'desc';
@@ -27,7 +27,17 @@ export default function KingdomStats() {
   const router = useRouter();
 const KINGDOMS = [3237, 2554, 2500];
 const kingdoms = KINGDOMS;
-  const [members,setMembers] = useState<{id:string,name:string}[]>([])
+ type Member = {
+ id:string
+ name:string
+ power:number
+ prevNames:string[]
+ migratedOut:string | null
+ migratedIn:string | null
+ lastSeen:string | null
+}
+
+const [members,setMembers] = useState<Member[]>([])
 const [loadingMembers,setLoadingMembers] = useState(true)
 
 
@@ -55,7 +65,7 @@ setLoadingMembers(true)
 const res = await fetch(`/api/top-kingdom?kingdom=${selectedKingdom}`)
 const data = await res.json()
 
-setMembers(data)
+setMembers(Array.isArray(data) ? data : [])
 setLoadingMembers(false)
 
 }
@@ -250,11 +260,36 @@ onChange={e => setSelectedKingdom(Number(e.target.value))}
           </div>
 
           {/* Summary cards */}
-          {!isLoading && members.length > 0 && (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-<SummaryCard label="Members Loaded" value={members.length.toLocaleString()} color="text-sky-400" />
-            </div>
-          )}
+         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+
+<GlowCard
+title="All Members"
+value={members.length}
+sub={`${formatCompact(members.reduce((a,b)=>a+b.power,0))} total power`}
+color="yellow"
+/>
+
+<GlowCard
+title="Recently Migrated In"
+value={members.filter(m=>{
+if(!m.migratedIn) return false
+return new Date(m.migratedIn).getTime() > Date.now()-604800000
+}).length}
+sub="last 7 days"
+color="orange"
+/>
+
+<GlowCard
+title="Recently Migrated Out"
+value={members.filter(m=>{
+if(!m.migratedOut) return false
+return new Date(m.migratedOut).getTime() > Date.now()-604800000
+}).length}
+sub="last 7 days"
+color="red"
+/>
+
+</div>
 
           {/* Table */}
           <div className="rounded-xl border border-[var(--border)] bg-[var(--background-card)] overflow-hidden">
@@ -266,19 +301,58 @@ onChange={e => setSelectedKingdom(Number(e.target.value))}
               <>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
-                    <thead>
-                      <tr className="border-b border-[var(--border)] bg-[var(--background-secondary)]">
-                        <th className="px-3 py-3 text-left text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider w-10">#</th>
-                        <th className="px-3 py-3 text-left text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">ID</th>
-<th className="px-3 py-3 text-left text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">Name</th>
+                   <thead>
+<tr className="border-b border-[var(--border)] bg-[var(--background-secondary)]">
+<th className="px-3 py-3 text-left text-xs font-semibold text-[var(--text-muted)]">#</th>
+<th className="px-3 py-3 text-left text-xs font-semibold text-[var(--text-muted)]">ID</th>
+<th className="px-3 py-3 text-left text-xs font-semibold text-[var(--text-muted)]">Name</th>
+<th className="px-3 py-3 text-left text-xs font-semibold text-[var(--text-muted)]">Mig. In</th>
+<th className="px-3 py-3 text-left text-xs font-semibold text-[var(--text-muted)]">Mig. Out</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      {paged.map((m, i) => (
-                        <tr key={m.id} className="border-b border-[var(--border)] hover:bg-[var(--background-secondary)] transition-colors">
-                          <td className="px-3 py-2.5 text-[var(--text-muted)]">{page * rowsPerPage + i + 1}</td>
-                          <td className="px-3 py-2.5 text-[var(--text-muted)] text-xs tabular-nums">{m.id}</td>
-                          <td className="px-3 py-2.5 font-medium text-[var(--foreground)]">{m.name}</td>
+                  <tbody>
+{paged.map((m, i) => (
+<tr key={m.id}>
+<td>{page * rowsPerPage + i + 1}</td>
+<td>{m.id}</td>
+
+<td className="flex items-center gap-2">
+
+{m.name}
+
+{m.prevNames?.length > 0 && (
+<div className="relative group flex items-center">
+
+<Clock size={14} className="text-gray-400 hover:text-white transition cursor-pointer" />
+
+<div className="absolute left-5 top-6 hidden group-hover:block z-50 
+bg-[var(--background-card)] border border-[var(--border)] 
+rounded-lg px-3 py-2 text-xs shadow-lg min-w-[140px]">
+
+<div className="text-[var(--text-muted)] mb-1">
+{m.prevNames.length} previous names
+</div>
+
+{m.prevNames.map((n,i)=>(
+<div key={i} className="text-[var(--foreground)]">
+{n}
+</div>
+))}
+
+</div>
+
+</div>
+)}
+
+</td>
+
+<td title={m.migratedIn || ""}>
+{formatRelative(m.migratedIn)}
+</td>
+
+<td title={m.migratedOut || ""}>
+{formatRelative(m.migratedOut)}
+</td>
                         
                         </tr>
                       ))}
@@ -519,6 +593,59 @@ function SummaryCard({ label, value, color }: { label: string; value: string; co
     </div>
   );
 }
+
+function formatRelative(date?:string | null){
+
+if(!date) return "-"
+
+const d = new Date(date)
+const now = new Date()
+
+const diff = (now.getTime() - d.getTime()) / 1000
+
+const day = 86400
+
+if(diff < day) return "today"
+
+if(diff < day*7) return `${Math.floor(diff/day)} days ago`
+
+if(diff < day*30) return `${Math.floor(diff/(day*7))} weeks ago`
+
+if(diff < day*365) return `${Math.floor(diff/(day*30))} months ago`
+
+return `${Math.floor(diff/(day*365))} years ago`
+
+}
+
+function GlowCard({title,value,sub,color}:{title:string,value:number,sub:string,color:string}){
+
+const colors:any={
+yellow:"from-yellow-500/20 to-yellow-500/5 border-yellow-500/30",
+orange:"from-orange-500/20 to-orange-500/5 border-orange-500/30",
+red:"from-red-500/20 to-red-500/5 border-red-500/30"
+}
+
+return(
+
+<div className={`rounded-xl border p-4 bg-gradient-to-br ${colors[color]}`}>
+
+<div className="text-xs text-[var(--text-muted)] mb-1">
+{title}
+</div>
+
+<div className="text-2xl font-bold">
+{value}
+</div>
+
+<div className="text-xs text-[var(--text-muted)]">
+{sub}
+</div>
+
+</div>
+
+)
+}
+
 function formatCompact(v:number){
 
   if(v>=1_000_000_000) return (v/1_000_000_000).toFixed(1)+"B"
