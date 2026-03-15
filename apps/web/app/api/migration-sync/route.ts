@@ -18,7 +18,7 @@ const spreadsheetId = process.env.GOOGLE_SHEET_ID!
 
 const sheet = await sheets.spreadsheets.values.get({
 spreadsheetId,
-range:"3237!A2:G"
+range:"2500!A2:G"
 })
 
 const rows = sheet.data.values || []
@@ -105,7 +105,7 @@ r[5] = ""
 await sheets.spreadsheets.values.update({
 
 spreadsheetId,
-range:"3237!A2",
+range:"2500!A2",
 valueInputOption:"RAW",
 requestBody:{
 values:rows
