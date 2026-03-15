@@ -320,20 +320,20 @@ setPlayers((prev:any[]) =>
 {
 (() => {
 
-const percent = Math.round(player.kvkContribution / 1_000_000)
+const kvk = kvkContributionPercent(player.kvkContribution)
 
 let color =
-  percent >= 300
+  kvk.color === "green"
     ? "border-green-500 text-green-400 bg-green-500/10"
-    : percent >= 100
+    : kvk.color === "yellow"
     ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
-    : percent >= 50
+    : kvk.color === "orange"
     ? "border-orange-500 text-orange-400 bg-orange-500/10"
     : "border-red-500 text-red-400 bg-red-500/10"
 
 return (
   <span className={`${badge} ${color}`}>
-    {percent}%
+    {kvk.label}
   </span>
 )
 
