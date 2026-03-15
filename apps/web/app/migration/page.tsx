@@ -83,7 +83,8 @@ headers:{
 },
 body:JSON.stringify({
 members,
-date:s
+date:s,
+kingdom:2500
 })
 })
 
