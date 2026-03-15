@@ -1,0 +1,45 @@
+export async function GET(){
+
+const kingdoms = [2500,2554,3237]
+
+const yesterday = new Date()
+yesterday.setUTCDate(yesterday.getUTCDate()-1)
+const start = yesterday.toISOString().slice(0,10)
+
+const end = new Date(yesterday)
+end.setUTCDate(end.getUTCDate()+1)
+
+const endDate = end.toISOString().slice(0,10)
+
+for(const kingdom of kingdoms){
+
+const url =
+`https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?start=${start}&end=${endDate}&search=&server_id=${kingdom}`
+
+const r = await fetch(url,{
+headers:{
+pauthorization:process.env.PAUTH!,
+bauthorization:process.env.BAUTH!,
+lang:"en_US"
+}
+})
+
+const data = await r.json()
+
+await fetch(`${process.env.APP_URL}/api/migration-sync`,{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+members:data.data || [],
+date:start,
+kingdom
+})
+})
+
+}
+
+return Response.json({success:true})
+
+}
