@@ -64,7 +64,7 @@ loadMembers()
 
 },[selectedKingdom])
   const [search, setSearch] = useState('');
-  const [sortField, setSortField] = useState<SortField>('power');
+const [sortField, setSortField] = useState<SortField>('name');
   const [sortDir, setSortDir] = useState<SortDir>('desc');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(50);
@@ -77,6 +77,11 @@ loadMembers()
 
   // Comparison state
   const [comparisonDate, setComparisonDate] = useState<string>('');
+const aggregates:any[] = [];
+const compAggregates:any[] = [];
+const loadingAggregates = false;
+const loadingComparison = false;
+
 
  React.useEffect(() => { setPage(0); }, [search, selectedKingdom, sortField, sortDir]);
 
@@ -118,21 +123,21 @@ return data
   };
 
   // Pivot aggregates for multi-KD chart: { dt, "KD 3921": value, "KD 4041": value }
-  const chartData = useMemo(() => {
-    const byDate = new Map<string, Record<string, string | number>>();
-  const aggregates:any[] = [];
-const compAggregates:any[] = [];
-const loadingAggregates = false;
-const loadingComparison = false;
+const chartData = useMemo(() => {
 
-const chartKingdomIds = useMemo(() => Array.from(chartKingdoms), [chartKingdoms]);
-    for (const agg of aggregates) {
-      const row = byDate.get(agg.dt) || { dt: agg.dt };
-      row[`KD ${agg.kingdom_id}`] = agg[chartMetric as keyof KingdomAggregate] as number;
-      byDate.set(agg.dt, row);
-    }
-    return Array.from(byDate.values()).sort((a, b) => (a.dt as string).localeCompare(b.dt as string));
-  }, [aggregates, chartMetric]);
+  const byDate = new Map<string, Record<string, string | number>>();
+
+  for (const agg of aggregates) {
+    const row = byDate.get(agg.dt) || { dt: agg.dt };
+    row[`KD ${agg.kingdom_id}`] = agg[chartMetric] as number;
+    byDate.set(agg.dt, row);
+  }
+
+  return Array.from(byDate.values()).sort(
+    (a,b)=> (a.dt as string).localeCompare(b.dt as string)
+  )
+
+},[aggregates,chartMetric]);
 
   // Chart kingdom IDs sorted by latest total power (desc)
   const sortedChartKingdomIds = useMemo(() => {
@@ -164,7 +169,7 @@ const chartKingdomIds = useMemo(() => Array.from(chartKingdoms), [chartKingdoms]
       ? compAggregates.filter(a => a.dt === comparisonDate)
       : compAggregates;
     // One row per kingdom
-    const byKd = new Map<number, KingdomAggregate>();
+    const byKd = new Map<number, any>();
     for (const a of forDate) {
       // If multiple dates, take the latest
       if (!byKd.has(a.kingdom_id)) byKd.set(a.kingdom_id, a);
@@ -508,29 +513,4 @@ function SummaryCard({ label, value, color }: { label: string; value: string; co
   );
 }
 
-function HeaderCell({
-  label, field, sortField, sortDir, onSort, align = 'left',
-}: {
-  label: string;
-  field: SortField;
-  sortField: SortField;
-  sortDir: SortDir;
-  onSort: (f: SortField) => void;
-  align?: 'left' | 'right';
-}) {
-  return (
-    <th
-      className={`px-3 py-3 text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider cursor-pointer hover:text-[var(--foreground)] transition-colors select-none ${align === 'right' ? 'text-right' : 'text-left'}`}
-      onClick={() => onSort(field)}
-    >
-      <span className="inline-flex items-center gap-1">
-        {label}
-        {sortField === field ? (
-          sortDir === 'asc' ? <ChevronUp size={14} /> : <ChevronDown size={14} />
-        ) : (
-          <ChevronDown size={14} className="opacity-20" />
-        )}
-      </span>
-    </th>
-  );
-}
+
