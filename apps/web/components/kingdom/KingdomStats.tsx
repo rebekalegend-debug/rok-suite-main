@@ -6,7 +6,7 @@ import { Search, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, BarChart3, T
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 
-type SortField = 'power' | 'kill' | 'collect' | 'help' | 'dead' | 't4' | 't5' | 'name' | 'max_power';
+type SortField = 'name';
 type SortDir = 'asc' | 'desc';
 
 const METRICS = [
@@ -25,24 +25,12 @@ const VALID_TABS: TabType[] = ['table', 'charts', 'comparison'];
 export default function KingdomStats() {
   const searchParams = useSearchParams();
   const router = useRouter();
-const [members,setMembers] = useState<{id:string,name:string}[]>([])
+const KINGDOMS = [3237, 2554, 2500];
+const kingdoms = KINGDOMS;
+  const [members,setMembers] = useState<{id:string,name:string}[]>([])
 const [loadingMembers,setLoadingMembers] = useState(true)
 
-  React.useEffect(()=>{
 
-async function loadMembers(){
-
-const res = await fetch("/api/top3237")
-const data = await res.json()
-
-setMembers(data)
-setLoadingMembers(false)
-
-}
-
-loadMembers()
-
-},[])
   
   
   // URL-synced tab
@@ -57,8 +45,24 @@ loadMembers()
   }, [searchParams, router]);
 
   // Table state
-  const [selectedKingdom, setSelectedKingdom] = useState<number | null>(null);
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedKingdom, setSelectedKingdom] = useState<number>(3237);
+React.useEffect(()=>{
+
+async function loadMembers(){
+
+setLoadingMembers(true)
+
+const res = await fetch(`/api/top-kingdom?kingdom=${selectedKingdom}`)
+const data = await res.json()
+
+setMembers(data)
+setLoadingMembers(false)
+
+}
+
+loadMembers()
+
+},[selectedKingdom])
   const [search, setSearch] = useState('');
   const [sortField, setSortField] = useState<SortField>('power');
   const [sortDir, setSortDir] = useState<SortDir>('desc');
@@ -74,44 +78,7 @@ loadMembers()
   // Comparison state
   const [comparisonDate, setComparisonDate] = useState<string>('');
 
-  // Data
-  const { kingdoms, loading: loadingKingdoms } = useAvailableKingdoms();
-  const { dates, loading: loadingDates } = useKingdomDates(selectedKingdom);
-  const { dates: allDates, loading: loadingAllDates } = useAllDates();
-
-
-  const chartKingdomIds = useMemo(() => Array.from(chartKingdoms), [chartKingdoms]);
-  const { aggregates, loading: loadingAggregates } = useKingdomAggregates(
-    chartKingdomIds,
-    chartDateFrom || null,
-    chartDateTo || null,
-  );
-
-  // Comparison: fetch all kingdoms for the selected comparison date
-  const { aggregates: compAggregates, loading: loadingComparison } = useKingdomAggregates(
-    kingdoms,
-    comparisonDate || null,
-    comparisonDate || null,
-  );
-
-  // Auto-select first kingdom
-  React.useEffect(() => {
-    if (kingdoms.length > 0 && !selectedKingdom) {
-      setSelectedKingdom(kingdoms[0]);
-      setChartKingdoms(new Set(kingdoms));
-    }
-  }, [kingdoms, selectedKingdom]);
-
-  React.useEffect(() => {
-    if (dates.length > 0 && !selectedDate) setSelectedDate(dates[0]);
-  }, [dates, selectedDate]);
-
-  // Auto-select latest date for comparison
-  React.useEffect(() => {
-    if (allDates.length > 0 && !comparisonDate) setComparisonDate(allDates[0]);
-  }, [allDates, comparisonDate]);
-
-  React.useEffect(() => { setPage(0); }, [search, selectedKingdom, selectedDate, sortField, sortDir]);
+ React.useEffect(() => { setPage(0); }, [search, selectedKingdom, sortField, sortDir]);
 
   // Sort & filter (already limited to top 400 by the hook)
  const filtered = useMemo(() => {
@@ -153,6 +120,12 @@ return data
   // Pivot aggregates for multi-KD chart: { dt, "KD 3921": value, "KD 4041": value }
   const chartData = useMemo(() => {
     const byDate = new Map<string, Record<string, string | number>>();
+  const aggregates:any[] = [];
+const compAggregates:any[] = [];
+const loadingAggregates = false;
+const loadingComparison = false;
+
+const chartKingdomIds = useMemo(() => Array.from(chartKingdoms), [chartKingdoms]);
     for (const agg of aggregates) {
       const row = byDate.get(agg.dt) || { dt: agg.dt };
       row[`KD ${agg.kingdom_id}`] = agg[chartMetric as keyof KingdomAggregate] as number;
@@ -199,7 +172,7 @@ return data
     return Array.from(byKd.values()).sort((a, b) => b.total_power - a.total_power);
   }, [compAggregates, comparisonDate]);
 
-  const isLoading = loadingKingdoms || loadingDates || loadingMembers;
+ const isLoading = loadingMembers;
 
   return (
     <div className="min-h-screen p-4 lg:p-8">
@@ -240,22 +213,17 @@ return data
           {/* Table controls */}
           <div className="flex flex-wrap items-center gap-3 mb-6">
             <select
-              value={selectedKingdom || ''}
-              onChange={e => { setSelectedKingdom(Number(e.target.value)); setSelectedDate(null); }}
+       value={selectedKingdom}
+onChange={e => setSelectedKingdom(Number(e.target.value))}
               className="px-3 py-2 rounded-lg bg-[var(--background-card)] border border-[var(--border)] text-[var(--foreground)] text-sm"
             >
-              {loadingKingdoms && <option>Loading...</option>}
-              {kingdoms.map(k => <option key={k} value={k}>KD {k}</option>)}
+             
+             {KINGDOMS.map(k => (
+<option key={k} value={k}>KD {k}</option>
+))}
             </select>
 
-            <select
-              value={selectedDate || ''}
-              onChange={e => setSelectedDate(e.target.value)}
-              className="px-3 py-2 rounded-lg bg-[var(--background-card)] border border-[var(--border)] text-[var(--foreground)] text-sm"
-            >
-              {loadingDates && <option>Loading...</option>}
-              {dates.map(d => <option key={d} value={d}>{d}</option>)}
-            </select>
+        
 
             <div className="relative flex-1 min-w-[200px] max-w-[300px]">
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
@@ -272,10 +240,7 @@ return data
           {/* Summary cards */}
           {!isLoading && members.length > 0 && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-              <SummaryCard label="Top 400 Members" value={members.length.toLocaleString()} color="text-sky-400" />
-              <SummaryCard label="Total Power" value={formatCompact(members.reduce((s, m) => s + m.power, 0))} color="text-indigo-400" />
-              <SummaryCard label="Total Kill Points" value={formatCompact(members.reduce((s, m) => s + m.kill, 0))} color="text-red-400" />
-              <SummaryCard label="Total Gathered" value={formatCompact(members.reduce((s, m) => s + m.collect, 0))} color="text-emerald-400" />
+<SummaryCard label="Members Loaded" value={members.length.toLocaleString()} color="text-sky-400" />
             </div>
           )}
 
@@ -293,14 +258,7 @@ return data
                       <tr className="border-b border-[var(--border)] bg-[var(--background-secondary)]">
                         <th className="px-3 py-3 text-left text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider w-10">#</th>
                         <th className="px-3 py-3 text-left text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">ID</th>
-                        <HeaderCell label="Name" field="name" sortField={sortField} sortDir={sortDir} onSort={handleSort} />
-                        <HeaderCell label="Power" field="power" sortField={sortField} sortDir={sortDir} onSort={handleSort} align="right" />
-                        <HeaderCell label="Kill Points" field="kill" sortField={sortField} sortDir={sortDir} onSort={handleSort} align="right" />
-                        <HeaderCell label="T4 Kills" field="t4" sortField={sortField} sortDir={sortDir} onSort={handleSort} align="right" />
-                        <HeaderCell label="T5 Kills" field="t5" sortField={sortField} sortDir={sortDir} onSort={handleSort} align="right" />
-                        <HeaderCell label="Gathered" field="collect" sortField={sortField} sortDir={sortDir} onSort={handleSort} align="right" />
-                        <HeaderCell label="Helps" field="help" sortField={sortField} sortDir={sortDir} onSort={handleSort} align="right" />
-                        <HeaderCell label="Deaths" field="dead" sortField={sortField} sortDir={sortDir} onSort={handleSort} align="right" />
+<th className="px-3 py-3 text-left text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">Name</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -309,13 +267,7 @@ return data
                           <td className="px-3 py-2.5 text-[var(--text-muted)]">{page * rowsPerPage + i + 1}</td>
                           <td className="px-3 py-2.5 text-[var(--text-muted)] text-xs tabular-nums">{m.id}</td>
                           <td className="px-3 py-2.5 font-medium text-[var(--foreground)]">{m.name}</td>
-                          <td className="px-3 py-2.5 text-right text-[var(--foreground)] tabular-nums">{formatCompact(m.power)}</td>
-                          <td className="px-3 py-2.5 text-right text-red-400 tabular-nums">{formatCompact(m.kill)}</td>
-                          <td className="px-3 py-2.5 text-right text-[var(--text-secondary)] tabular-nums">{formatCompact(m.t4)}</td>
-                          <td className="px-3 py-2.5 text-right text-[var(--text-secondary)] tabular-nums">{formatCompact(m.t5)}</td>
-                          <td className="px-3 py-2.5 text-right text-emerald-400 tabular-nums">{formatCompact(m.collect)}</td>
-                          <td className="px-3 py-2.5 text-right text-amber-400 tabular-nums">{formatCompact(m.help)}</td>
-                          <td className="px-3 py-2.5 text-right text-[var(--text-muted)] tabular-nums">{formatCompact(m.dead)}</td>
+                        
                         </tr>
                       ))}
                     </tbody>
@@ -354,14 +306,7 @@ return data
         <div className="space-y-4">
           {/* Date selector */}
           <div className="flex items-center gap-3">
-            <select
-              value={comparisonDate}
-              onChange={e => setComparisonDate(e.target.value)}
-              className="px-3 py-2 rounded-lg bg-[var(--background-card)] border border-[var(--border)] text-[var(--foreground)] text-sm"
-            >
-              {allDates.length === 0 && <option>Loading...</option>}
-              {allDates.map(d => <option key={d} value={d}>{d}</option>)}
-            </select>
+          
             <span className="text-sm text-[var(--text-muted)]">
               {comparisonRows.length} kingdom{comparisonRows.length !== 1 ? 's' : ''} compared
             </span>
