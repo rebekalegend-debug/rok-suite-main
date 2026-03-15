@@ -148,7 +148,6 @@ String(d.getUTCDate()).padStart(2,'0')
 
 },[members])
 
-const totalPages = Math.ceil(filtered.length / rowsPerPage);
   const totalPages = Math.ceil(filtered.length / rowsPerPage);
   const paged = filtered.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
 
