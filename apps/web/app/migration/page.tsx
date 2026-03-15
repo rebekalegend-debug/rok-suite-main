@@ -60,7 +60,7 @@ while(e <= yesterday){
 addLog(`Processing ${s}`)
 
 const url =
-`https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?start=${s}&end=${e}&search=&server_id=3237`
+`https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?start=${s}&end=${e}&search=&server_id=2500`
 
 const r = await fetch(url,{
 headers:{
