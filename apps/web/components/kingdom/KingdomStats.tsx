@@ -118,7 +118,37 @@ data.sort((a,b)=>a.name.localeCompare(b.name))
 return data
 
 },[members,search])
+// ADD IT HERE ↓↓↓
 
+const dataUpdated = useMemo(() => {
+
+if(members.length === 0) return null
+
+let latest = 0
+
+for(const m of members){
+
+if(!m.lastSeen) continue
+
+const t = new Date(m.lastSeen).getTime()
+
+if(t > latest) latest = t
+
+}
+
+if(!latest) return null
+
+const d = new Date(latest)
+
+return `${d.getUTCFullYear()}/${
+String(d.getUTCMonth()+1).padStart(2,'0')
+}/${
+String(d.getUTCDate()).padStart(2,'0')
+} 02:00 UTC`
+
+},[members])
+
+const totalPages = Math.ceil(filtered.length / rowsPerPage);
   const totalPages = Math.ceil(filtered.length / rowsPerPage);
   const paged = filtered.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
 
@@ -199,13 +229,30 @@ const chartData = useMemo(() => {
   return (
     <div className="min-h-screen p-4 lg:p-8">
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-[var(--foreground)] flex items-center gap-2">
-          <BarChart3 size={28} className="text-green-500" />
-          Kingdom Stats
-        </h1>
-        <p className="text-sm text-[var(--text-muted)] mt-1">Top 400 member statistics from Lilith Game Tools</p>
-      </div>
+     <div className="mb-6 flex items-start justify-between">
+
+<div>
+<h1 className="text-2xl font-bold text-[var(--foreground)] flex items-center gap-2">
+<BarChart3 size={28} className="text-green-500" />
+Kingdom Stats
+</h1>
+
+<p className="text-sm text-[var(--text-muted)] mt-1">
+Top 400 member statistics from Lilith Game Tools
+</p>
+</div>
+
+<div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
+<Clock size={14} />
+<span>
+{dataUpdated
+? `Data updated on ${dataUpdated}`
+: "Loading status..."
+}
+</span>
+</div>
+
+</div>
 
       {/* Tab toggle */}
       <div className="flex rounded-lg border border-[var(--border)] overflow-hidden mb-6 w-fit">
