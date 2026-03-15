@@ -34,15 +34,30 @@ export async function GET(){
     const url =
     `https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?start=${start}&end=${end}&search=&server_id=${kingdom}`
 
-    const r = await fetch(url,{
-      headers:{
-        pauthorization:process.env.PAUTH!,
-        bauthorization:process.env.BAUTH!,
-        lang:"en_US"
-      }
-    })
+    let data
 
-    const data = await r.json()
+    // retry until snapshot exists
+    for(let i = 0; i < 5; i++){
+
+      const r = await fetch(url,{
+        headers:{
+          pauthorization:process.env.PAUTH!,
+          bauthorization:process.env.BAUTH!,
+          lang:"en_US"
+        }
+      })
+
+      data = await r.json()
+
+      if(data?.data?.length > 0){
+        console.log("Snapshot ready:", kingdom, data.data.length)
+        break
+      }
+
+      console.log("Snapshot not ready for", kingdom, "retrying...")
+
+      await new Promise(r => setTimeout(r,60000)) // wait 1 minute
+    }
 
     await fetch(`${process.env.APP_URL}/api/migration-sync`,{
       method:"POST",
@@ -50,7 +65,7 @@ export async function GET(){
         "Content-Type":"application/json"
       },
       body:JSON.stringify({
-        members:data.data || [],
+        members:data?.data || [],
         date:start,
         kingdom
       })
