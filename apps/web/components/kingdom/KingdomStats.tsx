@@ -4,15 +4,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Search, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, BarChart3, Table, TrendingUp, GitCompareArrows } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import {
-  useAvailableKingdoms,
-  useKingdomDates,
-  useAllDates,
-  useKingdomMembers,
-  useKingdomAggregates,
-  formatCompact,
-  type KingdomAggregate,
-} from '@/lib/supabase/use-kingdom-members';
+
 
 type SortField = 'power' | 'kill' | 'collect' | 'help' | 'dead' | 't4' | 't5' | 'name' | 'max_power';
 type SortDir = 'asc' | 'desc';
@@ -33,7 +25,26 @@ const VALID_TABS: TabType[] = ['table', 'charts', 'comparison'];
 export default function KingdomStats() {
   const searchParams = useSearchParams();
   const router = useRouter();
+const [members,setMembers] = useState<{id:string,name:string}[]>([])
+const [loadingMembers,setLoadingMembers] = useState(true)
 
+  React.useEffect(()=>{
+
+async function loadMembers(){
+
+const res = await fetch("/api/top3237")
+const data = await res.json()
+
+setMembers(data)
+setLoadingMembers(false)
+
+}
+
+loadMembers()
+
+},[])
+  
+  
   // URL-synced tab
   const rawTab = searchParams.get('tab');
   const activeTab: TabType = VALID_TABS.includes(rawTab as TabType) ? (rawTab as TabType) : 'table';
@@ -67,7 +78,7 @@ export default function KingdomStats() {
   const { kingdoms, loading: loadingKingdoms } = useAvailableKingdoms();
   const { dates, loading: loadingDates } = useKingdomDates(selectedKingdom);
   const { dates: allDates, loading: loadingAllDates } = useAllDates();
-  const { members, loading: loadingMembers } = useKingdomMembers(selectedKingdom, selectedDate, 400);
+
 
   const chartKingdomIds = useMemo(() => Array.from(chartKingdoms), [chartKingdoms]);
   const { aggregates, loading: loadingAggregates } = useKingdomAggregates(
@@ -103,21 +114,25 @@ export default function KingdomStats() {
   React.useEffect(() => { setPage(0); }, [search, selectedKingdom, selectedDate, sortField, sortDir]);
 
   // Sort & filter (already limited to top 400 by the hook)
-  const filtered = useMemo(() => {
-    let data = [...members];
-    if (search) {
-      const q = search.toLowerCase();
-      data = data.filter(m => m.name.toLowerCase().includes(q) || m.id.toString().includes(q));
-    }
-    data.sort((a, b) => {
-      const av = sortField === 'name' ? a.name.toLowerCase() : (a[sortField] || 0);
-      const bv = sortField === 'name' ? b.name.toLowerCase() : (b[sortField] || 0);
-      if (av < bv) return sortDir === 'asc' ? -1 : 1;
-      if (av > bv) return sortDir === 'asc' ? 1 : -1;
-      return 0;
-    });
-    return data;
-  }, [members, search, sortField, sortDir]);
+ const filtered = useMemo(() => {
+
+let data = [...members]
+
+if(search){
+const q = search.toLowerCase()
+
+data = data.filter(m =>
+m.name.toLowerCase().includes(q) ||
+m.id.toString().includes(q)
+)
+
+}
+
+data.sort((a,b)=>a.name.localeCompare(b.name))
+
+return data
+
+},[members,search])
 
   const totalPages = Math.ceil(filtered.length / rowsPerPage);
   const paged = filtered.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
