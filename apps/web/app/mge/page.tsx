@@ -580,7 +580,14 @@ ${missing.equipment
 type="file"
 accept="image/*"
 className="hidden"
-onChange={(e)=>setCommanderFile(e.target.files?.[0] || null)}
+onChange={(e)=>{
+  const file = e.target.files?.[0] || null
+  setCommanderFile(file)
+
+  if(file){
+    setMissing(prev => ({ ...prev, equipment:false }))
+  }
+}}
 />
 </label>
 
