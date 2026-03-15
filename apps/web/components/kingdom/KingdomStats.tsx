@@ -71,7 +71,7 @@ const [sortField, setSortField] = useState<SortField>('name');
 
   // Chart state
   const [chartKingdoms, setChartKingdoms] = useState<Set<number>>(new Set());
-  const [chartMetric, setChartMetric] = useState<string>('total_power');
+ const [chartMetric, setChartMetric] = useState<string>('total_power');
   const [chartDateFrom, setChartDateFrom] = useState<string>('');
   const [chartDateTo, setChartDateTo] = useState<string>('');
 
@@ -81,7 +81,10 @@ const aggregates:any[] = [];
 const compAggregates:any[] = [];
 const loadingAggregates = false;
 const loadingComparison = false;
-
+const chartKingdomIds = useMemo(
+  () => Array.from(chartKingdoms),
+  [chartKingdoms]
+)
 
  React.useEffect(() => { setPage(0); }, [search, selectedKingdom, sortField, sortDir]);
 
@@ -125,19 +128,23 @@ return data
   // Pivot aggregates for multi-KD chart: { dt, "KD 3921": value, "KD 4041": value }
 const chartData = useMemo(() => {
 
-  const byDate = new Map<string, Record<string, string | number>>();
+  const byDate = new Map<string, Record<string, any>>();
 
   for (const agg of aggregates) {
-    const row = byDate.get(agg.dt) || { dt: agg.dt };
-    row[`KD ${agg.kingdom_id}`] = agg[chartMetric] as number;
-    byDate.set(agg.dt, row);
+
+    const row = byDate.get(agg.dt) || { dt: agg.dt } as Record<string, any>
+
+    row[`KD ${agg.kingdom_id}`] = agg[chartMetric]
+
+    byDate.set(agg.dt,row)
+
   }
 
   return Array.from(byDate.values()).sort(
-    (a,b)=> (a.dt as string).localeCompare(b.dt as string)
+    (a,b)=> String(a.dt).localeCompare(String(b.dt))
   )
 
-},[aggregates,chartMetric]);
+},[aggregates,chartMetric])
 
   // Chart kingdom IDs sorted by latest total power (desc)
   const sortedChartKingdomIds = useMemo(() => {
@@ -512,5 +519,13 @@ function SummaryCard({ label, value, color }: { label: string; value: string; co
     </div>
   );
 }
+function formatCompact(v:number){
 
+  if(v>=1_000_000_000) return (v/1_000_000_000).toFixed(1)+"B"
+  if(v>=1_000_000) return (v/1_000_000).toFixed(1)+"M"
+  if(v>=1_000) return (v/1_000).toFixed(1)+"K"
+
+  return v.toString()
+
+}
 
