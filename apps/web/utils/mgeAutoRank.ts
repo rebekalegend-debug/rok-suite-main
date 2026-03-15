@@ -28,14 +28,11 @@ function rgScore(rg?: string[]) {
     if (r === "Both") score += 6
     else if (r === "Rally") score += 5
     else if (r === "Garrison") score += 5
-
     else if (r === "Rally-Y") score += 3
     else if (r === "Garrison-Y") score += 3
-
     else if (r === "R4") score += 2
     else if (r === "R5") score += 2
-
-    else if (r === "No") score -= 2
+    else if (r === "No") score += 0
 
   }
 
@@ -55,7 +52,7 @@ function kvkScore(kvk:number){
   if (percent >= 50) return 2
   if (percent > 0) return 1
 
-  return -3
+  return 0
 }
 
 /* ---------------------------------- */
@@ -69,7 +66,7 @@ function eqScore(eq?:string){
   if (eq === "Legendary") return 4
   if (eq === "Leg.Purple") return 3
   if (eq === "Purple") return 2
-  if (eq === "Bad/Low") return -2
+  if (eq === "Bad/Low") return 0
 
   return 0
 }
@@ -86,8 +83,8 @@ function purposeScore(purpose?:string){
     "Non-Meta R/G Leader": 2,
     "Field fight": 2,
     "Own city garrison": 1,
-    "Slow building it": -1,
-    "Just unlock": -2
+    "Slow building it": 0,
+    "Just unlock": 0
 
   }
 
@@ -104,7 +101,7 @@ function spendScore(spend:string){
   if(spend.includes("Few")) return 2
   if(spend.includes("50%")) return 1
   if(spend.includes("Crystal")) return 0
-  if(spend === "F2P") return -1
+  if(spend === "F2P") return 0
 
   return 0
 }
@@ -134,6 +131,22 @@ function headsNeeded(skills?:string){
 }
 
 /* ---------------------------------- */
+/* TOTAL SCORE */
+/* ---------------------------------- */
+
+function totalScore(p:RankPlayer){
+
+  return (
+    rgScore(p.rg) +
+    kvkScore(p.kvkContribution) +
+    eqScore(p.eq) +
+    purposeScore(p.purpose) +
+    spendScore(p.spend)
+  )
+
+}
+
+/* ---------------------------------- */
 /* AUTO RANK */
 /* ---------------------------------- */
 
@@ -142,7 +155,7 @@ export function autoRankPlayers<T extends RankPlayer>(players:T[]):T[]{
   const sorted = [...players].sort((a,b)=>{
 
     /* ----------------------- */
-    /* SKILL HEAD WASTE RULE */
+    /* SKILL HEAD PROTECTION */
     /* ----------------------- */
 
     const ha = headsNeeded(a.skills)
@@ -156,60 +169,13 @@ export function autoRankPlayers<T extends RankPlayer>(players:T[]):T[]{
     }
 
     /* ----------------------- */
-    /* MAIN STRENGTH SCORE */
+    /* TOTAL SCORE */
     /* ----------------------- */
 
-   /* ----------------------- */
-/* R&G PRIORITY */
-/* ----------------------- */
+    const sa = totalScore(a)
+    const sb = totalScore(b)
 
-const rgA = rgScore(a.rg)
-const rgB = rgScore(b.rg)
-
-if(rgA !== rgB) return rgB - rgA
-
-
-/* ----------------------- */
-/* KVK CONTRIBUTION */
-/* ----------------------- */
-
-const kvkA = kvkScore(a.kvkContribution)
-const kvkB = kvkScore(b.kvkContribution)
-
-if(kvkA !== kvkB) return kvkB - kvkA
-
-
-/* ----------------------- */
-/* EQUIPMENT */
-/* ----------------------- */
-
-const eqA = eqScore(a.eq)
-const eqB = eqScore(b.eq)
-
-if(eqA !== eqB) return eqB - eqA
-
-    /* ----------------------- */
-    /* SECONDARY FACTORS */
-    /* ----------------------- */
-
-   /* ----------------------- */
-/* PURPOSE */
-/* ----------------------- */
-
-const purposeA = purposeScore(a.purpose)
-const purposeB = purposeScore(b.purpose)
-
-if(purposeA !== purposeB) return purposeB - purposeA
-
-
-/* ----------------------- */
-/* SPENDING */
-/* ----------------------- */
-
-const spendA = spendScore(a.spend)
-const spendB = spendScore(b.spend)
-
-if(spendA !== spendB) return spendB - spendA
+    if(sa !== sb) return sb - sa
 
     /* ----------------------- */
     /* DESIRED RANK LAST */
