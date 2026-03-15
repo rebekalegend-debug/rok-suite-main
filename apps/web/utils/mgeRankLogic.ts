@@ -56,12 +56,9 @@ export function kvkContributionPercent(value: number) {
 
   const percent = Math.floor(value / 1_000_000)
 
-  if (percent >= 500) return { label: `≥${percent}%`, color: "green" }
-  if (percent >= 300) return { label: `≥${percent}%`, color: "green" }
-  if (percent >= 200) return { label: `≥${percent}%`, color: "green" }
-  if (percent >= 100) return { label: `≥${percent}%`, color: "green" }
-  if (percent >= 75) return { label: `≥${percent}%`, color: "yellow" }
-  if (percent >= 50) return { label: `≥${percent}%`, color: "orange" }
+  if (percent >= 100) return { label: `${percent}%`, color: "green" }
+if (percent >= 70)  return { label: `${percent}%`, color: "yellow" }
+if (percent >= 50)  return { label: `${percent}%`, color: "orange" }
 
-  return { label: "0-50%", color: "red" }
+return { label: `${percent}%`, color: "red" }
 }
