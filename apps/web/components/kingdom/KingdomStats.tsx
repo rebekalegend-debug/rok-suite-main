@@ -399,7 +399,7 @@ color="red"
 
 <th
 onClick={()=>handleSort('id')}
-className="px-3 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
+className="px-3 py-2.5 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
 >
 ID
 <span className="inline-flex ml-1">
@@ -415,7 +415,7 @@ ID
 
 <th
 onClick={()=>handleSort('name')}
-className="px-3 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
+className="px-3 py-2.5 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
 >
 Name
 <span className="inline-flex ml-1">
@@ -430,7 +430,7 @@ Name
 
 <th
 onClick={()=>handleSort('power')}
-className="px-3 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
+className="px-3 py-2.5 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
 >
 Power
 <span className="inline-flex ml-1">
@@ -445,7 +445,7 @@ Power
 
 <th
 onClick={()=>handleSort('in')}
-className="px-3 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
+className="px-3 py-2.5 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
 >
 Show Up
 <span className="inline-flex ml-1">
@@ -459,7 +459,7 @@ Show Up
 </th>
 <th
 onClick={()=>handleSort('out')}
-className="px-3 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
+className="px-3 py-2.5 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
 >
 Off
 <span className="inline-flex ml-1">
@@ -478,7 +478,7 @@ Off
 {filtered.map((m, i) => (
 <tr
 key={m.id}
-className={`border-b border-[var(--border)] hover:bg-[var(--background-secondary)]/50 transition-colors ${
+className={`border-b border-[var(--border)] hover:bg-[var(--background-secondary)]/40 transition-colors ${
 i % 2 === 0 ? 'bg-[var(--background-secondary)]/30' : ''
 }`}
 >
@@ -501,7 +501,7 @@ className="text-[var(--text-muted)] hover:text-[var(--foreground)] transition-co
 
 <div className="flex items-center gap-2">
 
-<span className="font-medium">{m.name}</span>
+<span className="font-medium text-[var(--foreground)]">{m.name}</span>
 
 {m.prevNames?.length > 0 && (
 <div className="relative group flex items-center">
