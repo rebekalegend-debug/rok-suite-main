@@ -24,7 +24,7 @@ export async function GET(){
 
   const end = lastLilithSnapshot()
   const start = prevDay(end)
-
+ console.log("Calling Lilith with:", start, end)
   const kingdoms = [2500,2554,3237]
 
   for(const kingdom of kingdoms){
@@ -33,7 +33,7 @@ export async function GET(){
 
     const url =
     `https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?start=${start}&end=${end}&search=&server_id=${kingdom}`
-
+console.log("URL:", url)
     let data:any = null
 
     // retry until snapshot exists
