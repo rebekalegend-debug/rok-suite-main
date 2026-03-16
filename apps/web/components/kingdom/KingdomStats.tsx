@@ -439,6 +439,8 @@ rounded-lg px-3 py-2 text-xs shadow-lg min-w-[140px]">
 </div>
 )}
 
+</div>
+
 </td>
 
 <td className="px-3 py-2 text-indigo-400 font-semibold">
