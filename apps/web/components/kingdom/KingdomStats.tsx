@@ -347,10 +347,10 @@ color="red"
               <div className="p-12 text-center text-[var(--text-muted)]">No data available</div>
             ) : (
               <>
-                <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+                <div className="overflow-x-auto max-h-[70vh] overflow-y-auto">
+         <table className="w-full text-sm will-change-transform">
 
-<thead className="sticky top-0 z-10 bg-[var(--background-card)]">
+<thead className="sticky top-0 z-20 bg-[var(--background-card)] backdrop-blur">
 
 <tr className="border-b border-[var(--border)] text-xs uppercase tracking-wider">
 
