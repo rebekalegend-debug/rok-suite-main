@@ -410,8 +410,9 @@ rounded-lg px-3 py-2 text-xs shadow-lg min-w-[140px]">
               </>
             )}
           </div>
-        </>
-      )}
+</div>
+);
+}
 
 function SummaryCard({ label, value, color }: { label: string; value: string; color: string }) {
   return (
