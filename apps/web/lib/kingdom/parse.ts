@@ -266,25 +266,32 @@ export async function fetchPrevNamesSheet(url: string): Promise<Map<number,strin
   const normalize = (s:string) =>
     s.toLowerCase().replace(/\s+/g,'').trim()
 
-  const iGov = headers.findIndex(h => normalize(h).includes("governorid"))
-  const iPrev = headers.findIndex(h => normalize(h).includes("prevnames"))
+  const iGov = headers.findIndex(h => normalize(h) === "id")
+  const iPrev = headers.findIndex(h => normalize(h).includes("prev"))
+
+  if (iGov === -1 || iPrev === -1) {
+    console.error("Headers detected:", headers)
+    throw new Error("Prev names sheet columns not found")
+  }
 
   const map = new Map<number,string>()
 
-  for(const cols of rows){
+  for (const cols of rows) {
 
-   const id = parseInt(cols[iGov].replace(/[^0-9]/g,''))
-    if(!id) continue
+    const raw = (cols[iGov] || "").trim()
+
+    // remove the leading ' and any other non-digits
+    const id = parseInt(raw.replace(/[^0-9]/g,''))
+
+    if (!id) continue
 
     const prev = (cols[iPrev] || "").trim()
 
     map.set(id, prev)
-
   }
 
   return map
 }
-
 
 
 export async function fetchWantedSheet(url: string): Promise<WantedPlayer[]> {
