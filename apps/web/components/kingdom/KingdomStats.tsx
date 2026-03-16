@@ -504,7 +504,7 @@ className="text-[var(--text-muted)] hover:text-[var(--foreground)] transition-co
 
 <td className="px-3 py-2.5 text-center">
 
-<div className="flex items-center gap-2">
+<div className="flex items-center justify-center gap-2">
 
 <span className="font-medium text-sm text-[var(--foreground)]">{m.name}</span>
 
