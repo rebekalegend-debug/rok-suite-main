@@ -285,7 +285,7 @@ Data scan run daily at 03:30 UTC • Data sourced from Lilith newly released Too
 <select
 value={selectedKingdom}
 onChange={e => setSelectedKingdom(Number(e.target.value))}
-className="px-3 py-2 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] text-sm"
+className="px-3 py-2.5 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] text-sm"
 >
 {KINGDOMS.map(k => (
 <option key={k} value={k}>KD {k}</option>
@@ -389,80 +389,115 @@ color="red"
               <div className="p-12 text-center text-[var(--text-muted)]">No data available</div>
             ) : (
               <>
-             <div className="overflow-x-auto max-h-[70vh] overflow-y-auto rounded-xl border border-[#2a3442] bg-[#161b23]">
-         <table className="w-full text-sm will-change-transform">
+             <div className="overflow-x-auto overflow-y-visible">
+        <table className="w-full">
 
-<thead className="sticky top-0 z-20 bg-gradient-to-b from-[#1f2632] to-[#1a2029] backdrop-blur border-b border-[#2a3442]">
+<thead className="sticky top-0 z-10 bg-[var(--background-card)]">
+<tr className="border-b border-[var(--border)]">
 
-<tr className="text-xs uppercase tracking-wider text-[#9aa4b2]">
-
-<th className="cursor-pointer px-4 py-4 text-left hover:text-white">#</th>
+<th className="px-3 py-2.5 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">#</th>
 
 <th
 onClick={()=>handleSort('id')}
-className="cursor-pointer px-4 py-4 text-left hover:text-white"
+className="px-3 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
 >
 ID
-{sortField === 'id' && (sortDir === 'asc' ? <ChevronUp size={12}/> : <ChevronDown size={12}/>)}
+<span className="inline-flex ml-1">
+{sortField === 'id' ? (
+  sortDir === 'asc'
+    ? <ChevronUp className="w-3.5 h-3.5"/>
+    : <ChevronDown className="w-3.5 h-3.5"/>
+) : (
+  <ChevronUp className="w-3.5 h-3.5 opacity-30"/>
+)}
+</span>
 </th>
 
 <th
 onClick={()=>handleSort('name')}
-className="cursor-pointer px-4 py-4 text-left hover:text-white"
+className="px-3 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
 >
 Name
-{sortField === 'name' && (sortDir === 'asc' ? <ChevronUp size={12}/> : <ChevronDown size={12}/>)}
+<span className="inline-flex ml-1">
+{sortField === 'name'
+  ? (sortDir === 'asc'
+      ? <ChevronUp className="w-3.5 h-3.5"/>
+      : <ChevronDown className="w-3.5 h-3.5"/>)
+  : <ChevronUp className="w-3.5 h-3.5 opacity-30"/>
+}
+</span>
 </th>
 
 <th
 onClick={()=>handleSort('power')}
-className="cursor-pointer px-4 py-4 text-left hover:text-white"
+className="px-3 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
 >
 Power
-{sortField === 'power' && (sortDir === 'asc' ? <ChevronUp size={12}/> : <ChevronDown size={12}/>)}
+<span className="inline-flex ml-1">
+{sortField === 'power'
+  ? (sortDir === 'asc'
+      ? <ChevronUp className="w-3.5 h-3.5"/>
+      : <ChevronDown className="w-3.5 h-3.5"/>)
+  : <ChevronUp className="w-3.5 h-3.5 opacity-30"/>
+}
+</span>
 </th>
 
 <th
 onClick={()=>handleSort('in')}
-className="cursor-pointer px-4 py-4 text-left hover:text-white"
+className="px-3 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
 >
 Show Up
-{sortField === 'in' && (sortDir === 'asc' ? <ChevronUp size={12}/> : <ChevronDown size={12}/>)}
+<span className="inline-flex ml-1">
+{sortField === 'in'
+  ? (sortDir === 'asc'
+      ? <ChevronUp className="w-3.5 h-3.5"/>
+      : <ChevronDown className="w-3.5 h-3.5"/>)
+  : <ChevronUp className="w-3.5 h-3.5 opacity-30"/>
+}
+</span>
 </th>
-
 <th
 onClick={()=>handleSort('out')}
-className="cursor-pointer px-4 py-4 text-left hover:text-white"
+className="px-3 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
 >
 Off
-{sortField === 'out' && (sortDir === 'asc' ? <ChevronUp size={12}/> : <ChevronDown size={12}/>)}
+<span className="inline-flex ml-1">
+{sortField === 'out'
+  ? (sortDir === 'asc'
+      ? <ChevronUp className="w-3.5 h-3.5"/>
+      : <ChevronDown className="w-3.5 h-3.5"/>)
+  : <ChevronUp className="w-3.5 h-3.5 opacity-30"/>
+}
+</span>
 </th>
-
 </tr>
 
 </thead>
-               <tbody className="divide-y divide-[var(--border)]">
+               <tbody>
 {filtered.map((m, i) => (
 <tr
 key={m.id}
-className="border-b border-[#222a36] hover:bg-[#1c2330] transition-colors"
+className={`border-b border-[var(--border)] hover:bg-[var(--background-secondary)]/50 transition-colors ${
+i % 2 === 0 ? 'bg-[var(--background-secondary)]/30' : ''
+}`}
 >
 
-<td className="px-3 py-2">
+<td className="px-3 py-2.5">
 {i + 1}
 </td>
 
-<td className="px-3 py-2 text-[var(--text-muted)]">
+<td className="px-3 py-2.5 text-[var(--text-muted)]">
 <a
 href={`https://app.rokstats.online/governor/${m.id}`}
 target="_blank"
 rel="noopener noreferrer"
-className="text-[#7f8da3] hover:text-[#7c8cff] transition-colors"  >
+className="text-[var(--text-muted)] hover:text-[var(--foreground)] transition-colors"  >
 {m.id}
 </a>
 </td>
 
-<td className="px-3 py-2">
+<td className="px-3 py-2.5">
 
 <div className="flex items-center gap-2">
 
@@ -471,11 +506,11 @@ className="text-[#7f8da3] hover:text-[#7c8cff] transition-colors"  >
 {m.prevNames?.length > 0 && (
 <div className="relative group flex items-center">
 
-<Clock size={14} className="text-gray-400 hover:text-white transition cursor-pointer" />
+<Clock size={14} className="text-[var(--text-muted)] hover:text-[var(--foreground)] transition cursor-pointer" />
 
 <div className="absolute left-5 bottom-full mb-2 hidden group-hover:block z-[9999]
 bg-[var(--background-card)] border border-[var(--border)]
-rounded-lg px-3 py-2 text-xs shadow-xl min-w-[140px]">
+rounded-lg px-3 py-2.5 text-xs shadow-lg min-w-[140px]">
 
 <div className="text-[var(--text-muted)] mb-1">
 {m.prevNames.length} previous names
@@ -494,15 +529,15 @@ rounded-lg px-3 py-2 text-xs shadow-xl min-w-[140px]">
 
 </td>
 
-<td className="px-3 py-2 text-[#7c8cff] font-semibold">
+<td className="px-3 py-2.5 font-mono text-sm text-[var(--foreground)]">
 {formatCompact(m.power)}
 </td>
 
-<td className="px-3 py-2" title={m.migratedIn || ""}>
+<td className="px-3 py-2.5" title={m.migratedIn || ""}>
 {formatRelative(m.migratedIn)}
 </td>
 
-<td className="px-3 py-2" title={m.migratedOut || ""}>
+<td className="px-3 py-2.5" title={m.migratedOut || ""}>
 {formatRelative(m.migratedOut)}
 </td>
 
