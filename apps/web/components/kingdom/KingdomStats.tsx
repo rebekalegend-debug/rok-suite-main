@@ -358,7 +358,7 @@ color="red"
 
 <th
 onClick={()=>handleSort('id')}
-className="cursor-pointer px-3 py-3 text-left flex items-center gap-1 hover:text-white"
+className="cursor-pointer px-3 py-3 text-left hover:text-white"
 >
 ID
 {sortField === 'id' && (sortDir === 'asc' ? <ChevronUp size={12}/> : <ChevronDown size={12}/>)}
@@ -366,7 +366,7 @@ ID
 
 <th
 onClick={()=>handleSort('name')}
-className="cursor-pointer px-3 py-3 text-left flex items-center gap-1 hover:text-white"
+className="cursor-pointer px-3 py-3 text-left hover:text-white"
 >
 Name
 {sortField === 'name' && (sortDir === 'asc' ? <ChevronUp size={12}/> : <ChevronDown size={12}/>)}
@@ -374,7 +374,7 @@ Name
 
 <th
 onClick={()=>handleSort('power')}
-className="cursor-pointer px-3 py-3 text-left flex items-center gap-1 hover:text-white"
+className="cursor-pointer px-3 py-3 text-left hover:text-white"
 >
 Power
 {sortField === 'power' && (sortDir === 'asc' ? <ChevronUp size={12}/> : <ChevronDown size={12}/>)}
@@ -382,7 +382,7 @@ Power
 
 <th
 onClick={()=>handleSort('in')}
-className="cursor-pointer px-3 py-3 text-left flex items-center gap-1 hover:text-white"
+className="cursor-pointer px-3 py-3 text-left hover:text-white"
 >
 Mig. In
 {sortField === 'in' && (sortDir === 'asc' ? <ChevronUp size={12}/> : <ChevronDown size={12}/>)}
@@ -390,7 +390,7 @@ Mig. In
 
 <th
 onClick={()=>handleSort('out')}
-className="cursor-pointer px-3 py-3 text-left flex items-center gap-1 hover:text-white"
+className="cursor-pointer px-3 py-3 text-left hover:text-white"
 >
 Mig. Out
 {sortField === 'out' && (sortDir === 'asc' ? <ChevronUp size={12}/> : <ChevronDown size={12}/>)}
@@ -411,7 +411,9 @@ Mig. Out
 {m.id}
 </td>
 
-<td className="px-3 py-2 flex items-center gap-2">
+<td className="px-3 py-2">
+
+<div className="flex items-center gap-2">
 
 <span className="font-medium">{m.name}</span>
 
