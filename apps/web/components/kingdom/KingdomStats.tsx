@@ -246,8 +246,10 @@ const chartData = useMemo(() => {
 
  const isLoading = loadingMembers;
 
-  return (
+ return (
+  <>
     <h1 style={{color:"red"}}>TEST KINGDOM COMPONENT</h1>
+
     <div className="min-h-screen p-4 lg:p-8">
       {/* Header */}
      <div className="mb-6 flex items-start justify-between">
