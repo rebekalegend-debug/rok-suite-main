@@ -298,7 +298,10 @@ className="w-full pl-9 pr-3 py-2 rounded-xl bg-[var(--background-secondary)] bor
 </div>
 
 </div>
-   
+
+
+
+      
 
           {/* Summary cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -321,7 +324,7 @@ color="yellow"
 <GlowCard
 title="Migrated In"
 value={members.filter(m=>m.migratedIn).length}
-sub="players"
+sub="Migrated in - Wake up - New accounts"
 color="orange"
 />
 
@@ -331,7 +334,7 @@ color="orange"
 <GlowCard
 title="Migrated Out"
 value={members.filter(m=>m.migratedOut).length}
-sub="players"
+sub="Migrated out - Went inactive - Disappeared from map"
 color="red"
 />
 
