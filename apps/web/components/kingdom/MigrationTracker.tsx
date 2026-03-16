@@ -1,6 +1,6 @@
 'use client';
 import { History } from "lucide-react";
-import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Search, RefreshCw, Lock, ExternalLink, Crosshair, X, Info, ChevronDown, ChevronUp, Undo2, Target, Skull, LogOut } from 'lucide-react';
 import { fetchViolationSheet } from '@/lib/kingdom/parse';
 import { 
@@ -9,27 +9,36 @@ import {
   PREV_NAMES_SHEET_URL
 } from '@/lib/kingdom/config';
 import { matchesSearch } from '@/lib/search';
-import type { WantedPlayer } from '@/lib/kingdom/types';
 import { AlertCircle } from "lucide-react";
 import { Radar } from "lucide-react";
 import { fetchPrevNamesSheet } from '@/lib/kingdom/parse';
-type OfficerMark = 'On wanted list' | 'Left';
 const VIOLATION_OPTIONS = ['First', 'Second', 'Third', 'KD Break'];
 interface WantedStatus {
   governor_id: number;
   status: OfficerMark;
   updated_at: string;
 }
-
-interface UndoAction {
+type WantedPlayer = {
   governorId: number;
-  playerName: string;
-  previousStatus: OfficerMark | null;
-  newStatus: OfficerMark | null;
-}
+  name: string;
+  power1: number;
+  power2: number;
+  alliance: string;
+
+  violation?: string[];
+  handled?: string;
+  notes?: string;
+
+  zero?: "" | "yes" | "no";
+  zeroed?: "" | "yes" | "no" | "left";
+  display?: boolean;
+
+  prevNames?: string;
+};
+
 
 import { ADMIN_PASSWORD, OFFICER_PASSWORD } from '@/lib/auth-passwords';
-const UNDO_TIMEOUT_MS = 6000;
+
 
 /** Format power — sheet stores values in millions (e.g. 28 = 28M) */
 const formatPower = (val: number): string => {
@@ -112,11 +121,7 @@ export default function WantedList() {
   const [showPasswordPrompt, setShowPasswordPrompt] = useState(false);
   const [password, setPassword] = useState('');
 
- 
 
-  // Undo state
-  const [undoAction, setUndoAction] = useState<UndoAction | null>(null);
-  const undoTimerRef = useRef<NodeJS.Timeout | null>(null);
 const fetchData = useCallback(async () => {
   setLoading(true);
   setError(null);
@@ -126,10 +131,23 @@ const fetchData = useCallback(async () => {
       fetchPrevNamesSheet(PREV_NAMES_SHEET_URL),
     ]);
 
-    const merged = wantedPlayers.map(p => ({
-      ...p,
-      prevNames: prevNamesMap.get(p.governorId) || ""
-    }));
+ const merged: WantedPlayer[] = wantedPlayers.map((p: any) => ({
+  governorId: p.governorId,
+  name: p.name,
+  power1: p.power1,
+  power2: p.power2,
+  alliance: p.alliance,
+
+  violation: p.violation || [],
+  handled: p.handled || 'No action',
+  notes: p.notes || '',
+
+  zero: p.zero || '',
+  zeroed: p.zeroed || '',
+  display: p.display !== false,
+
+  prevNames: prevNamesMap.get(p.governorId) || ""
+}));
 
     setPlayers(merged);
     setLastRefreshed(new Date());
@@ -150,12 +168,7 @@ const fetchData = useCallback(async () => {
     fetchData();
   }, [fetchData]);
 
-  // Clean up undo timer on unmount
-  useEffect(() => {
-    return () => {
-      if (undoTimerRef.current) clearTimeout(undoTimerRef.current);
-    };
-  }, []);
+
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
@@ -231,7 +244,10 @@ const handleSort = (field: SortableField, multi: boolean) => {
 
 
   // Only visible players (display !== false)
-  const visiblePlayers = useMemo(() => players.filter(p => p.display), [players]);
+const visiblePlayers = useMemo(
+  () => players.filter(p => p.display !== false),
+  [players]
+);
 const filtered = useMemo(() => {
   const list = visiblePlayers
     .filter(p => {
@@ -646,7 +662,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
          {isAdmin && search && (
   <div className="bg-[var(--background-card)] border border-[var(--border)] rounded-xl mt-2 max-h-40 overflow-y-auto">
     {players
-      .filter(p => p.name.toLowerCase().includes(search.toLowerCase()))
+     .filter(p => p.name?.toLowerCase().includes(search.toLowerCase()))
       .slice(0, 10)
       .map(p => (
         <div
@@ -900,32 +916,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 
 
                       
-                      {isOfficer && (
-                        <td className="px-3 py-2.5 text-center">
-                          <div className="flex items-center justify-center gap-1">
-                            <button
-                              onClick={() => handleMarkStatus(player.governorId, player.name, handled === 'On wanted list' ? null : 'On wanted list')}
-                              className={`px-2 py-1 rounded text-[10px] font-semibold border transition-colors ${
-                                handled === 'On wanted list'
-                                  ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400'
-                                  : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)] hover:text-emerald-400 hover:border-emerald-500/40'
-                              }`}
-                            >
-                              ZEROED
-                            </button>
-                            <button
-                              onClick={() => handleMarkStatus(player.governorId, player.name, handled === 'Left' ? null : 'Left')}
-                              className={`px-2 py-1 rounded text-[10px] font-semibold border transition-colors ${
-                                handled === 'Left'
-                                  ? 'bg-sky-500/20 border-sky-500/40 text-sky-400'
-                                  : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)] hover:text-sky-400 hover:border-sky-500/40'
-                              }`}
-                            >
-                              LEFT
-                            </button>
-                          </div>
-                        </td>
-                      )}
+                    
                     </tr>
                   );
                 })
@@ -1008,33 +999,6 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
     );
   })}
 </div>
-
-
-                  {/* Officer actions */}
-                  {isOfficer && (
-                    <div className="flex gap-2 pt-1 border-t border-[var(--border)]/50">
-                      <button
-                        onClick={() => handleMarkStatus(player.governorId, player.name, handled === 'On wanted list' ? null : 'On wanted list')}
-                        className={`flex-1 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${
-                          handled === 'On wanted list'
-                            ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400'
-                            : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)] hover:text-emerald-400 hover:border-emerald-500/40'
-                        }`}
-                      >
-                        ZEROED
-                      </button>
-                      <button
-                        onClick={() => handleMarkStatus(player.governorId, player.name, handled === 'Left' ? null : 'Left')}
-                        className={`flex-1 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${
-                          handled === 'Left'
-                            ? 'bg-sky-500/20 border-sky-500/40 text-sky-400'
-                            : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)] hover:text-sky-400 hover:border-sky-500/40'
-                        }`}
-                      >
-                        LEFT
-                      </button>
-                    </div>
-                  )}
                 </div>
               );
             })
@@ -1050,26 +1014,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
         )}
       </div>
 
-      {/* Undo toast */}
-      {undoAction && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-4 fade-in duration-200">
-          <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[var(--background-card)] border border-[var(--border)] shadow-xl">
-            <span className="text-sm text-[var(--text-secondary)]">
-              Marked <span className="font-medium text-[var(--foreground)]">{undoAction.playerName}</span> as{' '}
-              <span className="font-medium">
-                {undoAction.newStatus === null ? 'pending' : undoAction.newStatus}
-              </span>
-            </span>
-            <button
-              onClick={handleUndo}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium bg-amber-500/10 border border-amber-500/30 text-amber-400 hover:bg-amber-500/20 transition-colors"
-            >
-              <Undo2 size={14} />
-              Undo
-            </button>
-          </div>
-        </div>
-      )}
+   
 
       {/* Password modal */}
       {showPasswordPrompt && (
