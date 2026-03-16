@@ -803,7 +803,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
       href={`https://app.rokstats.online/governor/${player.governorId}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-[var(--text-muted)] hover:text-[var(--foreground)] transition-colors"
+      className="text-cyan-400/80 hover:text-cyan-300 hover:underline"
     >
       {player.governorId}
     </a>
