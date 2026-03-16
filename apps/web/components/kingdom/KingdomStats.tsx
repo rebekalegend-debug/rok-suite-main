@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Search, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, BarChart3 } from 'lucide-react';
+import { Search, ChevronUp, ChevronDown, BarChart3 } from 'lucide-react';
 import { Clock } from "lucide-react"
 
 type SortField = 'name' | 'id' | 'power' | 'in' | 'out';
@@ -78,8 +78,6 @@ const chartKingdomIds = useMemo(
   () => Array.from(chartKingdoms),
   [chartKingdoms]
 )
-
- React.useEffect(() => { setPage(0); }, [search, selectedKingdom, sortField, sortDir]);
 
   // Sort & filter (already limited to top 400 by the hook)
 const filtered = useMemo(() => {
