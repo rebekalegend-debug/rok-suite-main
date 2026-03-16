@@ -1,7 +1,6 @@
 function lastLilithSnapshot() {
 
   const d = new Date()
-
   d.setUTCDate(d.getUTCDate() - 1)
 
   return d.toISOString().slice(0,10)
@@ -19,12 +18,14 @@ function prevDay(date:string){
 
 export async function GET(){
 
+  const base = `https://${process.env.VERCEL_URL}`
+
   const end = lastLilithSnapshot()
 
   console.log("Current snapshot:", end)
 
   // read last processed snapshot from sheet
-  const metaRes = await fetch(`${process.env.APP_URL}/api/meta`)
+  const metaRes = await fetch(`${base}/api/meta`)
   const meta = await metaRes.json()
 
   const lastProcessed = meta?.snapshot || null
@@ -79,7 +80,7 @@ export async function GET(){
 
     console.log("Members received:", data?.data?.length)
 
-    await fetch(`${process.env.APP_URL}/api/migration-sync`,{
+    await fetch(`${base}/api/migration-sync`,{
       method:"POST",
       headers:{
         "Content-Type":"application/json"
@@ -94,7 +95,7 @@ export async function GET(){
   }
 
   // save snapshot date to sheet
-  await fetch(`${process.env.APP_URL}/api/meta`,{
+  await fetch(`${base}/api/meta`,{
     method:"POST",
     headers:{
       "Content-Type":"application/json"
