@@ -280,33 +280,6 @@ Data scan run daily at 03:30 UTC • Data sourced from Lilith newly released Too
 </div>
 
      
-{/* Controls */}
-<div className="flex flex-wrap items-center gap-3 mb-6">
-
-<select
-value={selectedKingdom}
-onChange={e => setSelectedKingdom(Number(e.target.value))}
-className="px-3 py-2.5 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] text-sm"
->
-{KINGDOMS.map(k => (
-<option key={k} value={k}>KD {k}</option>
-))}
-</select>
-
-<div className="relative flex-1 min-w-[200px] max-w-[320px]">
-<Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
-
-<input
-type="text"
-placeholder="Search player..."
-value={search}
-onChange={e => setSearch(e.target.value)}
-className="w-full pl-9 pr-3 py-2 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] text-sm"
-/>
-
-</div>
-
-</div>
 
 
 
@@ -381,13 +354,40 @@ color="red"
 </div>
 
 </div>
+{/* Controls */}
+<div className="flex flex-wrap items-center gap-3 mb-6">
+
+<select
+value={selectedKingdom}
+onChange={e => setSelectedKingdom(Number(e.target.value))}
+className="px-3 py-2.5 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] text-sm"
+>
+{KINGDOMS.map(k => (
+<option key={k} value={k}>KD {k}</option>
+))}
+</select>
+
+<div className="relative flex-1">
+<Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
+
+<input
+type="text"
+placeholder="Search player..."
+value={search}
+onChange={e => setSearch(e.target.value)}
+className="w-full pl-9 pr-3 py-2 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] text-sm"
+/>
+
+</div>
+
+</div>
 
           {/* Table */}
-         <div className="rounded-xl border border-[var(--border)] overflow-hidden">
+        <div>
             {isLoading ? (
-              <div className="p-12 text-center text-[var(--text-muted)]">Loading...</div>
+              <div className="p-12text-center text-[var(--text-muted)]">Loading...</div>
             ) : filtered.length === 0 ? (
-              <div className="p-12 text-center text-[var(--text-muted)]">No data available</div>
+              <div className="p-12text-center text-[var(--text-muted)]">No data available</div>
             ) : (
               <>
              <div className="hidden md:block overflow-x-auto overflow-y-visible">
@@ -400,7 +400,7 @@ color="red"
 
 <th
 onClick={()=>handleSort('id')}
-className="px-3 py-2.5 sm:py-3 text-right text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
+className="px-3 py-2.5 sm:py-3text-center text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
 >
 ID
 <span className="inline-flex mr-1">
@@ -416,7 +416,7 @@ ID
 
 <th
 onClick={()=>handleSort('name')}
-className="px-3 py-2.5 sm:py-3 text-right text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
+className="px-3 py-2.5 sm:py-3text-center text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
 >
 Name
 <span className="inline-flex mr-1">
@@ -431,7 +431,7 @@ Name
 
 <th
 onClick={()=>handleSort('power')}
-className="px-3 py-2.5 sm:py-3 text-right text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
+className="px-3 py-2.5 sm:py-3text-center text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
 >
 Power
 <span className="inline-flex mr-1">
@@ -446,7 +446,7 @@ Power
 
 <th
 onClick={()=>handleSort('in')}
-className="px-3 py-2.5 sm:py-3 text-right text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
+className="px-3 py-2.5 sm:py-3text-center text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
 >
 Show Up
 <span className="inline-flex mr-1">
@@ -460,7 +460,7 @@ Show Up
 </th>
 <th
 onClick={()=>handleSort('out')}
-className="px-3 py-2.5 sm:py-3 text-right text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
+className="px-3 py-2.5 sm:py-3text-center text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
 >
 Off
 <span className="inline-flex mr-1">
@@ -484,11 +484,11 @@ i % 2 === 0 ? 'bg-[var(--background-secondary)]/30' : ''
 }`}
 >
 
-<td className="px-3 py-2.5">
+<td className="px-3 py-2.5 text-center">
 {i + 1}
 </td>
 
-<td className="px-3 py-2.5 font-mono text-xs text-[var(--text-muted)]">
+<td className="px-3 py-2.5 text-center font-mono text-xs text-[var(--text-muted)]">
 <a
 href={`https://app.rokstats.online/governor/${m.id}`}
 target="_blank"
@@ -498,11 +498,11 @@ className="text-[var(--text-muted)] hover:text-[var(--foreground)] transition-co
 </a>
 </td>
 
-<td className="px-3 py-2.5">
+<td className="px-3 py-2.5 text-center">
 
 <div className="flex items-center gap-2">
 
-<span className="font-medium text-[var(--foreground)]">{m.name}</span>
+<span className="font-medium text-sm text-[var(--foreground)]">{m.name}</span>
 
 {m.prevNames?.length > 0 && (
 <div className="relative group flex items-center">
@@ -530,15 +530,15 @@ rounded-lg px-3 py-2.5 text-xs shadow-lg min-w-[140px]">
 
 </td>
 
-<td className="px-3 py-2.5 text-right font-mono text-sm text-[var(--foreground)]">
+<td className="px-3 py-2.5 text-center font-mono text-sm text-[var(--foreground)]">
 {formatCompact(m.power)}
 </td>
 
-<td className="px-3 py-2.5 text-right" title={m.migratedIn || ""}>
+<td className="px-3 py-2.5 text-center text-sm text-[var(--text-muted)]" title={m.migratedIn || ""}>
 {formatRelative(m.migratedIn)}
 </td>
 
-<td className="px-3 py-2.5 text-right" title={m.migratedOut || ""}>
+<td className="px-3 py-2.5 text-center text-sm text-[var(--text-muted)]" title={m.migratedOut || ""}>
 {formatRelative(m.migratedOut)}
 </td>
 
