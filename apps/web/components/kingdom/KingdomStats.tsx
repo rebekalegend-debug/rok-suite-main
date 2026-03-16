@@ -61,8 +61,6 @@ loadMembers()
   const [filterMode,setFilterMode] = useState<'all'|'in'|'out'>('all')
   const [sortField, setSortField] = useState<SortField>('name');
   const [sortDir, setSortDir] = useState<SortDir>('desc');
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(50);
 
   // Chart state
   const [chartKingdoms, setChartKingdoms] = useState<Set<number>>(new Set());
@@ -165,10 +163,7 @@ String(d.getUTCDate()).padStart(2,'0')
 } 03:30 UTC`
 
 },[members])
-
-  const totalPages = Math.ceil(filtered.length / rowsPerPage);
-  const paged = filtered.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
-
+const paged = filtered
  const handleSort = (field: SortField) => {
 
 if(sortField === field){
@@ -312,7 +307,7 @@ className="w-full pl-9 pr-3 py-2 rounded-xl bg-[var(--background-secondary)] bor
 
 <div
 onClick={()=>setFilterMode('all')}
-className={`cursor-pointer ${filterMode==='all' ? 'ring-2 ring-yellow-500/40' : ''}`}
+className="cursor-pointer"
 >
 <GlowCard
 title="All Members"
@@ -355,7 +350,7 @@ color="red"
             ) : (
               <>
                 <div className="overflow-x-auto">
-            <table className="w-full">
+          <table className="w-full text-sm">
 
 <thead className="sticky top-0 z-10 bg-[var(--background-card)]">
 
@@ -368,11 +363,7 @@ onClick={()=>handleSort('id')}
 className="cursor-pointer px-3 py-3 text-left flex items-center gap-1 hover:text-white"
 >
 ID
-{sortField === 'id' && (
-sortDir === 'asc'
-? <ChevronUp size={12}/>
-: <ChevronDown size={12}/>
-)}
+{sortField === 'id' && (sortDir === 'asc' ? <ChevronUp size={12}/> : <ChevronDown size={12}/>)}
 </th>
 
 <th
@@ -380,11 +371,7 @@ onClick={()=>handleSort('name')}
 className="cursor-pointer px-3 py-3 text-left flex items-center gap-1 hover:text-white"
 >
 Name
-{sortField === 'name' && (
-sortDir === 'asc'
-? <ChevronUp size={12}/>
-: <ChevronDown size={12}/>
-)}
+{sortField === 'name' && (sortDir === 'asc' ? <ChevronUp size={12}/> : <ChevronDown size={12}/>)}
 </th>
 
 <th
@@ -392,11 +379,7 @@ onClick={()=>handleSort('power')}
 className="cursor-pointer px-3 py-3 text-left flex items-center gap-1 hover:text-white"
 >
 Power
-{sortField === 'power' && (
-sortDir === 'asc'
-? <ChevronUp size={12}/>
-: <ChevronDown size={12}/>
-)}
+{sortField === 'power' && (sortDir === 'asc' ? <ChevronUp size={12}/> : <ChevronDown size={12}/>)}
 </th>
 
 <th
@@ -404,11 +387,7 @@ onClick={()=>handleSort('in')}
 className="cursor-pointer px-3 py-3 text-left flex items-center gap-1 hover:text-white"
 >
 Mig. In
-{sortField === 'in' && (
-sortDir === 'asc'
-? <ChevronUp size={12}/>
-: <ChevronDown size={12}/>
-)}
+{sortField === 'in' && (sortDir === 'asc' ? <ChevronUp size={12}/> : <ChevronDown size={12}/>)}
 </th>
 
 <th
@@ -416,18 +395,14 @@ onClick={()=>handleSort('out')}
 className="cursor-pointer px-3 py-3 text-left flex items-center gap-1 hover:text-white"
 >
 Mig. Out
-{sortField === 'out' && (
-sortDir === 'asc'
-? <ChevronUp size={12}/>
-: <ChevronDown size={12}/>
-)}
+{sortField === 'out' && (sortDir === 'asc' ? <ChevronUp size={12}/> : <ChevronDown size={12}/>)}
 </th>
 
 </tr>
 
 </thead>
-                  <tbody>
-{paged.map((m, i) => (
+               <tbody className="divide-y divide-[var(--border)]">
+{filtered.map((m, i) => (
 <tr key={m.id} className="border-b border-[var(--border)] hover:bg-[var(--background-secondary)] transition">
 
 <td className="px-3 py-2">
@@ -484,31 +459,7 @@ rounded-lg px-3 py-2 text-xs shadow-lg min-w-[140px]">
                   </table>
                 </div>
 
-                <div className="flex items-center justify-between px-4 py-3 border-t border-[var(--border)]">
-                  <div className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
-                    <span>{filtered.length} of top 400</span>
-                    <select
-                      value={rowsPerPage}
-                      onChange={e => { setRowsPerPage(Number(e.target.value)); setPage(0); }}
-                      className="px-2 py-1 rounded bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] text-xs"
-                    >
-                      {[25, 50, 100].map(n => <option key={n} value={n}>{n} / page</option>)}
-                    </select>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <button onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0} className="p-1.5 rounded hover:bg-[var(--background-secondary)] disabled:opacity-30 text-[var(--text-secondary)]">
-                      <ChevronLeft size={16} />
-                    </button>
-                    <span className="px-3 py-1 text-sm text-[var(--foreground)]">{page + 1} / {totalPages || 1}</span>
-                    <button onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))} disabled={page >= totalPages - 1} className="p-1.5 rounded hover:bg-[var(--background-secondary)] disabled:opacity-30 text-[var(--text-secondary)]">
-                      <ChevronRight size={16} />
-                    </button>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-</div>
+           
 );
 }
 
