@@ -294,6 +294,64 @@ export async function fetchPrevNamesSheet(url: string): Promise<Map<number,strin
 }
 
 
+
+
+export async function fetchViolationSheet(url: string) {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`Failed to fetch sheet: ${response.status}`);
+  const text = await response.text();
+  const { headers, rows } = parseCSV(text);
+
+  const idx = (name: string) => {
+    return headers.findIndex(h => h.toLowerCase().includes(name.toLowerCase()));
+  };
+
+  const iGovId = idx('id');
+  const iName = idx('name');
+  const iPower = idx('power');
+  const iViolation = idx('violation');
+  const iHandled = idx('handled');
+  const iNotes = idx('notes');
+  
+  return rows
+    .map(cols => {
+      const violationRaw = (cols[iViolation] || '').trim();
+      const handledRaw = (cols[iHandled] || '').trim();
+      const notesRaw = (cols[iNotes] || '').trim();
+
+      return {
+        governorId: parseInt(cols[iGovId]) || 0,
+        name: (cols[iName] || '').trim(),
+
+        // keep your system
+        power1: 0,
+        power2: parseInt(cols[iPower]) || 0,
+
+        alliance: (cols[iAlliance] || '').trim(),
+
+        // 👇 IMPORTANT NEW FIELDS
+        violation: violationRaw
+          ? violationRaw.split(',').map(v => v.trim())
+          : [],
+
+        handled: handledRaw || 'No action',
+
+        notes: notesRaw || '',
+
+        // 👇 keep compatibility with your existing page
+        reason: violationRaw, // fallback so page doesn't crash
+        zero: '' as WantedPlayer['zero'],
+        zeroed: '' as WantedPlayer['zeroed'],
+
+        prevNames: "",
+        display: true,
+      };
+    })
+    .filter(r => r.name || r.governorId);
+}
+
+
+
 export async function fetchWantedSheet(url: string): Promise<WantedPlayer[]> {
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Failed to fetch wanted sheet: ${response.status}`);
