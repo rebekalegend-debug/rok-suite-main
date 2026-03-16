@@ -406,7 +406,7 @@ Mig. Out
 <tr key={m.id} className="border-b border-[var(--border)] hover:bg-[var(--background-secondary)] transition">
 
 <td className="px-3 py-2">
-{page * rowsPerPage + i + 1}
+{i + 1}
 </td>
 
 <td className="px-3 py-2 text-[var(--text-muted)]">
@@ -455,11 +455,12 @@ rounded-lg px-3 py-2 text-xs shadow-lg min-w-[140px]">
 
 </tr>
 ))}
-                    </tbody>
-                  </table>
-                </div>
-
-           
+</tbody>
+</table>
+</div>
+</>
+)}
+</div>
 );
 }
 
