@@ -552,7 +552,7 @@ onClick={() => {
  className="cursor-pointer rounded-xl border border-red-500/20 bg-red-500/5 p-4 hover:bg-red-500/10 transition shadow-lg shadow-red-500/30"
 >
             <div className="flex items-center gap-2 mb-2">
-              <Skull size={16} className="text-red-400" />
+              <Crosshair size={16} className="text-red-400" />
               <span className="text-xs font-semibold uppercase tracking-wider text-red-400">To Zero</span>
             </div>
             <p className="text-2xl font-bold text-[var(--foreground)]">{stats.toZeroCount}</p>
@@ -569,7 +569,7 @@ setZeroFilter('all');
 className="cursor-pointer rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 hover:bg-emerald-500/10 transition shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40"            
      >
           <div className="flex items-center gap-2 mb-2">
-              <Crosshair size={16} className="text-emerald-400" />
+              <Skull size={16} className="text-emerald-400" />
               <span className="text-xs font-semibold uppercase tracking-wider text-emerald-400">Zeroed</span>
             </div>
             <p className="text-2xl font-bold text-[var(--foreground)]">{stats.zeroedCount}</p>
