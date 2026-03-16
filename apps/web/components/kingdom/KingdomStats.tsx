@@ -357,14 +357,26 @@ color="orange"
 </div>
 
 <div onClick={()=>setFilterMode('out')} className="cursor-pointer">
+
 <GlowCard
-title="Migrated out / Disappeared from map"
-value={members.filter(m=>m.migratedOut).length}
+title="Migrated out / Disappeared from map (1M)"
+value={
+members.filter(m=>{
+if(!m.migratedOut) return false
+return Date.now() - new Date(m.migratedOut).getTime() <= 30*86400000
+}).length
+}
 sub={`${formatCompact(
-members.filter(m=>m.migratedOut).reduce((a,b)=>a+b.power,0)
+members
+.filter(m=>{
+if(!m.migratedOut) return false
+return Date.now() - new Date(m.migratedOut).getTime() <= 30*86400000
+})
+.reduce((a,b)=>a+b.power,0)
 )} total power`}
 color="red"
 />
+
 </div>
 
 </div>
