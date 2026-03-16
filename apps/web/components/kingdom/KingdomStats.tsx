@@ -254,7 +254,7 @@ Kingdom Stats
 </h1>
 
 <p className="text-sm text-[var(--text-muted)] mt-1">
-Top 400 member statistics from Lilith Game Tools
+Track, Name changes, appear and disappeared member in KD (Data track since 2025\9\15)
 </p>
 </div>
 
@@ -322,9 +322,9 @@ color="yellow"
 <div onClick={()=>setFilterMode('in')} className="cursor-pointer">
 
 <GlowCard
-title="Migrated In"
+title="Migrated in - Wake up - New accounts"
 value={members.filter(m=>m.migratedIn).length}
-sub="Migrated in - Wake up - New accounts"
+sub={`${formatCompact(members.filter(m=>m.migratedIn).reduce((a,b)=>a+b.power,0))} total power`}
 color="orange"
 />
 
@@ -332,9 +332,9 @@ color="orange"
 <div onClick={()=>setFilterMode('out')} className="cursor-pointer">
 
 <GlowCard
-title="Migrated Out"
+title="Migrated out - Disappeared from map"
 value={members.filter(m=>m.migratedOut).length}
-sub="Migrated out - Disappeared from map"
+sub={`${formatCompact(members.filter(m=>m.migratedOut).reduce((a,b)=>a+b.power,0))} total power`}
 color="red"
 />
 
@@ -387,7 +387,7 @@ Power
 onClick={()=>handleSort('in')}
 className="cursor-pointer px-3 py-3 text-left hover:text-white"
 >
-Mig. In
+Show Up
 {sortField === 'in' && (sortDir === 'asc' ? <ChevronUp size={12}/> : <ChevronDown size={12}/>)}
 </th>
 
