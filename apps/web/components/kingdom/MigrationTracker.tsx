@@ -726,7 +726,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 <SortHeader field="power" label="Power" align="center" />
                 
              {/* <SortHeader field="alliance" label="Alliance" /> */}
-                <SortHeader field="reason" label="Violation" />
+                <SortHeader field="reason" label="Violation" align="center" />
                 
                 <SortHeader field="handled" label="Handled" align="center" />
                 {isOfficer && (
@@ -820,31 +820,31 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
   {player.alliance || '-'}
 </td>
 */}
-                      <td className="px-3 py-2.5 text-center">
-                        {player.reason ? (
-                         <span
-  className={`inline-block whitespace-nowrap px-2 py-0.5 rounded-md text-xs font-medium border ${
-    player.reason === '1'
-      ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/30'
-      : player.reason === '2'
-      ? 'bg-orange-500/10 text-orange-400 border-orange-500/30'
-      : player.reason === '3'
-      ? 'bg-red-500/10 text-red-400 border-red-500/30'
-      : 'bg-[var(--background-secondary)] text-[var(--text-muted)] border-[var(--border)]'
-  }`}
->
-  {player.reason === '1'
-    ? 'FIRST'
-    : player.reason === '2'
-    ? 'SECOND'
-    : player.reason === '3'
-    ? 'THIRD'
-    : player.reason}
-</span>
-                        ) : (
-                          <span className="text-[var(--text-muted)]">-</span>
-                        )}
-                      </td>
+                  <td className="px-3 py-2.5 text-center">
+  {player.reason ? (
+    <span
+      className={`inline-block whitespace-nowrap px-2 py-0.5 rounded-md text-xs font-medium border ${
+        player.reason === '1'
+          ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/30'
+          : player.reason === '2'
+          ? 'bg-orange-500/10 text-orange-400 border-orange-500/30'
+          : player.reason === '3'
+          ? 'bg-red-500/10 text-red-400 border-red-500/30'
+          : 'bg-[var(--background-secondary)] text-[var(--text-muted)] border-[var(--border)]'
+      }`}
+    >
+      {player.reason === '1'
+        ? 'FIRST'
+        : player.reason === '2'
+        ? 'SECOND'
+        : player.reason === '3'
+        ? 'THIRD'
+        : player.reason}
+    </span>
+  ) : (
+    <span className="text-[var(--text-muted)]">-</span>
+  )}
+</td>
                      
                       <td className="px-3 py-2.5 text-center">
 <span
