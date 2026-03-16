@@ -497,7 +497,7 @@ i % 2 === 0 ? 'bg-[var(--background-secondary)]/30' : ''
 href={`https://app.rokstats.online/governor/${m.id}`}
 target="_blank"
 rel="noopener noreferrer"
-className="text-[var(--text-muted)] hover:text-[var(--foreground)] transition-colors"  >
+className="text-cyan-400/80 hover:text-cyan-300 hover:underline"  >
 {m.id}
 </a>
 </td>
