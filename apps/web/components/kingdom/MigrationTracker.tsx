@@ -9,6 +9,7 @@ import { matchesSearch } from '@/lib/search';
 import type { WantedPlayer } from '@/lib/kingdom/types';
 import { AlertCircle } from "lucide-react";
 import { Radar } from "lucide-react";
+import { fetchPrevNamesSheet } from '@/lib/kingdom/parse';
 type OfficerMark = 'zeroed' | 'left';
 
 interface WantedStatus {
