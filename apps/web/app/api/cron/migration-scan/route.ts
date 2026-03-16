@@ -10,7 +10,6 @@ function lastLilithSnapshot() {
   }
 
   return snapshot.toISOString().slice(0,10)
-
 }
 
 function prevDay(date:string){
@@ -19,7 +18,6 @@ function prevDay(date:string){
   d.setUTCDate(d.getUTCDate()-1)
 
   return d.toISOString().slice(0,10)
-
 }
 
 export async function GET(){
@@ -31,10 +29,12 @@ export async function GET(){
 
   for(const kingdom of kingdoms){
 
+    console.log("Scanning kingdom:", kingdom)
+
     const url =
     `https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?start=${start}&end=${end}&search=&server_id=${kingdom}`
 
-    let data
+    let data:any = null
 
     // retry until snapshot exists
     for(let i = 0; i < 5; i++){
@@ -56,8 +56,10 @@ export async function GET(){
 
       console.log("Snapshot not ready for", kingdom, "retrying...")
 
-      await new Promise(r => setTimeout(r,60000)) // wait 1 minute
+      await new Promise(res => setTimeout(res,60000)) // wait 1 minute
     }
+
+    console.log("Members received:", data?.data?.length)
 
     await fetch(`${process.env.APP_URL}/api/migration-sync`,{
       method:"POST",
