@@ -1,15 +1,11 @@
 function lastLilithSnapshot() {
 
-  const now = new Date()
+  const d = new Date()
 
-  const snapshot = new Date(now)
-  snapshot.setUTCHours(2,0,0,0)
+  d.setUTCDate(d.getUTCDate() - 1)
 
-  if(now < snapshot){
-    snapshot.setUTCDate(snapshot.getUTCDate()-1)
-  }
+  return d.toISOString().slice(0,10)
 
-  return snapshot.toISOString().slice(0,10)
 }
 
 function prevDay(date:string){
