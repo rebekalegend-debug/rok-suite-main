@@ -273,7 +273,7 @@ export async function fetchPrevNamesSheet(url: string): Promise<Map<number,strin
 
   for(const cols of rows){
 
-    const id = parseInt(cols[iGov])
+   const id = parseInt(cols[iGov].replace(/[^0-9]/g,''))
     if(!id) continue
 
     const prev = (cols[iPrev] || "").trim()
