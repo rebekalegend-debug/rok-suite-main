@@ -721,9 +721,9 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
   <th className="px-3 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
     #
   </th>
-  <SortHeader field="name" label="Name" />
+  <SortHeader field="name" label="Name" align="left" />
                 <SortHeader field="governorId" label="ID" align="center" />
-<SortHeader field="reason" label="Violation" align="center" />
+<SortHeader field="power" label="Power" align="center" />
                 
              {/* <SortHeader field="alliance" label="Alliance" /> */}
                 <SortHeader field="reason" label="Violation" />
@@ -754,7 +754,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                       className={`border-b border-[var(--border)] hover:bg-[var(--background-secondary)]/50 transition-colors ${idx % 2 === 0 ? 'bg-[var(--background-secondary)]/30' : ''} ${isDone ? 'opacity-50' : ''}`}
                     >
 
-                      <td className="px-3 py-2.5 text-xs text-[var(--text-muted)] font-mono">
+                     <td className="px-3 py-2.5 text-xs text-[var(--text-muted)] font-mono text-center">
   {idx + 1}
 </td>
                       <td className="px-3 py-2.5 text-center">
@@ -811,7 +811,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
     <span className="text-[var(--text-muted)]">-</span>
   )}
 </td>
-                      <td className="px-3 py-2.5 text-right font-mono text-sm text-[var(--foreground)]">
+                   <td className="px-3 py-2.5 text-center font-mono text-sm text-[var(--foreground)]">
                         {formatPower(player.power2)}
                       </td>
 
