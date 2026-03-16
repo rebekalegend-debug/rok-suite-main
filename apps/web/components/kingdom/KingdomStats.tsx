@@ -411,7 +411,14 @@ Mig. Out
 </td>
 
 <td className="px-3 py-2 text-[var(--text-muted)]">
+<a
+href={`https://app.rokstats.online/governor/${m.id}`}
+target="_blank"
+rel="noopener noreferrer"
+className="text-blue-400 hover:text-blue-300 hover:underline"
+  >
 {m.id}
+</a>
 </td>
 
 <td className="px-3 py-2">
