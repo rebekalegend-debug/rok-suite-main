@@ -322,7 +322,7 @@ color="yellow"
 <div onClick={()=>setFilterMode('in')} className="cursor-pointer">
 
 <GlowCard
-title="Migrated in - Wake up - New accounts"
+title="All + Mig. in \ Wake up \ New acc"
 value={members.filter(m=>m.migratedIn).length}
 sub={`${formatCompact(members.filter(m=>m.migratedIn).reduce((a,b)=>a+b.power,0))} total power`}
 color="orange"
@@ -332,7 +332,7 @@ color="orange"
 <div onClick={()=>setFilterMode('out')} className="cursor-pointer">
 
 <GlowCard
-title="Migrated out - Disappeared from map"
+title="Migrated out \ Disappeared from map"
 value={members.filter(m=>m.migratedOut).length}
 sub={`${formatCompact(members.filter(m=>m.migratedOut).reduce((a,b)=>a+b.power,0))} total power`}
 color="red"
@@ -395,7 +395,7 @@ Show Up
 onClick={()=>handleSort('out')}
 className="cursor-pointer px-3 py-3 text-left hover:text-white"
 >
-Mig. Out
+Off
 {sortField === 'out' && (sortDir === 'asc' ? <ChevronUp size={12}/> : <ChevronDown size={12}/>)}
 </th>
 
