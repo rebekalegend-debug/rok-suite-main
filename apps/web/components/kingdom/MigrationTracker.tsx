@@ -13,11 +13,7 @@ import { AlertCircle } from "lucide-react";
 import { Radar } from "lucide-react";
 import { fetchPrevNamesSheet } from '@/lib/kingdom/parse';
 const VIOLATION_OPTIONS = ['First', 'Second', 'Third', 'KD Break'];
-interface WantedStatus {
-  governor_id: number;
-  status: OfficerMark;
-  updated_at: string;
-}
+
 type WantedPlayer = {
   governorId: number;
   name: string;
