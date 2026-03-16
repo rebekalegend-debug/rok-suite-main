@@ -302,9 +302,8 @@ className="w-full pl-9 pr-3 py-2 rounded-xl bg-[var(--background-secondary)] bor
 
 
       
-
-          {/* Summary cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+ {/* Summary cards */}
+ <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
 
 <div
 onClick={()=>setFilterMode('all')}
@@ -314,15 +313,28 @@ className="cursor-pointer"
 title="All Members"
 value={members.length}
 sub={`${formatCompact(members.reduce((a,b)=>a+b.power,0))} total power`}
+color="green"
+/>
+
+</div>
+<div className="cursor-pointer">
+
+<GlowCard
+title="Current Members in KD"
+value={members.filter(m=>!m.migratedOut).length}
+sub={`${formatCompact(
+members
+.filter(m=>!m.migratedOut)
+.reduce((a,b)=>a+b.power,0)
+)} total power`}
 color="yellow"
 />
 
 </div>
-
 <div onClick={()=>setFilterMode('in')} className="cursor-pointer">
 
 <GlowCard
-title="All + Mig. in \ Wake up \ New acc"
+title="Current \ Mig. in \ Wake up \ New acc"
 value={members.filter(m=>m.migratedIn).length}
 sub={`${formatCompact(members.filter(m=>m.migratedIn).reduce((a,b)=>a+b.power,0))} total power`}
 color="orange"
@@ -511,6 +523,7 @@ return `${Math.floor(diff/(day*365))} years ago`
 function GlowCard({title,value,sub,color}:{title:string,value:number,sub:string,color:string}){
 
 const styles:any={
+green:"border-green-500/20 bg-green-500/5 shadow-green-500/20",
 yellow:"border-yellow-500/20 bg-yellow-500/5 shadow-yellow-500/20",
 orange:"border-orange-500/20 bg-orange-500/5 shadow-orange-500/20",
 red:"border-red-500/20 bg-red-500/5 shadow-red-500/30"
