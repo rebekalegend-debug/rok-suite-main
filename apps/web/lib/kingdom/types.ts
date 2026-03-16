@@ -65,9 +65,9 @@ export interface WantedPlayer {
   prevNames?: string;
   power1: number;
   power2: number;
-  delta: number;
-  x: number;
-  y: number;
+ delta?: number
+x?: number
+y?: number
   alliance: string;
   zero: 'yes' | 'no' | '';
   reason: string;
