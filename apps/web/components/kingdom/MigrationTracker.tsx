@@ -978,7 +978,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                       <span className="text-[var(--text-muted)]">Power: </span>
                       <span className="font-mono text-[var(--text-secondary)]">{formatPower(player.power2)}</span>
                     </div>
-                    
+                      </div>
                  
 
 {/* Violation */}
