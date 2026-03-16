@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { Search, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, BarChart3 } from 'lucide-react';
 import { Clock } from "lucide-react"
 
-type SortField = 'name';
+type SortField = 'name' | 'id' | 'power' | 'in' | 'out';
 type SortDir = 'asc' | 'desc';
 
 const METRICS = [
@@ -107,15 +107,29 @@ data = data.filter(m => m.migratedOut)
 
 data.sort((a,b)=>{
 
+let res = 0
+
 if(sortField === 'name'){
-
-const res = a.name.localeCompare(b.name)
-
-return sortDir === 'asc' ? res : -res
-
+res = a.name.localeCompare(b.name)
 }
 
-return 0
+if(sortField === 'id'){
+res = Number(a.id) - Number(b.id)
+}
+
+if(sortField === 'power'){
+res = a.power - b.power
+}
+
+if(sortField === 'in'){
+res = new Date(a.migratedIn || 0).getTime() - new Date(b.migratedIn || 0).getTime()
+}
+
+if(sortField === 'out'){
+res = new Date(a.migratedOut || 0).getTime() - new Date(b.migratedOut || 0).getTime()
+}
+
+return sortDir === 'asc' ? res : -res
 
 })
 
@@ -155,10 +169,16 @@ String(d.getUTCDate()).padStart(2,'0')
   const totalPages = Math.ceil(filtered.length / rowsPerPage);
   const paged = filtered.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
 
-  const handleSort = (field: SortField) => {
-    if (sortField === field) setSortDir(d => d === 'asc' ? 'desc' : 'asc');
-    else { setSortField(field); setSortDir('desc'); }
-  };
+ const handleSort = (field: SortField) => {
+
+if(sortField === field){
+setSortDir(d => d === 'asc' ? 'desc' : 'asc')
+}else{
+setSortField(field)
+setSortDir('desc')
+}
+
+}
 
   const toggleChartKingdom = (k: number) => {
     setChartKingdoms(prev => {
@@ -258,7 +278,33 @@ Top 400 member statistics from Lilith Game Tools
 </div>
 
      
+{/* Controls */}
+<div className="flex flex-wrap items-center gap-3 mb-6">
 
+<select
+value={selectedKingdom}
+onChange={e => setSelectedKingdom(Number(e.target.value))}
+className="px-3 py-2 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] text-sm"
+>
+{KINGDOMS.map(k => (
+<option key={k} value={k}>KD {k}</option>
+))}
+</select>
+
+<div className="relative flex-1 min-w-[200px] max-w-[320px]">
+<Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
+
+<input
+type="text"
+placeholder="Search player..."
+value={search}
+onChange={e => setSearch(e.target.value)}
+className="w-full pl-9 pr-3 py-2 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] text-sm"
+/>
+
+</div>
+
+</div>
    
 
           {/* Summary cards */}
@@ -309,12 +355,30 @@ color="red"
             ) : (
               <>
                 <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                   <thead>
-<tr className="border-b border-[var(--border)] bg-[var(--background-secondary)] text-xs uppercase tracking-wider">
-<th className="px-3 py-3 text-left text-xs font-semibold text-[var(--text-muted)]">#</th>
-<th>ID</th>
-<th onClick={()=>handleSort('name')} className="cursor-pointer flex items-center gap-1">
+            <table className="w-full">
+
+<thead className="sticky top-0 z-10 bg-[var(--background-card)]">
+
+<tr className="border-b border-[var(--border)] text-xs uppercase tracking-wider">
+
+<th className="px-3 py-3 text-left">#</th>
+
+<th
+onClick={()=>handleSort('id')}
+className="cursor-pointer px-3 py-3 text-left flex items-center gap-1 hover:text-white"
+>
+ID
+{sortField === 'id' && (
+sortDir === 'asc'
+? <ChevronUp size={12}/>
+: <ChevronDown size={12}/>
+)}
+</th>
+
+<th
+onClick={()=>handleSort('name')}
+className="cursor-pointer px-3 py-3 text-left flex items-center gap-1 hover:text-white"
+>
 Name
 {sortField === 'name' && (
 sortDir === 'asc'
@@ -323,11 +387,45 @@ sortDir === 'asc'
 )}
 </th>
 
-<th>Power</th>
-<th>Mig. In</th>
-<th>Mig. Out</th>
-                      </tr>
-                    </thead>
+<th
+onClick={()=>handleSort('power')}
+className="cursor-pointer px-3 py-3 text-left flex items-center gap-1 hover:text-white"
+>
+Power
+{sortField === 'power' && (
+sortDir === 'asc'
+? <ChevronUp size={12}/>
+: <ChevronDown size={12}/>
+)}
+</th>
+
+<th
+onClick={()=>handleSort('in')}
+className="cursor-pointer px-3 py-3 text-left flex items-center gap-1 hover:text-white"
+>
+Mig. In
+{sortField === 'in' && (
+sortDir === 'asc'
+? <ChevronUp size={12}/>
+: <ChevronDown size={12}/>
+)}
+</th>
+
+<th
+onClick={()=>handleSort('out')}
+className="cursor-pointer px-3 py-3 text-left flex items-center gap-1 hover:text-white"
+>
+Mig. Out
+{sortField === 'out' && (
+sortDir === 'asc'
+? <ChevronUp size={12}/>
+: <ChevronDown size={12}/>
+)}
+</th>
+
+</tr>
+
+</thead>
                   <tbody>
 {paged.map((m, i) => (
 <tr key={m.id} className="border-b border-[var(--border)] hover:bg-[var(--background-secondary)] transition">
@@ -448,34 +546,39 @@ return `${Math.floor(diff/(day*365))} years ago`
 
 function GlowCard({title,value,sub,color}:{title:string,value:number,sub:string,color:string}){
 
-const colors:any={
-yellow:"border-yellow-500/30 shadow-[0_0_20px_rgba(234,179,8,0.25)]",
-orange:"border-orange-500/30 shadow-[0_0_20px_rgba(249,115,22,0.25)]",
-red:"border-red-500/30 shadow-[0_0_20px_rgba(239,68,68,0.25)]"
+const styles:any={
+yellow:"border-yellow-500/20 bg-yellow-500/5 shadow-yellow-500/20",
+orange:"border-orange-500/20 bg-orange-500/5 shadow-orange-500/20",
+red:"border-red-500/20 bg-red-500/5 shadow-red-500/30"
 }
 
 return(
 
-<div className={`rounded-xl border p-5 bg-[var(--background-card)] ${colors[color]} transition hover:scale-[1.02]`}>
+<div className={`cursor-pointer rounded-xl border p-4 transition 
+hover:scale-[1.02] shadow-lg ${styles[color]}`}>
 
-<div className="text-xs text-[var(--text-muted)] mb-1">
+<div className="flex items-center gap-2 mb-2">
+
+<span className={`text-xs font-semibold uppercase tracking-wider`}>
+
 {title}
+
+</span>
+
 </div>
 
-<div className="text-3xl font-bold">
+<p className="text-2xl font-bold text-[var(--foreground)]">
 {value}
-</div>
+</p>
 
-<div className="text-xs text-[var(--text-muted)] mt-1">
+<p className="text-sm font-semibold text-[var(--text-secondary)] mt-1">
 {sub}
-</div>
+</p>
 
 </div>
 
 )
-
 }
-
 function formatCompact(v:number){
 
   if(v>=1_000_000_000) return (v/1_000_000_000).toFixed(1)+"B"
