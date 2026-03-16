@@ -313,7 +313,7 @@ color="yellow"
 
 <div onClick={()=>setFilterMode('in')} className="cursor-pointer">
 <GlowCard
-title="Mig. in / Wake up / New acc (7d)"
+title="Mig.in / Wake up / New acc (7d)"
 icon={Eye}
 value={
 members.filter(m=>{
@@ -336,7 +336,7 @@ color="orange"
 <div onClick={()=>setFilterMode('out')} className="cursor-pointer">
 
 <GlowCard
-title="Migrated out / Disappeared from map (1M)"
+title="Mig.out / Off map (1M)"
 icon={EyeOff}
 value={
 members.filter(m=>{
