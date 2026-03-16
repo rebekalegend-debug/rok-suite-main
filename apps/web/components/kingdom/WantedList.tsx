@@ -8,6 +8,8 @@ import { WANTED_SHEET_URL, WANTED_SHEET_EDIT_URL } from '@/lib/kingdom/config';
 import { matchesSearch } from '@/lib/search';
 import type { WantedPlayer } from '@/lib/kingdom/types';
 import { AlertCircle } from "lucide-react";
+import { fetchPrevNamesSheet } from '@/lib/kingdom/parse';
+import { PREV_NAMES_SHEET_URL } from '@/lib/kingdom/config';
 type OfficerMark = 'zeroed' | 'left';
 
 interface WantedStatus {
@@ -124,12 +126,18 @@ export default function WantedList() {
     setLoading(true);
     setError(null);
     try {
-      const [wantedPlayers, { data: statusRows }] = await Promise.all([
-        fetchWantedSheet(WANTED_SHEET_URL),
-        supabase.from('wanted_status').select('*'),
-      ]);
+     const [wantedPlayers, prevNamesMap, { data: statusRows }] = await Promise.all([
+  fetchWantedSheet(WANTED_SHEET_URL),
+  fetchPrevNamesSheet(PREV_NAMES_SHEET_URL),
+  supabase.from('wanted_status').select('*'),
+]);
 
-      setPlayers(wantedPlayers);
+    const mergedPlayers = wantedPlayers.map(p => ({
+  ...p,
+  prevNames: prevNamesMap.get(p.governorId) || p.prevNames || ""
+}));
+
+setPlayers(mergedPlayers);
 
       const marks = new Map<number, OfficerMark>();
       if (statusRows) {
@@ -726,11 +734,11 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
      <div className="fixed hidden group-hover:block z-[9999] mt-1 ml-4">
         <div className="bg-[var(--background-card)] border border-[var(--border)] rounded-lg px-3 py-2 shadow-lg text-xs whitespace-nowrap">
           <div className="font-semibold text-[var(--text-secondary)] mb-1">
-            {player.prevNames.split(',').length} previous names
+            {player.prevNames.split(',').map(n => n.trim()).filter(Boolean).length} previous names
           </div>
 
           <div className="space-y-0.5 text-[var(--text-muted)]">
-            {player.prevNames.split(',').map((n, i) => (
+            {player.prevNames.split(',').map(n => n.trim()).filter(Boolean).map((n, i) => (
               <div key={i}>{n.trim()}</div>
             ))}
           </div>
