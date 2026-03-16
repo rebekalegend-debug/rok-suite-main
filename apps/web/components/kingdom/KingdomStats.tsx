@@ -254,7 +254,11 @@ Kingdom Stats
 </h1>
 
 <p className="text-sm text-[var(--text-muted)] mt-1">
-Track, Name changes, appear and disappeared member in KD (Data track since 2025\9\15)
+Track name change's and appear\disappeared members in KD
+</p>
+
+<p className="text-xs text-[var(--text-muted)] opacity-70 mt-1">
+Data scan run daily at 03:30 UTC • Data sourced from Lilith newly released Tools (available since 2025/09/15)
 </p>
 </div>
 
