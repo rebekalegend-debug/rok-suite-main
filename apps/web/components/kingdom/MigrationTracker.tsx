@@ -126,9 +126,9 @@ export default function WantedList() {
     setLoading(true);
     setError(null);
     try {
-     const [wantedPlayers, prevNamesMap, { data: statusRows }] = await Promise.all([
+const [wantedPlayers, prevNamesMap, { data: statusRows }] = await Promise.all([
   fetchMgeViolationsSheet(MGE_VIOLATION_SHEET_URL),
-  fetchPrevNamesSheet("/api/sheets/3237.csv"), // your 3237 sheet
+  fetchPrevNamesSheet(PREV_NAMES_SHEET_URL),
   supabase.from('wanted_status').select('*'),
 ]);
 
