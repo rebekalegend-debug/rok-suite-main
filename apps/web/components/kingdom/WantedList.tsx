@@ -682,7 +682,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                 <SortHeader field="power" label="Power" align="right" />
                 
                 <SortHeader field="alliance" label="Alliance" />
-                <SortHeader field="reason" label="Reason" />
+                <SortHeader field="reason" label="Reason" align="center" />
                 <SortHeader field="zero" label="Zero?" align="center" />
                 <SortHeader field="handled" label="Handled" align="center" />
                 {isOfficer && (
@@ -769,19 +769,23 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                       <td className="px-3 py-2.5 text-sm text-[var(--text-secondary)]">
                         {player.alliance || '-'}
                       </td>
-                      <td className="px-3 py-2.5">
-                        {player.reason ? (
-                          <span className={`inline-block whitespace-nowrap px-2 py-0.5 rounded-md text-xs font-medium border ${
-                            isIllegal
-                              ? 'bg-amber-500/10 text-amber-400 border-amber-500/20'
-                              : 'bg-red-500/10 text-red-400 border-red-500/20'
-                          }`}>
-                            {player.reason}
-                          </span>
-                        ) : (
-                          <span className="text-[var(--text-muted)]">-</span>
-                        )}
-                      </td>
+                <td className="px-3 py-2.5 text-center">
+  {player.reason ? (
+    <div className="flex justify-center">
+      <span
+        className={`inline-block whitespace-nowrap px-2 py-0.5 rounded-md text-xs font-medium border ${
+          isIllegal
+            ? 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+            : 'bg-red-500/10 text-red-400 border-red-500/20'
+        }`}
+      >
+        {player.reason}
+      </span>
+    </div>
+  ) : (
+    <span className="text-[var(--text-muted)]">-</span>
+  )}
+</td>
                       <td className="px-3 py-2.5 text-center">
                         {player.zero === 'yes' ? (
                           <span className="text-xs font-semibold text-red-400">YES</span>
