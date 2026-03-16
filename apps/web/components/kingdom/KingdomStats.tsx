@@ -247,8 +247,6 @@ const chartData = useMemo(() => {
  const isLoading = loadingMembers;
 
  return (
-  <>
-    <h1 style={{color:"red"}}>TEST KINGDOM COMPONENT</h1>
 
     <div className="min-h-screen p-4 lg:p-8">
       {/* Header */}
@@ -260,16 +258,16 @@ const chartData = useMemo(() => {
 Kingdom Stats
 </h1>
 
-<p className="text-sm text-[var(--text-muted)] mt-1">
+<p className="text-sm text-[#8b9bb3] mt-1">
 Track name change's and appear\disappeared members in KD
 </p>
 
-<p className="text-xs text-[var(--text-muted)] opacity-70 mt-1">
+<p className="text-xs text-[#8b9bb3] opacity-70 mt-1">
 Data scan run daily at 03:30 UTC • Data sourced from Lilith newly released Tools (available since 2025/09/15)
 </p>
 </div>
 
-<div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
+<div className="flex items-center gap-2 text-xs text-[#8b9bb3]">
 <Clock size={14} />
 <span>
 {dataUpdated
@@ -288,7 +286,7 @@ Data scan run daily at 03:30 UTC • Data sourced from Lilith newly released Too
 <select
 value={selectedKingdom}
 onChange={e => setSelectedKingdom(Number(e.target.value))}
-className="px-3 py-2.5 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] text-sm"
+className="px-5 py-4 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] text-sm"
 >
 {KINGDOMS.map(k => (
 <option key={k} value={k}>KD {k}</option>
@@ -296,7 +294,7 @@ className="px-3 py-2.5 rounded-xl bg-[var(--background-secondary)] border border
 </select>
 
 <div className="relative flex-1 min-w-[200px] max-w-[320px]">
-<Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
+<Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8b9bb3]" />
 
 <input
 type="text"
@@ -387,29 +385,29 @@ color="red"
           {/* Table */}
           <div className="rounded-xl border border-[var(--border)] bg-[var(--background-card)] overflow-hidden">
             {isLoading ? (
-              <div className="p-12 text-center text-[var(--text-muted)]">Loading...</div>
+              <div className="p-12 text-center text-[#8b9bb3]">Loading...</div>
             ) : filtered.length === 0 ? (
-              <div className="p-12 text-center text-[var(--text-muted)]">No data available</div>
+              <div className="p-12 text-center text-[#8b9bb3]">No data available</div>
             ) : (
               <>
              <div className="overflow-x-auto overflow-y-visible">
         <table className="w-full">
 
-<thead className="sticky top-0 z-10 bg-[var(--background-card)]">
+<thead className="sticky top-0 z-10 bg-gradient-to-r from-[#1e2633] to-[#232b38]">
 <tr className="border-b border-[var(--border)]">
 
-<th className="px-3 py-2.5 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">#</th>
+<th className="px-5 py-4 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[#8b9bb3]">#</th>
 
 <th
 onClick={()=>handleSort('id')}
-className="px-3 py-2.5 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
+className="px-5 py-4 sm:py-3 text-right text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[#8b9bb3] cursor-pointer"
 >
 ID
-<span className="inline-flex ml-1">
+<span className="inline-flex mr-1">
 {sortField === 'id' ? (
   sortDir === 'asc'
-    ? <ChevronUp className="w-3.5 h-3.5"/>
-    : <ChevronDown className="w-3.5 h-3.5"/>
+    ? <ChevronUp className="w-3.5 h-3.5 text-[#6f7f97]"/>
+    : <ChevronDown className="w-3.5 h-3.5 text-[#6f7f97]"/>
 ) : (
   <ChevronUp className="w-3.5 h-3.5 opacity-30"/>
 )}
@@ -418,14 +416,14 @@ ID
 
 <th
 onClick={()=>handleSort('name')}
-className="px-3 py-2.5 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
+className="px-5 py-4 sm:py-3 text-right text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[#8b9bb3] cursor-pointer"
 >
 Name
-<span className="inline-flex ml-1">
+<span className="inline-flex mr-1">
 {sortField === 'name'
   ? (sortDir === 'asc'
-      ? <ChevronUp className="w-3.5 h-3.5"/>
-      : <ChevronDown className="w-3.5 h-3.5"/>)
+      ? <ChevronUp className="w-3.5 h-3.5 text-[#6f7f97]"/>
+      : <ChevronDown className="w-3.5 h-3.5 text-[#6f7f97]"/>)
   : <ChevronUp className="w-3.5 h-3.5 opacity-30"/>
 }
 </span>
@@ -433,14 +431,14 @@ Name
 
 <th
 onClick={()=>handleSort('power')}
-className="px-3 py-2.5 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
+className="px-5 py-4 sm:py-3 text-right text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[#8b9bb3] cursor-pointer"
 >
 Power
-<span className="inline-flex ml-1">
+<span className="inline-flex mr-1">
 {sortField === 'power'
   ? (sortDir === 'asc'
-      ? <ChevronUp className="w-3.5 h-3.5"/>
-      : <ChevronDown className="w-3.5 h-3.5"/>)
+      ? <ChevronUp className="w-3.5 h-3.5 text-[#6f7f97]"/>
+      : <ChevronDown className="w-3.5 h-3.5 text-[#6f7f97]"/>)
   : <ChevronUp className="w-3.5 h-3.5 opacity-30"/>
 }
 </span>
@@ -448,28 +446,28 @@ Power
 
 <th
 onClick={()=>handleSort('in')}
-className="px-3 py-2.5 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
+className="px-5 py-4 sm:py-3 text-right text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[#8b9bb3] cursor-pointer"
 >
 Show Up
-<span className="inline-flex ml-1">
+<span className="inline-flex mr-1">
 {sortField === 'in'
   ? (sortDir === 'asc'
-      ? <ChevronUp className="w-3.5 h-3.5"/>
-      : <ChevronDown className="w-3.5 h-3.5"/>)
+      ? <ChevronUp className="w-3.5 h-3.5 text-[#6f7f97]"/>
+      : <ChevronDown className="w-3.5 h-3.5 text-[#6f7f97]"/>)
   : <ChevronUp className="w-3.5 h-3.5 opacity-30"/>
 }
 </span>
 </th>
 <th
 onClick={()=>handleSort('out')}
-className="px-3 py-2.5 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
+className="px-5 py-4 sm:py-3 text-right text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[#8b9bb3] cursor-pointer"
 >
 Off
-<span className="inline-flex ml-1">
+<span className="inline-flex mr-1">
 {sortField === 'out'
   ? (sortDir === 'asc'
-      ? <ChevronUp className="w-3.5 h-3.5"/>
-      : <ChevronDown className="w-3.5 h-3.5"/>)
+      ? <ChevronUp className="w-3.5 h-3.5 text-[#6f7f97]"/>
+      : <ChevronDown className="w-3.5 h-3.5 text-[#6f7f97]"/>)
   : <ChevronUp className="w-3.5 h-3.5 opacity-30"/>
 }
 </span>
@@ -486,21 +484,21 @@ i % 2 === 0 ? 'bg-[var(--background-secondary)]/30' : ''
 }`}
 >
 
-<td className="px-3 py-2.5">
+<td className="px-5 py-4">
 {i + 1}
 </td>
 
-<td className="px-3 py-2.5 text-[var(--text-muted)]">
+<td className="px-5 py-4 text-[#8b9bb3]">
 <a
 href={`https://app.rokstats.online/governor/${m.id}`}
 target="_blank"
 rel="noopener noreferrer"
-className="text-[var(--text-muted)] hover:text-[var(--foreground)] transition-colors"  >
+className="text-[#8b9bb3] hover:text-[var(--foreground)] transition-colors"  >
 {m.id}
 </a>
 </td>
 
-<td className="px-3 py-2.5">
+<td className="px-5 py-4">
 
 <div className="flex items-center gap-2">
 
@@ -509,13 +507,13 @@ className="text-[var(--text-muted)] hover:text-[var(--foreground)] transition-co
 {m.prevNames?.length > 0 && (
 <div className="relative group flex items-center">
 
-<Clock size={14} className="text-[var(--text-muted)] hover:text-[var(--foreground)] transition cursor-pointer" />
+<Clock size={14} className="text-[#8b9bb3] hover:text-[var(--foreground)] transition cursor-pointer" />
 
 <div className="absolute left-5 bottom-full mb-2 hidden group-hover:block z-[9999]
 bg-[var(--background-card)] border border-[var(--border)]
-rounded-lg px-3 py-2.5 text-xs shadow-lg min-w-[140px]">
+rounded-lg px-5 py-4 text-xs shadow-lg min-w-[140px]">
 
-<div className="text-[var(--text-muted)] mb-1">
+<div className="text-[#8b9bb3] mb-1">
 {m.prevNames.length} previous names
 </div>
 
@@ -532,15 +530,15 @@ rounded-lg px-3 py-2.5 text-xs shadow-lg min-w-[140px]">
 
 </td>
 
-<td className="px-3 py-2.5 font-mono text-sm text-[var(--foreground)]">
+<td className="px-5 py-4 text-right font-mono text-sm text-[var(--foreground)]">
 {formatCompact(m.power)}
 </td>
 
-<td className="px-3 py-2.5" title={m.migratedIn || ""}>
+<td className="px-5 py-4 text-right" title={m.migratedIn || ""}>
 {formatRelative(m.migratedIn)}
 </td>
 
-<td className="px-3 py-2.5" title={m.migratedOut || ""}>
+<td className="px-5 py-4 text-right" title={m.migratedOut || ""}>
 {formatRelative(m.migratedOut)}
 </td>
 
@@ -556,14 +554,14 @@ rounded-lg px-3 py-2.5 text-xs shadow-lg min-w-[140px]">
 </div>
 
 </div>
-</>
+
 );
 }
 
 function SummaryCard({ label, value, color }: { label: string; value: string; color: string }) {
   return (
     <div className="rounded-xl border border-[var(--border)] bg-[var(--background-card)] p-4">
-      <div className="text-xs text-[var(--text-muted)] mb-1">{label}</div>
+      <div className="text-xs text-[#8b9bb3] mb-1">{label}</div>
       <div className={`text-xl font-bold ${color}`}>{value}</div>
     </div>
   );
