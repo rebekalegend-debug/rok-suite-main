@@ -58,7 +58,7 @@ loadMembers()
 
 },[selectedKingdom])
   const [search, setSearch] = useState('');
-  const [filterMode,setFilterMode] = useState<'all'|'in'|'out'>('all')
+  const [filterMode,setFilterMode] = useState<'all'|'current'|'in'|'out'>('all')
   const [sortField, setSortField] = useState<SortField>('name');
   const [sortDir, setSortDir] = useState<SortDir>('desc');
 
@@ -91,6 +91,10 @@ data = data.filter(m =>
 m.name.toLowerCase().includes(q) ||
 m.id.toString().includes(q)
 )
+}
+
+if(filterMode === 'current'){
+data = data.filter(m => !m.migratedOut)
 }
 
 if(filterMode === 'in'){
@@ -320,8 +324,10 @@ sub={`${formatCompact(members.reduce((a,b)=>a+b.power,0))} total power`}
 color="green"
 />
 
-</div>
-<div className="cursor-pointer">
+<div
+onClick={()=>setFilterMode('current')}
+className="cursor-pointer"
+>
 
 <GlowCard
 title="Current Members in KD"
@@ -335,16 +341,34 @@ color="yellow"
 />
 
 </div>
-<div onClick={()=>setFilterMode('in')} className="cursor-pointer">
+
+   
+   
+   <div onClick={()=>setFilterMode('in')} className="cursor-pointer">
 
 <GlowCard
-title="Current \ Mig. in \ Wake up \ New acc"
-value={members.filter(m=>m.migratedIn).length}
-sub={`${formatCompact(members.filter(m=>m.migratedIn).reduce((a,b)=>a+b.power,0))} total power`}
+title="Mig. in \ Wake up \ New acc (7d)"
+value={
+members.filter(m=>{
+if(!m.migratedIn) return false
+return Date.now() - new Date(m.migratedIn).getTime() <= 7*86400000
+}).length
+}
+sub={`${formatCompact(
+members
+.filter(m=>{
+if(!m.migratedIn) return false
+return Date.now() - new Date(m.migratedIn).getTime() <= 7*86400000
+})
+.reduce((a,b)=>a+b.power,0)
+)} total power`}
 color="orange"
 />
 
 </div>
+
+
+   
 <div onClick={()=>setFilterMode('out')} className="cursor-pointer">
 
 <GlowCard
