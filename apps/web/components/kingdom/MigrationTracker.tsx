@@ -13,8 +13,8 @@ import type { WantedPlayer } from '@/lib/kingdom/types';
 import { AlertCircle } from "lucide-react";
 import { Radar } from "lucide-react";
 import { fetchPrevNamesSheet } from '@/lib/kingdom/parse';
-type OfficerMark = 'On wanted list' | ''Left';
-
+type OfficerMark = 'On wanted list' | 'Left';
+const VIOLATION_OPTIONS = ['First', 'Second', 'Third', 'KD Break'];
 interface WantedStatus {
   governor_id: number;
   status: OfficerMark;
@@ -99,7 +99,7 @@ export default function WantedList() {
   const [search, setSearch] = useState('');
   const [reasonFilter, setReasonFilter] = useState<string | null>(null);
   
-  const [handledFilter, setHandledFilter] = useState<'all' | 'No action' | 'Pending' | 'On wanted list' | ''Left'>('all');
+  const [handledFilter, setHandledFilter] = useState<'all' | 'No action' | 'Pending' | 'On wanted list' | 'Left'>('all');
 
 
   // Sort state
@@ -216,7 +216,7 @@ const handleSort = (field: SortableField, multi: boolean) => {
  const handledOrder = (status: string): number => {
   if (status === 'No action' || status === 'Pending') return 0;
   if (status === 'On wanted list') return 1;
-  if (status === ''Left') return 2;
+  if (status === 'Left') return 2;
   return 0;
 };
 
@@ -312,7 +312,7 @@ const filtered = useMemo(() => {
       toZeroPower += power;
     }
 
-    if (s === ''Left') {
+    if (s === 'Left') {
       leftCount++;
     }
   }
@@ -346,28 +346,14 @@ const filtered = useMemo(() => {
   return duplicates;
 }, [visiblePlayers]);
   // Unique reasons for filter chips
-  const reasons = useMemo(() => {
-    const set = new Set<string>();
-    for (const p of visiblePlayers) {
-      if (p.reason) set.add(p.reason);
-    }
-    return [...set].sort();
-  }, [visiblePlayers]);
+ 
 
-  // Unique alliances for filter dropdown
-  const alliances = useMemo(() => {
-    const set = new Set<string>();
-    for (const p of visiblePlayers) {
-      if (p.alliance) set.add(p.alliance);
-    }
-    return [...set].sort();
-  }, [visiblePlayers]);
 
 
 
  const handledBg = (status: string) => {
   if (status === 'On wanted list') return 'bg-red-500/10 border-red-500/30 text-red-400';
-  if (status === ''Left') return 'bg-sky-500/10 border-sky-500/30 text-sky-400';
+  if (status === 'Left') return 'bg-sky-500/10 border-sky-500/30 text-sky-400';
   return 'bg-amber-500/10 border-amber-500/30 text-amber-400';
 };
 
@@ -399,7 +385,7 @@ const hasActiveFilters =
   || JSON.stringify(sortRules) !== JSON.stringify(DEFAULT_SORT_RULES);
 
   // Sortable header helper
-  const SortHeader = ({ field, label, align = ''Left' }: { field: SortableField; label: string; align?: ''Left' | 'right' | 'center' }) => (
+  const SortHeader = ({ field, label, align = 'Left' }: { field: SortableField; label: string; align?: 'Left' | 'right' | 'center' }) => (
     <th className={`text-${align} px-3 py-2 sm:py-3`}>
       <button
         onClick={(e) => handleSort(field, e.shiftKey)}
@@ -410,14 +396,29 @@ const hasActiveFilters =
       </button>
     </th>
   );
+
+const toggleViolation = (player: any, value: string) => {
+  let current = player.violation || [];
+
+  if (current.includes(value)) {
+    current = current.filter((v: string) => v !== value);
+  } else {
+    if (current.length >= 2) return; // max 2
+    current = [...current, value];
+  }
+
+  savePlayer(player, { violation: current });
+};
+
+                                 
 const savePlayer = async (player: any, updates: any) => {
   const updated = { ...player, ...updates };
 
-  if (
-    (!updated.violation || updated.violation.length === 0) &&
-    !updated.handled &&
-    !updated.notes
-  ) {
+ if (
+  (!updated.violation || updated.violation.length === 0) &&
+  (!updated.handled || updated.handled === 'No action') &&
+  !updated.notes
+) {
     await fetch('/api/violation-save', {
       method: 'POST',
       body: JSON.stringify({
@@ -615,7 +616,7 @@ className="cursor-pointer rounded-xl border border-red-500/20 bg-red-500/5 p-4 h
           {/* Left Kingdom */}
           <div
   onClick={() => {
-  setHandledFilter(''Left');
+  setHandledFilter('Left');
    
 }}
 className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 hover:bg-sky-500/10 transition shadow-lg shadow-sky-500/20">
@@ -642,7 +643,34 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
               className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] text-sm focus:outline-none focus:border-red-500/50"
             />
           </div>
-         
+         {isAdmin && search && (
+  <div className="bg-[var(--background-card)] border border-[var(--border)] rounded-xl mt-2 max-h-40 overflow-y-auto">
+    {players
+      .filter(p => p.name.toLowerCase().includes(search.toLowerCase()))
+      .slice(0, 10)
+      .map(p => (
+        <div
+          key={p.governorId}
+          onClick={() =>
+            savePlayer(
+              {
+                name: p.name,
+                governorId: p.governorId,
+                power2: p.power2,
+                violation: [],
+                handled: 'No action',
+                notes: ''
+              },
+              {}
+            )
+          }
+          className="px-3 py-2 hover:bg-[var(--background-secondary)] cursor-pointer text-sm"
+        >
+          {p.name} ({p.governorId})
+        </div>
+      ))}
+  </div>
+)}
          
           {/* Reset */}
           {hasActiveFilters && (
@@ -725,7 +753,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                 filtered.map((player, idx) => {
                   const handled = player.handled || 'No action';
                   const isDone = handled !== 'Pending' && handled !== 'No action';
-                  const isIllegal = player.reason?.toLowerCase().includes('illegal');
+                  const isIllegal = (player.violation?.join(',') || '').toLowerCase().includes('illegal');
                   return (
                     <tr
                       key={player.governorId || player.name}
@@ -789,55 +817,67 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
     <span className="text-[var(--text-muted)]">-</span>
   )}
 </td>
-                   <td className="px-3 py-2.5 text-center font-mono text-sm text-[var(--foreground)]">
-                        {formatPower(player.power2)}
-                      </td>
-
-                    {/* 
-<td className="px-3 py-2.5 text-sm text-[var(--text-secondary)]">
-  {player.alliance || '-'}
+                 <td className="px-3 py-2.5 text-center font-mono text-sm text-[var(--foreground)]">
+  {formatPower(player.power2)}
 </td>
-*/}
-                <td className="px-3 py-2.5 text-center">
+                    
+
+
+  <td className="px-3 py-2.5 text-center">
   <div className="flex flex-wrap justify-center gap-1">
-    {player.violation?.length ? player.violation.map((v, i) => (
-      <span
-        key={i}
-        className={`px-2 py-0.5 rounded-md text-xs font-medium border ${
-          v === 'First'
-            ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/30'
-            : v === 'Second'
-            ? 'bg-orange-500/10 text-orange-400 border-orange-500/30'
-            : v === 'Third'
-            ? 'bg-red-500/10 text-red-400 border-red-500/30'
-            : v === 'KD Break'
-            ? 'bg-purple-500/10 text-purple-400 border-purple-500/30'
-            : ''
-        }`}
-      >
-        {v}
-      </span>
-    )) : <span className="text-[var(--text-muted)]">-</span>}
+    {VIOLATION_OPTIONS.map((v) => {
+      const active = player.violation?.includes(v);
+
+      return (
+        <button
+          key={v}
+          disabled={!isAdmin}
+          onClick={() => toggleViolation(player, v)}
+          className={`px-2 py-0.5 rounded-md text-xs border transition ${
+            active
+              ? v === 'First'
+                ? 'bg-yellow-500/20 text-yellow-300 border-yellow-500/40'
+                : v === 'Second'
+                ? 'bg-orange-500/20 text-orange-300 border-orange-500/40'
+                : v === 'Third'
+                ? 'bg-red-500/20 text-red-300 border-red-500/40'
+                : 'bg-purple-500/20 text-purple-300 border-purple-500/40'
+              : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)]'
+          } ${!isAdmin ? 'opacity-50 cursor-not-allowed' : ''}`}
+        >
+          {v}
+        </button>
+      );
+    })}
   </div>
 </td>
                      
-                      <td className="px-3 py-2.5 text-center">
-<span
-  className={`inline-block px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase border ${
-    handled === 'On wanted list'
-      ? 'bg-red-500/10 text-red-400 border-red-500/30'
-      : handled === ''Left'
-      ? 'bg-sky-500/10 text-sky-400 border-sky-500/30'
-      : 'bg-amber-500/10 text-amber-400 border-amber-500/30'
-  }`}
->
-  {handled === 'No action' || handled === 'Pending'
-    ? 'NO ACTION'
-    : handled === 'On wanted list'
-    ? 'ON WANTED LIST'
-    : ''Left'}
-</span>
-                      </td>
+  <td className="px-3 py-2.5 text-center">
+  {isAdmin ? (
+    <select
+      value={player.handled || 'No action'}
+      onChange={(e) => savePlayer(player, { handled: e.target.value })}
+      className="bg-[var(--background-secondary)] border border-[var(--border)] text-xs rounded px-2 py-1"
+    >
+      <option>No action</option>
+      <option>Pending</option>
+      <option>On wanted list</option>
+      <option>Left</option>
+    </select>
+  ) : (
+    <span
+      className={`inline-block px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase border ${
+        player.handled === 'On wanted list'
+          ? 'bg-red-500/10 text-red-400 border-red-500/30'
+          : player.handled === 'Left'
+          ? 'bg-sky-500/10 text-sky-400 border-sky-500/30'
+          : 'bg-amber-500/10 text-amber-400 border-amber-500/30'
+      }`}
+    >
+      {player.handled || 'No action'}
+    </span>
+  )}
+</td>
 
 
 
@@ -874,9 +914,9 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                               ZEROED
                             </button>
                             <button
-                              onClick={() => handleMarkStatus(player.governorId, player.name, handled === ''Left' ? null : ''Left')}
+                              onClick={() => handleMarkStatus(player.governorId, player.name, handled === 'Left' ? null : 'Left')}
                               className={`px-2 py-1 rounded text-[10px] font-semibold border transition-colors ${
-                                handled === ''Left'
+                                handled === 'Left'
                                   ? 'bg-sky-500/20 border-sky-500/40 text-sky-400'
                                   : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)] hover:text-sky-400 hover:border-sky-500/40'
                               }`}
@@ -895,9 +935,14 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
         </div>
       )}
 
-      {/* Mobile card view */}
-      {!loading && !error && (
-        <div className="md:hidden space-y-3">
+
+
+
+
+      
+      {/* Mobile  MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM   card view */}
+   {!loading && !error && (
+  <div className="md:hidden space-y-3">
           {filtered.length === 0 ? (
             <div className="px-4 py-8 text-center text-[var(--text-muted)] rounded-xl border border-[var(--border)]">
               {hasActiveFilters ? 'No players match filters' : 'No wanted players'}
@@ -906,7 +951,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
             filtered.map((player) => {
               const handled = player.handled || 'No action';
               const isDone = handled !== 'Pending' && handled !== 'No action';
-              const isIllegal = player.reason?.toLowerCase().includes('illegal');
+              const isIllegal = (player.violation?.join(',') || '').toLowerCase().includes('illegal');
               return (
                 <div
                   key={player.governorId || player.name}
@@ -934,31 +979,36 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                       <span className="font-mono text-[var(--text-secondary)]">{formatPower(player.power2)}</span>
                     </div>
                     
-                    
-                    
-                  </div>
+                 
 
-                  {/* Reason */}
-                <div className="flex flex-wrap gap-1">
-  {player.violation?.length ? player.violation.map((v, i) => (
-    <span
-      key={i}
-      className={`px-2 py-0.5 rounded-md text-xs font-medium border ${
-        v === 'First'
-          ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/30'
-          : v === 'Second'
-          ? 'bg-orange-500/10 text-orange-400 border-orange-500/30'
-          : v === 'Third'
-          ? 'bg-red-500/10 text-red-400 border-red-500/30'
-          : v === 'KD Break'
-          ? 'bg-purple-500/10 text-purple-400 border-purple-500/30'
-          : ''
-      }`}
-    >
-      {v}
-    </span>
-  )) : <span className="text-[var(--text-muted)]">-</span>}
+{/* Violation */}
+<div className="flex flex-wrap gap-1 pt-2">
+  {VIOLATION_OPTIONS.map((v) => {
+    const active = player.violation?.includes(v);
+
+    return (
+      <button
+        key={v}
+        disabled={!isAdmin}
+        onClick={() => toggleViolation(player, v)}
+        className={`px-2 py-0.5 rounded-md text-xs border transition ${
+          active
+            ? v === 'First'
+              ? 'bg-yellow-500/20 text-yellow-300 border-yellow-500/40'
+              : v === 'Second'
+              ? 'bg-orange-500/20 text-orange-300 border-orange-500/40'
+              : v === 'Third'
+              ? 'bg-red-500/20 text-red-300 border-red-500/40'
+              : 'bg-purple-500/20 text-purple-300 border-purple-500/40'
+            : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)]'
+        } ${!isAdmin ? 'opacity-50 cursor-not-allowed' : ''}`}
+      >
+        {v}
+      </button>
+    );
+  })}
 </div>
+
 
                   {/* Officer actions */}
                   {isOfficer && (
@@ -974,9 +1024,9 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                         ZEROED
                       </button>
                       <button
-                        onClick={() => handleMarkStatus(player.governorId, player.name, handled === ''Left' ? null : ''Left')}
+                        onClick={() => handleMarkStatus(player.governorId, player.name, handled === 'Left' ? null : 'Left')}
                         className={`flex-1 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${
-                          handled === ''Left'
+                          handled === 'Left'
                             ? 'bg-sky-500/20 border-sky-500/40 text-sky-400'
                             : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)] hover:text-sky-400 hover:border-sky-500/40'
                         }`}
