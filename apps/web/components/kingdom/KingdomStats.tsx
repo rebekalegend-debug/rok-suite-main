@@ -334,7 +334,7 @@ color="orange"
 <GlowCard
 title="Migrated Out"
 value={members.filter(m=>m.migratedOut).length}
-sub="Migrated out - Went inactive - Disappeared from map"
+sub="Migrated out - Disappeared from map"
 color="red"
 />
 
@@ -415,8 +415,7 @@ Mig. Out
 href={`https://app.rokstats.online/governor/${m.id}`}
 target="_blank"
 rel="noopener noreferrer"
-className="text-blue-400 hover:text-blue-300 hover:underline"
-  >
+className="text-[var(--text-muted)] hover:text-blue-400 hover:underline transition"  >
 {m.id}
 </a>
 </td>
