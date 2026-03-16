@@ -366,18 +366,18 @@ color="red"
               <div className="p-12 text-center text-[var(--text-muted)]">No data available</div>
             ) : (
               <>
-                <div className="overflow-x-auto max-h-[70vh] overflow-y-auto">
+             <div className="overflow-x-auto max-h-[70vh] overflow-y-auto rounded-xl border border-[#2a3442] bg-[#161b23]">
          <table className="w-full text-sm will-change-transform">
 
-<thead className="sticky top-0 z-20 bg-[var(--background-card)] backdrop-blur">
+<thead className="sticky top-0 z-20 bg-gradient-to-b from-[#1f2632] to-[#1a2029] backdrop-blur border-b border-[#2a3442]">
 
-<tr className="border-b border-[var(--border)] text-xs uppercase tracking-wider">
+<tr className="text-xs uppercase tracking-wider text-[#9aa4b2]">
 
-<th className="px-3 py-3 text-left">#</th>
+<th className="cursor-pointer px-4 py-4 text-left hover:text-white">#</th>
 
 <th
 onClick={()=>handleSort('id')}
-className="cursor-pointer px-3 py-3 text-left hover:text-white"
+className="cursor-pointer px-4 py-4 text-left hover:text-white"
 >
 ID
 {sortField === 'id' && (sortDir === 'asc' ? <ChevronUp size={12}/> : <ChevronDown size={12}/>)}
@@ -385,7 +385,7 @@ ID
 
 <th
 onClick={()=>handleSort('name')}
-className="cursor-pointer px-3 py-3 text-left hover:text-white"
+className="cursor-pointer px-4 py-4 text-left hover:text-white"
 >
 Name
 {sortField === 'name' && (sortDir === 'asc' ? <ChevronUp size={12}/> : <ChevronDown size={12}/>)}
@@ -393,7 +393,7 @@ Name
 
 <th
 onClick={()=>handleSort('power')}
-className="cursor-pointer px-3 py-3 text-left hover:text-white"
+className="cursor-pointer px-4 py-4 text-left hover:text-white"
 >
 Power
 {sortField === 'power' && (sortDir === 'asc' ? <ChevronUp size={12}/> : <ChevronDown size={12}/>)}
@@ -401,7 +401,7 @@ Power
 
 <th
 onClick={()=>handleSort('in')}
-className="cursor-pointer px-3 py-3 text-left hover:text-white"
+className="cursor-pointer px-4 py-4 text-left hover:text-white"
 >
 Show Up
 {sortField === 'in' && (sortDir === 'asc' ? <ChevronUp size={12}/> : <ChevronDown size={12}/>)}
@@ -409,7 +409,7 @@ Show Up
 
 <th
 onClick={()=>handleSort('out')}
-className="cursor-pointer px-3 py-3 text-left hover:text-white"
+className="cursor-pointer px-4 py-4 text-left hover:text-white"
 >
 Off
 {sortField === 'out' && (sortDir === 'asc' ? <ChevronUp size={12}/> : <ChevronDown size={12}/>)}
@@ -420,7 +420,10 @@ Off
 </thead>
                <tbody className="divide-y divide-[var(--border)]">
 {filtered.map((m, i) => (
-<tr key={m.id} className="border-b border-[var(--border)] hover:bg-[var(--background-secondary)] transition">
+<tr
+key={m.id}
+className="border-b border-[#222a36] hover:bg-[#1c2330] transition-colors"
+>
 
 <td className="px-3 py-2">
 {i + 1}
@@ -431,7 +434,7 @@ Off
 href={`https://app.rokstats.online/governor/${m.id}`}
 target="_blank"
 rel="noopener noreferrer"
-className="text-[var(--text-muted)] hover:text-blue-400 hover:underline transition"  >
+className="text-[#7f8da3] hover:text-[#7c8cff] transition-colors"  >
 {m.id}
 </a>
 </td>
@@ -447,9 +450,9 @@ className="text-[var(--text-muted)] hover:text-blue-400 hover:underline transiti
 
 <Clock size={14} className="text-gray-400 hover:text-white transition cursor-pointer" />
 
-<div className="absolute left-5 top-6 hidden group-hover:block z-50 
-bg-[var(--background-card)] border border-[var(--border)] 
-rounded-lg px-3 py-2 text-xs shadow-lg min-w-[140px]">
+<div className="absolute left-5 bottom-full mb-2 hidden group-hover:block z-[9999]
+bg-[var(--background-card)] border border-[var(--border)]
+rounded-lg px-3 py-2 text-xs shadow-xl min-w-[140px]">
 
 <div className="text-[var(--text-muted)] mb-1">
 {m.prevNames.length} previous names
@@ -468,7 +471,7 @@ rounded-lg px-3 py-2 text-xs shadow-lg min-w-[140px]">
 
 </td>
 
-<td className="px-3 py-2 text-indigo-400 font-semibold">
+<td className="px-3 py-2 text-[#7c8cff] font-semibold">
 {formatCompact(m.power)}
 </td>
 
