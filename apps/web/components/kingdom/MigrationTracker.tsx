@@ -470,7 +470,7 @@ const hasActiveFilters =
   Violation Track
 </h1>
             <p className="text-sm text-[var(--text-muted)]">
-              {stats.total} players tracked{stats.hidden > 0 && ` · ${stats.hidden} hidden`}
+               MGE & 20GH violation track list ({stats.total} players)
             </p>
           </div>
         </div>
@@ -711,8 +711,8 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
     #
   </th>
   <SortHeader field="name" label="Name" />
-                <SortHeader field="governorId" label="Gov ID" />
-                <SortHeader field="power" label="Power" align="right" />
+                <SortHeader field="governorId" label="ID" align="center" />
+<SortHeader field="reason" label="Violation" align="center" />
                 
              {/* <SortHeader field="alliance" label="Alliance" /> */}
                 <SortHeader field="reason" label="Violation" />
@@ -746,7 +746,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                       <td className="px-3 py-2.5 text-xs text-[var(--text-muted)] font-mono">
   {idx + 1}
 </td>
-                      <td className="px-3 py-2.5">
+                      <td className="px-3 py-2.5 text-center">
                        <div className="flex items-center gap-1">
   <span className={`font-medium text-sm ${isDone ? 'line-through text-[var(--text-muted)]' : 'text-[var(--foreground)]'}`}>
   {player.name}
@@ -786,9 +786,20 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 )}
 </div>
                       </td>
-                      <td className="px-3 py-2.5 font-mono text-xs text-[var(--text-muted)]">
-                        {player.governorId || '-'}
-                      </td>
+                    <td className="px-3 py-2.5 font-mono text-xs text-center">
+  {player.governorId ? (
+    <a
+      href={`https://app.rokstats.online/governor/${player.governorId}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-[var(--text-muted)] hover:text-[var(--foreground)] transition-colors"
+    >
+      {player.governorId}
+    </a>
+  ) : (
+    <span className="text-[var(--text-muted)]">-</span>
+  )}
+</td>
                       <td className="px-3 py-2.5 text-right font-mono text-sm text-[var(--foreground)]">
                         {formatPower(player.power2)}
                       </td>
@@ -798,7 +809,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
   {player.alliance || '-'}
 </td>
 */}
-                      <td className="px-3 py-2.5">
+                      <td className="px-3 py-2.5 text-center">
                         {player.reason ? (
                          <span
   className={`inline-block whitespace-nowrap px-2 py-0.5 rounded-md text-xs font-medium border ${
