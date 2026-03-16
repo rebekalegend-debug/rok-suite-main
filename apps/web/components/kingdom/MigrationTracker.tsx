@@ -567,7 +567,7 @@ const hasActiveFilters =
   className="cursor-pointer rounded-xl border border-yellow-500/20 bg-yellow-500/5 p-4 hover:bg-yellow-500/10 transition shadow-lg shadow-yellow-500/20"
 >
             <div className="flex items-center gap-2 mb-2">
-              <Crosshair size={16} className="text-yellow-400" />
+              <radar size={16} className="text-yellow-400" />
              <span className="text-xs font-semibold uppercase tracking-wider text-yellow-400">
   ALL MEMBERS
 </span>
@@ -589,7 +589,7 @@ const hasActiveFilters =
   className="cursor-pointer rounded-xl border border-orange-500/20 bg-orange-500/5 p-4 hover:bg-orange-500/10 transition shadow-lg shadow-orange-500/20"
 >
             <div className="flex items-center gap-2 mb-2">
-              <Target size={16} className="text-orange-400" />
+              <crosshair size={16} className="text-orange-400" />
               <span className="text-xs font-semibold uppercase tracking-wider text-orange-400">Violators</span>
             </div>
             <p className="text-2xl font-bold text-[var(--foreground)]">{stats.pendingCount}</p>
