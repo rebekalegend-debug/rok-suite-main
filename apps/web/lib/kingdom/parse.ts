@@ -235,7 +235,7 @@ const iPrevNames = idx('prev');
 
       alliance: (cols[iAlliance] || '').trim(),
       reason: (cols[iViolation] || '').trim(),
-prevNames: (cols[iPrevNames] || '').trim(),
+prevNames: "",
       zeroed: (
   handledVal === 'wanted'
     ? 'yes'
@@ -324,7 +324,7 @@ export async function fetchWantedSheet(url: string): Promise<WantedPlayer[]> {
         alliance: (cols[iAlliance] || '').trim(),
         zero: (zeroVal === 'yes' ? 'yes' : zeroVal === 'no' ? 'no' : '') as WantedPlayer['zero'],
         reason: (cols[iReason] || '').trim(),
-        prevNames: (cols[iPrevNames] || '').trim(),
+        prevNames: "",
         zeroed: (
   zeroedVal === 'yes' ? 'yes' :
   zeroedVal === 'left' ? 'left' :
