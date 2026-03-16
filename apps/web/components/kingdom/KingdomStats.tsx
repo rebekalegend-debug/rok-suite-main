@@ -311,24 +311,18 @@ className="w-full pl-9 pr-3 py-2 rounded-xl bg-[var(--background-secondary)] bor
 
       
  {/* Summary cards */}
- <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+<div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
 
-<div
-onClick={()=>setFilterMode('all')}
-className="cursor-pointer"
->
+<div onClick={()=>setFilterMode('all')} className="cursor-pointer">
 <GlowCard
 title="All Members"
 value={members.length}
 sub={`${formatCompact(members.reduce((a,b)=>a+b.power,0))} total power`}
 color="green"
 />
+</div>
 
-<div
-onClick={()=>setFilterMode('current')}
-className="cursor-pointer"
->
-
+<div onClick={()=>setFilterMode('current')} className="cursor-pointer">
 <GlowCard
 title="Current Members in KD"
 value={members.filter(m=>!m.migratedOut).length}
@@ -339,15 +333,11 @@ members
 )} total power`}
 color="yellow"
 />
-
 </div>
 
-   
-   
-   <div onClick={()=>setFilterMode('in')} className="cursor-pointer">
-
+<div onClick={()=>setFilterMode('in')} className="cursor-pointer">
 <GlowCard
-title="Mig. in \ Wake up \ New acc (7d)"
+title="Mig. in / Wake up / New acc (7d)"
 value={
 members.filter(m=>{
 if(!m.migratedIn) return false
@@ -364,20 +354,17 @@ return Date.now() - new Date(m.migratedIn).getTime() <= 7*86400000
 )} total power`}
 color="orange"
 />
-
 </div>
 
-
-   
 <div onClick={()=>setFilterMode('out')} className="cursor-pointer">
-
 <GlowCard
-title="Migrated out \ Disappeared from map"
+title="Migrated out / Disappeared from map"
 value={members.filter(m=>m.migratedOut).length}
-sub={`${formatCompact(members.filter(m=>m.migratedOut).reduce((a,b)=>a+b.power,0))} total power`}
+sub={`${formatCompact(
+members.filter(m=>m.migratedOut).reduce((a,b)=>a+b.power,0)
+)} total power`}
 color="red"
 />
-
 </div>
 
 </div>
@@ -512,9 +499,12 @@ rounded-lg px-3 py-2 text-xs shadow-xl min-w-[140px]">
 </tbody>
 </table>
 </div>
+
 </>
 )}
+
 </div>
+
 </div>
 );
 }
