@@ -28,7 +28,8 @@ export const MGE_VIOLATION_SHEET_URL =
 export const MGE_VIOLATION_SHEET_EDIT_URL =
   "https://docs.google.com/spreadsheets/d/1ZUf-qCCvZ5N6qU_hCNHXQ1z-6qxhn36PucYOxbaXIv0/edit?gid=845020290";
 
-
+export const PREV_NAMES_SHEET_URL =
+  "https://docs.google.com/spreadsheets/d/1ZUf-qCCvZ5N6qU_hCNHXQ1z-6qxhn36PucYOxbaXIv0/export?format=csv&gid=693046633";
 
 /** Alliance tags that belong to this kingdom */
 export const KINGDOM_ALLIANCE_TAGS = ['ANG', '23KK', 'KNG', 'K23S', '23A', '23-A', 'EQ', '23SP', 'ING', 'GNG'];
