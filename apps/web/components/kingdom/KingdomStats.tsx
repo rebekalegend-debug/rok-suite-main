@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Search, ChevronUp, ChevronDown, BarChart3 } from 'lucide-react';
+import { Search, ChevronUp, ChevronDown, BarChart3, Radar, Eye, EyeOff, Users } from 'lucide-react';
 import { Clock } from "lucide-react"
 
 type SortField = 'name' | 'id' | 'power' | 'in' | 'out';
@@ -263,7 +263,7 @@ Track name change's and appear\disappeared members in KD
 </p>
 
 <p className="text-xs text-[var(--text-muted)] opacity-70 mt-1">
-Data scan run daily at 03:30 UTC • Data sourced from Lilith newly released Tools (available since 2025/09/15)
+Scan will auto run daily in every kingdom and updates data • Data sourced from Lilith newly released Tools (available since 2025/09/15)
 </p>
 </div>
 
@@ -290,6 +290,7 @@ Data scan run daily at 03:30 UTC • Data sourced from Lilith newly released Too
 <div onClick={()=>setFilterMode('all')} className="cursor-pointer">
 <GlowCard
 title="All Members"
+icon={Radar}
 value={members.length}
 sub={`${formatCompact(members.reduce((a,b)=>a+b.power,0))} total power`}
 color="green"
@@ -299,6 +300,7 @@ color="green"
 <div onClick={()=>setFilterMode('current')} className="cursor-pointer">
 <GlowCard
 title="Current Members in KD"
+icon={Users}
 value={members.filter(m=>!m.migratedOut).length}
 sub={`${formatCompact(
 members
@@ -312,6 +314,7 @@ color="yellow"
 <div onClick={()=>setFilterMode('in')} className="cursor-pointer">
 <GlowCard
 title="Mig. in / Wake up / New acc (7d)"
+icon={Eye}
 value={
 members.filter(m=>{
 if(!m.migratedIn) return false
@@ -334,6 +337,7 @@ color="orange"
 
 <GlowCard
 title="Migrated out / Disappeared from map (1M)"
+icon={EyeOff}
 value={
 members.filter(m=>{
 if(!m.migratedOut) return false
@@ -484,7 +488,7 @@ i % 2 === 0 ? 'bg-[var(--background-secondary)]/30' : ''
 }`}
 >
 
-<td className="px-3 py-2.5 text-center">
+<td className="px-3 py-2.5 text-center font-mono text-sm text-[var(--foreground)]">
 {i + 1}
 </td>
 
@@ -590,7 +594,13 @@ return `${Math.floor(diff/(day*365))} years ago`
 
 }
 
-function GlowCard({title,value,sub,color}:{title:string,value:number,sub:string,color:string}){
+function GlowCard({
+title,
+value,
+sub,
+color,
+icon:Icon
+}:{title:string,value:number,sub:string,color:string,icon:any}){
 
 const styles:any={
 green:"border-green-500/20 bg-green-500/5 shadow-green-500/20",
@@ -598,7 +608,12 @@ yellow:"border-yellow-500/20 bg-yellow-500/5 shadow-yellow-500/20",
 orange:"border-orange-500/20 bg-orange-500/5 shadow-orange-500/20",
 red:"border-red-500/20 bg-red-500/5 shadow-red-500/30"
 }
-
+const titleColors:any={
+green:"text-green-400",
+yellow:"text-yellow-400",
+orange:"text-orange-400",
+red:"text-red-400"
+}
 return(
 
 <div className={`cursor-pointer rounded-xl border p-4 transition 
@@ -606,10 +621,10 @@ hover:scale-[1.02] shadow-lg ${styles[color]}`}>
 
 <div className="flex items-center gap-2 mb-2">
 
-<span className={`text-xs font-semibold uppercase tracking-wider`}>
+<Icon size={16} className={titleColors[color]} />
 
+<span className={`text-xs font-semibold uppercase tracking-wider ${titleColors[color]}`}>
 {title}
-
 </span>
 
 </div>
