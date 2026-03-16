@@ -738,7 +738,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
   <th className="px-3 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
     #
   </th>
-  <SortHeader field="name" label="Name" align="left" />
+  <SortHeader field="name" label="Name" align="Left" />
                 <SortHeader field="governorId" label="ID" align="center" />
 <SortHeader field="power" label="Power" align="center" />
                 
