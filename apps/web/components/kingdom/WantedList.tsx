@@ -374,7 +374,8 @@ const duplicateNames = useMemo(() => {
   const stats = useMemo(() => {
     let pendingCount = 0, pendingPower = 0;
     let zeroedCount = 0, zeroedPower = 0;
-    let leftCount = 0;
+   let leftCount = 0;
+let leftPower = 0;
     let toZeroCount = 0, toZeroPower = 0;
 
     for (const p of visiblePlayers) {
@@ -391,19 +392,20 @@ const duplicateNames = useMemo(() => {
       } else if (s === 'zeroed') {
         zeroedCount++;
         zeroedPower += power;
-      } else {
-        leftCount++;
-      }
+     } else {
+  leftCount++;
+  leftPower += power;
+}
     }
 
-    return {
-      total: visiblePlayers.length,
-      hidden: players.length - visiblePlayers.length,
-      pendingCount, pendingPower,
-      zeroedCount, zeroedPower,
-      leftCount,
-      toZeroCount, toZeroPower,
-    };
+   return {
+  total: visiblePlayers.length,
+  hidden: players.length - visiblePlayers.length,
+  pendingCount, pendingPower,
+  zeroedCount, zeroedPower,
+  leftCount, leftPower,
+  toZeroCount, toZeroPower,
+};
   }, [players, visiblePlayers, getHandledStatus]);
 
   const handledBg = (status: 'pending' | 'zeroed' | 'left') => {
@@ -464,9 +466,9 @@ const hasActiveFilters =
           </div>
           <div>
             <h1 className="text-xl sm:text-2xl font-bold text-[var(--foreground)]">Wanted</h1>
-            <p className="text-sm text-[var(--text-muted)]">
-              {stats.total} players tracked{stats.hidden > 0 && ` · ${stats.hidden} hidden`}
-            </p>
+           <p className="text-sm text-[var(--text-muted)]">
+  Official zero list ({stats.total} players tracked)
+</p>
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -590,7 +592,10 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
               <span className="text-xs font-semibold uppercase tracking-wider text-sky-400">Left</span>
             </div>
             <p className="text-2xl font-bold text-[var(--foreground)]">{stats.leftCount}</p>
-            <p className="text-xs text-[var(--text-muted)] mt-0.5">migrated out</p>
+<p className="text-sm font-semibold text-[var(--text-secondary)] mt-1">
+  {formatTotalPower(stats.leftPower)}
+</p>
+<p className="text-[10px] text-[var(--text-muted)]">total power</p>
           </div>
         </div>
       )}
@@ -665,7 +670,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
     #
   </th>
   <SortHeader field="name" label="Name" />
-                <SortHeader field="governorId" label="Gov ID" />
+                <SortHeader field="governorId" label="ID" />
                 <SortHeader field="power" label="Power" align="right" />
                 
                 <SortHeader field="alliance" label="Alliance" />
@@ -735,9 +740,20 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
   )}
 </div>
                       </td>
-                      <td className="px-3 py-2.5 font-mono text-xs text-[var(--text-muted)]">
-                        {player.governorId || '-'}
-                      </td>
+                    <td className="px-3 py-2.5 font-mono text-xs">
+  {player.governorId ? (
+    <a
+      href={`https://app.rokstats.online/governor/${player.governorId}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-sky-400 hover:text-sky-300 hover:underline"
+    >
+      {player.governorId}
+    </a>
+  ) : (
+    <span className="text-[var(--text-muted)]">-</span>
+  )}
+</td>
                       <td className="px-3 py-2.5 text-right font-mono text-sm text-[var(--foreground)]">
                         {formatPower(player.power2)}
                       </td>
