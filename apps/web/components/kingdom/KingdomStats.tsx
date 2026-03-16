@@ -2,8 +2,7 @@
 
 import React, { useState, useMemo, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Search, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, BarChart3, Table, TrendingUp, GitCompareArrows } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { Search, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, BarChart3 } from 'lucide-react';
 import { Clock } from "lucide-react"
 
 type SortField = 'name';
@@ -19,8 +18,7 @@ const METRICS = [
 // Color palette for multi-KD lines
 const KD_COLORS = ['#818cf8', '#f87171', '#34d399', '#fbbf24', '#fb923c', '#a78bfa'];
 
-type TabType = 'table' | 'charts' | 'comparison';
-const VALID_TABS: TabType[] = ['table', 'charts', 'comparison'];
+type TabType = 'table';
 
 export default function KingdomStats() {
   const searchParams = useSearchParams();
@@ -39,20 +37,6 @@ const kingdoms = KINGDOMS;
 
 const [members,setMembers] = useState<Member[]>([])
 const [loadingMembers,setLoadingMembers] = useState(true)
-
-
-  
-  
-  // URL-synced tab
-  const rawTab = searchParams.get('tab');
-  const activeTab: TabType = VALID_TABS.includes(rawTab as TabType) ? (rawTab as TabType) : 'table';
-  const setActiveTab = useCallback((tab: TabType) => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (tab === 'table') params.delete('tab');
-    else params.set('tab', tab);
-    const qs = params.toString();
-    router.push(qs ? `?${qs}` : '/kingdom/kingdom-stats', { scroll: false });
-  }, [searchParams, router]);
 
   // Table state
   const [selectedKingdom, setSelectedKingdom] = useState<number>(3237);
@@ -74,7 +58,8 @@ loadMembers()
 
 },[selectedKingdom])
   const [search, setSearch] = useState('');
-const [sortField, setSortField] = useState<SortField>('name');
+  const [filterMode,setFilterMode] = useState<'all'|'in'|'out'>('all')
+  const [sortField, setSortField] = useState<SortField>('name');
   const [sortDir, setSortDir] = useState<SortDir>('desc');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(50);
@@ -99,7 +84,7 @@ const chartKingdomIds = useMemo(
  React.useEffect(() => { setPage(0); }, [search, selectedKingdom, sortField, sortDir]);
 
   // Sort & filter (already limited to top 400 by the hook)
- const filtered = useMemo(() => {
+const filtered = useMemo(() => {
 
 let data = [...members]
 
@@ -110,14 +95,33 @@ data = data.filter(m =>
 m.name.toLowerCase().includes(q) ||
 m.id.toString().includes(q)
 )
+}
+
+if(filterMode === 'in'){
+data = data.filter(m => m.migratedIn)
+}
+
+if(filterMode === 'out'){
+data = data.filter(m => m.migratedOut)
+}
+
+data.sort((a,b)=>{
+
+if(sortField === 'name'){
+
+const res = a.name.localeCompare(b.name)
+
+return sortDir === 'asc' ? res : -res
 
 }
 
-data.sort((a,b)=>a.name.localeCompare(b.name))
+return 0
+
+})
 
 return data
 
-},[members,search])
+},[members,search,filterMode,sortField,sortDir])
 // ADD IT HERE ↓↓↓
 
 const dataUpdated = useMemo(() => {
@@ -253,61 +257,17 @@ Top 400 member statistics from Lilith Game Tools
 
 </div>
 
-      {/* Tab toggle */}
-      <div className="flex rounded-lg border border-[var(--border)] overflow-hidden mb-6 w-fit">
-        <button
-          onClick={() => setActiveTab('table')}
-          className={`px-4 py-2 text-sm flex items-center gap-1.5 transition-colors ${activeTab === 'table' ? 'bg-[var(--primary)] text-white' : 'bg-[var(--background-card)] text-[var(--text-secondary)] hover:text-[var(--foreground)]'}`}
-        >
-          <Table size={16} /> Table
-        </button>
-        <button
-          onClick={() => setActiveTab('charts')}
-          className={`px-4 py-2 text-sm flex items-center gap-1.5 transition-colors ${activeTab === 'charts' ? 'bg-[var(--primary)] text-white' : 'bg-[var(--background-card)] text-[var(--text-secondary)] hover:text-[var(--foreground)]'}`}
-        >
-          <TrendingUp size={16} /> Charts
-        </button>
-        <button
-          onClick={() => setActiveTab('comparison')}
-          className={`px-4 py-2 text-sm flex items-center gap-1.5 transition-colors ${activeTab === 'comparison' ? 'bg-[var(--primary)] text-white' : 'bg-[var(--background-card)] text-[var(--text-secondary)] hover:text-[var(--foreground)]'}`}
-        >
-          <GitCompareArrows size={16} /> Comparison
-        </button>
-      </div>
+     
 
-      {/* ═══ TABLE VIEW ═══ */}
-      {activeTab === 'table' && (
-        <>
-          {/* Table controls */}
-          <div className="flex flex-wrap items-center gap-3 mb-6">
-            <select
-       value={selectedKingdom}
-onChange={e => setSelectedKingdom(Number(e.target.value))}
-              className="px-3 py-2 rounded-lg bg-[var(--background-card)] border border-[var(--border)] text-[var(--foreground)] text-sm"
-            >
-             
-             {KINGDOMS.map(k => (
-<option key={k} value={k}>KD {k}</option>
-))}
-            </select>
-
-        
-
-            <div className="relative flex-1 min-w-[200px] max-w-[300px]">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
-              <input
-                type="text"
-                placeholder="Search player..."
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 rounded-lg bg-[var(--background-card)] border border-[var(--border)] text-[var(--foreground)] text-sm placeholder:text-[var(--text-muted)]"
-              />
-            </div>
-          </div>
+   
 
           {/* Summary cards */}
-         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
 
+<div
+onClick={()=>setFilterMode('all')}
+className={`cursor-pointer ${filterMode==='all' ? 'ring-2 ring-yellow-500/40' : ''}`}
+>
 <GlowCard
 title="All Members"
 value={members.length}
@@ -315,25 +275,28 @@ sub={`${formatCompact(members.reduce((a,b)=>a+b.power,0))} total power`}
 color="yellow"
 />
 
+</div>
+
+<div onClick={()=>setFilterMode('in')} className="cursor-pointer">
+
 <GlowCard
-title="Recently Migrated In"
-value={members.filter(m=>{
-if(!m.migratedIn) return false
-return new Date(m.migratedIn).getTime() > Date.now()-604800000
-}).length}
-sub="last 7 days"
+title="Migrated In"
+value={members.filter(m=>m.migratedIn).length}
+sub="players"
 color="orange"
 />
 
+</div>
+<div onClick={()=>setFilterMode('out')} className="cursor-pointer">
+
 <GlowCard
-title="Recently Migrated Out"
-value={members.filter(m=>{
-if(!m.migratedOut) return false
-return new Date(m.migratedOut).getTime() > Date.now()-604800000
-}).length}
-sub="last 7 days"
+title="Migrated Out"
+value={members.filter(m=>m.migratedOut).length}
+sub="players"
 color="red"
 />
+
+</div>
 
 </div>
 
@@ -348,23 +311,38 @@ color="red"
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                    <thead>
-<tr className="border-b border-[var(--border)] bg-[var(--background-secondary)]">
+<tr className="border-b border-[var(--border)] bg-[var(--background-secondary)] text-xs uppercase tracking-wider">
 <th className="px-3 py-3 text-left text-xs font-semibold text-[var(--text-muted)]">#</th>
-<th className="px-3 py-3 text-left text-xs font-semibold text-[var(--text-muted)]">ID</th>
-<th className="px-3 py-3 text-left text-xs font-semibold text-[var(--text-muted)]">Name</th>
-<th className="px-3 py-3 text-left text-xs font-semibold text-[var(--text-muted)]">Mig. In</th>
-<th className="px-3 py-3 text-left text-xs font-semibold text-[var(--text-muted)]">Mig. Out</th>
+<th>ID</th>
+<th onClick={()=>handleSort('name')} className="cursor-pointer flex items-center gap-1">
+Name
+{sortField === 'name' && (
+sortDir === 'asc'
+? <ChevronUp size={12}/>
+: <ChevronDown size={12}/>
+)}
+</th>
+
+<th>Power</th>
+<th>Mig. In</th>
+<th>Mig. Out</th>
                       </tr>
                     </thead>
                   <tbody>
 {paged.map((m, i) => (
-<tr key={m.id}>
-<td>{page * rowsPerPage + i + 1}</td>
-<td>{m.id}</td>
+<tr key={m.id} className="border-b border-[var(--border)] hover:bg-[var(--background-secondary)] transition">
 
-<td className="flex items-center gap-2">
+<td className="px-3 py-2">
+{page * rowsPerPage + i + 1}
+</td>
 
-{m.name}
+<td className="px-3 py-2 text-[var(--text-muted)]">
+{m.id}
+</td>
+
+<td className="px-3 py-2 flex items-center gap-2">
+
+<span className="font-medium">{m.name}</span>
 
 {m.prevNames?.length > 0 && (
 <div className="relative group flex items-center">
@@ -380,9 +358,7 @@ rounded-lg px-3 py-2 text-xs shadow-lg min-w-[140px]">
 </div>
 
 {m.prevNames.map((n,i)=>(
-<div key={i} className="text-[var(--foreground)]">
-{n}
-</div>
+<div key={i}>{n}</div>
 ))}
 
 </div>
@@ -392,16 +368,20 @@ rounded-lg px-3 py-2 text-xs shadow-lg min-w-[140px]">
 
 </td>
 
-<td title={m.migratedIn || ""}>
+<td className="px-3 py-2 text-indigo-400 font-semibold">
+{formatCompact(m.power)}
+</td>
+
+<td className="px-3 py-2" title={m.migratedIn || ""}>
 {formatRelative(m.migratedIn)}
 </td>
 
-<td title={m.migratedOut || ""}>
+<td className="px-3 py-2" title={m.migratedOut || ""}>
 {formatRelative(m.migratedOut)}
 </td>
-                        
-                        </tr>
-                      ))}
+
+</tr>
+))}
                     </tbody>
                   </table>
                 </div>
@@ -432,204 +412,6 @@ rounded-lg px-3 py-2 text-xs shadow-lg min-w-[140px]">
           </div>
         </>
       )}
-
-      {/* ═══ COMPARISON VIEW ═══ */}
-      {activeTab === 'comparison' && (
-        <div className="space-y-4">
-          {/* Date selector */}
-          <div className="flex items-center gap-3">
-          
-            <span className="text-sm text-[var(--text-muted)]">
-              {comparisonRows.length} kingdom{comparisonRows.length !== 1 ? 's' : ''} compared
-            </span>
-          </div>
-
-          {/* Comparison table */}
-          <div className="rounded-xl border border-[var(--border)] bg-[var(--background-card)] overflow-hidden">
-            {loadingComparison ? (
-              <div className="p-12 text-center text-[var(--text-muted)]">Loading...</div>
-            ) : comparisonRows.length === 0 ? (
-              <div className="p-12 text-center text-[var(--text-muted)]">No data for this date</div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-[var(--border)] bg-[var(--background-secondary)]">
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider w-10">#</th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">Kingdom</th>
-                      <th className="px-4 py-3 text-right text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">Total Power</th>
-                      <th className="px-4 py-3 text-right text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">Kill Points</th>
-                      <th className="px-4 py-3 text-right text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">Gathered</th>
-                      <th className="px-4 py-3 text-right text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">Helps</th>
-                      <th className="px-4 py-3 text-right text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">Deaths</th>
-                      <th className="px-4 py-3 text-right text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">Members</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {comparisonRows.map((row, i) => (
-                      <tr key={row.kingdom_id} className="border-b border-[var(--border)] hover:bg-[var(--background-secondary)] transition-colors">
-                        <td className="px-4 py-3 text-[var(--text-muted)] font-medium">{i + 1}</td>
-                        <td className="px-4 py-3 font-semibold text-[var(--foreground)]">
-                          <span
-                            className="inline-block w-3 h-3 rounded-full mr-2"
-                            style={{ backgroundColor: KD_COLORS[kingdoms.indexOf(row.kingdom_id) % KD_COLORS.length] }}
-                          />
-                          KD {row.kingdom_id}
-                        </td>
-                        <td className="px-4 py-3 text-right text-indigo-400 font-semibold tabular-nums">{row.total_power.toLocaleString()}</td>
-                        <td className="px-4 py-3 text-right text-red-400 tabular-nums">{row.total_kill.toLocaleString()}</td>
-                        <td className="px-4 py-3 text-right text-emerald-400 tabular-nums">{row.total_collect.toLocaleString()}</td>
-                        <td className="px-4 py-3 text-right text-amber-400 tabular-nums">{row.total_help.toLocaleString()}</td>
-                        <td className="px-4 py-3 text-right text-[var(--text-muted)] tabular-nums">{row.total_dead.toLocaleString()}</td>
-                        <td className="px-4 py-3 text-right text-[var(--text-secondary)] tabular-nums">{row.member_count}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* ═══ CHARTS VIEW ═══ */}
-      {activeTab === 'charts' && (
-        <div className="space-y-4">
-          {/* Chart controls */}
-          <div className="rounded-xl border border-[var(--border)] bg-[var(--background-card)] p-4">
-            <div className="flex flex-wrap items-center gap-4">
-              {/* Kingdom multi-select */}
-              <div>
-                <div className="text-xs text-[var(--text-muted)] mb-2">Kingdoms</div>
-                <div className="flex gap-2">
-                  {kingdoms.map((k, i) => (
-                    <button
-                      key={k}
-                      onClick={() => toggleChartKingdom(k)}
-                      className={`px-3 py-1.5 text-xs rounded-lg border transition-colors font-medium ${
-                        chartKingdoms.has(k)
-                          ? 'border-transparent text-white'
-                          : 'border-[var(--border)] text-[var(--text-muted)]'
-                      }`}
-                      style={chartKingdoms.has(k) ? { backgroundColor: KD_COLORS[i % KD_COLORS.length] } : {}}
-                    >
-                      KD {k}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Metric selector */}
-              <div>
-                <div className="text-xs text-[var(--text-muted)] mb-2">Metric</div>
-                <div className="flex gap-2">
-                  {METRICS.map(m => (
-                    <button
-                      key={m.key}
-                      onClick={() => setChartMetric(m.key)}
-                      className={`px-3 py-1.5 text-xs rounded-lg border transition-colors ${
-                        chartMetric === m.key
-                          ? 'border-transparent text-white'
-                          : 'border-[var(--border)] text-[var(--text-muted)]'
-                      }`}
-                      style={chartMetric === m.key ? { backgroundColor: m.color } : {}}
-                    >
-                      {m.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Date range */}
-              <div>
-                <div className="text-xs text-[var(--text-muted)] mb-2">Date Range</div>
-                <div className="flex items-center gap-2">
-                  <select
-                    value={chartDateFrom}
-                    onChange={e => setChartDateFrom(e.target.value)}
-                    className="px-2 py-1.5 rounded-lg bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] text-xs"
-                  >
-                    <option value="">All (from)</option>
-                    {allChartDates.map(d => <option key={d} value={d}>{d}</option>)}
-                  </select>
-                  <span className="text-[var(--text-muted)] text-xs">to</span>
-                  <select
-                    value={chartDateTo}
-                    onChange={e => setChartDateTo(e.target.value)}
-                    className="px-2 py-1.5 rounded-lg bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] text-xs"
-                  >
-                    <option value="">All (to)</option>
-                    {allChartDates.map(d => <option key={d} value={d}>{d}</option>)}
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Chart */}
-          <div className="rounded-xl border border-[var(--border)] bg-[var(--background-card)] p-6">
-            <h2 className="text-lg font-semibold text-[var(--foreground)] mb-4">
-              {METRICS.find(m => m.key === chartMetric)?.label || 'Trend'} — Top 400
-            </h2>
-
-            {loadingAggregates ? (
-              <div className="h-80 flex items-center justify-center text-[var(--text-muted)]">Loading...</div>
-            ) : chartData.length === 0 ? (
-              <div className="h-80 flex items-center justify-center text-[var(--text-muted)]">No historical data yet</div>
-            ) : (
-              <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                    <XAxis
-                      dataKey="dt"
-                      tick={{ fill: 'var(--text-muted)', fontSize: 12 }}
-                      tickFormatter={(d: string) => d.slice(5)}
-                    />
-                    <YAxis
-                      tick={{ fill: 'var(--text-muted)', fontSize: 12 }}
-                      tickFormatter={formatCompact}
-                    />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: 'var(--background-card)',
-                        border: '1px solid var(--border)',
-                        borderRadius: '8px',
-                        color: 'var(--foreground)',
-                      }}
-                      formatter={(value?: number) => formatCompact(value ?? 0)}
-                      labelFormatter={(label: string) => `Date: ${label}`}
-                    />
-                    <Legend />
-                    {sortedChartKingdomIds.map((k, i) => (
-                      <Line
-                        key={k}
-                        type="monotone"
-                        dataKey={`KD ${k}`}
-                        name={`KD ${k}`}
-                        stroke={KD_COLORS[i % KD_COLORS.length]}
-                        strokeWidth={2}
-                        dot={false}
-                        activeDot={{ r: 4 }}
-                        connectNulls
-                      />
-                    ))}
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            )}
-
-            {chartData.length > 0 && (
-              <div className="mt-4 text-xs text-[var(--text-muted)]">
-                {chartData.length} dates &middot; {chartKingdomIds.length} kingdom{chartKingdomIds.length > 1 ? 's' : ''}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
 
 function SummaryCard({ label, value, color }: { label: string; value: string; color: string }) {
   return (
@@ -666,30 +448,31 @@ return `${Math.floor(diff/(day*365))} years ago`
 function GlowCard({title,value,sub,color}:{title:string,value:number,sub:string,color:string}){
 
 const colors:any={
-yellow:"from-yellow-500/20 to-yellow-500/5 border-yellow-500/30",
-orange:"from-orange-500/20 to-orange-500/5 border-orange-500/30",
-red:"from-red-500/20 to-red-500/5 border-red-500/30"
+yellow:"border-yellow-500/30 shadow-[0_0_20px_rgba(234,179,8,0.25)]",
+orange:"border-orange-500/30 shadow-[0_0_20px_rgba(249,115,22,0.25)]",
+red:"border-red-500/30 shadow-[0_0_20px_rgba(239,68,68,0.25)]"
 }
 
 return(
 
-<div className={`rounded-xl border p-4 bg-gradient-to-br ${colors[color]}`}>
+<div className={`rounded-xl border p-5 bg-[var(--background-card)] ${colors[color]} transition hover:scale-[1.02]`}>
 
 <div className="text-xs text-[var(--text-muted)] mb-1">
 {title}
 </div>
 
-<div className="text-2xl font-bold">
+<div className="text-3xl font-bold">
 {value}
 </div>
 
-<div className="text-xs text-[var(--text-muted)]">
+<div className="text-xs text-[var(--text-muted)] mt-1">
 {sub}
 </div>
 
 </div>
 
 )
+
 }
 
 function formatCompact(v:number){
