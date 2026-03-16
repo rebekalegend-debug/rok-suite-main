@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/cron/migration-scan",
-      "schedule": "15 4 * * *"
+      "schedule": "35 4 * * *"
     }
   ]
 }
