@@ -2,8 +2,7 @@
 import { History } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Search, RefreshCw, Lock, ExternalLink, Crosshair, X, Info, ChevronDown, ChevronUp, Undo2, Target, Skull, LogOut } from 'lucide-react';
-import { createClient } from '@/lib/supabase/client';
-import { fetchMgeViolationsSheet } from '@/lib/kingdom/parse';
+import { fetchViolationSheet } from '@/lib/kingdom/parse';
 import { 
   MGE_VIOLATION_SHEET_URL, 
   MGE_VIOLATION_SHEET_EDIT_URL,
@@ -14,7 +13,7 @@ import type { WantedPlayer } from '@/lib/kingdom/types';
 import { AlertCircle } from "lucide-react";
 import { Radar } from "lucide-react";
 import { fetchPrevNamesSheet } from '@/lib/kingdom/parse';
-type OfficerMark = 'zeroed' | 'left';
+type OfficerMark = 'On wanted list' | ''Left';
 
 interface WantedStatus {
   governor_id: number;
@@ -100,7 +99,7 @@ export default function WantedList() {
   const [search, setSearch] = useState('');
   const [reasonFilter, setReasonFilter] = useState<string | null>(null);
   
-  const [handledFilter, setHandledFilter] = useState<'all' | 'pending' | 'zeroed' | 'left'>('all');
+  const [handledFilter, setHandledFilter] = useState<'all' | 'No action' | 'Pending' | 'On wanted list' | ''Left'>('all');
 
 
   // Sort state
@@ -113,50 +112,39 @@ export default function WantedList() {
   const [showPasswordPrompt, setShowPasswordPrompt] = useState(false);
   const [password, setPassword] = useState('');
 
-  // Supabase officer marks
-  const [officerMarks, setOfficerMarks] = useState<Map<number, OfficerMark>>(new Map());
+ 
 
   // Undo state
   const [undoAction, setUndoAction] = useState<UndoAction | null>(null);
   const undoTimerRef = useRef<NodeJS.Timeout | null>(null);
+const fetchData = useCallback(async () => {
+  setLoading(true);
+  setError(null);
+  try {
+    const [wantedPlayers, prevNamesMap] = await Promise.all([
+      fetchViolationSheet(MGE_VIOLATION_SHEET_URL),
+      fetchPrevNamesSheet(PREV_NAMES_SHEET_URL),
+    ]);
 
+    const merged = wantedPlayers.map(p => ({
+      ...p,
+      prevNames: prevNamesMap.get(p.governorId) || ""
+    }));
+
+    setPlayers(merged);
+    setLastRefreshed(new Date());
+
+  } catch (err) {
+    setError(err instanceof Error ? err.message : 'Failed to load');
+  } finally {
+    setLoading(false);
+  }
+}, []);
   // Refresh state
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastRefreshed, setLastRefreshed] = useState<Date | null>(null);
 
-  const supabase = useMemo(() => createClient(), []);
-
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-const [wantedPlayers, prevNamesMap, { data: statusRows }] = await Promise.all([
-  fetchMgeViolationsSheet(MGE_VIOLATION_SHEET_URL),
-  fetchPrevNamesSheet(PREV_NAMES_SHEET_URL),
-  supabase.from('wanted_status').select('*'),
-]);
-
-const merged = wantedPlayers.map(p => ({
-  ...p,
-  prevNames: prevNamesMap.get(p.governorId) || ""
-}));
-
-setPlayers(merged);
-
-      const marks = new Map<number, OfficerMark>();
-      if (statusRows) {
-        for (const row of statusRows as WantedStatus[]) {
-          marks.set(row.governor_id, row.status);
-        }
-      }
-      setOfficerMarks(marks);
-      setLastRefreshed(new Date());
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load wanted list');
-    } finally {
-      setLoading(false);
-    }
-  }, [supabase]);
+ 
 
   useEffect(() => {
     fetchData();
@@ -191,95 +179,33 @@ setPlayers(merged);
     }
   };
 
-  const handleMarkStatus = async (governorId: number, playerName: string, status: OfficerMark | null) => {
-    // Save previous state for undo
-    const previousStatus = officerMarks.get(governorId) || null;
+ 
 
-    // Clear any existing undo timer
-    if (undoTimerRef.current) clearTimeout(undoTimerRef.current);
-
-    // Apply the change
-    if (status === null) {
-      await supabase.from('wanted_status').delete().eq('governor_id', governorId);
-      setOfficerMarks(prev => {
-        const next = new Map(prev);
-        next.delete(governorId);
-        return next;
-      });
-    } else {
-      await supabase
-        .from('wanted_status')
-        .upsert({ governor_id: governorId, status, updated_at: new Date().toISOString() });
-      setOfficerMarks(prev => new Map(prev).set(governorId, status));
-    }
-
-    // Show undo toast
-    setUndoAction({ governorId, playerName, previousStatus, newStatus: status });
-    undoTimerRef.current = setTimeout(() => setUndoAction(null), UNDO_TIMEOUT_MS);
-  };
-
-  const handleUndo = async () => {
-    if (!undoAction) return;
-    if (undoTimerRef.current) clearTimeout(undoTimerRef.current);
-
-    const { governorId, previousStatus } = undoAction;
-
-    if (previousStatus === null) {
-      await supabase.from('wanted_status').delete().eq('governor_id', governorId);
-      setOfficerMarks(prev => {
-        const next = new Map(prev);
-        next.delete(governorId);
-        return next;
-      });
-    } else {
-      await supabase
-        .from('wanted_status')
-        .upsert({ governor_id: governorId, status: previousStatus, updated_at: new Date().toISOString() });
-      setOfficerMarks(prev => new Map(prev).set(governorId, previousStatus));
-    }
-
-    setUndoAction(null);
-  };
-
-  // Officer handling status: zeroed, left, or pending
-  // Uses Supabase mark first, falls back to sheet "Zeroed" column
-  const getHandledStatus = useCallback((player: WantedPlayer): 'pending' | 'zeroed' | 'left' => {
-    const mark = officerMarks.get(player.governorId);
-    if (mark) return mark;
-    if (player.zeroed === 'yes') return 'zeroed';
-     if (player.zeroed === 'left') return 'left';
-    return 'pending';
-  }, [officerMarks]);
-
-  // ─── Sort logic ────────────────────────────────────────────────────
-  const handleSort = (field: SortableField, addToChain: boolean) => {
-    if (addToChain) {
-      const existingIdx = sortRules.findIndex(r => r.field === field);
-      if (existingIdx >= 0) {
-        const updated = [...sortRules];
-        updated[existingIdx] = {
-          ...updated[existingIdx],
-          direction: updated[existingIdx].direction === 'asc' ? 'desc' : 'asc',
-        };
-        setSortRules(updated);
-      } else {
-        const defaultDir = field === 'name' || field === 'alliance' ? 'asc' : 'desc';
-        setSortRules([...sortRules, { field, direction: defaultDir }]);
-      }
-    } else {
-      const existing = sortRules.find(r => r.field === field);
-      const newDir = existing
-        ? (existing.direction === 'asc' ? 'desc' : 'asc')
-        : (field === 'name' || field === 'alliance' ? 'asc' : 'desc');
-      setSortRules([{ field, direction: newDir }]);
-    }
-  };
 
   const removeSortRule = (field: SortableField) => {
     const remaining = sortRules.filter(r => r.field !== field);
     setSortRules(remaining.length > 0 ? remaining : DEFAULT_SORT_RULES);
   };
+const handleSort = (field: SortableField, multi: boolean) => {
+  setSortRules(prev => {
+    const existing = prev.find(r => r.field === field);
 
+    if (!multi) {
+      if (!existing) return [{ field, direction: 'asc' }];
+      return [{ field, direction: existing.direction === 'asc' ? 'desc' : 'asc' }];
+    }
+
+    if (!existing) {
+      return [...prev, { field, direction: 'asc' }];
+    }
+
+    return prev.map(r =>
+      r.field === field
+        ? { ...r, direction: r.direction === 'asc' ? 'desc' : 'asc' }
+        : r
+    );
+  });
+};
  const resetFiltersAndSort = () => {
   setSortRules(DEFAULT_SORT_RULES);
   setReasonFilter(null);
@@ -287,13 +213,12 @@ setPlayers(merged);
   setSearch('');
 };
 
-  const handledOrder = (status: 'pending' | 'zeroed' | 'left'): number => {
-    switch (status) {
-      case 'pending': return 0;
-      case 'zeroed': return 1;
-      case 'left': return 2;
-    }
-  };
+ const handledOrder = (status: string): number => {
+  if (status === 'No action' || status === 'Pending') return 0;
+  if (status === 'On wanted list') return 1;
+  if (status === ''Left') return 2;
+  return 0;
+};
 
   const zeroOrder = (val: 'yes' | 'no' | ''): number => {
     switch (val) {
@@ -303,31 +228,109 @@ setPlayers(merged);
     }
   };
 
-  const compareByField = useCallback((a: WantedPlayer, b: WantedPlayer, field: SortableField, direction: 'asc' | 'desc'): number => {
-    let aVal: string | number;
-    let bVal: string | number;
 
-    switch (field) {
-      case 'name':       aVal = a.name.toLowerCase(); bVal = b.name.toLowerCase(); break;
-      case 'governorId': aVal = a.governorId; bVal = b.governorId; break;
-      case 'power':      aVal = a.power2 || 0; bVal = b.power2 || 0; break;
-      case 'alliance':   aVal = (a.alliance || '').toLowerCase(); bVal = (b.alliance || '').toLowerCase(); break;
-      case 'reason':     aVal = (a.reason || '').toLowerCase(); bVal = (b.reason || '').toLowerCase(); break;
-      case 'zero':       aVal = zeroOrder(a.zero); bVal = zeroOrder(b.zero); break;
-      case 'handled':    aVal = handledOrder(getHandledStatus(a)); bVal = handledOrder(getHandledStatus(b)); break;
-      default: return 0;
-    }
-
-    if (direction === 'asc') {
-      return aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
-    } else {
-      return aVal > bVal ? -1 : aVal < bVal ? 1 : 0;
-    }
-  }, [getHandledStatus]);
 
   // Only visible players (display !== false)
   const visiblePlayers = useMemo(() => players.filter(p => p.display), [players]);
-const duplicateNames = useMemo(() => {
+const filtered = useMemo(() => {
+  const list = visiblePlayers
+    .filter(p => {
+      if (search && !matchesSearch(search, p.name, p.governorId)) return false;
+      if (reasonFilter && !p.violation?.includes(reasonFilter)) return false;
+
+      const handled = p.handled || 'No action';
+      if (handledFilter !== 'all' && handled !== handledFilter) return false;
+
+      return true;
+    });
+
+  return [...list].sort((a, b) => {
+    for (const rule of sortRules) {
+      let aVal: any;
+      let bVal: any;
+
+      switch (rule.field) {
+        case 'name':
+          aVal = a.name || '';
+          bVal = b.name || '';
+          break;
+
+        case 'governorId':
+          aVal = a.governorId || 0;
+          bVal = b.governorId || 0;
+          break;
+
+        case 'power':
+          aVal = a.power2 || 0;
+          bVal = b.power2 || 0;
+          break;
+
+        case 'handled':
+          aVal = handledOrder(a.handled || 'No action');
+          bVal = handledOrder(b.handled || 'No action');
+          break;
+
+        case 'reason':
+          aVal = a.violation?.join(',') || '';
+          bVal = b.violation?.join(',') || '';
+          break;
+
+        default:
+          continue;
+      }
+
+      if (aVal < bVal) return rule.direction === 'asc' ? -1 : 1;
+      if (aVal > bVal) return rule.direction === 'asc' ? 1 : -1;
+    }
+
+    return 0;
+  });
+}, [visiblePlayers, search, reasonFilter, handledFilter, sortRules]);
+
+
+  
+  const stats = useMemo(() => {
+  let pendingCount = 0, pendingPower = 0;
+  let zeroedCount = 0, zeroedPower = 0;
+  let leftCount = 0;
+  let toZeroCount = 0, toZeroPower = 0;
+
+  for (const p of visiblePlayers) {
+    const s = p.handled || 'No action';
+    const power = p.power2 || 0;
+
+    if (s === 'Pending' || s === 'No action') {
+      pendingCount++;
+      pendingPower += power;
+    }
+
+    if (s === 'On wanted list') {
+      zeroedCount++;
+      zeroedPower += power;
+
+      toZeroCount++;
+      toZeroPower += power;
+    }
+
+    if (s === ''Left') {
+      leftCount++;
+    }
+  }
+
+  return {
+    total: visiblePlayers.length,
+    pendingCount,
+    pendingPower,
+    zeroedCount,
+    zeroedPower,
+    leftCount,
+    toZeroCount,
+    toZeroPower,
+  };
+}, [visiblePlayers]);
+  
+  
+  const duplicateNames = useMemo(() => {
   const map = new Map<string, number>();
 
   for (const p of visiblePlayers) {
@@ -360,73 +363,13 @@ const duplicateNames = useMemo(() => {
     return [...set].sort();
   }, [visiblePlayers]);
 
-  // Filtered and sorted players (from visible only)
-  const filtered = useMemo(() => {
-    return visiblePlayers
-      .filter(p => {
-        if (search && !matchesSearch(search, p.name, p.governorId)) return false;
-        if (reasonFilter && p.reason !== reasonFilter) return false;
-      
-       
-        const handled = getHandledStatus(p);
-        if (handledFilter !== 'all' && handled !== handledFilter) return false;
-        return true;
-      })
-      .sort((a, b) => {
-        for (const rule of sortRules) {
-          const result = compareByField(a, b, rule.field, rule.direction);
-          if (result !== 0) return result;
-        }
-        return 0;
-      });
-}, [visiblePlayers, search, reasonFilter, handledFilter, sortRules, getHandledStatus, compareByField]);
 
-  // Dashboard stats — based on visible players only (excludes hidden)
-  const stats = useMemo(() => {
-    let pendingCount = 0, pendingPower = 0;
-    let zeroedCount = 0, zeroedPower = 0;
-    let leftCount = 0;
-    let toZeroCount = 0, toZeroPower = 0;
 
-for (const p of visiblePlayers) {
-  const s = getHandledStatus(p);
-  const power = p.power2 || 0;
-
-  if (s === 'pending') {
-    pendingCount++;
-    pendingPower += power;
-  }
-
-  if (s === 'zeroed') {
-    zeroedCount++;
-    zeroedPower += power;
-
-    toZeroCount++;
-    toZeroPower += power;
-  }
-
-  if (s === 'left') {
-    leftCount++;
-  }
-}
-
-    return {
-      total: visiblePlayers.length,
-      hidden: players.length - visiblePlayers.length,
-      pendingCount, pendingPower,
-      zeroedCount, zeroedPower,
-      leftCount,
-      toZeroCount, toZeroPower,
-    };
-  }, [players, visiblePlayers, getHandledStatus]);
-
-  const handledBg = (status: 'pending' | 'zeroed' | 'left') => {
-    switch (status) {
-      case 'pending': return 'bg-amber-500/10 border-amber-500/30 text-amber-400';
-      case 'zeroed': return 'bg-red-500/10 border-red-500/30 text-red-400';
-      case 'left': return 'bg-sky-500/10 border-sky-500/30 text-sky-400';
-    }
-  };
+ const handledBg = (status: string) => {
+  if (status === 'On wanted list') return 'bg-red-500/10 border-red-500/30 text-red-400';
+  if (status === ''Left') return 'bg-sky-500/10 border-sky-500/30 text-sky-400';
+  return 'bg-amber-500/10 border-amber-500/30 text-amber-400';
+};
 
   // Instructions toggle
   const [showInstructions, setShowInstructions] = useState(false);
@@ -456,7 +399,7 @@ const hasActiveFilters =
   || JSON.stringify(sortRules) !== JSON.stringify(DEFAULT_SORT_RULES);
 
   // Sortable header helper
-  const SortHeader = ({ field, label, align = 'left' }: { field: SortableField; label: string; align?: 'left' | 'right' | 'center' }) => (
+  const SortHeader = ({ field, label, align = ''Left' }: { field: SortableField; label: string; align?: ''Left' | 'right' | 'center' }) => (
     <th className={`text-${align} px-3 py-2 sm:py-3`}>
       <button
         onClick={(e) => handleSort(field, e.shiftKey)}
@@ -467,8 +410,42 @@ const hasActiveFilters =
       </button>
     </th>
   );
+const savePlayer = async (player: any, updates: any) => {
+  const updated = { ...player, ...updates };
+
+  if (
+    (!updated.violation || updated.violation.length === 0) &&
+    !updated.handled &&
+    !updated.notes
+  ) {
+    await fetch('/api/violation-save', {
+      method: 'POST',
+      body: JSON.stringify({
+        id: player.governorId,
+        delete: true
+      })
+    });
+    fetchData();
+    return;
+  }
+
+  await fetch('/api/violation-save', {
+    method: 'POST',
+    body: JSON.stringify({
+      name: updated.name,
+      id: updated.governorId,
+      power: updated.power2,
+      violation: updated.violation?.join(',') || '',
+      handled: updated.handled || '',
+      notes: updated.notes || ''
+    })
+  });
+
+  fetchData();
+};
 
   return (
+    
     <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 sm:py-10">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
@@ -594,7 +571,7 @@ const hasActiveFilters =
           {/* Pending */}
           <div
   onClick={() => {
-  setHandledFilter('pending');
+  setHandledFilter('Pending');
    
 }}
   className="cursor-pointer rounded-xl border border-orange-500/20 bg-orange-500/5 p-4 hover:bg-orange-500/10 transition shadow-lg shadow-orange-500/20"
@@ -611,7 +588,7 @@ const hasActiveFilters =
          {/* On Wanted List */}
 <div
   onClick={() => {
-    setHandledFilter('zeroed');
+    setHandledFilter('On wanted list');
   }}
 className="cursor-pointer rounded-xl border border-red-500/20 bg-red-500/5 p-4 hover:bg-red-500/10 transition shadow-lg shadow-red-500/30"
   >
@@ -638,7 +615,7 @@ className="cursor-pointer rounded-xl border border-red-500/20 bg-red-500/5 p-4 h
           {/* Left Kingdom */}
           <div
   onClick={() => {
-  setHandledFilter('left');
+  setHandledFilter(''Left');
    
 }}
 className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 hover:bg-sky-500/10 transition shadow-lg shadow-sky-500/20">
@@ -729,7 +706,8 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                 <SortHeader field="reason" label="Violation" align="center" />
                 
                 <SortHeader field="handled" label="Handled" align="center" />
-                {isOfficer && (
+              <th className="text-center px-3 py-2">Notes</th>
+               {isOfficer && (
                   <th className="text-center px-3 py-2 sm:py-3">
                     <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">Actions</span>
                   </th>
@@ -745,8 +723,8 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                 </tr>
               ) : (
                 filtered.map((player, idx) => {
-                  const handled = getHandledStatus(player);
-                  const isDone = handled !== 'pending';
+                  const handled = player.handled || 'No action';
+                  const isDone = handled !== 'Pending' && handled !== 'No action';
                   const isIllegal = player.reason?.toLowerCase().includes('illegal');
                   return (
                     <tr
@@ -820,56 +798,75 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
   {player.alliance || '-'}
 </td>
 */}
-                  <td className="px-3 py-2.5 text-center">
-  {player.reason ? (
-    <span
-      className={`inline-block whitespace-nowrap px-2 py-0.5 rounded-md text-xs font-medium border ${
-        player.reason === '1'
-          ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/30'
-          : player.reason === '2'
-          ? 'bg-orange-500/10 text-orange-400 border-orange-500/30'
-          : player.reason === '3'
-          ? 'bg-red-500/10 text-red-400 border-red-500/30'
-          : 'bg-[var(--background-secondary)] text-[var(--text-muted)] border-[var(--border)]'
-      }`}
-    >
-      {player.reason === '1'
-        ? 'FIRST'
-        : player.reason === '2'
-        ? 'SECOND'
-        : player.reason === '3'
-        ? 'THIRD'
-        : player.reason}
-    </span>
-  ) : (
-    <span className="text-[var(--text-muted)]">-</span>
-  )}
+                <td className="px-3 py-2.5 text-center">
+  <div className="flex flex-wrap justify-center gap-1">
+    {player.violation?.length ? player.violation.map((v, i) => (
+      <span
+        key={i}
+        className={`px-2 py-0.5 rounded-md text-xs font-medium border ${
+          v === 'First'
+            ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/30'
+            : v === 'Second'
+            ? 'bg-orange-500/10 text-orange-400 border-orange-500/30'
+            : v === 'Third'
+            ? 'bg-red-500/10 text-red-400 border-red-500/30'
+            : v === 'KD Break'
+            ? 'bg-purple-500/10 text-purple-400 border-purple-500/30'
+            : ''
+        }`}
+      >
+        {v}
+      </span>
+    )) : <span className="text-[var(--text-muted)]">-</span>}
+  </div>
 </td>
                      
                       <td className="px-3 py-2.5 text-center">
 <span
   className={`inline-block px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase border ${
-    handled === 'zeroed'
+    handled === 'On wanted list'
       ? 'bg-red-500/10 text-red-400 border-red-500/30'
-      : handled === 'left'
+      : handled === ''Left'
       ? 'bg-sky-500/10 text-sky-400 border-sky-500/30'
       : 'bg-amber-500/10 text-amber-400 border-amber-500/30'
   }`}
 >
-  {handled === 'pending'
+  {handled === 'No action' || handled === 'Pending'
     ? 'NO ACTION'
-    : handled === 'zeroed'
+    : handled === 'On wanted list'
     ? 'ON WANTED LIST'
-    : 'LEFT'}
+    : ''Left'}
 </span>
                       </td>
+
+
+
+<td className="px-3 py-2.5 text-center">
+  {isAdmin ? (
+    <input
+      value={player.notes || ''}
+      onChange={(e) => savePlayer(player, { notes: e.target.value })}
+      className="bg-[var(--background-secondary)] border border-[var(--border)] text-xs rounded px-2 py-1 w-32"
+    />
+  ) : (
+    <span className="text-xs text-[var(--text-muted)]">
+      {player.notes || '-'}
+    </span>
+  )}
+</td>
+
+
+
+
+
+                      
                       {isOfficer && (
                         <td className="px-3 py-2.5 text-center">
                           <div className="flex items-center justify-center gap-1">
                             <button
-                              onClick={() => handleMarkStatus(player.governorId, player.name, handled === 'zeroed' ? null : 'zeroed')}
+                              onClick={() => handleMarkStatus(player.governorId, player.name, handled === 'On wanted list' ? null : 'On wanted list')}
                               className={`px-2 py-1 rounded text-[10px] font-semibold border transition-colors ${
-                                handled === 'zeroed'
+                                handled === 'On wanted list'
                                   ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400'
                                   : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)] hover:text-emerald-400 hover:border-emerald-500/40'
                               }`}
@@ -877,9 +874,9 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                               ZEROED
                             </button>
                             <button
-                              onClick={() => handleMarkStatus(player.governorId, player.name, handled === 'left' ? null : 'left')}
+                              onClick={() => handleMarkStatus(player.governorId, player.name, handled === ''Left' ? null : ''Left')}
                               className={`px-2 py-1 rounded text-[10px] font-semibold border transition-colors ${
-                                handled === 'left'
+                                handled === ''Left'
                                   ? 'bg-sky-500/20 border-sky-500/40 text-sky-400'
                                   : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)] hover:text-sky-400 hover:border-sky-500/40'
                               }`}
@@ -907,8 +904,8 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
             </div>
           ) : (
             filtered.map((player) => {
-              const handled = getHandledStatus(player);
-              const isDone = handled !== 'pending';
+              const handled = player.handled || 'No action';
+              const isDone = handled !== 'Pending' && handled !== 'No action';
               const isIllegal = player.reason?.toLowerCase().includes('illegal');
               return (
                 <div
@@ -942,38 +939,34 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                   </div>
 
                   {/* Reason */}
-                 {player.reason && (
-  <div className="flex items-center gap-2">
-    <span className="text-[var(--text-muted)]">Violation:</span>
-
+                <div className="flex flex-wrap gap-1">
+  {player.violation?.length ? player.violation.map((v, i) => (
     <span
-      className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${
-        player.reason === '1'
+      key={i}
+      className={`px-2 py-0.5 rounded-md text-xs font-medium border ${
+        v === 'First'
           ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/30'
-          : player.reason === '2'
+          : v === 'Second'
           ? 'bg-orange-500/10 text-orange-400 border-orange-500/30'
-          : player.reason === '3'
+          : v === 'Third'
           ? 'bg-red-500/10 text-red-400 border-red-500/30'
-          : 'bg-[var(--background-secondary)] text-[var(--text-muted)] border-[var(--border)]'
+          : v === 'KD Break'
+          ? 'bg-purple-500/10 text-purple-400 border-purple-500/30'
+          : ''
       }`}
     >
-      {player.reason === '1'
-        ? 'FIRST'
-        : player.reason === '2'
-        ? 'SECOND'
-        : player.reason === '3'
-        ? 'THIRD'
-        : player.reason}
+      {v}
     </span>
-  </div>
-)}
+  )) : <span className="text-[var(--text-muted)]">-</span>}
+</div>
+
                   {/* Officer actions */}
                   {isOfficer && (
                     <div className="flex gap-2 pt-1 border-t border-[var(--border)]/50">
                       <button
-                        onClick={() => handleMarkStatus(player.governorId, player.name, handled === 'zeroed' ? null : 'zeroed')}
+                        onClick={() => handleMarkStatus(player.governorId, player.name, handled === 'On wanted list' ? null : 'On wanted list')}
                         className={`flex-1 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${
-                          handled === 'zeroed'
+                          handled === 'On wanted list'
                             ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400'
                             : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)] hover:text-emerald-400 hover:border-emerald-500/40'
                         }`}
@@ -981,9 +974,9 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                         ZEROED
                       </button>
                       <button
-                        onClick={() => handleMarkStatus(player.governorId, player.name, handled === 'left' ? null : 'left')}
+                        onClick={() => handleMarkStatus(player.governorId, player.name, handled === ''Left' ? null : ''Left')}
                         className={`flex-1 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${
-                          handled === 'left'
+                          handled === ''Left'
                             ? 'bg-sky-500/20 border-sky-500/40 text-sky-400'
                             : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)] hover:text-sky-400 hover:border-sky-500/40'
                         }`}
