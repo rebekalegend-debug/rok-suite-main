@@ -263,11 +263,11 @@ export async function fetchPrevNamesSheet(url: string): Promise<Map<number,strin
   const text = await response.text()
   const { headers, rows } = parseCSV(text)
 
-  const idx = (name:string) =>
-    headers.findIndex(h => h.toLowerCase().includes(name.toLowerCase()))
+  const normalize = (s:string) =>
+    s.toLowerCase().replace(/\s+/g,'').trim()
 
-  const iGov = idx('governor')
-  const iPrev = idx('prev')
+  const iGov = headers.findIndex(h => normalize(h).includes("governorid"))
+  const iPrev = headers.findIndex(h => normalize(h).includes("prevnames"))
 
   const map = new Map<number,string>()
 
@@ -276,7 +276,9 @@ export async function fetchPrevNamesSheet(url: string): Promise<Map<number,strin
     const id = parseInt(cols[iGov])
     if(!id) continue
 
-    map.set(id,(cols[iPrev] || '').trim())
+    const prev = (cols[iPrev] || "").trim()
+
+    map.set(id, prev)
 
   }
 
