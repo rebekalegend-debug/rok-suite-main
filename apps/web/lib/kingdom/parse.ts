@@ -254,6 +254,37 @@ prevNames: (cols[iPrevNames] || '').trim(),
  * Fetch and parse the Google Sheet wanted list as CSV.
  * Columns: Name, Governor ID, X Coordinate, Y Coordinate, Zero, Reason
  */
+
+export async function fetchPrevNamesSheet(url: string): Promise<Map<number,string>> {
+
+  const response = await fetch(url)
+  if (!response.ok) throw new Error(`Failed to fetch prev names sheet: ${response.status}`)
+
+  const text = await response.text()
+  const { headers, rows } = parseCSV(text)
+
+  const idx = (name:string) =>
+    headers.findIndex(h => h.toLowerCase().includes(name.toLowerCase()))
+
+  const iGov = idx('governor')
+  const iPrev = idx('prev')
+
+  const map = new Map<number,string>()
+
+  for(const cols of rows){
+
+    const id = parseInt(cols[iGov])
+    if(!id) continue
+
+    map.set(id,(cols[iPrev] || '').trim())
+
+  }
+
+  return map
+}
+
+
+
 export async function fetchWantedSheet(url: string): Promise<WantedPlayer[]> {
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Failed to fetch wanted sheet: ${response.status}`);
