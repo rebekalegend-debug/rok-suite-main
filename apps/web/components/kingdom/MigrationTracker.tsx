@@ -2,7 +2,7 @@
 import { History } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Search, RefreshCw, Lock, ExternalLink, Crosshair, X, Info, ChevronDown, ChevronUp, Undo2, Target, Skull, LogOut } from 'lucide-react';
-import { fetchMgeViolationsSheet } from '@/lib/kingdom/parse';
+import { fetchMgeViolationsSheet, fetchKingdomMembersSheet } from '@/lib/kingdom/parse';
 import { 
   MGE_VIOLATION_SHEET_URL, 
   MGE_VIOLATION_SHEET_EDIT_URL,
