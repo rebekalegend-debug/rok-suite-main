@@ -1,112 +1,119 @@
 function lastLilithSnapshot() {
-
   const d = new Date()
   d.setUTCDate(d.getUTCDate() - 1)
-
   return d.toISOString().slice(0,10)
-
 }
 
 function prevDay(date:string){
-
   const d = new Date(date)
   d.setUTCDate(d.getUTCDate()-1)
-
   return d.toISOString().slice(0,10)
-
 }
 
 export async function GET(){
 
-  const base = `https://${process.env.VERCEL_URL}`
+  try {
 
-  const end = lastLilithSnapshot()
+    // ✅ SAFE BASE URL (NO ENV BUGS)
+    const base = "https://rok-quinn.vercel.app"
 
-  console.log("Current snapshot:", end)
+    const end = lastLilithSnapshot()
 
-  // read last processed snapshot from sheet
-  const metaRes = await fetch(`${base}/api/meta`)
-  const meta = await metaRes.json()
+    console.log("Current snapshot:", end)
 
-  const lastProcessed = meta?.snapshot || null
+    // read last processed snapshot
+    const metaRes = await fetch(`${base}/api/meta`)
+    const meta = await metaRes.json()
 
-  console.log("Last processed snapshot:", lastProcessed)
+    const lastProcessed = meta?.snapshot || null
 
-  // skip if already processed
-  if(lastProcessed === end){
-    console.log("Snapshot already processed. Skipping.")
-    return Response.json({ skipped:true })
-  }
+    console.log("Last processed snapshot:", lastProcessed)
 
-  const start = prevDay(end)
-
-  console.log("Calling Lilith with:", start, end)
-
-  const kingdoms = [2500,2554,3237]
-
-  for(const kingdom of kingdoms){
-
-    console.log("Scanning kingdom:", kingdom)
-
-    const url =
-    `https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?start=${start}&end=${end}&search=&server_id=${kingdom}`
-
-    console.log("URL:", url)
-
-    let data:any = null
-
-    // retry until snapshot exists
-    for(let i = 0; i < 10; i++){
-
-      const r = await fetch(url,{
-        headers:{
-          pauthorization:process.env.PAUTH!,
-          bauthorization:process.env.BAUTH!,
-          lang:"en_US"
-        }
-      })
-
-      data = await r.json()
-
-      if(data?.data?.length > 0){
-        console.log("Snapshot ready:", kingdom, data.data.length)
-        break
-      }
-
-      console.log("Snapshot not ready for", kingdom, "retrying...")
-
-      await new Promise(res => setTimeout(res,60000))
+    // skip if already processed
+    if(lastProcessed === end){
+      console.log("Snapshot already processed. Skipping.")
+      return Response.json({ skipped:true })
     }
 
-    console.log("Members received:", data?.data?.length)
+    const start = prevDay(end)
 
-    await fetch(`${base}/api/migration-sync`,{
+    console.log("Calling Lilith with:", start, end)
+
+    const kingdoms = [2500,2554,3237]
+
+    for(const kingdom of kingdoms){
+
+      console.log("Scanning kingdom:", kingdom)
+
+      const url =
+      `https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?start=${start}&end=${end}&search=&server_id=${kingdom}`
+
+      console.log("URL:", url)
+
+      let data:any = null
+
+      // retry until snapshot exists
+      for(let i = 0; i < 10; i++){
+
+        const r = await fetch(url,{
+          headers:{
+            pauthorization:process.env.PAUTH!,
+            bauthorization:process.env.BAUTH!,
+            lang:"en_US"
+          }
+        })
+
+        data = await r.json()
+
+        if(data?.data?.length > 0){
+          console.log("Snapshot ready:", kingdom, data.data.length)
+          break
+        }
+
+        console.log("Snapshot not ready for", kingdom, "retrying...")
+
+        await new Promise(res => setTimeout(res,60000))
+      }
+
+      console.log("Members received:", data?.data?.length)
+
+      await fetch(`${base}/api/migration-sync`,{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          members:data?.data || [],
+          date:start,
+          kingdom
+        })
+      })
+
+    }
+
+    // save snapshot date
+    await fetch(`${base}/api/meta`,{
       method:"POST",
       headers:{
         "Content-Type":"application/json"
       },
       body:JSON.stringify({
-        members:data?.data || [],
-        date:start,
-        kingdom
+        snapshot:end
       })
     })
 
+    console.log("Snapshot saved:", end)
+
+    return Response.json({success:true})
+
+  } catch (err:any) {
+
+    console.error("CRON ERROR:", err)
+
+    return Response.json(
+      { error: err.message },
+      { status: 500 }
+    )
   }
-
-  // save snapshot date to sheet
-  await fetch(`${base}/api/meta`,{
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json"
-    },
-    body:JSON.stringify({
-      snapshot:end
-    })
-  })
-
-  console.log("Snapshot saved:", end)
-
-  return Response.json({success:true})
 
 }
