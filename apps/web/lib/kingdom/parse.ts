@@ -266,63 +266,69 @@ export async function fetchPrevNamesSheet(url: string): Promise<Map<number,strin
 
 
 
-export async function fetchMgeViolationsSheet(url: string) {
-  const response = await fetch(url);
-  if (!response.ok) throw new Error(`Failed to fetch sheet: ${response.status}`);
+export async function POST(req: Request) {
+  const body = await req.json();
 
-  const text = await response.text();
-  const { headers, rows } = parseCSV(text);
+  const auth = new google.auth.GoogleAuth({
+    credentials: {
+      client_email: process.env.GOOGLE_CLIENT_EMAIL,
+      private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+    },
+    scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+  });
 
-  const idx = (name: string) =>
-    headers.findIndex(h => h.toLowerCase().includes(name.toLowerCase()));
+  const sheets = google.sheets({ version: "v4", auth });
+  const spreadsheetId = process.env.GOOGLE_SHEET_ID!;
 
-  const iGovId = idx('id');
-  const iName = idx('name');
-  const iPower = idx('power');
-  const iViolation = idx('violation');
-  const iHandled = idx('handled');
-  const iNotes = idx('notes');
+  // ✅ 🔥 ADD DELETE HERE (RIGHT HERE)
+  if (body.delete) {
+    await sheets.spreadsheets.values.clear({
+      spreadsheetId,
+      range: `Violation!A${body.rowIndex}:F${body.rowIndex}`
+    });
 
-  const data = rows
-    .map((cols, i) => {
-      const violationRaw = (cols[iViolation] || '').trim();
-      const handledRaw = (cols[iHandled] || '').trim();
-      const notesRaw = (cols[iNotes] || '').trim();
-
-      return {
-        governorId: Number(cols[iGovId]) || 0,
-        name: (cols[iName] || '').trim(),
-        power: Number(cols[iPower]) || 0,
-
-        // ✅ ALWAYS ARRAY
-        violation: violationRaw
-          ? violationRaw.split(',').map(v => v.trim()).filter(Boolean)
-          : [],
-
-        handled: handledRaw || 'No action',
-        notes: notesRaw || '',
-
-        // 🔥 CRITICAL FIX
-        rowIndex: i + 2, // Sheet starts at row 2
-
-        // optional fields (keep for compatibility)
-        zero: '',
-        zeroed: '',
-        prevNames: '',
-        display: true,
-      };
-    })
-    .filter(r => r.name || r.governorId);
-
-  // 🔥 REMOVE DUPLICATES (IMPORTANT)
-  const unique = new Map<number, any>();
-  for (const p of data) {
-    unique.set(p.governorId, p);
+    return Response.json({ success: true });
   }
 
-  return [...unique.values()];
-}
+  // ⬇️ EVERYTHING BELOW STAYS FOR UPDATE / ADD
 
+  const range = "Violation!A2:F";
+
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId,
+    range,
+  });
+
+  const rows = res.data.values || [];
+
+  const rowIndex = rows.findIndex(r => r[1] == body.id);
+
+  const newRow = [
+    body.name || "",
+    body.id || "",
+    body.power || "",
+    body.violation || "",
+    body.handled || "",
+    body.notes || ""
+  ];
+
+  if (rowIndex !== -1) {
+    rows[rowIndex] = newRow;
+  } else {
+    rows.push(newRow);
+  }
+
+  await sheets.spreadsheets.values.update({
+    spreadsheetId,
+    range: "Violation!A2",
+    valueInputOption: "RAW",
+    requestBody: {
+      values: rows,
+    },
+  });
+
+  return Response.json({ success: true });
+}
 
 
 export async function fetchWantedSheet(url: string): Promise<WantedPlayer[]> {
