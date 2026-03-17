@@ -667,7 +667,8 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
       )}
 
       {/* Search + filters */}
-    <div className="space-y-3 mb-4">
+  <div className="space-y-3 mb-4">
+  {/* Search row */}
   <div className="flex flex-col sm:flex-row gap-2 relative">
     <div className="relative flex-1">
       <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
@@ -689,30 +690,29 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
       </button>
     )}
   </div>
-</div>
+
     
 
-        {/* Sort chain display */}
-        {JSON.stringify(sortRules) !== JSON.stringify(DEFAULT_SORT_RULES) && (
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs text-[var(--text-muted)]">Sorted by:</span>
-            {sortRules.map((rule, idx) => (
-              <span key={rule.field} className="inline-flex items-center">
-                {idx > 0 && <span className="mx-1 text-[var(--text-muted)]">&rarr;</span>}
-                <button
-                  onClick={() => removeSortRule(rule.field)}
-                  className="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors"
-                  title={`Remove ${SORT_FIELD_LABELS[rule.field]} from sort`}
-                >
-                  {SORT_FIELD_LABELS[rule.field]}
-                  {rule.direction === 'asc' ? '\u2191' : '\u2193'}
-                  <X className="w-3 h-3 ml-0.5" />
-                </button>
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
+     {/* Sort chain display */}
+  {JSON.stringify(sortRules) !== JSON.stringify(DEFAULT_SORT_RULES) && (
+    <div className="flex items-center gap-2 flex-wrap">
+      <span className="text-xs text-[var(--text-muted)]">Sorted by:</span>
+      {sortRules.map((rule, idx) => (
+        <span key={rule.field} className="inline-flex items-center">
+          {idx > 0 && <span className="mx-1 text-[var(--text-muted)]">&rarr;</span>}
+          <button
+            onClick={() => removeSortRule(rule.field)}
+            className="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors"
+          >
+            {SORT_FIELD_LABELS[rule.field]}
+            {rule.direction === 'asc' ? '↑' : '↓'}
+            <X className="w-3 h-3 ml-0.5" />
+          </button>
+        </span>
+      ))}
+    </div>
+  )}
+</div>
 
       {/* Loading / Error */}
       {loading && (
