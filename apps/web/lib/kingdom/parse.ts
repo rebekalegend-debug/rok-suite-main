@@ -283,28 +283,29 @@ export async function fetchMgeViolationsSheet(url: string) {
   const iHandled = idx('handled');
   const iNotes = idx('notes');
 
-  return rows
-    .map(cols => {
+  const data = rows
+    .map((cols, i) => {
       const violationRaw = (cols[iViolation] || '').trim();
       const handledRaw = (cols[iHandled] || '').trim();
       const notesRaw = (cols[iNotes] || '').trim();
 
       return {
-        governorId: parseInt(cols[iGovId]) || 0,
+        governorId: Number(cols[iGovId]) || 0,
         name: (cols[iName] || '').trim(),
+        power: Number(cols[iPower]) || 0,
 
-        // ✅ SINGLE POWER FIELD
-        power: parseInt(cols[iPower]) || 0,
-
-        // ✅ ARRAY (used in your UI)
+        // ✅ ALWAYS ARRAY
         violation: violationRaw
-          ? violationRaw.split(',').map(v => v.trim())
+          ? violationRaw.split(',').map(v => v.trim()).filter(Boolean)
           : [],
 
         handled: handledRaw || 'No action',
         notes: notesRaw || '',
 
-        // ✅ keep optional fields consistent with your type
+        // 🔥 CRITICAL FIX
+        rowIndex: i + 2, // Sheet starts at row 2
+
+        // optional fields (keep for compatibility)
         zero: '',
         zeroed: '',
         prevNames: '',
@@ -312,6 +313,14 @@ export async function fetchMgeViolationsSheet(url: string) {
       };
     })
     .filter(r => r.name || r.governorId);
+
+  // 🔥 REMOVE DUPLICATES (IMPORTANT)
+  const unique = new Map<number, any>();
+  for (const p of data) {
+    unique.set(p.governorId, p);
+  }
+
+  return [...unique.values()];
 }
 
 
