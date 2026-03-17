@@ -15,7 +15,7 @@ export async function POST(req: Request) {
 
   const spreadsheetId = process.env.GOOGLE_SHEET_ID!;
 
-  const range = "Violation!A2:F"; // ⚠️ change sheet name if needed
+  const range = "Violation!A2:F";
 
   // 📥 read existing rows
   const res = await sheets.spreadsheets.values.get({
@@ -23,16 +23,25 @@ export async function POST(req: Request) {
     range,
   });
 
-  const rows = res.data.values || [];
+  let rows = res.data.values || [];
 
-  // 🔍 find existing row
-  const rowIndex = rows.findIndex(r => r[1] == body.id);
+  // 🧠 normalize ID (IMPORTANT)
+  const id = String(body.id);
+
+  // 🔍 find existing row safely
+  const rowIndex = rows.findIndex(r => String(r[1]) === id);
+
+  // 🧠 normalize violation
+  const violation =
+    Array.isArray(body.violation)
+      ? body.violation.join(",")
+      : body.violation || "";
 
   const newRow = [
     body.name || "",
-    body.id || "",
+    id,
     body.power || "",
-    body.violation || "",
+    violation,
     body.handled || "",
     body.notes || ""
   ];
