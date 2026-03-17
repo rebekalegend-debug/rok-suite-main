@@ -62,7 +62,33 @@ export function parseSnapshotCSV(text: string): SnapshotRow[] {
     .filter(r => r.playerId && r.playerName);
 }
 
-/**
+
+
+export async function fetchKingdomMembersSheet(url: string) {
+  const response = await fetch(url);
+  const text = await response.text();
+  const { headers, rows } = parseCSV(text);
+
+  const idx = (name: string) =>
+    headers.findIndex(h => h.toLowerCase().includes(name.toLowerCase()));
+
+  const iId = idx('id');
+  const iName = idx('name');
+  const iPower = idx('power');
+
+  return rows.map(cols => ({
+    governorId: parseInt(cols[iId]) || 0,
+    name: (cols[iName] || '').trim(),
+    power: parseInt(cols[iPower]) || 0,
+  }));
+}
+
+
+
+
+
+
+
  * Parse kingdom stats export XLSX.
  * Dynamic import of xlsx for bundle size.
  * Handles BOM in Character ID column.
@@ -96,9 +122,7 @@ export async function parseKingdomXLSX(arrayBuffer: ArrayBuffer): Promise<Kingdo
     .filter(r => r.name && r.governorId);
 }
 
-/**
- * Fetch and parse the Google Sheet migrant list as CSV.
- */
+
 export async function fetchMigrantSheet(url: string): Promise<MigrantRow[]> {
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Failed to fetch migrant sheet: ${response.status}`);
