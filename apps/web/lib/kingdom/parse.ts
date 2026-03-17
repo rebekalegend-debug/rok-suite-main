@@ -266,68 +266,57 @@ export async function fetchPrevNamesSheet(url: string): Promise<Map<number,strin
 
 
 
-export async function POST(req: Request) {
-  const body = await req.json();
+export async function fetchMgeViolationsSheet(url: string) {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`Failed to fetch sheet: ${response.status}`);
 
-  const auth = new google.auth.GoogleAuth({
-    credentials: {
-      client_email: process.env.GOOGLE_CLIENT_EMAIL,
-      private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-    },
-    scopes: ["https://www.googleapis.com/auth/spreadsheets"],
-  });
+  const text = await response.text();
+  const { headers, rows } = parseCSV(text);
 
-  const sheets = google.sheets({ version: "v4", auth });
-  const spreadsheetId = process.env.GOOGLE_SHEET_ID!;
+  const idx = (name: string) =>
+    headers.findIndex(h => h.toLowerCase().includes(name.toLowerCase()));
 
-  // ✅ 🔥 ADD DELETE HERE (RIGHT HERE)
-  if (body.delete) {
-    await sheets.spreadsheets.values.clear({
-      spreadsheetId,
-      range: `Violation!A${body.rowIndex}:F${body.rowIndex}`
-    });
+  const iGovId = idx('id');
+  const iName = idx('name');
+  const iPower = idx('power');
+  const iViolation = idx('violation');
+  const iHandled = idx('handled');
+  const iNotes = idx('notes');
 
-    return Response.json({ success: true });
-  }
+  return rows
+    .map((cols, i) => {
+      const violationRaw = (cols[iViolation] || '').trim();
+      const handledRaw = (cols[iHandled] || '').trim();
+      const notesRaw = (cols[iNotes] || '').trim();
 
-  // ⬇️ EVERYTHING BELOW STAYS FOR UPDATE / ADD
+      const governorId = Number(cols[iGovId]) || 0;
+      const name = (cols[iName] || '').trim();
 
-  const range = "Violation!A2:F";
+      // ❗ SKIP COMPLETELY EMPTY ROWS (VERY IMPORTANT)
+      if (!governorId && !name) return null;
 
-  const res = await sheets.spreadsheets.values.get({
-    spreadsheetId,
-    range,
-  });
+      return {
+        governorId,
+        name,
+        power: Number(cols[iPower]) || 0,
 
-  const rows = res.data.values || [];
+        violation: violationRaw
+          ? violationRaw.split(',').map(v => v.trim()).filter(Boolean)
+          : [],
 
-  const rowIndex = rows.findIndex(r => r[1] == body.id);
+        handled: handledRaw || 'No action',
+        notes: notesRaw || '',
 
-  const newRow = [
-    body.name || "",
-    body.id || "",
-    body.power || "",
-    body.violation || "",
-    body.handled || "",
-    body.notes || ""
-  ];
+        // 🔥 THIS MUST MATCH SHEET EXACTLY
+        rowIndex: i + 2,
 
-  if (rowIndex !== -1) {
-    rows[rowIndex] = newRow;
-  } else {
-    rows.push(newRow);
-  }
-
-  await sheets.spreadsheets.values.update({
-    spreadsheetId,
-    range: "Violation!A2",
-    valueInputOption: "RAW",
-    requestBody: {
-      values: rows,
-    },
-  });
-
-  return Response.json({ success: true });
+        zero: '',
+        zeroed: '',
+        prevNames: '',
+        display: true,
+      };
+    })
+    .filter(Boolean); // removes null rows
 }
 
 
