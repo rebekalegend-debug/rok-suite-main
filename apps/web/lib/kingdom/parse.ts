@@ -202,53 +202,48 @@ export async function fetchInactivesSheet(url: string): Promise<InactiveRow[]> {
 export async function fetchMgeViolationsSheet(url: string): Promise<WantedPlayer[]> {
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Failed to fetch sheet: ${response.status}`);
+
   const text = await response.text();
   const { headers, rows } = parseCSV(text);
 
-  const idx = (name: string) => {
-    return headers.findIndex(h => h.toLowerCase().includes(name.toLowerCase()));
-  };
+  const idx = (name: string) =>
+    headers.findIndex(h => h.toLowerCase().includes(name.toLowerCase()));
 
   const iGovId = idx('governor id');
   const iName = idx('name');
-  const iPower1 = idx('power 1');
-  const iPower2 = idx('power 2');
-  const iAlliance = idx('alliance');
+  const iPower = idx('power');
   const iViolation = idx('violation');
   const iHandled = headers.findIndex(h => h.toLowerCase().trim() === 'handled');
-const iPrevNames = idx('prev');
+
   return rows
-  .map(cols => {
-    const handledVal = (cols[iHandled] || '').trim().toLowerCase();
+    .map(cols => {
+      const handledVal = (cols[iHandled] || '').trim();
 
-    return {
-      governorId: parseInt(cols[iGovId]) || 0,
-      name: (cols[iName] || '').trim(),
-      power1: parseInt(cols[iPower1]) || 0,
-      power2: parseInt(cols[iPower2]) || 0,
+      return {
+        governorId: parseInt(cols[iGovId]) || 0,
+        name: (cols[iName] || '').trim(),
+        power: parseInt(cols[iPower]) || 0,
 
-      // required fields for WantedPlayer
-      delta: 0,
-      x: 0,
-      y: 0,
-      zero: '' as WantedPlayer['zero'],
+        violation: (cols[iViolation] || '')
+          .split(',')
+          .map(v => v.trim())
+          .filter(Boolean),
 
-      alliance: (cols[iAlliance] || '').trim(),
-      reason: (cols[iViolation] || '').trim(),
-prevNames: "",
-      zeroed: (
-  handledVal === 'wanted'
-    ? 'yes'
-    : handledVal === 'left'
-    ? 'left'
-    : handledVal === 'no'
-    ? 'no'
-    : ''
-) as WantedPlayer['zeroed'],
-      display: true,
-    };
-  })
-  .filter(r => r.name || r.governorId);
+        handled: handledVal || 'No action',
+
+        zero: '',
+        zeroed:
+          handledVal.toLowerCase() === 'on wanted list'
+            ? 'yes'
+            : handledVal.toLowerCase() === 'left'
+            ? 'left'
+            : '',
+
+        display: true,
+        prevNames: '',
+      };
+    })
+    .filter(r => r.name || r.governorId);
 }
 /**
  * Fetch and parse the Google Sheet wanted list as CSV.
