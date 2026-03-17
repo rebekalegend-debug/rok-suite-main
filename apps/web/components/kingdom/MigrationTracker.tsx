@@ -863,42 +863,43 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 
 
 <td className="px-3 py-2.5 text-center relative group">
-<div
-  onClick={() =>
-    setOpenMenu(
-      openMenu?.type === 'violation' && openMenu?.id === player.governorId
-        ? null
-        : { type: 'violation', id: player.governorId }
-    )
-  }
-  className="cursor-pointer text-xs text-[var(--text-muted)]"
->
-  {player.violation?.length ? player.violation.join(', ') : '-'}
-</div>
-
-{isAdmin &&
- openMenu?.type === 'violation' &&
- openMenu?.id === player.governorId && (
-  <div className="menu absolute z-50 mt-2 w-32 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
-    {VIOLATION_OPTIONS.map((v) => (
-      <div
-        key={v}
-        onClick={(e) => {
-          e.stopPropagation();
-          toggleViolation(player, v);
-          setOpenMenu(null);
-        }}
-        className={`cursor-pointer px-2 py-1 rounded text-xs ${
-          player.violation?.includes(v)
-            ? 'bg-red-500/20 text-red-300'
-            : 'hover:bg-[var(--background-secondary)] text-[var(--text-muted)]'
-        }`}
-      >
-        {v}
-      </div>
-    ))}
+  <div
+    onClick={() =>
+      setOpenMenu(
+        openMenu?.type === 'violation' && openMenu?.id === player.governorId
+          ? null
+          : { type: 'violation', id: player.governorId }
+      )
+    }
+    className="cursor-pointer text-xs text-[var(--text-muted)]"
+  >
+    {player.violation?.length ? player.violation.join(', ') : '-'}
   </div>
-)}
+
+  {isAdmin &&
+    openMenu?.type === 'violation' &&
+    openMenu?.id === player.governorId && (
+      <div className="menu absolute z-50 mt-2 w-32 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
+        {VIOLATION_OPTIONS.map((v) => (
+          <div
+            key={v}
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleViolation(player, v);
+              setOpenMenu(null);
+            }}
+            className={`cursor-pointer px-2 py-1 rounded text-xs ${
+              player.violation?.includes(v)
+                ? 'bg-red-500/20 text-red-300'
+                : 'hover:bg-[var(--background-secondary)] text-[var(--text-muted)]'
+            }`}
+          >
+            {v}
+          </div>
+        ))}
+      </div>
+  )}
+</td>
 
                      
 <td className="px-3 py-2.5 text-center relative">
