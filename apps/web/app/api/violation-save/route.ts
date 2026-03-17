@@ -22,36 +22,36 @@ export async function POST(req: Request) {
     range,
   });
 
-  const rows = res.data.values || [];
+ const rows = res.data.values || []
 
-  // 🔥 FIXED: use rowIndex from frontend (NOT findIndex)
-  const realIndex = body.rowIndex ? body.rowIndex - 2 : -1;
+// find row by ID (column B = index 1)
+const findIndex = rows.findIndex(r => String(r[1]) === String(body.id))
 
-  const newRow = [
-    body.name || "",
-     body.id || body.governorId || "",
-    body.power || "",
-    body.violation || "",
-    body.handled || "",
-    body.notes || ""
-  ];
+const newRow = [
+  body.name || "",
+  body.id || "",
+  body.power || "",
+  body.violation || "",
+  body.handled || "",
+  body.notes || ""
+]
 
-  // ❌ DELETE (SAFE — no shifting bugs)
-  if (body.delete) {
-    if (realIndex >= 0) {
-      rows[realIndex] = ["", "", "", "", "", ""]; // clear row
-    }
+// ❌ DELETE
+if (body.delete) {
+  if (findIndex !== -1) {
+    rows.splice(findIndex, 1) // ✅ REMOVE ROW CLEAN
   }
+}
 
-  // ✏️ UPDATE
-  else if (realIndex >= 0) {
-    rows[realIndex] = newRow;
-  }
+// ✏️ UPDATE
+else if (findIndex !== -1) {
+  rows[findIndex] = newRow
+}
 
-  // ➕ ADD NEW
-  else {
-    rows.push(newRow);
-  }
+// ➕ ADD
+else {
+  rows.push(newRow)
+}
 
   // 💾 WRITE BACK
   await sheets.spreadsheets.values.update({
