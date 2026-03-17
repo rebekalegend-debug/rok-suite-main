@@ -536,6 +536,7 @@ await fetch('/api/violation-save', {
   method: 'POST',
   body: JSON.stringify({
     rowIndex: updated.rowIndex, // 🔥 IMPORTANT
+    id: updated.governorId, 
     name: updated.name,
     power: updated.power,
     violation: updated.violation?.join(',') || '',
