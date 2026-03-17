@@ -293,7 +293,7 @@ export async function fetchMgeViolationsSheet(url: string) {
       const name = (cols[iName] || '').trim();
 
       // ❗ SKIP COMPLETELY EMPTY ROWS (VERY IMPORTANT)
-      if (!governorId && !name) return null;
+     if (!name) return null;
 
       return {
         governorId,
