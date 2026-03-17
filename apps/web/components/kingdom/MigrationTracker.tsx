@@ -122,7 +122,7 @@ const fetchData = useCallback(async () => {
  const [wantedPlayers, prevNamesMap, members] = await Promise.all([
   fetchMgeViolationsSheet(MGE_VIOLATION_SHEET_URL),
   fetchPrevNamesSheet(PREV_NAMES_SHEET_URL),
-  fetchKingdomMembersSheet("https://docs.google.com/spreadsheets/d/1ZUf-qCCvZ5N6qU_hCNHXQ1z-6qxhn36PucYOxbaXIv0/edit?gid=693046633#gid=693046633"),
+  fetchKingdomMembersSheet("https://docs.google.com/spreadsheets/d/1ZUf-qCCvZ5N6qU_hCNHXQ1z-6qxhn36PucYOxbaXIv0/export?format=csv&gid=693046633"),
 ]);
 
 setAllMembers(members);
