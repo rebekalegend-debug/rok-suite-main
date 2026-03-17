@@ -100,7 +100,7 @@ export default function WantedList() {
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [reasonFilter, setReasonFilter] = useState<string | null>(null);
-  
+  const [openMenu, setOpenMenu] = useState<number | null>(null);
   const [handledFilter, setHandledFilter] = useState<'all' | 'No action' | 'Pending' | 'On wanted list' | 'Left'>('all');
 const [allMembers, setAllMembers] = useState<any[]>([]);
 
@@ -252,7 +252,7 @@ const visiblePlayers = useMemo(
   [players]
 );
 const filtered = useMemo(() => {
-  const source = search ? allMembers : visiblePlayers;
+const source = search && isAdmin ? allMembers : visiblePlayers;
 const normalize = (p: any): WantedPlayer => ({
   governorId: p.governorId ?? p.id,
   name: p.name ?? p.player_name,
@@ -827,19 +827,25 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 
 
 <td className="px-3 py-2.5 text-center relative group">
-  <div className="cursor-pointer text-xs text-[var(--text-muted)]">
+<div
+  onClick={() => setOpenMenu(openMenu === player.governorId ? null : player.governorId)}
+  className="cursor-pointer text-xs text-[var(--text-muted)]"
+>
     {player.violation?.length ? player.violation.join(', ') : '-'}
   </div>
 
-  {isAdmin && (
-    <div className="hidden group-hover:block absolute z-50 mt-2 w-32 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
+ {isAdmin && openMenu === player.governorId && (
+  <div className="absolute z-50 mt-2 w-32 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
       {VIOLATION_OPTIONS.map((v) => {
         const active = player.violation?.includes(v);
 
         return (
           <div
             key={v}
-            onClick={() => toggleViolation(player, v)}
+           onClick={() => {
+  toggleViolation(player, v);
+  setOpenMenu(null);
+}}
             className={`cursor-pointer px-2 py-1 rounded text-xs ${
               active
                 ? 'bg-red-500/20 text-red-300'
