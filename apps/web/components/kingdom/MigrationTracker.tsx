@@ -252,13 +252,24 @@ const visiblePlayers = useMemo(
   [players]
 );
 const filtered = useMemo(() => {
-  const list = visiblePlayers
+  const source = search ? allMembers : visiblePlayers;
+const normalize = (p: any): WantedPlayer => ({
+  governorId: p.governorId ?? p.id,
+  name: p.name ?? p.player_name,
+  power: p.power ?? 0,
+  violation: p.violation || [],
+  handled: p.handled || 'No action',
+  notes: p.notes || '',
+  display: true,
+  prevNames: p.prevNames || ''
+});
+  const list = source.map(normalize)
     .filter(p => {
-      if (search && !matchesSearch(search, p.name, p.governorId)) return false;
-      if (reasonFilter && !p.violation?.includes(reasonFilter)) return false;
+   if (search && !matchesSearch(search, p.name, p.governorId)) return false;
+     if (!search && reasonFilter && !p.violation?.includes(reasonFilter)) return false;
 
       const handled = p.handled || 'No action';
-  if (handledFilter !== 'all') {
+  if (!search && handledFilter !== 'all') {
   if (handledFilter === 'Pending') {
     if (handled !== 'No action') return false;
   } else {
@@ -310,7 +321,7 @@ const filtered = useMemo(() => {
 
     return 0;
   });
-}, [visiblePlayers, search, reasonFilter, handledFilter, sortRules]);
+}, [visiblePlayers, allMembers, search, reasonFilter, handledFilter, sortRules]);
 
 
   
@@ -428,22 +439,34 @@ const toggleViolation = (player: any, value: string) => {
   if (current.includes(value)) {
     current = current.filter((v: string) => v !== value);
   } else {
-    if (current.length >= 2) return; // max 2
+    if (current.length >= 2) return;
     current = [...current, value];
   }
 
-  savePlayer(player, { violation: current });
+  const updated = {
+    governorId: player.governorId,
+    name: player.name,
+    power: player.power || 0,
+    violation: current,
+    handled: player.handled || 'No action',
+    notes: player.notes || ''
+  };
+
+ savePlayer(updated, { violation: current });
+
+ 
 };
 
                                  
 const savePlayer = async (player: any, updates: any) => {
   const updated = { ...player, ...updates };
 
- if (
-  (!updated.violation || updated.violation.length === 0) &&
-  (!updated.handled || updated.handled === 'No action') &&
-  !updated.notes
-) {
+  // 🧹 DELETE CASE
+  if (
+    (!updated.violation || updated.violation.length === 0) &&
+    (!updated.handled || updated.handled === 'No action') &&
+    !updated.notes
+  ) {
     await fetch('/api/violation-save', {
       method: 'POST',
       body: JSON.stringify({
@@ -451,10 +474,16 @@ const savePlayer = async (player: any, updates: any) => {
         delete: true
       })
     });
-    fetchData();
+
+    // remove instantly from UI
+    setPlayers(prev =>
+      prev.filter(p => p.governorId !== updated.governorId)
+    );
+
     return;
   }
 
+  // 💾 NORMAL SAVE
   await fetch('/api/violation-save', {
     method: 'POST',
     body: JSON.stringify({
@@ -467,7 +496,18 @@ const savePlayer = async (player: any, updates: any) => {
     })
   });
 
-  fetchData();
+  // ⚡ instant UI update
+  setPlayers(prev => {
+    const exists = prev.find(p => p.governorId === updated.governorId);
+
+    if (!exists) {
+      return [updated, ...prev];
+    }
+
+    return prev.map(p =>
+      p.governorId === updated.governorId ? updated : p
+    );
+  });
 };
 
   return (
@@ -627,73 +667,30 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
       )}
 
       {/* Search + filters */}
-      <div className="space-y-3 mb-4">
-        <div className="flex flex-col sm:flex-row gap-2">
-          <div className="relative flex-1">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search by name or governor ID..."
-              className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] text-sm focus:outline-none focus:border-red-500/50"
-            />
-          </div>
-      {isAdmin && search && (
-  <div className="absolute left-0 top-full mt-2 w-full bg-[var(--background-card)] border border-[var(--border)] rounded-xl max-h-40 overflow-y-auto z-50">
-    {allMembers
-      .filter(m =>
-        m.name?.toLowerCase().includes(search.toLowerCase()) ||
-        String(m.governorId).includes(search)
-      )
-      .slice(0, 10)
-      .map(m => (
-        <div
-          key={m.governorId}
-         onClick={() => {
-  // check if already exists
-  const exists = players.find(p => p.governorId === m.governorId);
-  if (exists) return;
+    <div className="space-y-3 mb-4">
+  <div className="flex flex-col sm:flex-row gap-2 relative">
+    <div className="relative flex-1">
+      <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
+      <input
+        type="text"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Search by name or governor ID..."
+        className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] text-sm focus:outline-none focus:border-red-500/50"
+      />
+    </div>
 
-  const newPlayer = {
-    governorId: m.governorId,
-    name: m.name,
-    power: m.power || 0,
-    violation: [],
-    handled: 'No action',
-    notes: '',
-    display: true,
-    prevNames: ''
-  };
-
-  // add to table instantly
-  setPlayers(prev => [newPlayer, ...prev]);
-  setSearch('');
-  // ALSO save to sheet
-  savePlayer(newPlayer, {});
-}}
-          className="px-3 py-2 hover:bg-[var(--background-secondary)] cursor-pointer text-sm"
-        >
-          {m.name} ({m.governorId})
-        </div>
-      ))}
+    {hasActiveFilters && (
+      <button
+        onClick={resetFiltersAndSort}
+        className="px-3 py-2.5 rounded-xl text-sm font-medium bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--foreground)] transition-colors whitespace-nowrap"
+      >
+        Reset
+      </button>
+    )}
   </div>
-)}
-         
-          {/* Reset */}
-          {hasActiveFilters && (
-            <button
-              onClick={resetFiltersAndSort}
-              className="px-3 py-2.5 rounded-xl text-sm font-medium bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--foreground)] transition-colors whitespace-nowrap"
-            >
-              Reset
-            </button>
-          )}
-        </div>
-
-       
-
-   
+</div>
+    
 
         {/* Sort chain display */}
         {JSON.stringify(sortRules) !== JSON.stringify(DEFAULT_SORT_RULES) && (
@@ -829,67 +826,87 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                     
 
 
- <td className="px-3 py-2.5 text-center">
-  <select
-    disabled={!isAdmin}
-    value={player.violation?.[0] || ''}
-    onChange={(e) => {
-      if (!isAdmin) return;
+<td className="px-3 py-2.5 text-center relative group">
+  <div className="cursor-pointer text-xs text-[var(--text-muted)]">
+    {player.violation?.length ? player.violation.join(', ') : '-'}
+  </div>
 
-      const value = e.target.value;
+  {isAdmin && (
+    <div className="hidden group-hover:block absolute z-50 mt-2 w-32 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
+      {VIOLATION_OPTIONS.map((v) => {
+        const active = player.violation?.includes(v);
 
-      // keep your array logic
-      savePlayer(player, {
-        violation: value ? [value] : []
-      });
-    }}
-    className="bg-[var(--background-secondary)] border border-[var(--border)] text-xs rounded px-2 py-1"
-  >
-    <option value="">-</option>
-    {VIOLATION_OPTIONS.map((v) => (
-      <option key={v} value={v}>
-        {v}
-      </option>
-    ))}
-  </select>
+        return (
+          <div
+            key={v}
+            onClick={() => toggleViolation(player, v)}
+            className={`cursor-pointer px-2 py-1 rounded text-xs ${
+              active
+                ? 'bg-red-500/20 text-red-300'
+                : 'hover:bg-[var(--background-secondary)] text-[var(--text-muted)]'
+            }`}
+          >
+            {v}
+          </div>
+        );
+      })}
+    </div>
+  )}
 </td>
+
                      
-  <td className="px-3 py-2.5 text-center">
-  {isAdmin ? (
-    <select
-      value={player.handled || 'No action'}
-      onChange={(e) => savePlayer(player, { handled: e.target.value })}
-      className="bg-[var(--background-secondary)] border border-[var(--border)] text-xs rounded px-2 py-1"
-    >
-      <option>No action</option>
-      <option>Pending</option>
-      <option>On wanted list</option>
-      <option>Left</option>
-    </select>
-  ) : (
-    <span
-      className={`inline-block px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase border ${
-        player.handled === 'On wanted list'
-          ? 'bg-red-500/10 text-red-400 border-red-500/30'
-          : player.handled === 'Left'
-          ? 'bg-sky-500/10 text-sky-400 border-sky-500/30'
-          : 'bg-amber-500/10 text-amber-400 border-amber-500/30'
-      }`}
-    >
-      {player.handled || 'No action'}
-    </span>
+<td className="px-3 py-2.5 text-center relative group">
+  <div className="text-xs">
+    {player.handled || 'No action'}
+  </div>
+
+  {isAdmin && (
+    <div className="hidden group-hover:block absolute z-50 mt-2 w-36 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
+      {['No action', 'Pending', 'On wanted list', 'Left'].map((v) => (
+        <div
+          key={v}
+          onClick={() => {
+            const updated = {
+              governorId: player.governorId,
+              name: player.name,
+              power: player.power || 0,
+              violation: player.violation || [],
+              handled: v,
+              notes: player.notes || ''
+            };
+
+          savePlayer(updated, { handled: v });
+          }}
+          className="cursor-pointer px-2 py-1 rounded text-xs hover:bg-[var(--background-secondary)]"
+        >
+          {v}
+        </div>
+      ))}
+    </div>
   )}
 </td>
 
 
-
 <td className="px-3 py-2.5 text-center">
   {isAdmin ? (
-    <input
-      value={player.notes || ''}
-      onChange={(e) => savePlayer(player, { notes: e.target.value })}
-      className="bg-[var(--background-secondary)] border border-[var(--border)] text-xs rounded px-2 py-1 w-32"
-    />
+<input
+  value={player.notes || ''}
+  onChange={(e) => {
+    const value = e.target.value;
+
+    const updated = {
+      governorId: player.governorId,
+      name: player.name,
+      power: player.power || 0,
+      violation: player.violation || [],
+      handled: player.handled || 'No action',
+      notes: value
+    };
+
+    savePlayer(updated, { notes: value });
+  }}
+  className="bg-[var(--background-secondary)] border border-[var(--border)] text-xs rounded px-2 py-1 w-32"
+/>
   ) : (
     <span className="text-xs text-[var(--text-muted)]">
       {player.notes || '-'}
