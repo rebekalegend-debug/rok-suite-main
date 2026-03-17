@@ -521,36 +521,7 @@ const savePlayer = async (player: any, updates: any) => {
         </div>
       </div>
 
-      {/* Instructions panel */}
-      {showInstructions && (
-        <div className="mb-4 px-4 py-4 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-sm text-[var(--text-secondary)] space-y-3">
-          <p>
-            This page tracks wanted players in the kingdom. The list is pulled from a shared Google Sheet that admins can edit.
-          </p>
-          <div>
-            <p className="font-semibold text-[var(--foreground)] mb-1">Columns</p>
-            <ul className="list-disc list-inside space-y-0.5 text-[var(--text-muted)]">
-              <li><span className="text-[var(--text-secondary)]">Zero?</span> &mdash; Whether the player should be zeroed (from the sheet)</li>
-              <li><span className="text-[var(--text-secondary)]">Handled</span> &mdash; Officer-set status: Pending, Zeroed, or Left kingdom</li>
-            </ul>
-          </div>
-          <div>
-            <p className="font-semibold text-[var(--foreground)] mb-1">Zeroing Priority</p>
-            <ol className="list-decimal list-inside space-y-0.5 text-[var(--text-muted)]">
-              <li>Farm killers and hostile players &mdash; zero first</li>
-              <li>Players who refuse to follow kingdom rules</li>
-              <li className="text-amber-400 font-medium">Illegal migrants &mdash; zero LAST (they may still leave on their own)</li>
-            </ol>
-          </div>
-          <div>
-            <p className="font-semibold text-[var(--foreground)] mb-1">Officer Mode</p>
-            <p className="text-[var(--text-muted)]">
-              Log in as an officer to mark players as &quot;Zeroed&quot; or &quot;Left Kingdom&quot;. You can undo any status change within a few seconds.
-            </p>
-          </div>
-        </div>
-      )}
-
+    
       {/* Officer/Admin mode banner */}
       {isOfficer && (
         <div className="mb-4 px-4 py-3 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between">
@@ -669,7 +640,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
             />
           </div>
       {isAdmin && search && (
-  <div className="bg-[var(--background-card)] border border-[var(--border)] rounded-xl mt-2 max-h-40 overflow-y-auto">
+  <div className="absolute left-0 top-full mt-2 w-full bg-[var(--background-card)] border border-[var(--border)] rounded-xl max-h-40 overflow-y-auto z-50">
     {allMembers
       .filter(m =>
         m.name?.toLowerCase().includes(search.toLowerCase()) ||
@@ -679,19 +650,28 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
       .map(m => (
         <div
           key={m.governorId}
-          onClick={() =>
-            savePlayer(
-              {
-                name: m.name,
-                governorId: m.governorId,
-                power: m.power,
-                violation: [],
-                handled: 'No action',
-                notes: ''
-              },
-              {}
-            )
-          }
+         onClick={() => {
+  // check if already exists
+  const exists = players.find(p => p.governorId === m.governorId);
+  if (exists) return;
+
+  const newPlayer = {
+    governorId: m.governorId,
+    name: m.name,
+    power: m.power || 0,
+    violation: [],
+    handled: 'No action',
+    notes: '',
+    display: true,
+    prevNames: ''
+  };
+
+  // add to table instantly
+  setPlayers(prev => [newPlayer, ...prev]);
+  setSearch('');
+  // ALSO save to sheet
+  savePlayer(newPlayer, {});
+}}
           className="px-3 py-2 hover:bg-[var(--background-secondary)] cursor-pointer text-sm"
         >
           {m.name} ({m.governorId})
@@ -849,33 +829,29 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                     
 
 
-  <td className="px-3 py-2.5 text-center">
-  <div className="flex flex-wrap justify-center gap-1">
-    {VIOLATION_OPTIONS.map((v) => {
-      const active = player.violation?.includes(v);
+ <td className="px-3 py-2.5 text-center">
+  <select
+    disabled={!isAdmin}
+    value={player.violation?.[0] || ''}
+    onChange={(e) => {
+      if (!isAdmin) return;
 
-      return (
-        <button
-          key={v}
-          disabled={!isAdmin}
-          onClick={() => toggleViolation(player, v)}
-          className={`px-2 py-0.5 rounded-md text-xs border transition ${
-            active
-              ? v === 'First'
-                ? 'bg-yellow-500/20 text-yellow-300 border-yellow-500/40'
-                : v === 'Second'
-                ? 'bg-orange-500/20 text-orange-300 border-orange-500/40'
-                : v === 'Third'
-                ? 'bg-red-500/20 text-red-300 border-red-500/40'
-                : 'bg-purple-500/20 text-purple-300 border-purple-500/40'
-              : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)]'
-          } ${!isAdmin ? 'opacity-50 cursor-not-allowed' : ''}`}
-        >
-          {v}
-        </button>
-      );
-    })}
-  </div>
+      const value = e.target.value;
+
+      // keep your array logic
+      savePlayer(player, {
+        violation: value ? [value] : []
+      });
+    }}
+    className="bg-[var(--background-secondary)] border border-[var(--border)] text-xs rounded px-2 py-1"
+  >
+    <option value="">-</option>
+    {VIOLATION_OPTIONS.map((v) => (
+      <option key={v} value={v}>
+        {v}
+      </option>
+    ))}
+  </select>
 </td>
                      
   <td className="px-3 py-2.5 text-center">
