@@ -2,7 +2,7 @@
 import { History } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Search, RefreshCw, Lock, ExternalLink, Crosshair, X, Info, ChevronDown, ChevronUp, Undo2, Target, Skull, LogOut } from 'lucide-react';
-import { fetchViolationSheet } from '@/lib/kingdom/parse';
+import { fetchMgeViolationsSheet } from '@/lib/kingdom/parse';
 import { 
   MGE_VIOLATION_SHEET_URL, 
   MGE_VIOLATION_SHEET_EDIT_URL,
@@ -74,7 +74,7 @@ const formatTotalPower = (val: number): string => {
 };
 
 // ─── Sort types ────────────────────────────────────────────────────
-type SortableField = 'name' | 'governorId' | 'power' | 'alliance' | 'reason' | 'zero' | 'handled';
+type SortableField = 'name' | 'governorId' | 'power' | 'reason' | 'handled';
 
 interface SortRule {
   field: SortableField;
@@ -86,13 +86,11 @@ const DEFAULT_SORT_RULES: SortRule[] = [
   { field: 'power', direction: 'desc' },
 ];
 
-const SORT_FIELD_LABELS: Record<SortableField, string> = {
+const SORT_FIELD_LABELS = {
   name: 'Name',
   governorId: 'Gov ID',
   power: 'Power',
-  alliance: 'Alliance',
   reason: 'Reason',
-  zero: 'Zero?',
   handled: 'Handled',
 };
 
@@ -122,7 +120,7 @@ const fetchData = useCallback(async () => {
   setError(null);
   try {
     const [wantedPlayers, prevNamesMap] = await Promise.all([
-      fetchViolationSheet(MGE_VIOLATION_SHEET_URL),
+      fetchMgeViolationsSheet(MGE_VIOLATION_SHEET_URL),
       fetchPrevNamesSheet(PREV_NAMES_SHEET_URL),
     ]);
 
@@ -248,7 +246,13 @@ const filtered = useMemo(() => {
       if (reasonFilter && !p.violation?.includes(reasonFilter)) return false;
 
       const handled = p.handled || 'No action';
-      if (handledFilter !== 'all' && handled !== handledFilter) return false;
+  if (handledFilter !== 'all') {
+  if (handledFilter === 'Pending') {
+    if (handled !== 'No action') return false;
+  } else {
+    if (handled !== handledFilter) return false;
+  }
+}
 
       return true;
     });
@@ -269,20 +273,20 @@ const filtered = useMemo(() => {
           bVal = b.governorId || 0;
           break;
 
-        case 'power':
-          aVal = a.power2 || 0;
-          bVal = b.power2 || 0;
-          break;
+       case 'power':
+  aVal = a.power || 0;
+  bVal = b.power || 0;
+  break;
 
         case 'handled':
           aVal = handledOrder(a.handled || 'No action');
           bVal = handledOrder(b.handled || 'No action');
           break;
 
-        case 'reason':
-          aVal = a.violation?.join(',') || '';
-          bVal = b.violation?.join(',') || '';
-          break;
+       case 'reason':
+  aVal = violationScore(a.violation);
+  bVal = violationScore(b.violation);
+  break;
 
         default:
           continue;
@@ -306,7 +310,7 @@ const filtered = useMemo(() => {
 
   for (const p of visiblePlayers) {
     const s = p.handled || 'No action';
-    const power = p.power2 || 0;
+    const power = p.power || 0;
 
     if (s === 'Pending' || s === 'No action') {
       pendingCount++;
@@ -343,7 +347,7 @@ const filtered = useMemo(() => {
   const map = new Map<string, number>();
 
   for (const p of visiblePlayers) {
-    const name = p.name.toLowerCase().trim();
+    const name = (p.name || '').toLowerCase().trim();
     map.set(name, (map.get(name) || 0) + 1);
   }
 
@@ -394,7 +398,7 @@ const hasActiveFilters =
   || JSON.stringify(sortRules) !== JSON.stringify(DEFAULT_SORT_RULES);
 
   // Sortable header helper
-  const SortHeader = ({ field, label, align = 'Left' }: { field: SortableField; label: string; align?: 'Left' | 'right' | 'center' }) => (
+  const SortHeader = ({ field, label, align = 'left' }: { field: SortableField; label: string; align?: 'left' | 'right' | 'center' }) => (
     <th className={`text-${align} px-3 py-2 sm:py-3`}>
       <button
         onClick={(e) => handleSort(field, e.shiftKey)}
@@ -444,7 +448,7 @@ const savePlayer = async (player: any, updates: any) => {
     body: JSON.stringify({
       name: updated.name,
       id: updated.governorId,
-      power: updated.power2,
+      power: updated.power,
       violation: updated.violation?.join(',') || '',
       handled: updated.handled || '',
       notes: updated.notes || ''
@@ -572,7 +576,7 @@ const savePlayer = async (player: any, updates: any) => {
             </div>
             <p className="text-2xl font-bold text-[var(--foreground)]">{stats.total}</p>
             <p className="text-sm font-semibold text-[var(--text-secondary)] mt-1">{formatTotalPower(
-  visiblePlayers.reduce((sum, p) => sum + (p.power2 || 0), 0)
+  visiblePlayers.reduce((sum, p) => sum + (p.power || 0), 0)
 )}</p>
             <p className="text-[10px] text-[var(--text-muted)]">total power</p>
           </div>
@@ -665,7 +669,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
               {
                 name: p.name,
                 governorId: p.governorId,
-                power2: p.power2,
+                power: p.power,
                 violation: [],
                 handled: 'No action',
                 notes: ''
@@ -735,7 +739,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
   <th className="px-3 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
     #
   </th>
-  <SortHeader field="name" label="Name" align="Left" />
+  <SortHeader field="name" label="Name" align="left" />
                 <SortHeader field="governorId" label="ID" align="center" />
 <SortHeader field="power" label="Power" align="center" />
                 
@@ -778,7 +782,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
   {player.name}
 </span>
 
-{duplicateNames.has(player.name.toLowerCase().trim()) && (
+duplicateNames.has((player.name || '').toLowerCase().trim()) && (
  <span title="Duplicate name detected">
   <AlertCircle
     size={14}
