@@ -290,14 +290,14 @@ else {
   const playerMap = new Map(players.map(p => [p.governorId, p]));
 
   list = allMembers
-    .filter((m: any) => {
-      const name = (m.name || m.player_name || "").toLowerCase();
-   const id = Number((m.governorId ?? m.id));
-      return name.includes(lower) || id.includes(lower);
-    })
-    .map((m: any) => {
-      const id = Number(m.governorId ?? m.id);
-      const existing = playerMap.get(id);
+   .filter((m: any) => {
+  const name = (m.name || m.player_name || "").toLowerCase();
+  const id = String((m.governorId ?? m.id) || "");
+  return name.includes(lower) || id.includes(lower);
+})
+.map((m: any) => {
+  const id = Number(m.governorId ?? m.id);
+  const existing = playerMap.get(id);
 
       return existing || {
         governorId: id,
