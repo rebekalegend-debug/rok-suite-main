@@ -19,10 +19,12 @@ type WantedPlayer = {
   name: string;
   power: number;
 
-
   violation?: string[];
   handled?: string;
   notes?: string;
+
+  // 🔥 ADD THIS
+  rowIndex?: number;
 
   zero?: "" | "yes" | "no";
   zeroed?: "" | "yes" | "no" | "left";
@@ -137,11 +139,15 @@ const merged: WantedPlayer[] = wantedPlayers.map((p: any) => ({
   name: p.name,
   power: p.power || 0,
 
- violation: typeof p.violation === "string"
-  ? p.violation.split(",").map((v: string) => v.trim()).filter(Boolean)
-  : p.violation || [],
+  violation: typeof p.violation === "string"
+    ? p.violation.split(",").map((v: string) => v.trim()).filter(Boolean)
+    : p.violation || [],
+
   handled: p.handled || 'No action',
   notes: p.notes || '',
+
+  // 🔥 THIS WAS MISSING → VERY IMPORTANT
+  rowIndex: p.rowIndex,
 
   zero: p.zero || '',
   zeroed: p.zeroed || '',
@@ -511,10 +517,10 @@ const toggleViolation = (player: any, value: string) => {
 const deletePlayer = async (player: any) => {
   await fetch('/api/violation-save', {
     method: 'POST',
-    body: JSON.stringify({
-      id: player.governorId,
-      delete: true
-    })
+   body: JSON.stringify({
+  rowIndex: player.rowIndex,
+  delete: true
+})
   });
 
   setPlayers(prev =>
@@ -526,17 +532,17 @@ const deletePlayer = async (player: any) => {
 const savePlayer = async (player: any, updates: any) => {
   const updated = { ...player, ...updates };
 
-  await fetch('/api/violation-save', {
-    method: 'POST',
-    body: JSON.stringify({
-      name: updated.name,
-      id: updated.governorId,
-      power: updated.power,
-      violation: updated.violation?.join(',') || '',
-      handled: updated.handled || '',
-      notes: updated.notes || ''
-    })
-  });
+await fetch('/api/violation-save', {
+  method: 'POST',
+  body: JSON.stringify({
+    rowIndex: updated.rowIndex, // 🔥 IMPORTANT
+    name: updated.name,
+    power: updated.power,
+    violation: updated.violation?.join(',') || '',
+    handled: updated.handled || '',
+    notes: updated.notes || ''
+  })
+});
 
   setPlayers(prev => {
     const exists = prev.find(p => p.governorId === updated.governorId);
