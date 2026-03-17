@@ -517,8 +517,8 @@ const toggleViolation = (player: any, value: string) => {
 const deletePlayer = async (player: any) => {
   await fetch('/api/violation-save', {
     method: 'POST',
-   body: JSON.stringify({
-  rowIndex: player.rowIndex,
+body: JSON.stringify({
+  id: player.governorId, 
   delete: true
 })
   });
