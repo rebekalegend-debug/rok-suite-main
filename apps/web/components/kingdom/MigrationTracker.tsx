@@ -157,7 +157,15 @@ const merged: WantedPlayer[] = wantedPlayers.map((p: any) => ({
   const [lastRefreshed, setLastRefreshed] = useState<Date | null>(null);
 
  useEffect(() => {
-  const close = () => setOpenMenu(null);
+  const close = (e: MouseEvent) => {
+    const target = e.target as HTMLElement;
+
+    // ❌ ignore clicks inside dropdown or input
+    if (target.closest('.menu') || target.closest('input')) return;
+
+    setOpenMenu(null);
+  };
+
   window.addEventListener('click', close);
   return () => window.removeEventListener('click', close);
 }, []);
@@ -286,7 +294,10 @@ const normalize = (p: any): WantedPlayer => ({
 });
   const list = source.map(normalize)
     .filter(p => {
-   if (search && !matchesSearch(search, p.name, p.governorId)) return false;
+ if (search) {
+  if (!isAdmin) return false;
+  if (!matchesSearch(search, p.name, p.governorId)) return false;
+}
      if (!search && reasonFilter && !p.violation?.includes(reasonFilter)) return false;
 
       const handled = p.handled || 'No action';
@@ -855,8 +866,8 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
     {player.violation?.length ? player.violation.join(', ') : '-'}
   </div>
 
- {isAdmin && openMenu === player.governorId && (
-  <div className="absolute z-50 mt-2 w-32 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
+{isAdmin && openMenu === player.governorId && (
+  <div className="menu absolute z-50 mt-2 w-32 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
       {VIOLATION_OPTIONS.map((v) => {
         const active = player.violation?.includes(v);
 
@@ -892,10 +903,8 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
     {player.handled || 'No action'}
   </div>
 
-  {isAdmin && openMenu === player.governorId + 1000 && (
-    <div className="absolute z-50 mt-2 w-36 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
-      {['No action', 'Pending', 'On wanted list', 'Left'].map((v) => (
-        <div
+{isAdmin && openMenu === player.governorId + 1000 && (
+  <div className="menu absolute z-50 mt-2 w-36 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">        <div
           key={v}
           onClick={() => {
             savePlayer(player, { handled: v });
@@ -927,8 +936,8 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
   );
 }}
 
-onBlur={() => {
-  savePlayer(player, { notes: player.notes });
+onBlur={(e) => {
+  savePlayer(player, { notes: e.target.value });
 }}
   className="bg-[var(--background-secondary)] border border-[var(--border)] text-xs rounded px-2 py-1 w-32"
 />
