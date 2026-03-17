@@ -271,9 +271,9 @@ const visiblePlayers = useMemo(
   [players]
 );
 const filtered = useMemo(() => {
-const base = (search && isAdmin ? allMembers : visiblePlayers);
 
-const source = base.map((m: any) => {
+
+const source = allMembers.map((m: any) => {
   const id = Number(m.governorId ?? m.id);
 
   const existing = players.find(p => p.governorId === id);
@@ -299,22 +299,24 @@ const normalize = (p: any): WantedPlayer => ({
   display: true,
   prevNames: p.prevNames || ''
 });
-  const list = source.map(normalize)
-    .filter(p => {
-if (search && !matchesSearch(search, p.name, p.governorId)) return false;
-     if (!search && reasonFilter && !p.violation?.includes(reasonFilter)) return false;
 
-      const handled = p.handled || 'No action';
+  const list = source.filter(p => {
+  if (search && !matchesSearch(search, p.name, p.governorId)) return false;
+
+  if (!search && reasonFilter && !p.violation?.includes(reasonFilter)) return false;
+
+  const handled = p.handled || 'No action';
+
   if (!search && handledFilter !== 'all') {
-  if (handledFilter === 'Pending') {
-    if (handled !== 'No action') return false;
-  } else {
-    if (handled !== handledFilter) return false;
+    if (handledFilter === 'Pending') {
+      if (handled !== 'No action') return false;
+    } else {
+      if (handled !== handledFilter) return false;
+    }
   }
-}
 
-      return true;
-    });
+  return true;
+});
 
   return [...list].sort((a, b) => {
     for (const rule of sortRules) {
@@ -470,6 +472,7 @@ const hasActiveFilters =
   );
 
 const toggleViolation = (player: any, value: string) => {
+ 
   let current = player.violation || [];
 
   if (current.includes(value)) {
@@ -489,37 +492,27 @@ const toggleViolation = (player: any, value: string) => {
   };
 
  savePlayer(updated, { violation: current });
-
- 
 };
 
-                                 
+
+const deletePlayer = async (player: any) => {
+  await fetch('/api/violation-save', {
+    method: 'POST',
+    body: JSON.stringify({
+      id: player.governorId,
+      delete: true
+    })
+  });
+
+  setPlayers(prev =>
+    prev.filter(p => p.governorId !== player.governorId)
+  );
+};
+
+  
 const savePlayer = async (player: any, updates: any) => {
   const updated = { ...player, ...updates };
 
-  // 🧹 DELETE CASE
-  if (
-    (!updated.violation || updated.violation.length === 0) &&
-    (!updated.handled || updated.handled === 'No action') &&
-    !updated.notes
-  ) {
-    await fetch('/api/violation-save', {
-      method: 'POST',
-      body: JSON.stringify({
-        id: player.governorId,
-        delete: true
-      })
-    });
-
-    // remove instantly from UI
-    setPlayers(prev =>
-      prev.filter(p => p.governorId !== updated.governorId)
-    );
-
-    return;
-  }
-
-  // 💾 NORMAL SAVE
   await fetch('/api/violation-save', {
     method: 'POST',
     body: JSON.stringify({
@@ -532,13 +525,10 @@ const savePlayer = async (player: any, updates: any) => {
     })
   });
 
-  // ⚡ instant UI update
   setPlayers(prev => {
     const exists = prev.find(p => p.governorId === updated.governorId);
 
-    if (!exists) {
-      return [updated, ...prev];
-    }
+    if (!exists) return [updated, ...prev];
 
     return prev.map(p =>
       p.governorId === updated.governorId ? updated : p
@@ -776,11 +766,27 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                 
                 <SortHeader field="handled" label="Handled" align="center" />
               <th className="text-center px-3 py-2">Notes</th>
-               {isOfficer && (
-                  <th className="text-center px-3 py-2 sm:py-3">
-                    <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">Actions</span>
-                  </th>
+              {isAdmin && (
+  <th className="text-center px-3 py-2 sm:py-3">
+    Actions
+  </th>
+)}
                 )}
+
+
+               {isAdmin && (
+  <td className="px-3 py-2.5 text-center">
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        deletePlayer(player);
+      }}
+      className="text-red-400 hover:text-red-300 transition"
+    >
+      ❌
+    </button>
+  </td>
+)}
               </tr>
             </thead>
             <tbody>
@@ -890,10 +896,16 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
               setOpenMenu(null);
             }}
             className={`cursor-pointer px-2 py-1 rounded text-xs ${
-              player.violation?.includes(v)
-                ? 'bg-red-500/20 text-red-300'
-                : 'hover:bg-[var(--background-secondary)] text-[var(--text-muted)]'
-            }`}
+  player.violation?.includes(v)
+    ? v === 'First'
+      ? 'bg-yellow-500/20 text-yellow-300'
+      : v === 'Second'
+      ? 'bg-orange-500/20 text-orange-300'
+      : v === 'Third'
+      ? 'bg-red-500/20 text-red-300'
+      : 'bg-purple-500/20 text-purple-300'
+    : 'hover:bg-[var(--background-secondary)] text-[var(--text-muted)]'
+}`}
           >
             {v}
           </div>
@@ -915,7 +927,17 @@ onClick={(e) => {
 }}
   className="cursor-pointer text-xs"
 >
+<span className={
+  player.handled === 'Pending'
+    ? 'text-yellow-400'
+    : player.handled === 'On wanted list'
+    ? 'text-red-400'
+    : player.handled === 'Left'
+    ? 'text-sky-400'
+    : 'text-white'
+}>
   {player.handled || 'No action'}
+</span>
 </div>
 
 {isAdmin &&
