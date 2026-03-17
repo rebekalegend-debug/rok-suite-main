@@ -29,7 +29,7 @@ export async function POST(req: Request) {
 
   const newRow = [
     body.name || "",
-    body.id || "",
+     body.id || body.governorId || "",
     body.power || "",
     body.violation || "",
     body.handled || "",
