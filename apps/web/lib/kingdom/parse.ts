@@ -265,7 +265,6 @@ export async function fetchPrevNamesSheet(url: string): Promise<Map<number,strin
 
 
 
-
 export async function fetchMgeViolationsSheet(url: string) {
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Failed to fetch sheet: ${response.status}`);
@@ -274,51 +273,58 @@ export async function fetchMgeViolationsSheet(url: string) {
   const { headers, rows } = parseCSV(text);
 
   const idx = (name: string) =>
-    headers.findIndex(h => h.toLowerCase().includes(name.toLowerCase()));
+    headers.findIndex(h => h.trim().toLowerCase() === name.toLowerCase());
 
-  const iGovId = idx('id');
   const iName = idx('name');
+  const iGovId = idx('id');
   const iPower = idx('power');
   const iViolation = idx('violation');
   const iHandled = idx('handled');
   const iNotes = idx('notes');
 
-return rows
-  .filter(cols => cols.some(c => c && c.trim() !== "")) // remove empty rows
-  .map((cols, i) => {
+  if (iGovId === -1 || iName === -1) {
+    throw new Error("Sheet columns mismatch. Check header names.");
+  }
 
-    if (!cols || cols.length < 2) return null;
+  return rows
+    // ✅ remove empty rows
+    .filter(cols => cols && cols.some(c => c && c.trim() !== ""))
 
-    const violationRaw = (cols[iViolation] || '').trim();
-    const handledRaw = (cols[iHandled] || '').trim();
-    const notesRaw = (cols[iNotes] || '').trim();
+    .map((cols, i) => {
 
-    const governorId = Number(cols[iGovId]) || 0;
-    const name = (cols[iName] || '').trim();
+      const name = (cols[iName] || '').trim();
+      const governorId = Number(cols[iGovId]) || 0;
 
-    if (!name && !governorId) return null;
+      // 🔥 CRITICAL → skip broken rows
+      if (!name && !governorId) return null;
 
-    return {
-      governorId,
-      name,
-      power: Number(cols[iPower]) || 0,
+      const violationRaw = (cols[iViolation] || '').trim();
+      const handledRaw = (cols[iHandled] || '').trim();
+      const notesRaw = (cols[iNotes] || '').trim();
 
-      violation: violationRaw
-        ? violationRaw.split(',').map(v => v.trim()).filter(Boolean)
-        : [],
+      return {
+        governorId,
+        name,
+        power: Number(cols[iPower]) || 0,
 
-      handled: handledRaw || 'No action',
-      notes: notesRaw || '',
+        violation: violationRaw
+          ? violationRaw.split(',').map(v => v.trim()).filter(Boolean)
+          : [],
 
-      rowIndex: i + 2,
+        handled: handledRaw || 'No action',
+        notes: notesRaw || '',
 
-      zero: '',
-      zeroed: '',
-      prevNames: '',
-      display: true,
-    };
-  })
-  .filter(Boolean);
+        rowIndex: i + 2, // 🔥 IMPORTANT for saving/deleting
+
+        zero: '',
+        zeroed: '',
+        display: true,
+        prevNames: '',
+      };
+    })
+
+    // ✅ remove null rows
+    .filter(Boolean);
 }
 
 
