@@ -126,12 +126,10 @@ const fetchData = useCallback(async () => {
       fetchPrevNamesSheet(PREV_NAMES_SHEET_URL),
     ]);
 
- const merged: WantedPlayer[] = wantedPlayers.map((p: any) => ({
+const merged: WantedPlayer[] = wantedPlayers.map((p: any) => ({
   governorId: p.governorId,
   name: p.name,
-  power1: p.power1,
-  power2: p.power2,
-  alliance: p.alliance,
+  power: p.power || 0,
 
   violation: p.violation || [],
   handled: p.handled || 'No action',
