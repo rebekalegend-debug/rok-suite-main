@@ -271,23 +271,23 @@ const visiblePlayers = useMemo(
   [players]
 );
 const filtered = useMemo(() => {
-const source = (search && isAdmin ? allMembers : visiblePlayers).map((m: any) => {
+const base = (search && isAdmin ? allMembers : visiblePlayers);
+
+const source = base.map((m: any) => {
   const id = Number(m.governorId ?? m.id);
 
   const existing = players.find(p => p.governorId === id);
 
-  return existing
-    ? existing // ✅ USE REAL STATE OBJECT
-    : {
-        governorId: id,
-        name: m.name ?? m.player_name,
-        power: m.power ?? 0,
-        violation: [],
-        handled: 'No action',
-        notes: '',
-        display: true,
-        prevNames: ''
-      };
+  return {
+    governorId: id,
+    name: existing?.name ?? m.name ?? m.player_name,
+    power: existing?.power ?? m.power ?? 0,
+    violation: existing?.violation ?? [],
+    handled: existing?.handled ?? 'No action',
+    notes: existing?.notes ?? '',
+    display: true,
+    prevNames: existing?.prevNames ?? ''
+  };
 });
 const normalize = (p: any): WantedPlayer => ({
   governorId: Number(p.governorId ?? p.id),
@@ -864,13 +864,14 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 
 <td className="px-3 py-2.5 text-center relative group">
   <div
-    onClick={() =>
-      setOpenMenu(
-        openMenu?.type === 'violation' && openMenu?.id === player.governorId
-          ? null
-          : { type: 'violation', id: player.governorId }
-      )
-    }
+    onClick={(e) => {
+  e.stopPropagation();
+  setOpenMenu(
+    openMenu?.type === 'violation' && openMenu?.id === player.governorId
+      ? null
+      : { type: 'violation', id: player.governorId }
+  );
+}}
     className="cursor-pointer text-xs text-[var(--text-muted)]"
   >
     {player.violation?.length ? player.violation.join(', ') : '-'}
@@ -904,13 +905,14 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                      
 <td className="px-3 py-2.5 text-center relative">
 <div
-  onClick={() =>
-    setOpenMenu(
-      openMenu?.type === 'handled' && openMenu?.id === player.governorId
-        ? null
-        : { type: 'handled', id: player.governorId }
-    )
-  }
+onClick={(e) => {
+  e.stopPropagation();
+  setOpenMenu(
+    openMenu?.type === 'handled' && openMenu?.id === player.governorId
+      ? null
+      : { type: 'handled', id: player.governorId }
+  );
+}}
   className="cursor-pointer text-xs"
 >
   {player.handled || 'No action'}
