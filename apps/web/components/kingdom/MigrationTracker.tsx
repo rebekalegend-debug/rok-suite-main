@@ -102,7 +102,7 @@ export default function WantedList() {
   const [reasonFilter, setReasonFilter] = useState<string | null>(null);
   
   const [handledFilter, setHandledFilter] = useState<'all' | 'No action' | 'Pending' | 'On wanted list' | 'Left'>('all');
-
+const [allMembers, setAllMembers] = useState<any[]>([]);
 
   // Sort state
   const [sortRules, setSortRules] = useState<SortRule[]>(DEFAULT_SORT_RULES);
@@ -119,10 +119,13 @@ const fetchData = useCallback(async () => {
   setLoading(true);
   setError(null);
   try {
-    const [wantedPlayers, prevNamesMap] = await Promise.all([
-      fetchMgeViolationsSheet(MGE_VIOLATION_SHEET_URL),
-      fetchPrevNamesSheet(PREV_NAMES_SHEET_URL),
-    ]);
+ const [wantedPlayers, prevNamesMap, members] = await Promise.all([
+  fetchMgeViolationsSheet(MGE_VIOLATION_SHEET_URL),
+  fetchPrevNamesSheet(PREV_NAMES_SHEET_URL),
+  fetchKingdomMembersSheet("https://docs.google.com/spreadsheets/d/1ZUf-qCCvZ5N6qU_hCNHXQ1z-6qxhn36PucYOxbaXIv0/edit?gid=693046633#gid=693046633"),
+]);
+
+setAllMembers(members);
 
 const merged: WantedPlayer[] = wantedPlayers.map((p: any) => ({
   governorId: p.governorId,
@@ -665,20 +668,23 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
               className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] text-sm focus:outline-none focus:border-red-500/50"
             />
           </div>
-         {isAdmin && search && (
+      {isAdmin && search && (
   <div className="bg-[var(--background-card)] border border-[var(--border)] rounded-xl mt-2 max-h-40 overflow-y-auto">
-    {players
-     .filter(p => p.name?.toLowerCase().includes(search.toLowerCase()))
+    {allMembers
+      .filter(m =>
+        m.name?.toLowerCase().includes(search.toLowerCase()) ||
+        String(m.governorId).includes(search)
+      )
       .slice(0, 10)
-      .map(p => (
+      .map(m => (
         <div
-          key={p.governorId}
+          key={m.governorId}
           onClick={() =>
             savePlayer(
               {
-                name: p.name,
-                governorId: p.governorId,
-                power: p.power,
+                name: m.name,
+                governorId: m.governorId,
+                power: m.power,
                 violation: [],
                 handled: 'No action',
                 notes: ''
@@ -688,7 +694,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
           }
           className="px-3 py-2 hover:bg-[var(--background-secondary)] cursor-pointer text-sm"
         >
-          {p.name} ({p.governorId})
+          {m.name} ({m.governorId})
         </div>
       ))}
   </div>
