@@ -17,9 +17,8 @@ const VIOLATION_OPTIONS = ['First', 'Second', 'Third', 'KD Break'];
 type WantedPlayer = {
   governorId: number;
   name: string;
-  power1: number;
-  power2: number;
-  alliance: string;
+  power: number;
+
 
   violation?: string[];
   handled?: string;
@@ -830,7 +829,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
   )}
 </td>
                  <td className="px-3 py-2.5 text-center font-mono text-sm text-[var(--foreground)]">
-  {formatPower(player.power2)}
+  {formatPower(player.power)}
 </td>
                     
 
@@ -963,7 +962,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                   <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
                     <div>
                       <span className="text-[var(--text-muted)]">Power: </span>
-                      <span className="font-mono text-[var(--text-secondary)]">{formatPower(player.power2)}</span>
+                      <span className="font-mono text-[var(--text-secondary)]">{formatPower(player.power)}</span>
                     </div>
                       </div>
                  
