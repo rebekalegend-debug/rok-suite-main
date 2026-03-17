@@ -890,7 +890,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
           key={v}
 onClick={() =>
   setOpenMenu(openMenu === player.governorId + 1000 ? null : player.governorId + 1000)
-}}
+}
           className="cursor-pointer px-2 py-1 rounded text-xs hover:bg-[var(--background-secondary)]"
         >
           {v}
