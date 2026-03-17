@@ -271,22 +271,23 @@ const visiblePlayers = useMemo(
 const filtered = useMemo(() => {
 
 
-const source = allMembers.map((m: any) => {
-  const id = Number(m.governorId ?? m.id);
+const source = (!isAdmin || !search)
+  ? players
+  : allMembers.map((m: any) => {
+      const id = Number(m.governorId ?? m.id);
+      const existing = players.find(p => p.governorId === id);
 
-  const existing = players.find(p => p.governorId === id);
-
-  return {
-    governorId: id,
-    name: existing?.name ?? m.name ?? m.player_name,
-    power: existing?.power ?? m.power ?? 0,
-    violation: existing?.violation ?? [],
-    handled: existing?.handled ?? 'No action',
-    notes: existing?.notes ?? '',
-    display: true,
-    prevNames: existing?.prevNames ?? ''
-  };
-});
+      return {
+        governorId: id,
+        name: existing?.name ?? m.name ?? m.player_name,
+        power: existing?.power ?? m.power ?? 0,
+        violation: existing?.violation ?? [],
+        handled: existing?.handled ?? 'No action',
+        notes: existing?.notes ?? '',
+        display: true,
+        prevNames: existing?.prevNames ?? ''
+      };
+    });
 
 
   const list = source.filter(p => {
@@ -739,7 +740,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 
       {/* Desktop table */}
       {!loading && !error && (
-       <div className="hidden md:block overflow-x-auto overflow-y-visible">
+      <div className="hidden md:block overflow-x-auto relative z-0">
           <table className="w-full">
             <thead className="sticky top-0 z-10 bg-[var(--background-card)]">
              <tr className="border-b border-[var(--border)]">
@@ -846,24 +847,43 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 
 
 <td className="px-3 py-2.5 text-center relative group">
-  <div
-    onClick={(e) => {
-  e.stopPropagation();
-  setOpenMenu(
-    openMenu?.type === 'violation' && openMenu?.id === player.governorId
-      ? null
-      : { type: 'violation', id: player.governorId }
-  );
-}}
-    className="cursor-pointer text-xs text-[var(--text-muted)]"
-  >
-    {player.violation?.length ? player.violation.join(', ') : '-'}
-  </div>
+<div
+  onClick={(e) => {
+    e.stopPropagation();
+    setOpenMenu(
+      openMenu?.type === 'violation' && openMenu?.id === player.governorId
+        ? null
+        : { type: 'violation', id: player.governorId }
+    );
+  }}
+  className="cursor-pointer flex flex-wrap justify-center gap-1 min-h-[18px]"
+>
+  {player.violation?.length ? (
+    player.violation.map((v: string) => (
+      <span
+        key={v}
+        className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${
+          v === 'First'
+            ? 'bg-yellow-500/20 border-yellow-500/40 text-yellow-300'
+            : v === 'Second'
+            ? 'bg-orange-500/20 border-orange-500/40 text-orange-300'
+            : v === 'Third'
+            ? 'bg-red-500/20 border-red-500/40 text-red-300'
+            : 'bg-purple-500/20 border-purple-500/40 text-purple-300'
+        }`}
+      >
+        {v}
+      </span>
+    ))
+  ) : (
+    <span className="text-xs text-[var(--text-muted)]">-</span>
+  )}
+</div>
 
   {isAdmin &&
     openMenu?.type === 'violation' &&
     openMenu?.id === player.governorId && (
-      <div className="menu absolute z-50 mt-2 w-32 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
+      <div className="menu absolute z-[9999] bg-[var(--background-card)] backdrop-blur-md-50 mt-2 w-32 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
         {VIOLATION_OPTIONS.map((v) => (
           <div
             key={v}
@@ -892,7 +912,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 </td>
 
                      
-<td className="px-3 py-2.5 text-center relative">
+<td className="px-3 py-2.5 text-center relative z-10">
 <div
 onClick={(e) => {
   e.stopPropagation();
@@ -904,15 +924,16 @@ onClick={(e) => {
 }}
   className="cursor-pointer text-xs"
 >
-<span className={
+<span className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${
   player.handled === 'Pending'
-    ? 'text-yellow-400'
+    ? 'bg-yellow-500/10 border-yellow-500/30 text-yellow-400'
     : player.handled === 'On wanted list'
-    ? 'text-red-400'
+    ? 'bg-red-500/10 border-red-500/30 text-red-400'
     : player.handled === 'Left'
-    ? 'text-sky-400'
-    : 'text-white'
-}>
+    ? 'bg-sky-500/10 border-sky-500/30 text-sky-400'
+    : 'bg-amber-500/10 border-amber-500/30 text-amber-400'
+}`}
+>
   {player.handled || 'No action'}
 </span>
 </div>
@@ -920,7 +941,7 @@ onClick={(e) => {
 {isAdmin &&
  openMenu?.type === 'handled' &&
  openMenu?.id === player.governorId && (
-  <div className="menu absolute z-50 mt-2 w-36 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
+  <div className="menu absolute z-[9999] bg-[var(--background-card)] backdrop-blur-md-50 mt-2 w-36 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
     {['No action', 'Pending', 'On wanted list', 'Left'].map((v) => (
       <div
         key={v}
