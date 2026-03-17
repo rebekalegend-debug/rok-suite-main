@@ -22,10 +22,9 @@ export async function POST(req: Request) {
     range,
   });
 
- const rows = res.data.values || []
+const rows = res.data.values || []
 
-// find row by ID (column B = index 1)
-const findIndex = rows.findIndex(r => String(r[1]) === String(body.id))
+const index = rows.findIndex(r => String(r[1]) === String(body.id))
 
 const newRow = [
   body.name || "",
@@ -36,19 +35,19 @@ const newRow = [
   body.notes || ""
 ]
 
-// ❌ DELETE
+// DELETE
 if (body.delete) {
-  if (findIndex !== -1) {
-    rows.splice(findIndex, 1) // ✅ REMOVE ROW CLEAN
+  if (index !== -1) {
+    rows.splice(index, 1)
   }
 }
 
-// ✏️ UPDATE
-else if (findIndex !== -1) {
-  rows[findIndex] = newRow
+// UPDATE
+else if (index !== -1) {
+  rows[index] = newRow
 }
 
-// ➕ ADD
+// ADD
 else {
   rows.push(newRow)
 }
@@ -59,7 +58,7 @@ else {
     range: "Violation!A2",
     valueInputOption: "RAW",
     requestBody: {
-      values: rows,
+    range: `Violation!A${index + 2}:F${index + 2}`,
     },
   });
 
