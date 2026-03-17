@@ -125,6 +125,7 @@ const [allMembers, setAllMembers] = useState<any[]>([]);
 const fetchData = useCallback(async () => {
   setLoading(true);
   setError(null);
+  setPlayers([]);
   try {
  const [wantedPlayers, prevNamesMap, members] = await Promise.all([
   fetchMgeViolationsSheet(MGE_VIOLATION_SHEET_URL),
@@ -156,7 +157,7 @@ const merged: WantedPlayer[] = wantedPlayers.map((p: any) => ({
   prevNames: prevNamesMap.get(p.governorId) || ""
 }));
 
-    setPlayers(merged);
+   setPlayers([...merged]); // 🔥 FORCE NEW ARRAY
     setLastRefreshed(new Date());
 
   } catch (err) {
@@ -281,9 +282,8 @@ let list: WantedPlayer[] = [];
 
 // ✅ NORMAL USERS → ONLY SHEET
 if (!isAdmin) {
-  list = players;
+  list = players.length ? [...players] : [];
 }
-
 // ✅ ADMIN NO SEARCH → ONLY SHEET
 else if (!search) {
   list = players;
@@ -320,7 +320,7 @@ else {
 }
 
 const filteredList = list.filter(p => {
-if (search) {
+if (search.trim().length > 0) {
   const matches = matchesSearch(search, p.name, p.governorId);
   if (!matches) return false;
 }
