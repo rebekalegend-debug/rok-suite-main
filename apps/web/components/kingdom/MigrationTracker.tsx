@@ -156,7 +156,11 @@ const merged: WantedPlayer[] = wantedPlayers.map((p: any) => ({
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastRefreshed, setLastRefreshed] = useState<Date | null>(null);
 
- 
+ useEffect(() => {
+  const close = () => setOpenMenu(null);
+  window.addEventListener('click', close);
+  return () => window.removeEventListener('click', close);
+}, []);
 
   useEffect(() => {
     fetchData();
@@ -878,19 +882,25 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 </td>
 
                      
-<td className="px-3 py-2.5 text-center relative group">
-  <div className="text-xs">
+<td className="px-3 py-2.5 text-center relative">
+  <div
+    onClick={() =>
+      setOpenMenu(openMenu === player.governorId + 1000 ? null : player.governorId + 1000)
+    }
+    className="cursor-pointer text-xs"
+  >
     {player.handled || 'No action'}
   </div>
 
- {isAdmin && openMenu === player.governorId + 1000 && (
-    <div className="hidden group-hover:block absolute z-50 mt-2 w-36 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
+  {isAdmin && openMenu === player.governorId + 1000 && (
+    <div className="absolute z-50 mt-2 w-36 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
       {['No action', 'Pending', 'On wanted list', 'Left'].map((v) => (
         <div
           key={v}
-onClick={() =>
-  setOpenMenu(openMenu === player.governorId + 1000 ? null : player.governorId + 1000)
-}
+          onClick={() => {
+            savePlayer(player, { handled: v });
+            setOpenMenu(null);
+          }}
           className="cursor-pointer px-2 py-1 rounded text-xs hover:bg-[var(--background-secondary)]"
         >
           {v}
