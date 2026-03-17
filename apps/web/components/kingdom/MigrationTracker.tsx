@@ -100,7 +100,12 @@ export default function WantedList() {
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [reasonFilter, setReasonFilter] = useState<string | null>(null);
-  const [openMenu, setOpenMenu] = useState<number | null>(null);
+
+const [openMenu, setOpenMenu] = useState<{
+  type: 'violation' | 'handled';
+  id: number;
+} | null>(null);
+  
   const [handledFilter, setHandledFilter] = useState<'all' | 'No action' | 'Pending' | 'On wanted list' | 'Left'>('all');
 const [allMembers, setAllMembers] = useState<any[]>([]);
 
@@ -132,7 +137,9 @@ const merged: WantedPlayer[] = wantedPlayers.map((p: any) => ({
   name: p.name,
   power: p.power || 0,
 
-  violation: p.violation || [],
+ violation: typeof p.violation === "string"
+  ? p.violation.split(",").map((v: string) => v.trim()).filter(Boolean)
+  : p.violation || [],
   handled: p.handled || 'No action',
   notes: p.notes || '',
 
@@ -857,18 +864,27 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 
 <td className="px-3 py-2.5 text-center relative group">
 <div
-  onClick={() => setOpenMenu(openMenu === player.governorId ? null : player.governorId)}
+  onClick={() =>
+    setOpenMenu(
+      openMenu?.type === 'violation' && openMenu?.id === player.governorId
+        ? null
+        : { type: 'violation', id: player.governorId }
+    )
+  }
   className="cursor-pointer text-xs text-[var(--text-muted)]"
 >
-    {player.violation?.length ? player.violation.join(', ') : '-'}
-  </div>
+  {player.violation?.length ? player.violation.join(', ') : '-'}
+</div>
 
-{isAdmin && openMenu === player.governorId && (
+{isAdmin &&
+ openMenu?.type === 'violation' &&
+ openMenu?.id === player.governorId && (
   <div className="menu absolute z-50 mt-2 w-32 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
     {VIOLATION_OPTIONS.map((v) => (
       <div
         key={v}
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation();
           toggleViolation(player, v);
           setOpenMenu(null);
         }}
@@ -883,35 +899,39 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
     ))}
   </div>
 )}
-</td>
 
                      
 <td className="px-3 py-2.5 text-center relative">
-  <div
-    onClick={() =>
-      setOpenMenu(openMenu === player.governorId + 1000 ? null : player.governorId + 1000)
-    }
-    className="cursor-pointer text-xs"
-  >
-    {player.handled || 'No action'}
-  </div>
+<div
+  onClick={() =>
+    setOpenMenu(
+      openMenu?.type === 'handled' && openMenu?.id === player.governorId
+        ? null
+        : { type: 'handled', id: player.governorId }
+    )
+  }
+  className="cursor-pointer text-xs"
+>
+  {player.handled || 'No action'}
+</div>
 
-{isAdmin && openMenu === player.governorId + 1000 && (
+{isAdmin &&
+ openMenu?.type === 'handled' &&
+ openMenu?.id === player.governorId && (
   <div className="menu absolute z-50 mt-2 w-36 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
-    {['No action', 'Pending', 'On wanted list', 'Left'].map((v) => {
-      return (
-        <div
-          key={v}
-          onClick={() => {
-            savePlayer(player, { handled: v });
-            setOpenMenu(null);
-          }}
-          className="cursor-pointer px-2 py-1 rounded text-xs hover:bg-[var(--background-secondary)]"
-        >
-          {v}
-        </div>
-      );
-    })}
+    {['No action', 'Pending', 'On wanted list', 'Left'].map((v) => (
+      <div
+        key={v}
+        onClick={(e) => {
+          e.stopPropagation(); // IMPORTANT
+          savePlayer(player, { handled: v });
+          setOpenMenu(null);
+        }}
+        className="cursor-pointer px-2 py-1 rounded text-xs hover:bg-[var(--background-secondary)]"
+      >
+        {v}
+      </div>
+    ))}
   </div>
 )}
 </td>
@@ -921,21 +941,25 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
   {isAdmin ? (
 <input
   value={player.notes || ''}
- onChange={(e) => {
-  const value = e.target.value;
+  onChange={(e) => {
+    const value = e.target.value;
 
-  setPlayers(prev =>
-    prev.map(p =>
-      p.governorId === player.governorId
-        ? { ...p, notes: value }
-        : p
-    )
-  );
-}}
-
-onBlur={(e) => {
-  savePlayer(player, { notes: e.target.value });
-}}
+    setPlayers(prev =>
+      prev.map(p =>
+        p.governorId === player.governorId
+          ? { ...p, notes: value }
+          : p
+      )
+    );
+  }}
+  onKeyDown={(e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      savePlayer(player, {
+        notes: (e.target as HTMLInputElement).value
+      });
+    }
+  }}
   className="bg-[var(--background-secondary)] border border-[var(--border)] text-xs rounded px-2 py-1 w-32"
 />
   ) : (
