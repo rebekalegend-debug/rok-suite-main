@@ -372,7 +372,7 @@ const filteredList = list.filter(p => {
 
     return 0;
   });
-}, [players, allMembers, search, reasonFilter, handledFilter, sortRules, isAdmin]
+}, [players, allMembers, search, reasonFilter, handledFilter, sortRules, isAdmin]);
 
 
   
@@ -414,7 +414,7 @@ const filteredList = list.filter(p => {
     toZeroCount,
     toZeroPower,
   };
-}, [visiblePlayers]);
+}, [filtered]);
   
   
   const duplicateNames = useMemo(() => {
@@ -431,7 +431,7 @@ const filteredList = list.filter(p => {
   }
 
   return duplicates;
-}, [visiblePlayers]);
+}, [filtered]);
   // Unique reasons for filter chips
  
 
