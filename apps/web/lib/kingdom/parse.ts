@@ -89,10 +89,6 @@ export async function fetchKingdomMembersSheet(url: string) {
 
 
 
- * Parse kingdom stats export XLSX.
- * Dynamic import of xlsx for bundle size.
- * Handles BOM in Character ID column.
- */
 export async function parseKingdomXLSX(arrayBuffer: ArrayBuffer): Promise<KingdomExportRow[]> {
   const XLSX = await import('xlsx');
   const wb = XLSX.read(arrayBuffer, { type: 'array' });
