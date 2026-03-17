@@ -113,7 +113,7 @@ const [allMembers, setAllMembers] = useState<any[]>([]);
   const [sortRules, setSortRules] = useState<SortRule[]>(DEFAULT_SORT_RULES);
 
   // Officer mode (can change handled status)
-  const [isOfficer, setIsOfficer] = useState(false);
+
   // Admin mode (can see sheet link) — admin also gets officer privileges
   const [isAdmin, setIsAdmin] = useState(false);
   const [showPasswordPrompt, setShowPasswordPrompt] = useState(false);
@@ -192,11 +192,9 @@ const merged: WantedPlayer[] = wantedPlayers.map((p: any) => ({
   const handlePasswordSubmit = () => {
     if (password === ADMIN_PASSWORD) {
       setIsAdmin(true);
-      setIsOfficer(true);
       setShowPasswordPrompt(false);
       setPassword('');
     } else if (password === OFFICER_PASSWORD) {
-      setIsOfficer(true);
       setShowPasswordPrompt(false);
       setPassword('');
     } else {
@@ -289,16 +287,7 @@ const source = allMembers.map((m: any) => {
     prevNames: existing?.prevNames ?? ''
   };
 });
-const normalize = (p: any): WantedPlayer => ({
-  governorId: Number(p.governorId ?? p.id),
-  name: p.name ?? p.player_name,
-  power: p.power ?? 0,
-  violation: p.violation || [],
-  handled: p.handled || 'No action',
-  notes: p.notes || '',
-  display: true,
-  prevNames: p.prevNames || ''
-});
+
 
   const list = source.filter(p => {
   if (search && !matchesSearch(search, p.name, p.governorId)) return false;
@@ -359,7 +348,7 @@ const normalize = (p: any): WantedPlayer => ({
 
     return 0;
   });
-}, [visiblePlayers, allMembers, search, reasonFilter, handledFilter, sortRules]);
+}, [players, allMembers, search, reasonFilter, handledFilter, sortRules]);
 
 
   
@@ -564,7 +553,7 @@ const savePlayer = async (player: any, updates: any) => {
             <RefreshCw size={16} className={isRefreshing ? 'animate-spin' : ''} />
             <span className="hidden sm:inline">{isRefreshing ? 'Refreshing...' : 'Refresh'}</span>
           </button>
-          {!isOfficer && (
+          {!isAdmin && (
             <button
               onClick={() => setShowPasswordPrompt(true)}
               className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors"
@@ -589,7 +578,7 @@ const savePlayer = async (player: any, updates: any) => {
 
     
       {/* Officer/Admin mode banner */}
-      {isOfficer && (
+      {isAdmin && (
         <div className="mb-4 px-4 py-3 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm text-amber-400">
             <Lock size={14} />
@@ -597,7 +586,7 @@ const savePlayer = async (player: any, updates: any) => {
             <span className="hidden sm:inline text-amber-400/60">&mdash; Mark players as zeroed or left kingdom</span>
           </div>
           <button
-            onClick={() => { setIsOfficer(false); setIsAdmin(false); }}
+            onClick={() => setIsAdmin(false); }}
             className="text-amber-400/60 hover:text-amber-400 transition-colors"
           >
             <X size={16} />
@@ -774,25 +763,13 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                
 
 
-               {isAdmin && (
-  <td className="px-3 py-2.5 text-center">
-    <button
-      onClick={(e) => {
-        e.stopPropagation();
-        deletePlayer(player);
-      }}
-      className="text-red-400 hover:text-red-300 transition"
-    >
-      ❌
-    </button>
-  </td>
-)}
+             
               </tr>
             </thead>
             <tbody>
               {filtered.length === 0 ? (
                 <tr>
-                 <td colSpan={isOfficer ? 6 : 5} className="px-3 py-8 text-center text-sm text-[var(--text-muted)]">
+                 <td colSpan={isAdmin ? 8 : 7} className="px-3 py-8 text-center text-sm text-[var(--text-muted)]">
                     {hasActiveFilters ? 'No players match filters' : 'No wanted players'}
                   </td>
                 </tr>
@@ -994,13 +971,21 @@ onClick={(e) => {
   )}
 </td>
 
+{isAdmin && (
+  <td className="px-3 py-2.5 text-center">
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        deletePlayer(player);
+      }}
+      className="text-red-400 hover:text-red-300 transition"
+    >
+      ❌
+    </button>
+  </td>
+)}
 
-
-
-
-                      
-                    
-                    </tr>
+</tr>
                   );
                 })
               )}
