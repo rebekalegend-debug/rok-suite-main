@@ -252,9 +252,26 @@ const visiblePlayers = useMemo(
   [players]
 );
 const filtered = useMemo(() => {
-const source = search && isAdmin ? allMembers : visiblePlayers;
+const source = (search && isAdmin ? allMembers : visiblePlayers).map((m: any) => {
+  const id = Number(m.governorId ?? m.id);
+
+  const existing = players.find(p => p.governorId === id);
+
+  return existing
+    ? existing // ✅ USE REAL STATE OBJECT
+    : {
+        governorId: id,
+        name: m.name ?? m.player_name,
+        power: m.power ?? 0,
+        violation: [],
+        handled: 'No action',
+        notes: '',
+        display: true,
+        prevNames: ''
+      };
+});
 const normalize = (p: any): WantedPlayer => ({
-  governorId: p.governorId ?? p.id,
+  governorId: Number(p.governorId ?? p.id),
   name: p.name ?? p.player_name,
   power: p.power ?? 0,
   violation: p.violation || [],
@@ -866,23 +883,14 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
     {player.handled || 'No action'}
   </div>
 
-  {isAdmin && (
+ {isAdmin && openMenu === player.governorId + 1000 && (
     <div className="hidden group-hover:block absolute z-50 mt-2 w-36 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
       {['No action', 'Pending', 'On wanted list', 'Left'].map((v) => (
         <div
           key={v}
-          onClick={() => {
-            const updated = {
-              governorId: player.governorId,
-              name: player.name,
-              power: player.power || 0,
-              violation: player.violation || [],
-              handled: v,
-              notes: player.notes || ''
-            };
-
-          savePlayer(updated, { handled: v });
-          }}
+onClick={() =>
+  setOpenMenu(openMenu === player.governorId + 1000 ? null : player.governorId + 1000)
+}}
           className="cursor-pointer px-2 py-1 rounded text-xs hover:bg-[var(--background-secondary)]"
         >
           {v}
@@ -897,20 +905,21 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
   {isAdmin ? (
 <input
   value={player.notes || ''}
-  onChange={(e) => {
-    const value = e.target.value;
+ onChange={(e) => {
+  const value = e.target.value;
 
-    const updated = {
-      governorId: player.governorId,
-      name: player.name,
-      power: player.power || 0,
-      violation: player.violation || [],
-      handled: player.handled || 'No action',
-      notes: value
-    };
+  setPlayers(prev =>
+    prev.map(p =>
+      p.governorId === player.governorId
+        ? { ...p, notes: value }
+        : p
+    )
+  );
+}}
 
-    savePlayer(updated, { notes: value });
-  }}
+onBlur={() => {
+  savePlayer(player, { notes: player.notes });
+}}
   className="bg-[var(--background-secondary)] border border-[var(--border)] text-xs rounded px-2 py-1 w-32"
 />
   ) : (
