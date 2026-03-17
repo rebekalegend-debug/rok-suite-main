@@ -22,9 +22,9 @@ export async function POST(req: Request) {
     range,
   });
 
-const rows = res.data.values || []
+const rows = res.data.values || [];
 
-const index = rows.findIndex(r => String(r[1]) === String(body.id))
+const index = body.rowIndex ? body.rowIndex - 2 : -1;
 
 const newRow = [
   body.name || "",
@@ -33,34 +33,34 @@ const newRow = [
   body.violation || "",
   body.handled || "",
   body.notes || ""
-]
+];
 
 // DELETE
 if (body.delete) {
-  if (index !== -1) {
-    rows.splice(index, 1)
+  if (index >= 0) {
+    rows.splice(index, 1);
   }
 }
 
 // UPDATE
-else if (index !== -1) {
-  rows[index] = newRow
+else if (index >= 0) {
+  rows[index] = newRow;
 }
 
 // ADD
 else {
-  rows.push(newRow)
+  rows.push(newRow);
 }
 
-  // 💾 WRITE BACK
-  await sheets.spreadsheets.values.update({
-    spreadsheetId,
-    range: "Violation!A2",
-    valueInputOption: "RAW",
-    requestBody: {
-    range: `Violation!A${index + 2}:F${index + 2}`,
-    },
-  });
+// WRITE BACK (FULL TABLE)
+await sheets.spreadsheets.values.update({
+  spreadsheetId,
+  range: "Violation!A2",
+  valueInputOption: "RAW",
+  requestBody: {
+    values: rows,
+  },
+});
 
   return Response.json({ success: true });
 }
