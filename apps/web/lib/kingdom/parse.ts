@@ -199,52 +199,7 @@ export async function fetchInactivesSheet(url: string): Promise<InactiveRow[]> {
     })
     .filter((r): r is InactiveRow => r !== null && (!!r.name || !!r.governorId));
 }
-export async function fetchMgeViolationsSheet(url: string): Promise<WantedPlayer[]> {
-  const response = await fetch(url);
-  if (!response.ok) throw new Error(`Failed to fetch sheet: ${response.status}`);
 
-  const text = await response.text();
-  const { headers, rows } = parseCSV(text);
-
-  const idx = (name: string) =>
-    headers.findIndex(h => h.toLowerCase().includes(name.toLowerCase()));
-
-  const iGovId = idx('governor id');
-  const iName = idx('name');
-  const iPower = idx('power');
-  const iViolation = idx('violation');
-  const iHandled = headers.findIndex(h => h.toLowerCase().trim() === 'handled');
-
-  return rows
-    .map(cols => {
-      const handledVal = (cols[iHandled] || '').trim();
-
-      return {
-        governorId: parseInt(cols[iGovId]) || 0,
-        name: (cols[iName] || '').trim(),
-        power: parseInt(cols[iPower]) || 0,
-
-        violation: (cols[iViolation] || '')
-          .split(',')
-          .map(v => v.trim())
-          .filter(Boolean),
-
-        handled: handledVal || 'No action',
-
-        zero: '',
-        zeroed:
-          handledVal.toLowerCase() === 'on wanted list'
-            ? 'yes'
-            : handledVal.toLowerCase() === 'left'
-            ? 'left'
-            : '',
-
-        display: true,
-        prevNames: '',
-      };
-    })
-    .filter(r => r.name || r.governorId);
-}
 /**
  * Fetch and parse the Google Sheet wanted list as CSV.
  * Columns: Name, Governor ID, X Coordinate, Y Coordinate, Zero, Reason
