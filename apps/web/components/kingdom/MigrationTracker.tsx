@@ -586,7 +586,7 @@ const savePlayer = async (player: any, updates: any) => {
             <span className="hidden sm:inline text-amber-400/60">&mdash; Mark players as zeroed or left kingdom</span>
           </div>
           <button
-            onClick={() => setIsAdmin(false); }}
+           onClick={() => setIsAdmin(false)}
             className="text-amber-400/60 hover:text-amber-400 transition-colors"
           >
             <X size={16} />
