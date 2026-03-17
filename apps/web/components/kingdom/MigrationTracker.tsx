@@ -271,26 +271,49 @@ const visiblePlayers = useMemo(
 const filtered = useMemo(() => {
 
 
-const source = (!isAdmin || !search)
-  ? players
-  : allMembers.map((m: any) => {
-      const id = Number(m.governorId ?? m.id);
-      const existing = players.find(p => p.governorId === id);
+let list: WantedPlayer[] = [];
 
-      return {
+// ✅ NORMAL USERS → ONLY SHEET
+if (!isAdmin) {
+  list = players;
+}
+
+// ✅ ADMIN NO SEARCH → ONLY SHEET
+else if (!search) {
+  list = players;
+}
+
+// ✅ ADMIN WITH SEARCH → SEARCH ALL MEMBERS
+else {
+  const lower = search.toLowerCase();
+
+  const playerMap = new Map(players.map(p => [p.governorId, p]));
+
+  list = allMembers
+    .filter((m: any) => {
+      const name = (m.name || m.player_name || "").toLowerCase();
+      const id = String(m.governorId ?? m.id || "");
+      return name.includes(lower) || id.includes(lower);
+    })
+    .map((m: any) => {
+      const id = Number(m.governorId ?? m.id);
+      const existing = playerMap.get(id);
+
+      return existing || {
         governorId: id,
-        name: existing?.name ?? m.name ?? m.player_name,
-        power: existing?.power ?? m.power ?? 0,
-        violation: existing?.violation ?? [],
-        handled: existing?.handled ?? 'No action',
-        notes: existing?.notes ?? '',
+        name: m.name ?? m.player_name,
+        power: m.power ?? 0,
+        violation: [],
+        handled: 'No action',
+        notes: '',
         display: true,
-        prevNames: existing?.prevNames ?? ''
+        prevNames: ''
       };
     });
+}
 
 
-  const list = source.filter(p => {
+const filteredList = list.filter(p => {
   if (search && !matchesSearch(search, p.name, p.governorId)) return false;
 
   if (!search && reasonFilter && !p.violation?.includes(reasonFilter)) return false;
@@ -308,7 +331,7 @@ const source = (!isAdmin || !search)
   return true;
 });
 
-  return [...list].sort((a, b) => {
+  return [...filteredList].sort((a, b) => {
     for (const rule of sortRules) {
       let aVal: any;
       let bVal: any;
@@ -349,7 +372,7 @@ const source = (!isAdmin || !search)
 
     return 0;
   });
-}, [players, allMembers, search, reasonFilter, handledFilter, sortRules]);
+}, [players, allMembers, search, reasonFilter, handledFilter, sortRules, isAdmin]
 
 
   
@@ -359,7 +382,7 @@ const source = (!isAdmin || !search)
   let leftCount = 0;
   let toZeroCount = 0, toZeroPower = 0;
 
-  for (const p of visiblePlayers) {
+  for (const p of filtered) {
     const s = p.handled || 'No action';
     const power = p.power || 0;
 
@@ -382,7 +405,7 @@ const source = (!isAdmin || !search)
   }
 
   return {
-    total: visiblePlayers.length,
+    total: filtered.length,
     pendingCount,
     pendingPower,
     zeroedCount,
@@ -397,7 +420,7 @@ const source = (!isAdmin || !search)
   const duplicateNames = useMemo(() => {
   const map = new Map<string, number>();
 
-  for (const p of visiblePlayers) {
+  for (const p of filtered) {
     const name = (p.name || '').toLowerCase().trim();
     map.set(name, (map.get(name) || 0) + 1);
   }
@@ -740,7 +763,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 
       {/* Desktop table */}
       {!loading && !error && (
-      <div className="hidden md:block overflow-x-auto relative z-0">
+      <div className="hidden md:block overflow-x-auto relative z-10">
           <table className="w-full">
             <thead className="sticky top-0 z-10 bg-[var(--background-card)]">
              <tr className="border-b border-[var(--border)]">
@@ -883,7 +906,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
   {isAdmin &&
     openMenu?.type === 'violation' &&
     openMenu?.id === player.governorId && (
-      <div className="menu absolute z-[9999] bg-[var(--background-card)] backdrop-blur-md-50 mt-2 w-32 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
+      <div className="menu absolute z-[9999] bg-[var(--background-card)] mt-2 w-32 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
         {VIOLATION_OPTIONS.map((v) => (
           <div
             key={v}
@@ -941,7 +964,7 @@ onClick={(e) => {
 {isAdmin &&
  openMenu?.type === 'handled' &&
  openMenu?.id === player.governorId && (
-  <div className="menu absolute z-[9999] bg-[var(--background-card)] backdrop-blur-md-50 mt-2 w-36 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
+  <div className="menu absolute z-[9999] bg-[var(--background-card)] mt-2 w-36 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
     {['No action', 'Pending', 'On wanted list', 'Left'].map((v) => (
       <div
         key={v}
