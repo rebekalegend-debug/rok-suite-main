@@ -294,10 +294,7 @@ const normalize = (p: any): WantedPlayer => ({
 });
   const list = source.map(normalize)
     .filter(p => {
- if (search) {
-  if (!isAdmin) return false;
-  if (!matchesSearch(search, p.name, p.governorId)) return false;
-}
+if (search && !matchesSearch(search, p.name, p.governorId)) return false;
      if (!search && reasonFilter && !p.violation?.includes(reasonFilter)) return false;
 
       const handled = p.handled || 'No action';
@@ -868,28 +865,24 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 
 {isAdmin && openMenu === player.governorId && (
   <div className="menu absolute z-50 mt-2 w-32 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
-      {VIOLATION_OPTIONS.map((v) => {
-        const active = player.violation?.includes(v);
-
-        return (
-          <div
-            key={v}
-           onClick={() => {
-  toggleViolation(player, v);
-  setOpenMenu(null);
-}}
-            className={`cursor-pointer px-2 py-1 rounded text-xs ${
-              active
-                ? 'bg-red-500/20 text-red-300'
-                : 'hover:bg-[var(--background-secondary)] text-[var(--text-muted)]'
-            }`}
-          >
-            {v}
-          </div>
-        );
-      })}
-    </div>
-  )}
+    {VIOLATION_OPTIONS.map((v) => (
+      <div
+        key={v}
+        onClick={() => {
+          toggleViolation(player, v);
+          setOpenMenu(null);
+        }}
+        className={`cursor-pointer px-2 py-1 rounded text-xs ${
+          player.violation?.includes(v)
+            ? 'bg-red-500/20 text-red-300'
+            : 'hover:bg-[var(--background-secondary)] text-[var(--text-muted)]'
+        }`}
+      >
+        {v}
+      </div>
+    ))}
+  </div>
+)}
 </td>
 
                      
@@ -904,7 +897,10 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
   </div>
 
 {isAdmin && openMenu === player.governorId + 1000 && (
-  <div className="menu absolute z-50 mt-2 w-36 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">        <div
+  <div className="menu absolute z-50 mt-2 w-36 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
+    {['No action', 'Pending', 'On wanted list', 'Left'].map((v) => {
+      return (
+        <div
           key={v}
           onClick={() => {
             savePlayer(player, { handled: v });
@@ -914,9 +910,10 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
         >
           {v}
         </div>
-      ))}
-    </div>
-  )}
+      );
+    })}
+  </div>
+)}
 </td>
 
 
