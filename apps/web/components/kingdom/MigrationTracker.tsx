@@ -295,32 +295,35 @@ else {
 
   const playerMap = new Map(players.map(p => [p.governorId, p]));
 
-  list = allMembers
-   .filter((m: any) => {
-  const name = (m.name || m.player_name || "").toLowerCase();
-  const id = String((m.governorId ?? m.id) || "");
-  return name.includes(lower) || id.includes(lower);
-})
-.map((m: any) => {
-  const id = Number(m.governorId ?? m.id);
-  const existing = playerMap.get(id);
+  const matchedMembers = allMembers.filter((m: any) => {
+    const name = (m.name || m.player_name || "").toLowerCase();
+    const id = String((m.governorId ?? m.id) || "");
+    return name.includes(lower) || id.includes(lower);
+  });
 
-      return existing || {
-        governorId: id,
-        name: m.name ?? m.player_name,
-        power: m.power ?? 0,
-        violation: [],
-        handled: 'No action',
-        notes: '',
-        display: true,
-        prevNames: ''
-      };
-    });
+  const merged = matchedMembers.map((m: any) => {
+    const id = Number(m.governorId ?? m.id);
+    return playerMap.get(id) || {
+      governorId: id,
+      name: m.name ?? m.player_name,
+      power: m.power ?? 0,
+      violation: [],
+      handled: 'No action',
+      notes: '',
+      display: true,
+      prevNames: ''
+    };
+  });
+
+  // ✅ KEEP ORIGINAL PLAYERS + ADD NEW SEARCH RESULTS
+  list = [...players, ...merged.filter(m => !playerMap.has(m.governorId))];
 }
 
-
 const filteredList = list.filter(p => {
-  if (search && !matchesSearch(search, p.name, p.governorId)) return false;
+if (search) {
+  const matches = matchesSearch(search, p.name, p.governorId);
+  if (!matches) return false;
+}
 
   if (!search && reasonFilter && !p.violation?.includes(reasonFilter)) return false;
 
