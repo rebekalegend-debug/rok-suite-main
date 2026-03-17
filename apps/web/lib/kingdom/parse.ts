@@ -291,7 +291,7 @@ export async function fetchPrevNamesSheet(url: string): Promise<Map<number,strin
 
 
 
-export async function fetchViolationSheet(url: string) {
+export async function fetchMgeViolationsSheet(url: string) {
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Failed to fetch sheet: ${response.status}`);
   const text = await response.text();
