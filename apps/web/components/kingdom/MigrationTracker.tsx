@@ -232,7 +232,16 @@ const handleSort = (field: SortableField, multi: boolean) => {
     }
   };
 
+const violationScore = (v?: string[]) => {
+  if (!v || v.length === 0) return 0;
 
+  if (v.includes('KD Break')) return 4;
+  if (v.includes('Third')) return 3;
+  if (v.includes('Second')) return 2;
+  if (v.includes('First')) return 1;
+
+  return 0;
+};
 
   // Only visible players (display !== false)
 const visiblePlayers = useMemo(
@@ -766,7 +775,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                 filtered.map((player, idx) => {
                   const handled = player.handled || 'No action';
                   const isDone = handled !== 'Pending' && handled !== 'No action';
-                  const isIllegal = (player.violation?.join(',') || '').toLowerCase().includes('illegal');
+                
                   return (
                     <tr
                       key={player.governorId || player.name}
@@ -777,43 +786,41 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
   {idx + 1}
 </td>
                       <td className="px-3 py-2.5 text-center">
-                       <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1">
   <span className={`font-medium text-sm ${isDone ? 'line-through text-[var(--text-muted)]' : 'text-[var(--foreground)]'}`}>
-  {player.name}
-</span>
+    {player.name}
+  </span>
 
-duplicateNames.has((player.name || '').toLowerCase().trim()) && (
- <span title="Duplicate name detected">
-  <AlertCircle
-    size={14}
-    className="text-red-500 ml-1"
-  />
-</span>
-)}
+  {duplicateNames.has((player.name || '').toLowerCase().trim()) && (
+    <span title="Duplicate name detected">
+      <AlertCircle
+        size={14}
+        className="text-red-500 ml-1"
+      />
+    </span>
+  )}
 
- {player.prevNames?.trim() && (
-  <div className="relative group inline-flex">
-    <button className="text-[var(--text-muted)] hover:text-[var(--foreground)]">
-      <History size={12} />
-    </button>
+  {player.prevNames?.trim() && (
+    <div className="relative group inline-flex">
+      <button className="text-[var(--text-muted)] hover:text-[var(--foreground)]">
+        <History size={12} />
+      </button>
 
-    <div className="absolute left-5 top-4 hidden group-hover:block z-[9999] pointer-events-none">
-      <div className="bg-[var(--background-card)] border border-[var(--border)] rounded-lg px-3 py-2 shadow-lg text-xs whitespace-nowrap">
+      <div className="absolute left-5 top-4 hidden group-hover:block z-[9999] pointer-events-none">
+        <div className="bg-[var(--background-card)] border border-[var(--border)] rounded-lg px-3 py-2 shadow-lg text-xs whitespace-nowrap">
+          <div className="font-semibold text-[var(--text-secondary)] mb-1">
+            {player.prevNames.split(',').length} previous names
+          </div>
 
-        <div className="font-semibold text-[var(--text-secondary)] mb-1">
-          {player.prevNames.split(',').length} previous names
+          <div className="space-y-0.5 text-[var(--text-muted)]">
+            {player.prevNames.split(',').map((n, i) => (
+              <div key={i}>{n.trim()}</div>
+            ))}
+          </div>
         </div>
-
-        <div className="space-y-0.5 text-[var(--text-muted)]">
-          {player.prevNames.split(',').map((n, i) => (
-            <div key={i}>{n.trim()}</div>
-          ))}
-        </div>
-
       </div>
     </div>
-  </div>
-)}
+  )}
 </div>
                       </td>
                     <td className="px-3 py-2.5 font-mono text-xs text-center">
@@ -939,7 +946,7 @@ duplicateNames.has((player.name || '').toLowerCase().trim()) && (
             filtered.map((player) => {
               const handled = player.handled || 'No action';
               const isDone = handled !== 'Pending' && handled !== 'No action';
-              const isIllegal = (player.violation?.join(',') || '').toLowerCase().includes('illegal');
+            
               return (
                 <div
                   key={player.governorId || player.name}
