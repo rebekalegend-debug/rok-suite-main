@@ -12,7 +12,6 @@ export async function POST(req: Request) {
   });
 
   const sheets = google.sheets({ version: "v4", auth });
-
   const spreadsheetId = process.env.GOOGLE_SHEET_ID!;
 
   const range = "Violation!A2:F";
@@ -23,39 +22,30 @@ export async function POST(req: Request) {
     range,
   });
 
-  let rows = res.data.values || [];
+  const rows = res.data.values || [];
 
-  // 🧠 normalize ID (IMPORTANT)
-  const id = String(body.id);
-
-  // 🔍 find existing row safely
-  const rowIndex = rows.findIndex(r => String(r[1]) === id);
-
-  // 🧠 normalize violation
-  const violation =
-    Array.isArray(body.violation)
-      ? body.violation.join(",")
-      : body.violation || "";
+  // 🔥 FIXED: use rowIndex from frontend (NOT findIndex)
+  const realIndex = body.rowIndex ? body.rowIndex - 2 : -1;
 
   const newRow = [
     body.name || "",
-    id,
+    body.id || "",
     body.power || "",
-    violation,
+    body.violation || "",
     body.handled || "",
     body.notes || ""
   ];
 
-  // ❌ DELETE
+  // ❌ DELETE (SAFE — no shifting bugs)
   if (body.delete) {
-    if (rowIndex !== -1) {
-      rows.splice(rowIndex, 1);
+    if (realIndex >= 0) {
+      rows[realIndex] = ["", "", "", "", "", ""]; // clear row
     }
   }
 
   // ✏️ UPDATE
-  else if (rowIndex !== -1) {
-    rows[rowIndex] = newRow;
+  else if (realIndex >= 0) {
+    rows[realIndex] = newRow;
   }
 
   // ➕ ADD NEW
