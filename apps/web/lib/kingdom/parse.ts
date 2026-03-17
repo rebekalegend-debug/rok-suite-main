@@ -283,40 +283,42 @@ export async function fetchMgeViolationsSheet(url: string) {
   const iHandled = idx('handled');
   const iNotes = idx('notes');
 
-  return rows
-    .map((cols, i) => {
-      const violationRaw = (cols[iViolation] || '').trim();
-      const handledRaw = (cols[iHandled] || '').trim();
-      const notesRaw = (cols[iNotes] || '').trim();
+return rows
+  .filter(cols => cols.some(c => c && c.trim() !== "")) // remove empty rows
+  .map((cols, i) => {
 
-      const governorId = Number(cols[iGovId]) || 0;
-      const name = (cols[iName] || '').trim();
+    if (!cols || cols.length < 2) return null;
 
-      // ❗ SKIP COMPLETELY EMPTY ROWS (VERY IMPORTANT)
-    if (!name && !cols[iGovId]) return null;
+    const violationRaw = (cols[iViolation] || '').trim();
+    const handledRaw = (cols[iHandled] || '').trim();
+    const notesRaw = (cols[iNotes] || '').trim();
 
-      return {
-        governorId,
-        name,
-        power: Number(cols[iPower]) || 0,
+    const governorId = Number(cols[iGovId]) || 0;
+    const name = (cols[iName] || '').trim();
 
-        violation: violationRaw
-          ? violationRaw.split(',').map(v => v.trim()).filter(Boolean)
-          : [],
+    if (!name && !governorId) return null;
 
-        handled: handledRaw || 'No action',
-        notes: notesRaw || '',
+    return {
+      governorId,
+      name,
+      power: Number(cols[iPower]) || 0,
 
-        // 🔥 THIS MUST MATCH SHEET EXACTLY
-        rowIndex: i + 2,
+      violation: violationRaw
+        ? violationRaw.split(',').map(v => v.trim()).filter(Boolean)
+        : [],
 
-        zero: '',
-        zeroed: '',
-        prevNames: '',
-        display: true,
-      };
-    })
-    .filter(Boolean); // removes null rows
+      handled: handledRaw || 'No action',
+      notes: notesRaw || '',
+
+      rowIndex: i + 2,
+
+      zero: '',
+      zeroed: '',
+      prevNames: '',
+      display: true,
+    };
+  })
+  .filter(Boolean);
 }
 
 
