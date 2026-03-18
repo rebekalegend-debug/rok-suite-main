@@ -128,8 +128,8 @@ const touchStartY = useRef<number | null>(null);
     },
     
     {
-  labelKey: 'migrationTracker',
-  href: '/kingdom/migration-tracker',
+  labelKey: 'violationTrack',
+  href: '/kingdom/violation-track',
   icon: <Radar size={20} className="text-orange-500" />,
   hoverColor: 'group-hover:text-orange-500',
   hoverBg: 'hover:bg-orange-500/10',
