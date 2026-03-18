@@ -56,16 +56,21 @@ const index = rows.findIndex(r => {
     stripQuote(body.notes),
   ];
 
-  // DELETE
- if (body.delete) {
-  if (index >= 0) rows.splice(index, 1);
-}}
-
-  // UPDATE
-  else if (index >= 0) {
-    rows[index] = newRow;
+ // DELETE
+if (body.delete) {
+  if (index >= 0) {
+    rows.splice(index, 1);
   }
+}
 
+// UPDATE / ADD
+else {
+  if (index >= 0) {
+    rows[index] = newRow; // ✅ update
+  } else {
+    rows.push(newRow);    // ✅ add
+  }
+}
   // ADD
   else {
     rows.push(newRow);
