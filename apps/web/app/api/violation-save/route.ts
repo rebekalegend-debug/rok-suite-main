@@ -16,22 +16,18 @@ export async function POST(req: Request) {
 
   const range = "Violation!A2:F";
 
-  // 🧠 CLEAN HELPERS
-  const cleanText = (v: any) =>
+  // 🔥 CLEAN HELPERS (STRICT)
+  const stripQuote = (v: any) =>
     String(v ?? "").replace(/^'+/, "").trim();
 
-const cleanNumber = (v: any) => {
-  if (v === null || v === undefined) return 0;
+  const toNumber = (v: any) => {
+    const cleaned = stripQuote(v)
+      .replace(/[, ]/g, "")     // remove commas/spaces
+      .replace(/[^0-9]/g, "");  // keep only digits
 
-  // remove leading ', spaces, commas, anything not digit
-  const cleaned = String(v)
-    .replace(/^'+/, "")       // remove leading '
-    .replace(/[, ]/g, "")     // remove commas/spaces (e.g. 131,322,475)
-    .replace(/[^0-9]/g, "");  // keep only digits
-
-  const n = Number(cleaned);
-  return Number.isFinite(n) ? n : 0;
-};
+    const n = Number(cleaned);
+    return Number.isFinite(n) ? n : 0;
+  };
 
   // 📥 read existing rows
   const res = await sheets.spreadsheets.values.get({
@@ -43,14 +39,16 @@ const cleanNumber = (v: any) => {
 
   const index = body.rowIndex ? body.rowIndex - 2 : -1;
 
-  // ✅ FORCE TYPES HERE
+  // ✅ CLEAN + NORMALIZE ROW
   const newRow = [
-    cleanText(body.name),
-    cleanNumber(body.id),      // 🔥 FIX (NUMBER, not string)
-    cleanNumber(body.power),   // 🔥 FIX
-    cleanText(body.violation),
-    cleanText(body.handled),
-    cleanText(body.notes),
+    stripQuote(body.name),
+
+    toNumber(body.id),     // ✅ NO ' EVER
+    toNumber(body.power),  // ✅ NO ' EVER
+
+    stripQuote(body.violation),
+    stripQuote(body.handled),
+    stripQuote(body.notes),
   ];
 
   // DELETE
