@@ -535,18 +535,25 @@ body: JSON.stringify({
 const savePlayer = async (player: any, updates: any) => {
   const updated = { ...player, ...updates };
 
-await fetch('/api/violation-save', {
-  method: 'POST',
-  body: JSON.stringify({
-    rowIndex: updated.rowIndex, // 🔥 IMPORTANT
-    id: updated.governorId, 
-    name: updated.name,
-    power: updated.power,
-    violation: updated.violation?.join(',') || '',
-    handled: updated.handled || '',
-    notes: updated.notes || ''
-  })
-});
+  // 🔥 CLEAN HERE (FRONTEND FIX)
+  const cleanNumber = (v: any) =>
+    Number(String(v ?? "").replace(/[^0-9]/g, "") || 0);
+
+  await fetch('/api/violation-save', {
+    method: 'POST',
+    body: JSON.stringify({
+      rowIndex: updated.rowIndex,
+
+      id: cleanNumber(updated.governorId),   // ✅ FIX
+      name: updated.name,
+
+      power: cleanNumber(updated.power),     // ✅ FIX
+
+      violation: updated.violation?.join(',') || '',
+      handled: updated.handled || '',
+      notes: updated.notes || ''
+    })
+  });
 
   setPlayers(prev => {
     const exists = prev.find(p => p.governorId === updated.governorId);
@@ -558,7 +565,6 @@ await fetch('/api/violation-save', {
     );
   });
 };
-
   return (
     
     <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 sm:py-10">
