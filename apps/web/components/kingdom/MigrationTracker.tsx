@@ -854,7 +854,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                   return (
                   <tr
   key={player.governorId || player.name}
-  className={`relative z-0 border-b border-[var(--border)] hover:bg-[var(--background-secondary)]/50 transition-colors ${idx % 2 === 0 ? 'bg-[var(--background-secondary)]/30' : ''}`}
+  className={`relative z-0 border-b border-[var(--border)] hover:bg-[var(--background-secondary)]/50 transition-colors`}
 >
                     <td className={`px-3 py-2.5 text-xs font-mono text-center ${
   isDone ? 'text-[var(--text-muted)]' : 'text-[var(--text-muted)]'
@@ -970,7 +970,13 @@ setOpenMenu(
  {isAdmin &&
   openMenu?.type === 'violation' &&
   openMenu?.id === player.governorId && (
-   <div className="menu absolute z-[9999] bg-[var(--background-card)] mt-2 w-32 left-1/2 -translate-x-1/2 border border-[var(--border)] rounded-lg shadow-xl p-2 space-y-1">
+ <div
+  className="menu fixed z-[9999] bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-2xl p-2 space-y-1 w-32"
+  style={{
+    top: openMenu?.y,
+    left: openMenu?.x
+  }}
+>
       {VIOLATION_OPTIONS.map((v) => (
         <div
           key={v}
@@ -1026,17 +1032,15 @@ const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
 }`}>-</span>
 ) : (
 <span
-  className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${
-    isDone ? 'brightness-75' : ''
-  } ${
-    player.handled === 'Pending'
-      ? 'bg-yellow-500/10 border-yellow-500/30 text-yellow-400'
-      : player.handled === 'On wanted list'
-      ? 'bg-red-500/10 border-red-500/30 text-red-400'
-      : player.handled === 'Left'
-      ? 'bg-sky-500/10 border-sky-500/30 text-sky-400'
-      : 'bg-amber-500/10 border-amber-500/30 text-amber-400'
-  }`}
+className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${
+  player.handled === 'Pending'
+    ? 'bg-yellow-500/10 border-yellow-500/30 text-yellow-400'
+    : player.handled === 'On wanted list'
+    ? 'bg-red-500/10 border-red-500/30 text-red-400'
+    : player.handled === 'Left'
+    ? 'bg-sky-500/10 border-sky-500/30 text-sky-400'
+    : 'bg-amber-500/10 border-amber-500/30 text-amber-400'
+}`}
 >
   {player.handled}
 </span>
