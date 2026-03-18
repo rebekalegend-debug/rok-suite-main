@@ -115,7 +115,7 @@ const [allMembers, setAllMembers] = useState<any[]>([]);
   const [sortRules, setSortRules] = useState<SortRule[]>(DEFAULT_SORT_RULES);
 
   // Officer mode (can change handled status)
-
+const [prevNamesMap, setPrevNamesMap] = useState<Map<number, string>>(new Map());
   // Admin mode (can see sheet link) — admin also gets officer privileges
   const [isAdmin, setIsAdmin] = useState(false);
   const [showPasswordPrompt, setShowPasswordPrompt] = useState(false);
@@ -127,13 +127,14 @@ const fetchData = useCallback(async () => {
   setError(null);
   setPlayers([]);
   try {
- const [wantedPlayers, prevNamesMap, members] = await Promise.all([
+ const [wantedPlayers, prevMap, members] = await Promise.all([
   fetchMgeViolationsSheet(MGE_VIOLATION_SHEET_URL),
   fetchPrevNamesSheet(PREV_NAMES_SHEET_URL),
   fetchKingdomMembersSheet("https://docs.google.com/spreadsheets/d/1ZUf-qCCvZ5N6qU_hCNHXQ1z-6qxhn36PucYOxbaXIv0/export?format=csv&gid=693046633"),
 ]);
 
 setAllMembers(members);
+setPrevNamesMap(prevMap); // ✅ correct
 
 const merged: WantedPlayer[] = wantedPlayers.map((p: any) => ({
   governorId: p.governorId,
@@ -147,16 +148,15 @@ const merged: WantedPlayer[] = wantedPlayers.map((p: any) => ({
   handled: p.handled || 'No action',
   notes: p.notes || '',
 
-  // 🔥 THIS WAS MISSING → VERY IMPORTANT
   rowIndex: p.rowIndex,
 
   zero: p.zero || '',
   zeroed: p.zeroed || '',
   display: p.display !== false,
 
-  prevNames: prevNamesMap.get(p.governorId) || ""
+  // ✅ IMPORTANT FIX
+  prevNames: prevMap.get(p.governorId) || ""
 }));
-
    setPlayers([...merged]); // 🔥 FORCE NEW ARRAY
     setLastRefreshed(new Date());
 
