@@ -301,16 +301,29 @@ else {
     return name.includes(lower) || id.includes(lower);
   });
 
-const merged = matchedMembers
-  .map((m: any) => {
-    const id = Number(m.governorId ?? m.id);
-    return playerMap.get(id); // ✅ ONLY EXISTING
-  })
-  .filter(Boolean);
+const merged = matchedMembers.map((m: any) => {
+  const id = Number(m.governorId ?? m.id);
 
-// ✅ DO NOT ADD NEW PLAYERS
-list = [...players];
-}
+  // ✅ if exists → use real player
+  if (playerMap.has(id)) {
+    return playerMap.get(id);
+  }
+
+  // ✅ if not → return TEMP SEARCH RESULT (NOT saved)
+  return {
+    governorId: id,
+    name: m.name ?? m.player_name,
+    power: m.power ?? 0,
+    violation: [],
+    handled: 'No action',
+    notes: '',
+    display: true,
+    prevNames: ''
+  };
+});
+
+// ✅ IMPORTANT: DO NOT MERGE INTO PLAYERS
+list = merged;
 
 const filteredList = list.filter(p => {
 if (search.trim().length > 0) {
