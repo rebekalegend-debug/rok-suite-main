@@ -180,7 +180,7 @@ const merged: WantedPlayer[] = wantedPlayers.map((p: any) => ({
     setOpenMenu(null);
   };
 
-  window.addEventListener('click', close);
+  window.addEventListener('mousedown', close);
   return () => window.removeEventListener('click', close);
 }, []);
 
@@ -983,7 +983,7 @@ onClick={(e) => {
 {isAdmin &&
  openMenu?.type === 'handled' &&
  openMenu?.id === player.governorId && (
-  <div className="menu absolute z-[9999] bg-[var(--background-card)] mt-2 w-36 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
+  <div className="menu absolute z-[9999] pointer-events-auto bg-[var(--background-card)] mt-2 w-36 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
     {['No action', 'Pending', 'On wanted list', 'Left'].map((v) => (
       <div
         key={v}
