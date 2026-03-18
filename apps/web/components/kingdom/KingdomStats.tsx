@@ -84,58 +84,75 @@ const filtered = useMemo(() => {
 
 let data = [...members]
 
-if(search){
-const q = search.toLowerCase()
+// 🔍 SEARCH
+  if (search) {
+    const q = search.toLowerCase()
+    data = data.filter(m =>
+      m.name.toLowerCase().includes(q) ||
+      m.id.toString().includes(q)
+    )
+  }
 
-data = data.filter(m =>
-m.name.toLowerCase().includes(q) ||
-m.id.toString().includes(q)
-)
-}
+  // 🔥 FILTERS + SPECIAL SORT
+  if (filterMode === 'current') {
+    data = data.filter(m => !m.migratedOut)
+  }
 
-if(filterMode === 'current'){
-data = data.filter(m => !m.migratedOut)
-}
+  if (filterMode === 'in') {
+    data = data
+      .filter(m => m.migratedIn)
+      .sort((a, b) =>
+        new Date(b.migratedIn || 0).getTime() -
+        new Date(a.migratedIn || 0).getTime()
+      )
+    return data // 🚨 STOP HERE (override normal sort)
+  }
 
-if(filterMode === 'in'){
-data = data.filter(m => m.migratedIn)
-}
+  if (filterMode === 'out') {
+    data = data
+      .filter(m => m.migratedOut)
+      .sort((a, b) =>
+        new Date(b.migratedOut || 0).getTime() -
+        new Date(a.migratedOut || 0).getTime()
+      )
+    return data // 🚨 STOP HERE
+  }
 
-if(filterMode === 'out'){
-data = data.filter(m => m.migratedOut)
-}
+  // 🔄 DEFAULT SORT (for all / current)
+  data.sort((a, b) => {
 
-data.sort((a,b)=>{
+    let res = 0
 
-let res = 0
+    if (sortField === 'name') {
+      res = a.name.localeCompare(b.name)
+    }
 
-if(sortField === 'name'){
-res = a.name.localeCompare(b.name)
-}
+    if (sortField === 'id') {
+      res = Number(a.id) - Number(b.id)
+    }
 
-if(sortField === 'id'){
-res = Number(a.id) - Number(b.id)
-}
+    if (sortField === 'power') {
+      res = a.power - b.power
+    }
 
-if(sortField === 'power'){
-res = a.power - b.power
-}
+    if (sortField === 'in') {
+      res =
+        new Date(a.migratedIn || 0).getTime() -
+        new Date(b.migratedIn || 0).getTime()
+    }
 
-if(sortField === 'in'){
-res = new Date(a.migratedIn || 0).getTime() - new Date(b.migratedIn || 0).getTime()
-}
+    if (sortField === 'out') {
+      res =
+        new Date(a.migratedOut || 0).getTime() -
+        new Date(b.migratedOut || 0).getTime()
+    }
 
-if(sortField === 'out'){
-res = new Date(a.migratedOut || 0).getTime() - new Date(b.migratedOut || 0).getTime()
-}
+    return sortDir === 'asc' ? res : -res
+  })
 
-return sortDir === 'asc' ? res : -res
+  return data
 
-})
-
-return data
-
-},[members,search,filterMode,sortField,sortDir])
+}, [members, search, filterMode, sortField, sortDir])
 // ADD IT HERE ↓↓↓
 
 const dataUpdated = useMemo(() => {
@@ -311,7 +328,11 @@ color="yellow"
 />
 </div>
 
-<div onClick={()=>setFilterMode('in')} className="cursor-pointer">
+<div onClick={() => {
+  setFilterMode('in')
+  setSortField('in')
+  setSortDir('desc')
+}} className="cursor-pointer">
 <GlowCard
 title="Mig.in / Wake up / New acc (7d)"
 icon={Eye}
@@ -333,7 +354,11 @@ color="orange"
 />
 </div>
 
-<div onClick={()=>setFilterMode('out')} className="cursor-pointer">
+<div onClick={() => {
+  setFilterMode('out')
+  setSortField('out')
+  setSortDir('desc')
+}} className="cursor-pointer">
 
 <GlowCard
 title="Mig.out / Off map (1M)"
