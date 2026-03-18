@@ -58,9 +58,24 @@ const index = rows.findIndex(r => {
 
  // DELETE
 if (body.delete) {
-  if (index >= 0) {
-    rows.splice(index, 1);
-  }
+  const newRows = rows.filter(r => {
+    const rowId = String(r[1] ?? "")
+      .replace(/^'+/, "")
+      .replace(/[^0-9]/g, "");
+
+    return rowId !== idToFind;
+  });
+
+  await sheets.spreadsheets.values.update({
+    spreadsheetId,
+    range: "Violation!A2",
+    valueInputOption: "USER_ENTERED",
+    requestBody: {
+      values: newRows,
+    },
+  });
+
+  return Response.json({ success: true });
 }
 
 // UPDATE / ADD
