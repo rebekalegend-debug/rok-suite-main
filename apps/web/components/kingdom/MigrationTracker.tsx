@@ -108,7 +108,7 @@ const [openMenu, setOpenMenu] = useState<{
   id: number;
 } | null>(null);
   
-  const [handledFilter, setHandledFilter] = useState<'all' | 'No action' | 'Pending' | 'On wanted list' | 'Left'>('all');
+  const [filterMode, setFilterMode] = useState<'all' | 'violators' | 'wanted' | 'left'>('all');
 const [allMembers, setAllMembers] = useState<any[]>([]);
 
   // Sort state
@@ -240,7 +240,7 @@ const handleSort = (field: SortableField, multi: boolean) => {
  const resetFiltersAndSort = () => {
   setSortRules(DEFAULT_SORT_RULES);
   setReasonFilter(null);
-  setHandledFilter('all');
+  setFilterMode('all');
   setSearch('');
 };
 
@@ -330,23 +330,22 @@ const filtered = useMemo(() => {
 
     const handled = p.handled || 'No action';
 
-   if (!search && handledFilter !== 'all') {
+if (!search && filterMode !== 'all') {
 
-  // 🔥 VIOLATORS CARD (Pending)
-  if (handledFilter === 'Pending') {
-    if (!p.violation || p.violation.length === 0) return false;
+  // 🔥 VIOLATORS
+  if (filterMode === 'violators') {
+    if (!p.violation?.length) return false;
   }
 
-  // 🔴 ON WANTED LIST
-  else if (handledFilter === 'On wanted list') {
-    if (handled !== 'On wanted list') return false;
+  // 🔴 WANTED
+  else if (filterMode === 'wanted') {
+    if ((p.handled || 'No action') !== 'On wanted list') return false;
   }
 
   // 🔵 LEFT
-  else if (handledFilter === 'Left') {
-    if (handled !== 'Left') return false;
+  else if (filterMode === 'left') {
+    if ((p.handled || 'No action') !== 'Left') return false;
   }
-
 }
 
     return true;
@@ -409,10 +408,10 @@ for (const p of players) {
     const s = p.handled || 'No action';
     const power = p.power || 0;
 
-    if (s === 'Pending' || s === 'No action') {
-      pendingCount++;
-      pendingPower += power;
-    }
+  if (p.violation && p.violation.length > 0) {
+  pendingCount++;
+  pendingPower += power;
+}
 
     if (s === 'On wanted list') {
       zeroedCount++;
@@ -491,7 +490,7 @@ for (const p of players) {
   };
 
 const hasActiveFilters =
-  search || reasonFilter || handledFilter !== 'all'
+  search || reasonFilter || filterMode !== 'all'
   || JSON.stringify(sortRules) !== JSON.stringify(DEFAULT_SORT_RULES);
 
   // Sortable header helper
@@ -656,7 +655,7 @@ const savePlayer = async (player: any, updates: any) => {
             {/* ALL MEMBERS */}
         <div
  onClick={() => {
-  setHandledFilter('all');
+  setFilterMode('all');
 }}
   className="cursor-pointer rounded-xl border border-yellow-500/20 bg-yellow-500/5 p-4 hover:bg-yellow-500/10 transition shadow-lg shadow-yellow-500/20"
 >
@@ -676,9 +675,9 @@ const savePlayer = async (player: any, updates: any) => {
           
           {/* Pending */}
           <div
-  onClick={() => {
-  setHandledFilter('Pending');
-   
+onClick={() => {
+  setFilterMode('violators'); // keep if you want
+  setReasonFilter(null);       // optional
 }}
   className="cursor-pointer rounded-xl border border-orange-500/20 bg-orange-500/5 p-4 hover:bg-orange-500/10 transition shadow-lg shadow-orange-500/20"
 >
@@ -694,7 +693,7 @@ const savePlayer = async (player: any, updates: any) => {
          {/* On Wanted List */}
 <div
   onClick={() => {
-    setHandledFilter('On wanted list');
+    setFilterMode('wanted');
   }}
 className="cursor-pointer rounded-xl border border-red-500/20 bg-red-500/5 p-4 hover:bg-red-500/10 transition shadow-lg shadow-red-500/30"
   >
@@ -721,7 +720,7 @@ className="cursor-pointer rounded-xl border border-red-500/20 bg-red-500/5 p-4 h
           {/* Left Kingdom */}
           <div
   onClick={() => {
-  setHandledFilter('Left');
+  setFilterMode('Left');
    
 }}
 className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 hover:bg-sky-500/10 transition shadow-lg shadow-sky-500/20">
