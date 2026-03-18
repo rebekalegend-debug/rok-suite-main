@@ -91,15 +91,7 @@ const touchStartY = useRef<number | null>(null);
      //   { labelKey: 'wanted', href: '/kingdom/wanted', icon: <Crosshair size={20} />, hoverColor: 'group-hover:text-red-500', hoverBg: 'hover:bg-red-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-red-500 to-rose-500' },
  // {labelKey: 'kvkMap',href: '/kvk-map',icon: <Map size={20} className="text-yellow-500" />, hoverColor: 'group-hover:text-yellow-500',hoverBg: 'hover:bg-yellow-500/10',activeColor: 'text-white',activeBg: 'bg-gradient-to-r from-yellow-500 to-amber-500'},
   
-   {
-  labelKey: 'kingdomStats',
-  href: '/kingdom-stats',
-  icon: <Radar size={20} className="text-green-500" />,
-  hoverColor: 'group-hover:text-green-500',
-  hoverBg: 'hover:bg-green-500/10',
-  activeColor: 'text-white',
-  activeBg: 'bg-gradient-to-r from-green-500 to-emerald-500'
-},
+  
         {
   labelKey: 'rokMail',
   href: '/rok-mail',
@@ -113,10 +105,18 @@ const touchStartY = useRef<number | null>(null);
     },
 
 {
-  titleKey: 'breakers',
+  titleKey: 'Tracking',
   titleColor: 'text-red-500',
   items: [
-   
+    {
+  labelKey: 'kingdomStats',
+  href: '/kingdom-stats',
+  icon: <Radar size={20} className="text-green-500" />,
+  hoverColor: 'group-hover:text-green-500',
+  hoverBg: 'hover:bg-green-500/10',
+  activeColor: 'text-white',
+  activeBg: 'bg-gradient-to-r from-green-500 to-emerald-500'
+},
         { 
       labelKey: 'wanted',
       href: '/kingdom/wanted',
