@@ -276,76 +276,72 @@ const visiblePlayers = useMemo(
   [players]
 );
 const filtered = useMemo(() => {
+  let list: WantedPlayer[] = [];
 
+  // ✅ NORMAL USERS
+  if (!isAdmin) {
+    list = [...players];
+  }
 
-let list: WantedPlayer[] = [];
+  // ✅ ADMIN NO SEARCH
+  else if (!search) {
+    list = [...players];
+  }
 
-// ✅ NORMAL USERS → ONLY SHEET
-if (!isAdmin) {
-  list = players.length ? [...players] : [];
-}
-// ✅ ADMIN NO SEARCH → ONLY SHEET
-else if (!search) {
-  list = players;
-}
+  // ✅ ADMIN SEARCH
+  else {
+    const lower = search.toLowerCase();
 
-// ✅ ADMIN WITH SEARCH → SEARCH ALL MEMBERS
-else {
-  const lower = search.toLowerCase();
+    const playerMap = new Map(players.map(p => [p.governorId, p]));
 
-  const playerMap = new Map(players.map(p => [p.governorId, p]));
+    const matchedMembers = allMembers.filter((m: any) => {
+      const name = (m.name || m.player_name || "").toLowerCase();
+      const id = String((m.governorId ?? m.id) || "");
+      return name.includes(lower) || id.includes(lower);
+    });
 
-  const matchedMembers = allMembers.filter((m: any) => {
-    const name = (m.name || m.player_name || "").toLowerCase();
-    const id = String((m.governorId ?? m.id) || "");
-    return name.includes(lower) || id.includes(lower);
+    list = matchedMembers.map((m: any) => {
+      const id = Number(m.governorId ?? m.id);
+
+      if (playerMap.has(id)) {
+        return playerMap.get(id)!;
+      }
+
+      return {
+        governorId: id,
+        name: m.name ?? m.player_name,
+        power: m.power ?? 0,
+        violation: [],
+        handled: 'No action',
+        notes: '',
+        display: true,
+        prevNames: ''
+      };
+    });
+  }
+
+  // ✅ FILTER (OUTSIDE CONDITIONS)
+  const filteredList = list.filter(p => {
+    if (search.trim().length > 0) {
+      if (!matchesSearch(search, p.name, p.governorId)) return false;
+    }
+
+    if (!search && reasonFilter && !p.violation?.includes(reasonFilter)) return false;
+
+    const handled = p.handled || 'No action';
+
+    if (!search && handledFilter !== 'all') {
+      if (handledFilter === 'Pending') {
+        if (handled !== 'No action') return false;
+      } else {
+        if (handled !== handledFilter) return false;
+      }
+    }
+
+    return true;
   });
 
-const merged = matchedMembers.map((m: any) => {
-  const id = Number(m.governorId ?? m.id);
-
-  // ✅ if exists → use real player
-  if (playerMap.has(id)) {
-    return playerMap.get(id);
-  }
-
-  // ✅ if not → return TEMP SEARCH RESULT (NOT saved)
-  return {
-    governorId: id,
-    name: m.name ?? m.player_name,
-    power: m.power ?? 0,
-    violation: [],
-    handled: 'No action',
-    notes: '',
-    display: true,
-    prevNames: ''
-  };
-});
-
-// ✅ IMPORTANT: DO NOT MERGE INTO PLAYERS
-list = merged;
-
-const filteredList = list.filter(p => {
-if (search.trim().length > 0) {
-  const matches = matchesSearch(search, p.name, p.governorId);
-  if (!matches) return false;
-}
-
-  if (!search && reasonFilter && !p.violation?.includes(reasonFilter)) return false;
-
-  const handled = p.handled || 'No action';
-
-  if (!search && handledFilter !== 'all') {
-    if (handledFilter === 'Pending') {
-      if (handled !== 'No action') return false;
-    } else {
-      if (handled !== handledFilter) return false;
-    }
-  }
-
-  return true;
-});
-
+  // ✅ SORT
   return [...filteredList].sort((a, b) => {
     for (const rule of sortRules) {
       let aVal: any;
@@ -362,20 +358,20 @@ if (search.trim().length > 0) {
           bVal = b.governorId || 0;
           break;
 
-       case 'power':
-  aVal = a.power || 0;
-  bVal = b.power || 0;
-  break;
+        case 'power':
+          aVal = a.power || 0;
+          bVal = b.power || 0;
+          break;
 
         case 'handled':
           aVal = handledOrder(a.handled || 'No action');
           bVal = handledOrder(b.handled || 'No action');
           break;
 
-       case 'reason':
-  aVal = violationScore(a.violation);
-  bVal = violationScore(b.violation);
-  break;
+        case 'reason':
+          aVal = violationScore(a.violation);
+          bVal = violationScore(b.violation);
+          break;
 
         default:
           continue;
@@ -387,6 +383,7 @@ if (search.trim().length > 0) {
 
     return 0;
   });
+
 }, [players, allMembers, search, reasonFilter, handledFilter, sortRules, isAdmin]);
 
 
