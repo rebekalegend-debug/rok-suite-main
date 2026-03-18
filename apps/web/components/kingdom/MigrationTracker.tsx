@@ -141,9 +141,24 @@ const merged: WantedPlayer[] = wantedPlayers.map((p: any) => ({
   name: p.name,
   power: p.power || 0,
 
-  violation: typeof p.violation === "string"
-    ? p.violation.split(",").map((v: string) => v.trim()).filter(Boolean)
-    : p.violation || [],
+violation: (() => {
+  if (!p.violation) return [];
+
+  if (typeof p.violation === "string") {
+    return p.violation
+      .split(",")
+      .map((v: string) => v.trim())
+      .filter(v => v && v !== "-" && v.toLowerCase() !== "no action");
+  }
+
+  if (Array.isArray(p.violation)) {
+    return p.violation.filter(
+      (v: string) => v && v !== "-" && v.toLowerCase() !== "no action"
+    );
+  }
+
+  return [];
+})(),
 
   handled: p.handled || 'No action',
   notes: p.notes || '',
