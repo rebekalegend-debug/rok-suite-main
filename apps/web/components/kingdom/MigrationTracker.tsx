@@ -854,18 +854,20 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                   return (
                   <tr
   key={player.governorId || player.name}
-  className={`border-b border-[var(--border)] hover:bg-[var(--background-secondary)]/50 transition-colors ${idx % 2 === 0 ? 'bg-[var(--background-secondary)]/30' : ''} ${isDone ? 'opacity-50' : ''}`}
+  className={`border-b border-[var(--border)] hover:bg-[var(--background-secondary)]/50 transition-colors ${idx % 2 === 0 ? 'bg-[var(--background-secondary)]/30' : ''} ${isDone ? 'bg-[rgba(100,100,100,0.15)]' : ''}`}
 >
-                     <td className="px-3 py-2.5 text-xs text-[var(--text-muted)] font-mono text-center">
+                    <td className={`px-3 py-2.5 text-xs font-mono text-center ${
+  isDone ? 'text-[var(--text-muted)]' : 'text-[var(--text-muted)]'
+}`}>
   {idx + 1}
 </td>
               <td className="px-3 py-2.5 text-center">
   <div className="flex items-center gap-1 justify-center">
-    <span className={`font-medium text-sm ${
-      isDone
-        ? 'line-through text-[var(--text-muted)]'
-        : 'text-[var(--foreground)]'
-    }`}>
+ <span className={`font-medium text-sm ${
+ isDone
+  ? 'line-through text-[var(--text-muted)] opacity-80'
+  : 'text-[var(--foreground)]'
+}`}>
       {player.name}
     </span>
 
@@ -896,13 +898,19 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
     )}
   </div>
 </td>
-                    <td className="px-3 py-2.5 font-mono text-xs text-center">
+                   <td className={`px-3 py-2.5 font-mono text-xs text-center ${
+  isDone ? 'text-[var(--text-muted)]' : ''
+}`}>
   {player.governorId ? (
     <a
       href={`https://app.rokstats.online/governor/${player.governorId}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-cyan-400/80 hover:text-cyan-300 hover:underline"
+    className={`${
+  isDone
+    ? 'text-[var(--text-muted)]'
+    : 'text-cyan-400/80 hover:text-cyan-300 hover:underline'
+}`}
     >
       {player.governorId}
     </a>
@@ -910,7 +918,9 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
     <span className="text-[var(--text-muted)]">-</span>
   )}
 </td>
-                 <td className="px-3 py-2.5 text-center font-mono text-sm text-[var(--foreground)]">
+                <td className={`px-3 py-2.5 text-center font-mono text-sm ${
+  isDone ? 'text-[var(--text-muted)]' : 'text-[var(--foreground)]'
+}`}>
   {formatPower(player.power)}
 </td>
                     
@@ -1011,19 +1021,25 @@ onClick={(e) => {
   className="cursor-pointer text-xs"
 >
 {!player.handled || player.handled === 'No action' ? (
-  <span className="text-xs text-[var(--text-muted)]">-</span>
+  <span className={`text-xs ${
+  isDone ? 'text-[var(--text-muted)]' : 'text-[var(--text-muted)]'
+}`}>-</span>
 ) : (
-  <span className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${
+<span
+  className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${
+    isDone ? 'brightness-75' : ''
+  } ${
     player.handled === 'Pending'
       ? 'bg-yellow-500/10 border-yellow-500/30 text-yellow-400'
       : player.handled === 'On wanted list'
       ? 'bg-red-500/10 border-red-500/30 text-red-400'
       : player.handled === 'Left'
       ? 'bg-sky-500/10 border-sky-500/30 text-sky-400'
-      : ''
-  }`}>
-    {player.handled}
-  </span>
+      : 'bg-amber-500/10 border-amber-500/30 text-amber-400'
+  }`}
+>
+  {player.handled}
+</span>
 )}
 </div>
 
@@ -1096,7 +1112,9 @@ onClick={(e) => {
   className="bg-[var(--background-secondary)] border border-[var(--border)] text-xs rounded px-2 py-1 w-32"
 />
   ) : (
-    <span className="text-xs text-[var(--text-muted)]">
+    <span className={`text-xs ${
+  isDone ? 'text-[var(--text-muted)]' : 'text-[var(--text-muted)]'
+}`}>
       {player.notes || '-'}
     </span>
   )}
@@ -1145,7 +1163,7 @@ onClick={(e) => {
               return (
                 <div
                   key={player.governorId || player.name}
-                  className={`rounded-xl border border-[var(--border)] p-4 space-y-3 ${isDone ? 'opacity-50' : ''}`}
+                  className={`rounded-xl border border-[var(--border)] p-4 space-y-3 ${isDone ? 'bg-[rgba(100,100,100,0.15)]' : ''}`}
                 >
                   {/* Top row: name + handled badge */}
                   <div className="flex items-start justify-between gap-2">
