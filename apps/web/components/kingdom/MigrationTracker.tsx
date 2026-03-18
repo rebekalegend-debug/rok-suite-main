@@ -195,7 +195,7 @@ violation: (() => {
     setOpenMenu(null);
   };
 
-  window.addEventListener('mousedown', close);
+  window.addEventListener('click', close);
   return () => window.removeEventListener('click', close);
 }, []);
 
@@ -853,17 +853,21 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                   return (
                     <tr
                       key={player.governorId || player.name}
-                      className={`border-b border-[var(--border)] hover:bg-[var(--background-secondary)]/50 transition-colors ${idx % 2 === 0 ? 'bg-[var(--background-secondary)]/30' : ''} ${isDone ? 'opacity-50' : ''}`}
+  className={`border-b border-[var(--border)] hover:bg-[var(--background-secondary)]/50 transition-colors ${idx % 2 === 0 ? 'bg-[var(--background-secondary)]/30' : ''}`}
                     >
 
                      <td className="px-3 py-2.5 text-xs text-[var(--text-muted)] font-mono text-center">
   {idx + 1}
 </td>
-                      <td className="px-3 py-2.5 text-center">
-                    <div className="flex items-center gap-1">
-  <span className={`font-medium text-sm ${isDone ? 'line-through text-[var(--text-muted)]' : 'text-[var(--foreground)]'}`}>
-    {player.name}
-  </span>
+                     <td className={`px-3 py-2.5 text-center ${
+  isDone ? 'opacity-60' : ''
+}`}>
+  <div className="flex items-center gap-1">
+    <span className={`font-medium text-sm ${
+      isDone ? 'line-through text-[var(--text-muted)]' : 'text-[var(--foreground)]'
+    }`}>
+      {player.name}
+    </span>
 
   {duplicateNames.has((player.name || '').toLowerCase().trim()) && (
     <span title="Duplicate name detected">
