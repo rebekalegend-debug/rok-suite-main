@@ -984,6 +984,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 
                      
 <td className="px-3 py-2.5 text-center relative">
+  <div className="relative z-10">
 <div
 onClick={(e) => {
   e.stopPropagation();
@@ -1045,6 +1046,7 @@ onClick={(e) => {
 })}
   </div>
 )}
+      </div>
 </td>
 
 
