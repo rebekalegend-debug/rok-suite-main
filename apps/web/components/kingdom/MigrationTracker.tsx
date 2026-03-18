@@ -330,13 +330,24 @@ const filtered = useMemo(() => {
 
     const handled = p.handled || 'No action';
 
-    if (!search && handledFilter !== 'all') {
-      if (handledFilter === 'Pending') {
-        if (handled !== 'No action') return false;
-      } else {
-        if (handled !== handledFilter) return false;
-      }
-    }
+   if (!search && handledFilter !== 'all') {
+
+  // 🔥 VIOLATORS CARD (Pending)
+  if (handledFilter === 'Pending') {
+    if (!p.violation || p.violation.length === 0) return false;
+  }
+
+  // 🔴 ON WANTED LIST
+  else if (handledFilter === 'On wanted list') {
+    if (handled !== 'On wanted list') return false;
+  }
+
+  // 🔵 LEFT
+  else if (handledFilter === 'Left') {
+    if (handled !== 'Left') return false;
+  }
+
+}
 
     return true;
   });
@@ -976,7 +987,7 @@ onClick={(e) => {
     : 'bg-amber-500/10 border-amber-500/30 text-amber-400'
 }`}
 >
-  {player.handled || 'No action'}
+  {!player.handled || player.handled === 'No action' ? '-' : player.handled}
 </span>
 </div>
 
@@ -984,19 +995,33 @@ onClick={(e) => {
  openMenu?.type === 'handled' &&
  openMenu?.id === player.governorId && (
   <div className="menu absolute z-[9999] pointer-events-auto bg-[var(--background-card)] mt-2 w-36 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
-    {['No action', 'Pending', 'On wanted list', 'Left'].map((v) => (
-      <div
-        key={v}
-        onClick={(e) => {
-          e.stopPropagation(); // IMPORTANT
-          savePlayer(player, { handled: v });
-          setOpenMenu(null);
-        }}
-        className="cursor-pointer px-2 py-1 rounded text-xs hover:bg-[var(--background-secondary)]"
-      >
-        {v}
-      </div>
-    ))}
+   {['No action', 'Pending', 'On wanted list', 'Left'].map((v) => {
+  const active = (player.handled || 'No action') === v;
+
+  return (
+    <div
+      key={v}
+      onClick={(e) => {
+        e.stopPropagation();
+        savePlayer(player, { handled: v });
+        setOpenMenu(null);
+      }}
+      className={`cursor-pointer px-2 py-1 rounded text-xs ${
+        active
+          ? v === 'Pending'
+            ? 'bg-yellow-500/20 text-yellow-300'
+            : v === 'On wanted list'
+            ? 'bg-red-500/20 text-red-300'
+            : v === 'Left'
+            ? 'bg-sky-500/20 text-sky-300'
+            : 'bg-amber-500/20 text-amber-300'
+          : 'hover:bg-[var(--background-secondary)] text-[var(--text-muted)]'
+      }`}
+    >
+      {v}
+    </div>
+  );
+})}
   </div>
 )}
 </td>
