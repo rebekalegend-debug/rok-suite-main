@@ -106,6 +106,8 @@ export default function WantedList() {
 const [openMenu, setOpenMenu] = useState<{
   type: 'violation' | 'handled';
   id: number;
+  x: number;
+  y: number;
 } | null>(null);
   
   const [filterMode, setFilterMode] = useState<'all' | 'violators' | 'wanted' | 'left'>('all');
@@ -620,8 +622,7 @@ const savePlayer = async (player: any, updates: any) => {
           <button
             onClick={handleRefresh}
             disabled={isRefreshing}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 transition-colors disabled:opacity-50"
-          >
+className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 transition-colors disabled:bg-gray-800/40 disabled:text-gray-500"          >
             <RefreshCw size={16} className={isRefreshing ? 'animate-spin' : ''} />
             <span className="hidden sm:inline">{isRefreshing ? 'Refreshing...' : 'Refresh'}</span>
           </button>
@@ -851,56 +852,50 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                   const isDone = handled !== 'Pending' && handled !== 'No action';
                 
                   return (
-                    <tr
-                      key={player.governorId || player.name}
-  className={`border-b border-[var(--border)] hover:bg-[var(--background-secondary)]/50 transition-colors ${idx % 2 === 0 ? 'bg-[var(--background-secondary)]/30' : ''}`}
-                    >
-
+                  <tr
+  key={player.governorId || player.name}
+  className={`border-b border-[var(--border)] hover:bg-[var(--background-secondary)]/50 transition-colors ${idx % 2 === 0 ? 'bg-[var(--background-secondary)]/30' : ''} ${isDone ? 'opacity-50' : ''}`}
+>
                      <td className="px-3 py-2.5 text-xs text-[var(--text-muted)] font-mono text-center">
   {idx + 1}
 </td>
-                     <td className={`px-3 py-2.5 text-center ${
-  isDone ? 'opacity-60' : ''
-}`}>
-  <div className="flex items-center gap-1">
+              <td className="px-3 py-2.5 text-center">
+  <div className="flex items-center gap-1 justify-center">
     <span className={`font-medium text-sm ${
-      isDone ? 'line-through text-[var(--text-muted)]' : 'text-[var(--foreground)]'
+      isDone
+        ? 'line-through text-[var(--text-muted)]'
+        : 'text-[var(--foreground)]'
     }`}>
       {player.name}
     </span>
 
-  {duplicateNames.has((player.name || '').toLowerCase().trim()) && (
-    <span title="Duplicate name detected">
-      <AlertCircle
-        size={14}
-        className="text-red-500 ml-1"
-      />
-    </span>
-  )}
+    {duplicateNames.has((player.name || '').toLowerCase().trim()) && (
+      <AlertCircle size={14} className="text-red-500 ml-1" />
+    )}
 
-  {player.prevNames?.trim() && (
-    <div className="relative group inline-flex">
-      <button className="text-[var(--text-muted)] hover:text-[var(--foreground)]">
-        <History size={12} />
-      </button>
+    {player.prevNames?.trim() && (
+      <div className="relative group inline-flex">
+        <button className="text-[var(--text-muted)] hover:text-[var(--foreground)]">
+          <History size={12} />
+        </button>
 
-      <div className="absolute left-5 top-4 hidden group-hover:block z-[9999] pointer-events-none">
-        <div className="bg-[var(--background-card)] border border-[var(--border)] rounded-lg px-3 py-2 shadow-lg text-xs whitespace-nowrap">
-          <div className="font-semibold text-[var(--text-secondary)] mb-1">
-            {player.prevNames.split(',').length} previous names
-          </div>
+        <div className="absolute left-5 top-4 hidden group-hover:block z-[9999] pointer-events-none">
+          <div className="bg-[var(--background-card)] border border-[var(--border)] rounded-lg px-3 py-2 shadow-lg text-xs whitespace-nowrap">
+            <div className="font-semibold text-[var(--text-secondary)] mb-1">
+              {player.prevNames.split(',').length} previous names
+            </div>
 
-          <div className="space-y-0.5 text-[var(--text-muted)]">
-            {player.prevNames.split(',').map((n, i) => (
-              <div key={i}>{n.trim()}</div>
-            ))}
+            <div className="space-y-0.5 text-[var(--text-muted)]">
+              {player.prevNames.split(',').map((n, i) => (
+                <div key={i}>{n.trim()}</div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  )}
-</div>
-                      </td>
+    )}
+  </div>
+</td>
                     <td className="px-3 py-2.5 font-mono text-xs text-center">
   {player.governorId ? (
     <a
@@ -925,11 +920,18 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 <div
   onClick={(e) => {
     e.stopPropagation();
-    setOpenMenu(
-      openMenu?.type === 'violation' && openMenu?.id === player.governorId
-        ? null
-        : { type: 'violation', id: player.governorId }
-    );
+  const rect = (e.target as HTMLElement).getBoundingClientRect();
+
+setOpenMenu(
+  openMenu?.type === 'violation' && openMenu?.id === player.governorId
+    ? null
+    : {
+        type: 'violation',
+        id: player.governorId,
+        x: rect.left,
+        y: rect.bottom
+      }
+);
   }}
   className="cursor-pointer flex flex-wrap justify-center gap-1 min-h-[18px]"
 >
@@ -992,10 +994,18 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 <div
 onClick={(e) => {
   e.stopPropagation();
+
+  const rect = (e.target as HTMLElement).getBoundingClientRect();
+
   setOpenMenu(
     openMenu?.type === 'handled' && openMenu?.id === player.governorId
       ? null
-      : { type: 'handled', id: player.governorId }
+      : {
+          type: 'handled',
+          id: player.governorId,
+          x: rect.left,
+          y: rect.bottom
+        }
   );
 }}
   className="cursor-pointer text-xs"
@@ -1020,7 +1030,13 @@ onClick={(e) => {
 {isAdmin &&
  openMenu?.type === 'handled' &&
  openMenu?.id === player.governorId && (
-  <div className="menu absolute z-[9999] pointer-events-auto bg-[var(--background-card)] mt-2 w-36 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
+ <div
+  className="menu fixed z-[9999] pointer-events-auto bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1 w-36"
+ style={{
+  top: openMenu?.y,
+  left: openMenu?.x
+}}
+>
    {['No action', 'Pending', 'On wanted list', 'Left'].map((v) => {
   const active = (player.handled || 'No action') === v;
 
