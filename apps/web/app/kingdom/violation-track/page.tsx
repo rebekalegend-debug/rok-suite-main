@@ -3,7 +3,7 @@
 import { AppSidebar } from '@/components/AppSidebar';
 import MigrationTracker from '@/components/kingdom/MigrationTracker';
 
-export default function MigrationTrackerPage() {
+export default function ViolationTrackPage() {
   return (
     <AppSidebar>
       <MigrationTracker />
