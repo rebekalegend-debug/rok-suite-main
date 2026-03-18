@@ -264,82 +264,138 @@ export async function fetchPrevNamesSheet(url: string): Promise<Map<number,strin
 }
 
 
-
 export async function fetchMgeViolationsSheet(url: string) {
+  console.log("=== FETCH VIOLATION SHEET START ===");
+
   const response = await fetch(url);
-  if (!response.ok) throw new Error(`Failed to fetch sheet: ${response.status}`);
+  console.log("Fetch status:", response.status);
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch sheet: ${response.status}`);
+  }
 
   const text = await response.text();
+  console.log("RAW CSV TEXT (first 500 chars):", text.slice(0, 500));
+
   const { headers, rows } = parseCSV(text);
 
-const clean = (str: string) =>
-  (str || "")
-    .replace(/^\uFEFF/, "") // 🔥 remove BOM at start
-    .replace(/\uFEFF/g, "") // remove any BOM anywhere
-    .trim()
-    .toLowerCase();
+  console.log("RAW HEADERS:", headers);
+  console.log("ROWS COUNT:", rows.length);
 
-const headerMap = headers.map(h => clean(h));
+  // 🔥 CLEAN FUNCTION (BOM + CR + spaces)
+  const clean = (str: string) =>
+    (str || "")
+      .replace(/^\uFEFF/, "")
+      .replace(/\uFEFF/g, "")
+      .replace(/\r/g, "") // VERY IMPORTANT
+      .trim()
+      .toLowerCase();
 
-// 🔥 DEBUG — run once
-console.log("RAW HEADERS:", headers);
-console.log("CLEAN HEADERS:", headerMap);
+  const headerMap = headers.map(h => clean(h));
 
-const idx = (name: string) =>
-  headerMap.findIndex(h => h === name.toLowerCase());
+  console.log("CLEAN HEADERS:", headerMap);
 
-  const iName = idx('name');
-  const iGovId = idx('id');
-  const iPower = idx('power');
-  const iViolation = idx('violation');
-  const iHandled = idx('handled');
-  const iNotes = idx('notes');
+  // 🔥 PRINT CHAR CODES (to detect hidden chars)
+  headers.forEach((h, i) => {
+    console.log(
+      `HEADER[${i}] RAW: [${h}] CLEAN: [${clean(h)}] CODES:`,
+      h.split("").map(c => c.charCodeAt(0))
+    );
+  });
 
+  const idx = (name: string) => {
+    const index = headerMap.findIndex(h => h === name.toLowerCase());
+    console.log(`Index for "${name}":`, index);
+    return index;
+  };
+
+  const iName = idx("name");
+  const iGovId = idx("id");
+  const iPower = idx("power");
+  const iViolation = idx("violation");
+  const iHandled = idx("handled");
+  const iNotes = idx("notes");
+
+  // 🔴 HARD FAIL ONLY FOR CRITICAL FIELDS
   if (iGovId === -1 || iName === -1) {
+    console.error("❌ HEADER ERROR");
+    console.error("Expected: name, id");
+    console.error("Got:", headerMap);
     throw new Error("Sheet columns mismatch. Check header names.");
   }
 
-  return rows
-    // ✅ remove empty rows
-    .filter(cols => cols && cols.some(c => c && c.trim() !== ""))
+  // 🔥 SAFE ACCESS FUNCTION
+  const get = (cols: string[], i: number) =>
+    i !== -1 ? (cols[i] || "").trim() : "";
+
+  const parsed = rows
+    .filter((cols, rowIndex) => {
+      const valid = cols && cols.some(c => c && c.trim() !== "");
+      if (!valid) {
+        console.warn(`Skipping empty row ${rowIndex + 2}`, cols);
+      }
+      return valid;
+    })
 
     .map((cols, i) => {
+      console.log(`\n--- ROW ${i + 2} RAW ---`, cols);
 
-      const name = (cols[iName] || '').trim();
-      const governorId = Number(cols[iGovId]) || 0;
+      // 🔥 NORMALIZE LENGTH (VERY IMPORTANT)
+      const fixed = [...cols];
+      while (fixed.length < headers.length) {
+        fixed.push("");
+      }
 
-      // 🔥 CRITICAL → skip broken rows
-      if (!name && !governorId) return null;
+      console.log(`ROW ${i + 2} NORMALIZED:`, fixed);
 
-      const violationRaw = (cols[iViolation] || '').trim();
-      const handledRaw = (cols[iHandled] || '').trim();
-      const notesRaw = (cols[iNotes] || '').trim();
+      const name = get(fixed, iName);
+      const governorId = Number(get(fixed, iGovId)) || 0;
+
+      if (!name && !governorId) {
+        console.warn(`Skipping invalid row ${i + 2}`, fixed);
+        return null;
+      }
+
+      const violationRaw = get(fixed, iViolation);
+      const handledRaw = get(fixed, iHandled);
+      const notesRaw = get(fixed, iNotes);
+
+      console.log(`ROW ${i + 2} PARSED VALUES:`, {
+        name,
+        governorId,
+        violationRaw,
+        handledRaw,
+        notesRaw
+      });
 
       return {
         governorId,
         name,
-        power: Number(cols[iPower]) || 0,
+        power: Number(get(fixed, iPower)) || 0,
 
         violation: violationRaw
-          ? violationRaw.split(',').map(v => v.trim()).filter(Boolean)
+          ? violationRaw.split(",").map(v => v.trim()).filter(Boolean)
           : [],
 
-        handled: handledRaw || 'No action',
-        notes: notesRaw || '',
+        handled: handledRaw || "No action",
+        notes: notesRaw || "",
 
-        rowIndex: i + 2, // 🔥 IMPORTANT for saving/deleting
+        rowIndex: i + 2,
 
-        zero: '',
-        zeroed: '',
+        zero: "",
+        zeroed: "",
         display: true,
-        prevNames: '',
+        prevNames: ""
       };
     })
 
-    // ✅ remove null rows
     .filter(Boolean);
-}
 
+  console.log("FINAL PARSED PLAYERS:", parsed);
+  console.log("=== FETCH COMPLETE ===");
+
+  return parsed;
+}
 
 export async function fetchWantedSheet(url: string): Promise<WantedPlayer[]> {
   const response = await fetch(url);
