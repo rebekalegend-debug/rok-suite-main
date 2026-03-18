@@ -37,7 +37,12 @@ export async function POST(req: Request) {
 
   const rows = res.data.values || [];
 
-  const index = body.rowIndex ? body.rowIndex - 2 : -1;
+ const idToFind = toCleanStringNumber(body.id);
+
+const index = rows.findIndex(r => {
+  const rowId = String(r[1] ?? "").replace(/^'+/, "").replace(/[^0-9]/g, "");
+  return rowId === idToFind;
+});
 
   // ✅ CLEAN + NORMALIZE ROW
   const newRow = [
@@ -52,9 +57,9 @@ export async function POST(req: Request) {
   ];
 
   // DELETE
-  if (body.delete) {
-    if (index >= 0) rows.splice(index, 1);
-  }
+ if (body.delete) {
+  if (index >= 0) rows.splice(index, 1);
+}}
 
   // UPDATE
   else if (index >= 0) {
