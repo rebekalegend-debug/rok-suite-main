@@ -995,18 +995,21 @@ onClick={(e) => {
 }}
   className="cursor-pointer text-xs"
 >
-<span className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${
-  player.handled === 'Pending'
-    ? 'bg-yellow-500/10 border-yellow-500/30 text-yellow-400'
-    : player.handled === 'On wanted list'
-    ? 'bg-red-500/10 border-red-500/30 text-red-400'
-    : player.handled === 'Left'
-    ? 'bg-sky-500/10 border-sky-500/30 text-sky-400'
-    : 'bg-amber-500/10 border-amber-500/30 text-amber-400'
-}`}
->
-  {!player.handled || player.handled === 'No action' ? '-' : player.handled}
-</span>
+{!player.handled || player.handled === 'No action' ? (
+  <span className="text-xs text-[var(--text-muted)]">-</span>
+) : (
+  <span className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${
+    player.handled === 'Pending'
+      ? 'bg-yellow-500/10 border-yellow-500/30 text-yellow-400'
+      : player.handled === 'On wanted list'
+      ? 'bg-red-500/10 border-red-500/30 text-red-400'
+      : player.handled === 'Left'
+      ? 'bg-sky-500/10 border-sky-500/30 text-sky-400'
+      : ''
+  }`}>
+    {player.handled}
+  </span>
+)}
 </div>
 
 {isAdmin &&
