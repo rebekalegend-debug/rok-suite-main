@@ -394,7 +394,7 @@ const filtered = useMemo(() => {
   let leftCount = 0;
   let toZeroCount = 0, toZeroPower = 0;
 
-  for (const p of filtered) {
+for (const p of players) {
     const s = p.handled || 'No action';
     const power = p.power || 0;
 
@@ -417,7 +417,7 @@ const filtered = useMemo(() => {
   }
 
   return {
-    total: filtered.length,
+    total: players.length,
     pendingCount,
     pendingPower,
     zeroedCount,
@@ -657,7 +657,7 @@ const savePlayer = async (player: any, updates: any) => {
             </div>
             <p className="text-2xl font-bold text-[var(--foreground)]">{stats.total}</p>
             <p className="text-sm font-semibold text-[var(--text-secondary)] mt-1">{formatTotalPower(
-  visiblePlayers.reduce((sum, p) => sum + (p.power || 0), 0)
+  players.reduce((sum, p) => sum + (p.power || 0), 0)
 )}</p>
             <p className="text-[10px] text-[var(--text-muted)]">total power</p>
           </div>
