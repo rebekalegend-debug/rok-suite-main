@@ -394,7 +394,7 @@ if (!search && filterMode !== 'all') {
     return 0;
   });
 
-}, [players, allMembers, prevNamesMap, search, reasonFilter, handledFilter, sortRules, isAdmin]);
+}, [players, allMembers, prevNamesMap, search, reasonFilter, filterMode, sortRules, isAdmin]);
 
 
   
