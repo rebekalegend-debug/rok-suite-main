@@ -16,17 +16,17 @@ export async function POST(req: Request) {
 
   const range = "Violation!A2:F";
 
-  // 🔥 CLEAN HELPERS (STRICT)
+  // 🔥 CLEAN HELPERS
   const stripQuote = (v: any) =>
     String(v ?? "").replace(/^'+/, "").trim();
 
-  const toNumber = (v: any) => {
-    const cleaned = stripQuote(v)
-      .replace(/[, ]/g, "")     // remove commas/spaces
-      .replace(/[^0-9]/g, "");  // keep only digits
+  const toCleanStringNumber = (v: any) => {
+    const cleaned = String(v ?? "")
+      .replace(/^'+/, "")
+      .replace(/[, ]/g, "")
+      .replace(/[^0-9]/g, "");
 
-    const n = Number(cleaned);
-    return Number.isFinite(n) ? n : 0;
+    return cleaned || "";
   };
 
   // 📥 read existing rows
@@ -43,8 +43,8 @@ export async function POST(req: Request) {
   const newRow = [
     stripQuote(body.name),
 
-    toNumber(body.id),     // ✅ NO ' EVER
-    toNumber(body.power),  // ✅ NO ' EVER
+    toCleanStringNumber(body.id),     // ✅ ID (NO ')
+    toCleanStringNumber(body.power),  // ✅ POWER (NO ')
 
     stripQuote(body.violation),
     stripQuote(body.handled),
