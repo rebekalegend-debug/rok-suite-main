@@ -1027,17 +1027,17 @@ onClick={(e) => {
         savePlayer(player, { handled: v });
         setOpenMenu(null);
       }}
-      className={`cursor-pointer px-2 py-1 rounded text-xs ${
-        active
-          ? v === 'Pending'
-            ? 'bg-yellow-500/20 text-yellow-300'
-            : v === 'On wanted list'
-            ? 'bg-red-500/20 text-red-300'
-            : v === 'Left'
-            ? 'bg-sky-500/20 text-sky-300'
-            : 'bg-amber-500/20 text-amber-300'
-          : 'hover:bg-[var(--background-secondary)] text-[var(--text-muted)]'
-      }`}
+     className={`cursor-pointer px-2 py-1 rounded text-xs transition ${
+  active
+    ? v === 'Pending'
+      ? 'bg-yellow-500/30 text-yellow-200 border border-yellow-500/40'
+      : v === 'On wanted list'
+      ? 'bg-red-500/30 text-red-200 border border-red-500/40'
+      : v === 'Left'
+      ? 'bg-sky-500/30 text-sky-200 border border-sky-500/40'
+      : 'bg-amber-500/30 text-amber-200 border border-amber-500/40'
+    : 'hover:bg-[var(--background-secondary)] text-[var(--text-muted)]'
+}`}
     >
       {v}
     </div>
