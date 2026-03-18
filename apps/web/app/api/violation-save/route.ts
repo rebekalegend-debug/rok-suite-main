@@ -16,51 +16,59 @@ export async function POST(req: Request) {
 
   const range = "Violation!A2:F";
 
+  // 🧠 CLEAN HELPERS
+  const cleanText = (v: any) =>
+    String(v ?? "").replace(/^'+/, "").trim();
+
+  const cleanNumber = (v: any) => {
+    const n = Number(String(v ?? "").replace(/[^0-9]/g, ""));
+    return Number.isFinite(n) ? n : 0;
+  };
+
   // 📥 read existing rows
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId,
     range,
   });
 
-const rows = res.data.values || [];
+  const rows = res.data.values || [];
 
-const index = body.rowIndex ? body.rowIndex - 2 : -1;
+  const index = body.rowIndex ? body.rowIndex - 2 : -1;
 
-const newRow = [
-  body.name || "",
-  body.id || "",
-  body.power || "",
-  body.violation || "",
-  body.handled || "",
-  body.notes || ""
-];
+  // ✅ FORCE TYPES HERE
+  const newRow = [
+    cleanText(body.name),
+    cleanNumber(body.id),      // 🔥 FIX (NUMBER, not string)
+    cleanNumber(body.power),   // 🔥 FIX
+    cleanText(body.violation),
+    cleanText(body.handled),
+    cleanText(body.notes),
+  ];
 
-// DELETE
-if (body.delete) {
-  if (index >= 0) {
-    rows.splice(index, 1);
+  // DELETE
+  if (body.delete) {
+    if (index >= 0) rows.splice(index, 1);
   }
-}
 
-// UPDATE
-else if (index >= 0) {
-  rows[index] = newRow;
-}
+  // UPDATE
+  else if (index >= 0) {
+    rows[index] = newRow;
+  }
 
-// ADD
-else {
-  rows.push(newRow);
-}
+  // ADD
+  else {
+    rows.push(newRow);
+  }
 
-// WRITE BACK (FULL TABLE)
-await sheets.spreadsheets.values.update({
-  spreadsheetId,
-  range: "Violation!A2",
-  valueInputOption: "RAW",
-  requestBody: {
-    values: rows,
-  },
-});
+  // ✍️ WRITE BACK
+  await sheets.spreadsheets.values.update({
+    spreadsheetId,
+    range: "Violation!A2",
+    valueInputOption: "RAW",
+    requestBody: {
+      values: rows,
+    },
+  });
 
   return Response.json({ success: true });
 }
