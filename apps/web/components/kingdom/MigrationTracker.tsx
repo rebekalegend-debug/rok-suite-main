@@ -854,7 +854,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                   return (
                   <tr
   key={player.governorId || player.name}
-  className={`border-b border-[var(--border)] hover:bg-[var(--background-secondary)]/50 transition-colors ${idx % 2 === 0 ? 'bg-[var(--background-secondary)]/30' : ''} ${isDone ? 'bg-[rgba(100,100,100,0.15)]' : ''}`}
+  className={`border-b border-[var(--border)] hover:bg-[var(--background-secondary)]/50 transition-colors ${idx % 2 === 0 ? 'bg-[var(--background-secondary)]/30' : ''}`}
 >
                     <td className={`px-3 py-2.5 text-xs font-mono text-center ${
   isDone ? 'text-[var(--text-muted)]' : 'text-[var(--text-muted)]'
@@ -970,7 +970,7 @@ setOpenMenu(
   {isAdmin &&
     openMenu?.type === 'violation' &&
     openMenu?.id === player.governorId && (
-      <div className="menu absolute z-[9999] bg-[var(--background-card)] mt-2 w-32 left-1/2 -translate-x-1/2 bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1">
+      <div className="menu absolute z-[9999] bg-[#0f141a] mt-2 w-32 left-1/2 -translate-x-1/2 border border-[var(--border)] rounded-lg shadow-2xl p-2 space-y-1">
         {VIOLATION_OPTIONS.map((v) => (
           <div
             key={v}
@@ -1047,7 +1047,7 @@ onClick={(e) => {
  openMenu?.type === 'handled' &&
  openMenu?.id === player.governorId && (
  <div
-  className="menu fixed z-[9999] pointer-events-auto bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg p-2 space-y-1 w-36"
+  className="menu fixed z-[9999] pointer-events-auto bg-[#0f141a] border border-[var(--border)] rounded-lg shadow-2xl p-2 space-y-1 w-36"
  style={{
   top: openMenu?.y,
   left: openMenu?.x
