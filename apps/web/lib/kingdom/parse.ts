@@ -303,11 +303,17 @@ export async function fetchMgeViolationsSheet(url: string) {
     );
   });
 
-  const idx = (name: string) => {
-    const index = headerMap.findIndex(h => h === name.toLowerCase());
-    console.log(`Index for "${name}":`, index);
-    return index;
-  };
+const idx = (name: string) => {
+  const index = headerMap.findIndex(h => h === name.toLowerCase());
+
+  if (index !== -1) return index;
+
+  // 🔥 fallback: partial match
+  const fallback = headerMap.findIndex(h => h.includes(name.toLowerCase()));
+
+  console.warn(`Fallback index for "${name}":`, fallback);
+  return fallback;
+};
 
   const iName = idx("name");
   const iGovId = idx("id");
