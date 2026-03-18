@@ -967,34 +967,37 @@ setOpenMenu(
   )}
 </div>
 
-  {isAdmin &&
-    openMenu?.type === 'violation' &&
-    openMenu?.id === player.governorId && (
-className="menu absolute z-[9999] bg-[#0f141a] !bg-opacity-100 backdrop-blur-none mt-2 w-32 left-1/2 -translate-x-1/2 border border-[var(--border)] rounded-lg shadow-2xl p-2 space-y-1 isolate"        {VIOLATION_OPTIONS.map((v) => (
-          <div
-            key={v}
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleViolation(player, v);
-              setOpenMenu(null);
-            }}
-            className={`cursor-pointer px-2 py-1 rounded text-xs ${
-  player.violation?.includes(v)
-    ? v === 'First'
-      ? 'bg-yellow-500/20 text-yellow-300'
-      : v === 'Second'
-      ? 'bg-orange-500/20 text-orange-300'
-      : v === 'Third'
-      ? 'bg-red-500/20 text-red-300'
-      : 'bg-purple-500/20 text-purple-300'
-    : 'hover:bg-[var(--background-secondary)] text-[var(--text-muted)]'
-}`}
-          >
-            {v}
-          </div>
-        ))}
-      </div>
-  )}
+ {isAdmin &&
+  openMenu?.type === 'violation' &&
+  openMenu?.id === player.governorId && (
+    <div
+      className="menu absolute z-[9999] bg-[#0f141a] !bg-opacity-100 backdrop-blur-none mt-2 w-32 left-1/2 -translate-x-1/2 border border-[var(--border)] rounded-lg shadow-2xl p-2 space-y-1 isolate"
+    >
+      {VIOLATION_OPTIONS.map((v) => (
+        <div
+          key={v}
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleViolation(player, v);
+            setOpenMenu(null);
+          }}
+          className={`cursor-pointer px-2 py-1 rounded text-xs ${
+            player.violation?.includes(v)
+              ? v === 'First'
+                ? 'bg-yellow-500/20 text-yellow-300'
+                : v === 'Second'
+                ? 'bg-orange-500/20 text-orange-300'
+                : v === 'Third'
+                ? 'bg-red-500/20 text-red-300'
+                : 'bg-purple-500/20 text-purple-300'
+              : 'hover:bg-[var(--background-secondary)] text-[var(--text-muted)]'
+          }`}
+        >
+          {v}
+        </div>
+      ))}
+    </div>
+)}
 </td>
 
                      
