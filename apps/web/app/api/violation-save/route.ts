@@ -20,10 +20,18 @@ export async function POST(req: Request) {
   const cleanText = (v: any) =>
     String(v ?? "").replace(/^'+/, "").trim();
 
-  const cleanNumber = (v: any) => {
-    const n = Number(String(v ?? "").replace(/[^0-9]/g, ""));
-    return Number.isFinite(n) ? n : 0;
-  };
+const cleanNumber = (v: any) => {
+  if (v === null || v === undefined) return 0;
+
+  // remove leading ', spaces, commas, anything not digit
+  const cleaned = String(v)
+    .replace(/^'+/, "")       // remove leading '
+    .replace(/[, ]/g, "")     // remove commas/spaces (e.g. 131,322,475)
+    .replace(/[^0-9]/g, "");  // keep only digits
+
+  const n = Number(cleaned);
+  return Number.isFinite(n) ? n : 0;
+};
 
   // 📥 read existing rows
   const res = await sheets.spreadsheets.values.get({
