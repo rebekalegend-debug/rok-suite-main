@@ -970,8 +970,7 @@ setOpenMenu(
   {isAdmin &&
     openMenu?.type === 'violation' &&
     openMenu?.id === player.governorId && (
-      <div className="menu absolute z-[9999] bg-[#0f141a] mt-2 w-32 left-1/2 -translate-x-1/2 border border-[var(--border)] rounded-lg shadow-2xl p-2 space-y-1">
-        {VIOLATION_OPTIONS.map((v) => (
+className="menu absolute z-[9999] bg-[#0f141a] !bg-opacity-100 backdrop-blur-none mt-2 w-32 left-1/2 -translate-x-1/2 border border-[var(--border)] rounded-lg shadow-2xl p-2 space-y-1 isolate"        {VIOLATION_OPTIONS.map((v) => (
           <div
             key={v}
             onClick={(e) => {
@@ -1005,7 +1004,7 @@ setOpenMenu(
 onClick={(e) => {
   e.stopPropagation();
 
-  const rect = (e.target as HTMLElement).getBoundingClientRect();
+const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
 
   setOpenMenu(
     openMenu?.type === 'handled' && openMenu?.id === player.governorId
@@ -1047,7 +1046,7 @@ onClick={(e) => {
  openMenu?.type === 'handled' &&
  openMenu?.id === player.governorId && (
  <div
-  className="menu fixed z-[9999] pointer-events-auto bg-[#0f141a] border border-[var(--border)] rounded-lg shadow-2xl p-2 space-y-1 w-36"
+  className="menu fixed z-[9999] pointer-events-auto bg-[#0f141a] !bg-opacity-100 backdrop-blur-none border border-[var(--border)] rounded-lg shadow-2xl p-2 space-y-1 w-36 isolate"
  style={{
   top: openMenu?.y,
   left: openMenu?.x
