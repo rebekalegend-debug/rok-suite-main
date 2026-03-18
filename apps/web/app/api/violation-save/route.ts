@@ -21,13 +21,13 @@ export async function POST(req: Request) {
     String(v ?? "").replace(/^'+/, "").trim();
 
   const toCleanStringNumber = (v: any) => {
-    const cleaned = String(v ?? "")
+    return String(v ?? "")
       .replace(/^'+/, "")
       .replace(/[, ]/g, "")
       .replace(/[^0-9]/g, "");
-
-    return cleaned || "";
   };
+
+  const idToFind = toCleanStringNumber(body.id);
 
   // 📥 read existing rows
   const res = await sheets.spreadsheets.values.get({
@@ -37,64 +37,63 @@ export async function POST(req: Request) {
 
   const rows = res.data.values || [];
 
- const idToFind = toCleanStringNumber(body.id);
+  // 🔍 find row by ID
+  const index = rows.findIndex(r => {
+    const rowId = String(r[1] ?? "")
+      .replace(/^'+/, "")
+      .replace(/[^0-9]/g, "");
+    return rowId === idToFind;
+  });
 
-const index = rows.findIndex(r => {
-  const rowId = String(r[1] ?? "").replace(/^'+/, "").replace(/[^0-9]/g, "");
-  return rowId === idToFind;
-});
-
-  // ✅ CLEAN + NORMALIZE ROW
+  // ✅ CLEAN ROW
   const newRow = [
     stripQuote(body.name),
-
-    toCleanStringNumber(body.id),     // ✅ ID (NO ')
-    toCleanStringNumber(body.power),  // ✅ POWER (NO ')
-
+    idToFind,
+    toCleanStringNumber(body.power),
     stripQuote(body.violation),
     stripQuote(body.handled),
     stripQuote(body.notes),
   ];
 
- // DELETE
-if (body.delete) {
-  const newRows = rows.filter(r => {
-    const rowId = String(r[1] ?? "")
-      .replace(/^'+/, "")
-      .replace(/[^0-9]/g, "");
+  // =========================
+  // ❌ DELETE (SAFE)
+  // =========================
+  if (body.delete) {
+    if (index >= 0) {
+      await sheets.spreadsheets.values.clear({
+        spreadsheetId,
+        range: `Violation!A${index + 2}:F${index + 2}`,
+      });
+    }
 
-    return rowId !== idToFind;
-  });
-
-  await sheets.spreadsheets.values.update({
-    spreadsheetId,
-    range: "Violation!A2",
-    valueInputOption: "USER_ENTERED",
-    requestBody: {
-      values: newRows,
-    },
-  });
-
-  return Response.json({ success: true });
-}
-
-// UPDATE / ADD
-else {
-  if (index >= 0) {
-    rows[index] = newRow; // ✅ update
-  } else {
-    rows.push(newRow);    // ✅ add
+    return Response.json({ success: true });
   }
-}
-  
 
-  // ✍️ WRITE BACK
-  await sheets.spreadsheets.values.update({
+  // =========================
+  // ✏️ UPDATE (SAFE)
+  // =========================
+  if (index >= 0) {
+    await sheets.spreadsheets.values.update({
+      spreadsheetId,
+      range: `Violation!A${index + 2}:F${index + 2}`,
+      valueInputOption: "USER_ENTERED",
+      requestBody: {
+        values: [newRow],
+      },
+    });
+
+    return Response.json({ success: true });
+  }
+
+  // =========================
+  // ➕ ADD (SAFE)
+  // =========================
+  await sheets.spreadsheets.values.append({
     spreadsheetId,
-    range: "Violation!A2",
+    range: "Violation!A:F",
     valueInputOption: "USER_ENTERED",
     requestBody: {
-      values: rows,
+      values: [newRow],
     },
   });
 
