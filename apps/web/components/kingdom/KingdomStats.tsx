@@ -254,8 +254,8 @@ const chartData = useMemo(() => {
 
 <div>
 <h1 className="text-2xl font-bold text-[var(--foreground)] flex items-center gap-2">
-<BarChart3 size={28} className="text-green-500" />
-Kingdom Stats
+<Radar size={28} className="text-green-500" />
+Migration tracker
 </h1>
 
 <p className="text-sm text-[var(--text-muted)] mt-1">
