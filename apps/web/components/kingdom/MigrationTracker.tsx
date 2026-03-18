@@ -307,16 +307,16 @@ const filtered = useMemo(() => {
         return playerMap.get(id)!;
       }
 
-      return {
-        governorId: id,
-        name: m.name ?? m.player_name,
-        power: m.power ?? 0,
-        violation: [],
-        handled: 'No action',
-        notes: '',
-        display: true,
-        prevNames: ''
-      };
+    return {
+  governorId: id,
+  name: m.name ?? m.player_name,
+  power: m.power ?? 0,
+  violation: [],
+  handled: 'No action',
+  notes: '',
+  display: true,
+  prevNames: prevNamesMap.get(id) || ""
+};
     });
   }
 
@@ -384,7 +384,7 @@ const filtered = useMemo(() => {
     return 0;
   });
 
-}, [players, allMembers, search, reasonFilter, handledFilter, sortRules, isAdmin]);
+}, [players, allMembers, prevNamesMap, search, reasonFilter, handledFilter, sortRules, isAdmin]);
 
 
   
