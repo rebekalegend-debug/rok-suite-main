@@ -272,14 +272,21 @@ export async function fetchMgeViolationsSheet(url: string) {
   const text = await response.text();
   const { headers, rows } = parseCSV(text);
 
- const clean = (str: string) =>
-  str
-    .replace(/\uFEFF/g, '') // 🔥 remove BOM
+const clean = (str: string) =>
+  (str || "")
+    .replace(/^\uFEFF/, "") // 🔥 remove BOM at start
+    .replace(/\uFEFF/g, "") // remove any BOM anywhere
     .trim()
     .toLowerCase();
 
+const headerMap = headers.map(h => clean(h));
+
+// 🔥 DEBUG — run once
+console.log("RAW HEADERS:", headers);
+console.log("CLEAN HEADERS:", headerMap);
+
 const idx = (name: string) =>
-  headers.findIndex(h => clean(h) === name.toLowerCase());
+  headerMap.findIndex(h => h === name.toLowerCase());
 
   const iName = idx('name');
   const iGovId = idx('id');
