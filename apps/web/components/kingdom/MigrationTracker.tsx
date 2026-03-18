@@ -148,7 +148,7 @@ violation: (() => {
     return p.violation
       .split(",")
       .map((v: string) => v.trim())
-      .filter(v => v && v !== "-" && v.toLowerCase() !== "no action");
+      .filter((v: string) => v && v !== "-" && v.toLowerCase() !== "no action");
   }
 
   if (Array.isArray(p.violation)) {
@@ -425,7 +425,7 @@ for (const p of players) {
 
 const hasViolation =
   Array.isArray(p.violation) &&
-  p.violation.filter(v => v && v !== '-' && v.toLowerCase() !== 'no action').length > 0;
+  p.violation.filter((v: string) => v && v !== '-' && v.toLowerCase() !== 'no action').length > 0;
 
 if (hasViolation) {
   pendingCount++;
