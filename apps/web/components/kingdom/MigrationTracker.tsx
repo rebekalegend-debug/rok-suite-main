@@ -347,9 +347,9 @@ const filtered = useMemo(() => {
 
 if (!search && filterMode !== 'all') {
 
-  // 🔥 VIOLATORS
+  // 🟠 VIOLATORS → ONLY players with real violations
   if (filterMode === 'violators') {
-    if (!p.violation?.length) return false;
+    if (!Array.isArray(p.violation) || p.violation.length === 0) return false;
   }
 
   // 🔴 WANTED
@@ -423,7 +423,11 @@ for (const p of players) {
     const s = p.handled || 'No action';
     const power = p.power || 0;
 
-  if (p.violation && p.violation.length > 0) {
+const hasViolation =
+  Array.isArray(p.violation) &&
+  p.violation.filter(v => v && v !== '-' && v.toLowerCase() !== 'no action').length > 0;
+
+if (hasViolation) {
   pendingCount++;
   pendingPower += power;
 }
