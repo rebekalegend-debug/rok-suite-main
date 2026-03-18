@@ -426,7 +426,7 @@ for (const p of players) {
     toZeroCount,
     toZeroPower,
   };
-}, [filtered]);
+}, [players]);
   
   
   const duplicateNames = useMemo(() => {
@@ -443,7 +443,7 @@ for (const p of players) {
   }
 
   return duplicates;
-}, [filtered]);
+}, [players]);
   // Unique reasons for filter chips
  
 
@@ -782,8 +782,8 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 
       {/* Desktop table */}
       {!loading && !error && (
-      <div className="hidden md:block overflow-x-auto relative z-0">
-          <table className="w-full">
+     <div className="overflow-x-auto relative z-0">
+         <table className="w-full min-w-[700px] text-xs sm:text-sm">
             <thead className="sticky top-0 z-10 bg-[var(--background-card)]">
              <tr className="border-b border-[var(--border)]">
   <th className="px-3 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
@@ -1060,82 +1060,6 @@ onClick={(e) => {
 
 
 
-
-      
-      {/* Mobile  MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM   card view */}
-   {!loading && !error && (
-  <div className="md:hidden space-y-3">
-          {filtered.length === 0 ? (
-            <div className="px-4 py-8 text-center text-[var(--text-muted)] rounded-xl border border-[var(--border)]">
-              {hasActiveFilters ? 'No players match filters' : 'No wanted players'}
-            </div>
-          ) : (
-            filtered.map((player) => {
-              const handled = player.handled || 'No action';
-              const isDone = handled !== 'Pending' && handled !== 'No action';
-            
-              return (
-                <div
-                  key={player.governorId || player.name}
-                  className={`rounded-xl border border-[var(--border)] p-4 space-y-3 ${isDone ? 'opacity-50' : ''}`}
-                >
-                  {/* Top row: name + handled badge */}
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0">
-                      <p className={`font-semibold text-[var(--foreground)] truncate ${isDone ? 'line-through' : ''}`}>
-                        {player.name}
-                      </p>
-                      <p className="text-xs font-mono text-[var(--text-muted)]">
-                        ID: {player.governorId || '-'}
-                      </p>
-                    </div>
-                    <span className={`shrink-0 px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase border ${handledBg(handled)}`}>
-                      {handled}
-                    </span>
-                  </div>
-
-                  {/* Info grid */}
-                  <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
-                    <div>
-                      <span className="text-[var(--text-muted)]">Power: </span>
-                      <span className="font-mono text-[var(--text-secondary)]">{formatPower(player.power)}</span>
-                    </div>
-                      </div>
-                 
-
-{/* Violation */}
-<div className="flex flex-wrap gap-1 pt-2">
-  {VIOLATION_OPTIONS.map((v) => {
-    const active = player.violation?.includes(v);
-
-    return (
-      <button
-        key={v}
-        disabled={!isAdmin}
-        onClick={() => toggleViolation(player, v)}
-        className={`px-2 py-0.5 rounded-md text-xs border transition ${
-          active
-            ? v === 'First'
-              ? 'bg-yellow-500/20 text-yellow-300 border-yellow-500/40'
-              : v === 'Second'
-              ? 'bg-orange-500/20 text-orange-300 border-orange-500/40'
-              : v === 'Third'
-              ? 'bg-red-500/20 text-red-300 border-red-500/40'
-              : 'bg-purple-500/20 text-purple-300 border-purple-500/40'
-            : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)]'
-        } ${!isAdmin ? 'opacity-50 cursor-not-allowed' : ''}`}
-      >
-        {v}
-      </button>
-    );
-  })}
-</div>
-                </div>
-              );
-            })
-          )}
-        </div>
-      )}
 
       {/* Showing count + last refreshed */}
       <div className="mt-3 text-xs text-[var(--text-muted)] text-center space-y-0.5">
