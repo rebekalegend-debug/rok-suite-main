@@ -70,7 +70,7 @@ export async function POST(req: Request) {
   await sheets.spreadsheets.values.update({
     spreadsheetId,
     range: "Violation!A2",
-    valueInputOption: "RAW",
+    valueInputOption: "USER_ENTERED",
     requestBody: {
       values: rows,
     },
