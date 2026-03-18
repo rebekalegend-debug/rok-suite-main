@@ -71,10 +71,7 @@ else {
     rows.push(newRow);    // ✅ add
   }
 }
-  // ADD
-  else {
-    rows.push(newRow);
-  }
+  
 
   // ✍️ WRITE BACK
   await sheets.spreadsheets.values.update({
