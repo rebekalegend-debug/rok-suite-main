@@ -782,7 +782,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 
       {/* Desktop table */}
       {!loading && !error && (
-      <div className="hidden md:block overflow-x-auto relative z-10">
+      <div className="hidden md:block overflow-x-auto relative z-0">
           <table className="w-full">
             <thead className="sticky top-0 z-10 bg-[var(--background-card)]">
              <tr className="border-b border-[var(--border)]">
@@ -954,7 +954,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 </td>
 
                      
-<td className="px-3 py-2.5 text-center relative z-10">
+<td className="px-3 py-2.5 text-center relative">
 <div
 onClick={(e) => {
   e.stopPropagation();
