@@ -739,7 +739,7 @@ className="cursor-pointer rounded-xl border border-red-500/20 bg-red-500/5 p-4 h
           {/* Left Kingdom */}
           <div
   onClick={() => {
-  setFilterMode('Left');
+ setFilterMode('left');
    
 }}
 className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 hover:bg-sky-500/10 transition shadow-lg shadow-sky-500/20">
