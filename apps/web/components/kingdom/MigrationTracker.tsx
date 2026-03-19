@@ -516,7 +516,15 @@ const hasActiveFilters =
 
   // Sortable header helper
   const SortHeader = ({ field, label, align = 'left' }: { field: SortableField; label: string; align?: 'left' | 'right' | 'center' }) => (
-    <th className={`text-${align} px-3 py-2 sm:py-3`}>
+  <th
+  className={`px-3 py-2 sm:py-3 ${
+    align === 'right'
+      ? 'text-right'
+      : align === 'center'
+      ? 'text-center'
+      : 'text-left'
+  }`}
+>
       <button
         onClick={(e) => handleSort(field, e.shiftKey)}
         title="Click to sort, Shift+click to add secondary sort"
@@ -812,7 +820,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 
       {/* Desktop table */}
       {!loading && !error && (
-   <div className="hidden md:block overflow-visible relative z-10">
+   <div className="hidden md:block overflow-visible relative z-0">
         <div className="overflow-x-auto">
   <table className="w-full">
     <thead className="sticky top-0 z-10 bg-[var(--background-card)]">
@@ -972,9 +980,10 @@ setOpenMenu(
   openMenu?.type === 'violation' &&
   openMenu?.id === player.governorId && (
  <div
-className="menu fixed z-[9999] bg-[#0f141a] backdrop-blur-none border border-[var(--border)] rounded-lg shadow-2xl p-2 space-y-1 w-36"
+className="menu fixed z-[9999] bg-[#0f141a] border border-gray-700 rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.8)] p-2 space-y-1 w-36"
    style={{
-    top: openMenu?.y,
+    isolation: 'isolate',
+     top: openMenu?.y,
     left: openMenu?.x
   }}
 >
@@ -1052,9 +1061,10 @@ className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${
  openMenu?.type === 'handled' &&
  openMenu?.id === player.governorId && (
  <div
-className="menu fixed z-[9999] bg-[#0f141a] backdrop-blur-none border border-[var(--border)] rounded-lg shadow-2xl p-2 space-y-1 w-36"  
+className="menu fixed z-[9999] bg-[#0f141a] border border-gray-700 rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.8)] p-2 space-y-1 w-36"  
    style={{
-  top: openMenu?.y,
+ isolation: 'isolate',
+     top: openMenu?.y,
   left: openMenu?.x
 }}
 >
