@@ -968,18 +968,19 @@ setOpenMenu({
   )}
 </div>
 
- {isAdmin &&
+{isAdmin &&
   openMenu?.type === 'violation' &&
-  openMenu?.id === player.governorId && (
- <div
-className="menu fixed z-[9999] bg-[#0f141a] border border-[var(--border)] rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.8)] p-2 space-y-1 w-36" 
-   const rect = openMenu.anchor.getBoundingClientRect();
+  openMenu?.id === player.governorId && (() => {
+    const rect = openMenu.anchor.getBoundingClientRect();
 
-style={{
-  top: rect.bottom + window.scrollY,
-  left: rect.left + window.scrollX
-}}
->
+    return (
+      <div
+        className="menu fixed z-[9999] bg-[#0f141a] border border-[var(--border)] rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.8)] p-2 space-y-1 w-36"
+        style={{
+          top: rect.bottom + window.scrollY,
+          left: rect.left + window.scrollX
+        }}
+      >
       {VIOLATION_OPTIONS.map((v) => (
         <div
           key={v}
@@ -1044,17 +1045,18 @@ className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${
 </div>
 
 {isAdmin &&
- openMenu?.type === 'handled' &&
- openMenu?.id === player.governorId && (
- <div
-className="menu fixed z-[9999] bg-[#0f141a] border border-[var(--border)] rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.8)] p-2 space-y-1 w-36" 
-   const rect = openMenu.anchor.getBoundingClientRect();
+  openMenu?.type === 'handled' &&
+  openMenu?.id === player.governorId && (() => {
+    const rect = openMenu.anchor.getBoundingClientRect();
 
-style={{
-  top: rect.bottom + window.scrollY,
-  left: rect.left + window.scrollX
-}}
->
+    return (
+      <div
+        className="menu fixed z-[9999] bg-[#0f141a] border border-[var(--border)] rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.8)] p-2 space-y-1 w-36"
+        style={{
+          top: rect.bottom + window.scrollY,
+          left: rect.left + window.scrollX
+        }}
+      >
    {['No action', 'Pending', 'On wanted list', 'Left'].map((v) => {
   const active = (player.handled || 'No action') === v;
 
