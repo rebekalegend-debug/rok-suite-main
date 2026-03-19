@@ -61,115 +61,117 @@ const touchStartY = useRef<number | null>(null);
   const t2 = useTranslations('common');
 
   const navSections: NavSection[] = [
-    {
-      // Kingdom section (no title, top level)
-      items: [
-       {
-  labelKey: 'home',
-  href: '/',
-  icon: <Home size={20} className="text-red-500" />,
-  hoverColor: 'group-hover:text-red-500',
-  hoverBg: 'hover:bg-red-500/10',
-  activeColor: 'text-white',
-  activeBg: 'bg-gradient-to-r from-red-500 to-rose-500'
-},
   {
-  labelKey: 'calendar',
-  href: '/calendar',
-  icon: <Calendar size={20} className="text-orange-500" />,
-  hoverColor: 'group-hover:text-orange-500',
-  hoverBg: 'hover:bg-orange-500/10',
-  activeColor: 'text-white',
-  activeBg: 'bg-gradient-to-r from-orange-500 to-amber-500'
-},
-       // { labelKey: 'rosters', href: '/rosters', icon: <Users size={20} />, hoverColor: 'group-hover:text-sky-500', hoverBg: 'hover:bg-sky-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-sky-500 to-blue-500' },
-       // { labelKey: 'recognition', href: '/recognition', icon: <Crown size={20} />, hoverColor: 'group-hover:text-violet-500', hoverBg: 'hover:bg-violet-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-violet-500 to-purple-500' },
-       // { labelKey: 'aooPlanner', href: '/aoo-strategy', icon: <Swords size={20} />, hoverColor: 'group-hover:text-emerald-500', hoverBg: 'hover:bg-emerald-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-emerald-500 to-teal-500' },
-    
-        { labelKey: 'mge', href: '/mge', icon: <Shield size={20} />, hoverColor: 'group-hover:text-amber-500', hoverBg: 'hover:bg-amber-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-amber-500 to-yellow-500' },
-      // { labelKey: 'migrationTracker', href: '/kingdom/migration-tracker', icon: <Radar size={20} />, hoverColor: 'group-hover:text-teal-500', hoverBg: 'hover:bg-teal-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-teal-500 to-cyan-500' },
-     //   { labelKey: 'wanted', href: '/kingdom/wanted', icon: <Crosshair size={20} />, hoverColor: 'group-hover:text-red-500', hoverBg: 'hover:bg-red-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-red-500 to-rose-500' },
- // {labelKey: 'kvkMap',href: '/kvk-map',icon: <Map size={20} className="text-yellow-500" />, hoverColor: 'group-hover:text-yellow-500',hoverBg: 'hover:bg-yellow-500/10',activeColor: 'text-white',activeBg: 'bg-gradient-to-r from-yellow-500 to-amber-500'},
-  
-  
-        {
-  labelKey: 'rokMail',
-  href: '/rok-mail',
-  icon: <ScrollText size={20} className="text-blue-500" />,
-  hoverColor: 'group-hover:text-blue-500',
-  hoverBg: 'hover:bg-blue-500/10',
-  activeColor: 'text-white',
-  activeBg: 'bg-gradient-to-r from-blue-500 to-indigo-500'
-},
-      ],
-    },
+    // MAIN (no title)
+    items: [
+      {
+        labelKey: 'home',
+        href: '/',
+        icon: <Home size={20} className="text-red-500" />,
+        hoverColor: 'group-hover:text-red-500',
+        hoverBg: 'hover:bg-red-500/10',
+        activeColor: 'text-white',
+        activeBg: 'bg-gradient-to-r from-red-500 to-rose-500'
+      },
 
-{
-  titleKey: 'Tracking',
-  titleColor: 'text-red-500',
-  items: [
-    {
-  labelKey: 'kingdomStats',
-  href: '/kingdom-stats',
-  icon: <Radar size={20} className="text-green-500" />,
-  hoverColor: 'group-hover:text-green-500',
-  hoverBg: 'hover:bg-green-500/10',
-  activeColor: 'text-white',
-  activeBg: 'bg-gradient-to-r from-green-500 to-emerald-500'
-},
-        { 
-      labelKey: 'wanted',
-      href: '/kingdom/wanted',
-      icon: <Crosshair size={20} />,
-      hoverColor: 'group-hover:text-red-500',
-      hoverBg: 'hover:bg-red-500/10',
-      activeColor: 'text-white',
-      activeBg: 'bg-gradient-to-r from-red-500 to-rose-500'
-    },
-    
-    {
-  labelKey: 'violationTrack',
-  href: '/kingdom/violation-track',
-  icon: <Radar size={20} className="text-orange-500" />,
-  hoverColor: 'group-hover:text-orange-500',
-  hoverBg: 'hover:bg-orange-500/10',
-  activeColor: 'text-white',
-  activeBg: 'bg-gradient-to-r from-orange-500 to-red-500'
-},
+      {
+        labelKey: 'wanted',
+        href: '/kingdom/wanted',
+        icon: <Crosshair size={20} className="text-red-500" />,
+        hoverColor: 'group-hover:text-red-500',
+        hoverBg: 'hover:bg-red-500/10',
+        activeColor: 'text-white',
+        activeBg: 'bg-gradient-to-r from-red-500 to-rose-500'
+      },
 
-  ],
-},
+      {
+        labelKey: 'violationTrack',
+        href: '/kingdom/violation-track',
+        icon: <Radar size={20} className="text-orange-500" />,
+        hoverColor: 'group-hover:text-orange-500',
+        hoverBg: 'hover:bg-orange-500/10',
+        activeColor: 'text-white',
+        activeBg: 'bg-gradient-to-r from-orange-500 to-red-500'
+      },
 
+      {
+        labelKey: 'calendar',
+        href: '/calendar',
+        icon: <Calendar size={20} className="text-orange-500" />,
+        hoverColor: 'group-hover:text-orange-500',
+        hoverBg: 'hover:bg-orange-500/10',
+        activeColor: 'text-white',
+        activeBg: 'bg-gradient-to-r from-orange-500 to-amber-500'
+      },
 
-    
-    {
-      titleKey: 'rokstats',
-      titleColor: 'text-amber-500',
-      items: [
-        { labelKey: 'stats', href: 'https://app.rokstats.online/kvk/ranking', icon: <Trophy size={20} />, hoverColor: 'group-hover:text-amber-500', hoverBg: 'hover:bg-amber-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-amber-500 to-orange-500' },
-  
-      ],
-    },
-    {
-      titleKey: 'resources',
-      titleColor: 'text-cyan-500',
-      items: [
-       // { labelKey: 'guide', href: '/guide', icon: <BookOpen size={20} />, hoverColor: 'group-hover:text-cyan-500', hoverBg: 'hover:bg-cyan-500/10', activeColor: 'text-white', activeBg: 'bg-gradient-to-r from-cyan-500 to-blue-500' },
-        {
-          labelKey: 'betaTools',
-          href: '/beta-tools',
-          icon: <FlaskConical size={20} className="text-blue-500" />,
-          badgeKey: 'wipBadge',
-          badgeColor: 'bg-[#ffb547]/20 text-[#ffb547]',
-          hoverColor: 'group-hover:text-blue-500',
-         hoverBg: 'hover:bg-blue-500/10',
-  activeColor: 'text-white',
-           activeBg: 'bg-gradient-to-r from-blue-500 to-indigo-500',
-        },
-      ],
-    },
-  ];
+      {
+        labelKey: 'mge',
+        href: '/mge',
+        icon: <Shield size={20} className="text-amber-500" />,
+        hoverColor: 'group-hover:text-amber-500',
+        hoverBg: 'hover:bg-amber-500/10',
+        activeColor: 'text-white',
+        activeBg: 'bg-gradient-to-r from-amber-500 to-yellow-500'
+      },
 
+      {
+        labelKey: 'migrationTracker',
+        href: '/kingdom/migration-tracker',
+        icon: <Radar size={20} className="text-green-500" />,
+        hoverColor: 'group-hover:text-green-500',
+        hoverBg: 'hover:bg-green-500/10',
+        activeColor: 'text-white',
+        activeBg: 'bg-gradient-to-r from-green-500 to-emerald-500'
+      },
+
+      {
+        labelKey: 'rokMail',
+        href: '/rok-mail',
+        icon: <ScrollText size={20} className="text-blue-500" />,
+        hoverColor: 'group-hover:text-blue-500',
+        hoverBg: 'hover:bg-blue-500/10',
+        activeColor: 'text-white',
+        activeBg: 'bg-gradient-to-r from-blue-500 to-indigo-500'
+      },
+    ],
+  },
+
+  // ROKSTATS CATEGORY
+  {
+    titleKey: 'rokstats',
+    titleColor: 'text-amber-500',
+    items: [
+      {
+        labelKey: 'stats',
+        href: 'https://app.rokstats.online/kvk/ranking',
+        icon: <Trophy size={20} className="text-amber-500" />,
+        hoverColor: 'group-hover:text-amber-500',
+        hoverBg: 'hover:bg-amber-500/10',
+        activeColor: 'text-white',
+        activeBg: 'bg-gradient-to-r from-amber-500 to-orange-500'
+      },
+    ],
+  },
+
+  // RESOURCES CATEGORY
+  {
+    titleKey: 'resources',
+    titleColor: 'text-cyan-500',
+    items: [
+      {
+        labelKey: 'betaTools',
+        href: '/beta-tools',
+        icon: <FlaskConical size={20} className="text-blue-500" />,
+        badgeKey: 'wipBadge',
+        badgeColor: 'bg-[#ffb547]/20 text-[#ffb547]',
+        hoverColor: 'group-hover:text-blue-500',
+        hoverBg: 'hover:bg-blue-500/10',
+        activeColor: 'text-white',
+        activeBg: 'bg-gradient-to-r from-blue-500 to-indigo-500',
+      },
+    ],
+  },
+];
   // Close mobile menu on route change
   useEffect(() => {
     setIsMobileOpen(false);
