@@ -363,9 +363,9 @@ setPlayers((prev:any[]) =>
   className={`${badge} ${
     player.spend === "Buy all, max tech!"
       ? "border-green-500 text-green-400 bg-green-500/10"
-      : player.spend.includes("Few")
+      : (player.spend || "").includes("Few")
       ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
-      : player.spend.includes("Crystal")
+      : (player.spend || "").includes("Crystal")
       ? "border-orange-500 text-orange-400 bg-orange-500/10"
       : "border-red-500 text-red-400 bg-red-500/10"
   }`}
