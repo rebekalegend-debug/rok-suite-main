@@ -200,8 +200,8 @@ useEffect(() => {
     setOpenMenu(null);
   };
 
-  window.addEventListener('click', close);
-  return () => window.removeEventListener('click', close);
+ window.addEventListener('mousedown', close);
+return () => window.removeEventListener('mousedown', close);
 }, []);
 
   useEffect(() => {
@@ -940,7 +940,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 
 <td className="px-3 py-2.5 text-center relative group">
 <div
-  data-dropdown-trigger
+ data-dropdown-trigger="true"
   onClick={(e) => {
     e.stopPropagation();
 
@@ -1019,7 +1019,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 <td className="px-3 py-2.5 text-center relative">
   <div className="relative z-10">
 <div
-  data-dropdown-trigger
+data-dropdown-trigger="true"
   onClick={(e) => {
     e.stopPropagation();
 
