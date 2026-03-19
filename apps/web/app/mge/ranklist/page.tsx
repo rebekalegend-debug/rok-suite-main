@@ -699,16 +699,15 @@ return (
 {!authorized && (
   <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-[4px]">
 
-    <div className="bg-zinc-900/90 border border-yellow-500/30 rounded-xl p-6 shadow-[0_0_30px_rgba(255,215,120,0.25)] w-[320px] text-center space-y-5 relative overflow-hidden">
-
+<div className="bg-zinc-900/90 backdrop-blur-xl rounded-xl p-6 w-[320px] text-center space-y-5 relative overflow-hidden shadow-[0_0_40px_rgba(255,215,120,0.25)]">
       {/* glow layers */}
       <div className="absolute inset-0 rounded-xl pointer-events-none border border-yellow-500/20 shadow-[0_0_40px_rgba(255,215,120,0.15)]" />
       <div className="absolute inset-0 rounded-xl pointer-events-none bg-gradient-to-r from-transparent via-yellow-500/10 to-transparent opacity-40" />
 
       {/* ✅ TITLE FIX */}
-      <div className="text-yellow-400 font-semibold tracking-wide text-lg">
-        🔒 Admin Access
-      </div>
+     <div className="font-semibold text-lg tracking-wide bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,215,100,0.5)]">
+  🔒 Admin Access
+</div>
 
       {/* INPUT */}
       <input
