@@ -40,7 +40,20 @@ const tools = [
   iconHoverBg: 'group-hover:bg-rose-500/15',
   iconHoverColor: 'group-hover:text-rose-600',
 },
-  
+  {
+  href: '/mge',
+  titleKey: 'tools.mge.title',
+  descriptionKey: 'tools.mge.description',
+  icon: Swords,
+
+  iconColor: 'text-indigo-500',
+  iconGlow: 'drop-shadow-[0_0_6px_rgba(99,102,241,0.45)]',
+
+  hoverBorder: 'hover:border-indigo-500/40',
+  hoverShadow: 'hover:shadow-indigo-500/10',
+  iconHoverBg: 'group-hover:bg-indigo-500/15',
+  iconHoverColor: 'group-hover:text-indigo-600',
+},
 {
   href: 'https://app.rokstats.online/kvk/ranking',
   titleKey: 'tools.events.title',
