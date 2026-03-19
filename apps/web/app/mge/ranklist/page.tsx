@@ -699,7 +699,7 @@ return (
 {!authorized && (
   <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-[2px]">
 
-<div className="bg-zinc-900/90 backdrop-blur-xl rounded-xl p-6 w-[320px] text-center space-y-5 relative overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
+<div className="bg-zinc-900/95 rounded-xl p-6 w-[320px] text-center space-y-5 relative overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
       {/* glow layers */}
       <div className="absolute inset-0 rounded-xl pointer-events-none border border-yellow-500/20 shadow-[0_0_40px_rgba(255,215,120,0.15)]" />
       <div className="absolute inset-0 rounded-xl pointer-events-none bg-gradient-to-r from-transparent via-yellow-500/10 to-transparent opacity-40" />
