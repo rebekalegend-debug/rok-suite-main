@@ -507,7 +507,7 @@ const editorRef = useRef<HTMLDivElement>(null)
 
 const [players,setPlayers] = useState<Player[]>([])
 
-  const ADMIN_PASS = process.env.NEXT_PUBLIC_ADMIN_PASSWORD
+const ADMIN_PASS = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || ""
 const [checkedAuth, setCheckedAuth] = useState(false)
 const [authorized, setAuthorized] = useState(false)
 const [inputPass, setInputPass] = useState("")
@@ -540,16 +540,18 @@ function handleLogout() {
   
   
   
-  useEffect(() => {
+const [loading,setLoading] = useState(true)
+const [loaded,setLoaded] = useState(false)
+
+useEffect(() => {
 
   if (!loaded) return
 
   saveList(players)
 
 }, [players])
+
   
-  const [loading,setLoading] = useState(true)
-const [loaded,setLoaded] = useState(false)
 const [autoOrder,setAutoOrder] = useState(() => {
   if (typeof window !== "undefined") {
     const saved = localStorage.getItem("mge_auto")
