@@ -94,6 +94,11 @@ const [editing,setEditing] = useState(false)
   }
 
 }, [])
+  
+
+
+  
+  
   const rgOptions = [
   { label: "Garrison", value:"Garrison", color: "green" },
   { label: "Rally", value:"Rally", color: "green" },
@@ -501,7 +506,39 @@ const [mail,setMail] = useState("")
 const editorRef = useRef<HTMLDivElement>(null)
 
 const [players,setPlayers] = useState<Player[]>([])
+
+  const ADMIN_PASS = process.env.NEXT_PUBLIC_ADMIN_PASSWORD
+
+const [authorized, setAuthorized] = useState(false)
+const [inputPass, setInputPass] = useState("")
+
 useEffect(() => {
+  const saved = localStorage.getItem("mge_admin")
+
+  if (saved === ADMIN_PASS) {
+    setAuthorized(true)
+  }
+}, [])
+
+
+  
+function handleLogin() {
+  if (inputPass === ADMIN_PASS) {
+    localStorage.setItem("mge_admin", inputPass)
+    setAuthorized(true)
+  } else {
+    alert("Wrong password")
+  }
+}
+
+function handleLogout() {
+  localStorage.removeItem("mge_admin")
+  setAuthorized(false)
+}
+  
+  
+  
+  useEffect(() => {
 
   if (!loaded) return
 
@@ -699,6 +736,41 @@ setLoaded(true)
   }
 
 return (
+<div className="relative">
+
+{/* 🔒 LOCK OVERLAY */}
+{!authorized && (
+  <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm">
+    
+    <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-6 shadow-xl w-[300px] text-center space-y-4">
+      
+      <div className="text-white font-semibold">
+        Admin Access Required
+      </div>
+
+      <input
+        type="password"
+        placeholder="Enter password..."
+        value={inputPass}
+        onChange={(e)=>setInputPass(e.target.value)}
+        className="w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded text-sm text-white outline-none"
+      />
+
+      <button
+        onClick={handleLogin}
+        className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-semibold py-2 rounded"
+      >
+        Login
+      </button>
+
+    </div>
+
+  </div>
+)}
+
+{/* 🔥 MAIN CONTENT */}
+<div className={`${!authorized ? "blur-md pointer-events-none select-none" : ""}`}>
+  
 <div className="max-w-[1800px] mx-auto p-4 md:p-8">
 
 <div
@@ -709,9 +781,22 @@ style={{
 }}
 >
 
-<h2 className="mge-title border-b pb-2 mb-4">
-.˳·˖✶𓆩MGE Ranklist𓆪✶˖·˳.
-</h2>
+<div className="flex justify-between items-center border-b pb-2 mb-4">
+  
+  <h2 className="mge-title">
+    .˳·˖✶𓆩MGE Ranklist𓆪✶˖·˳.
+  </h2>
+
+  {authorized && (
+    <button
+      onClick={handleLogout}
+      className="text-red-400 hover:text-red-300 flex items-center gap-1 text-sm"
+    >
+      Log out
+    </button>
+  )}
+
+</div>
 
 {/* TABLE BOX */}
 <div className="relative overflow-visible mt-6 rounded-lg border border-yellow-500/40 bg-[#0f141a] backdrop-blur-sm shadow-[0_0_20px_rgba(255,215,107,0.25)]">
@@ -833,6 +918,8 @@ onInput={(e)=>{
 {/* close main card */}
 
 {/* page container */}
-</div>
+</div> {/* page container */}
+</div> {/* blur wrapper */}
+</div> {/* root */}
 )
 }
