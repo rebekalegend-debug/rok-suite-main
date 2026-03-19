@@ -133,6 +133,16 @@ const touchStartY = useRef<number | null>(null);
         activeColor: 'text-white',
         activeBg: 'bg-gradient-to-r from-blue-500 to-indigo-500'
       },
+{
+  labelKey: 'mgeRanklist',
+  href: '/mge/ranklist',
+  icon: <Trophy size={20} className="text-violet-500" />,
+  hoverColor: 'group-hover:text-violet-500',
+  hoverBg: 'hover:bg-violet-500/10',
+  activeColor: 'text-white',
+  activeBg: 'bg-gradient-to-r from-violet-500 to-purple-500'
+},
+      
     ],
   },
 
