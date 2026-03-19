@@ -1063,36 +1063,35 @@ className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${
         left: openMenu.anchor.getBoundingClientRect().left + window.scrollX
       }}
     >
-   {['No action', 'Pending', 'On wanted list', 'Left'].map((v) => {
-  const active = (player.handled || 'No action') === v;
+      {['No action', 'Pending', 'On wanted list', 'Left'].map((v) => {
+        const active = (player.handled || 'No action') === v;
 
-  return (
-    <div
-      key={v}
-      onClick={(e) => {
-        e.stopPropagation();
-        savePlayer(player, { handled: v });
-        setOpenMenu(null);
-      }}
-     className={`cursor-pointer px-2 py-1 rounded text-xs transition ${
-  active
-    ? v === 'Pending'
-      ? 'bg-yellow-500/30 text-yellow-200 border border-yellow-500/40'
-      : v === 'On wanted list'
-      ? 'bg-red-500/30 text-red-200 border border-red-500/40'
-      : v === 'Left'
-      ? 'bg-sky-500/30 text-sky-200 border border-sky-500/40'
-      : 'bg-amber-500/30 text-amber-200 border border-amber-500/40'
-    : 'hover:bg-[var(--background-secondary)] text-[var(--text-muted)]'
-}`}
-    >
-      {v}
+        return (
+          <div
+            key={v}
+            onClick={(e) => {
+              e.stopPropagation();
+              savePlayer(player, { handled: v });
+              setOpenMenu(null);
+            }}
+            className={`cursor-pointer px-2 py-1 rounded text-xs transition ${
+              active
+                ? v === 'Pending'
+                  ? 'bg-yellow-500/30 text-yellow-200 border border-yellow-500/40'
+                  : v === 'On wanted list'
+                  ? 'bg-red-500/30 text-red-200 border border-red-500/40'
+                  : v === 'Left'
+                  ? 'bg-sky-500/30 text-sky-200 border border-sky-500/40'
+                  : 'bg-amber-500/30 text-amber-200 border border-amber-500/40'
+                : 'hover:bg-[var(--background-secondary)] text-[var(--text-muted)]'
+            }`}
+          >
+            {v}
+          </div>
+        );
+      })}
     </div>
-  );
-})}
-  </div>
-);
-})()}
+)}
       </div>
 </td>
 
