@@ -1004,8 +1004,9 @@ setOpenMenu({
           {v}
         </div>
       ))}
-    </div>
-)}
+  </div>
+);
+})()}
 </td>
 
                      
@@ -1085,7 +1086,8 @@ className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${
   );
 })}
   </div>
-)}
+);
+})()}
       </div>
 </td>
 
