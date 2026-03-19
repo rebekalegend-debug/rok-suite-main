@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+@keyframes shine {
+  100% {
+    transform: translateX(100%);
+  }
+}
 /**
  * Modern dark/light theme
  * Clean, professional design inspired by ROKstats
