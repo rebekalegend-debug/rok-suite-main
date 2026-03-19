@@ -190,8 +190,16 @@ violation: (() => {
   const close = (e: MouseEvent) => {
     const target = e.target as HTMLElement;
 
-    // ❌ ignore clicks inside dropdown or input
-    if (target.closest('.menu') || target.closest('input')) return;
+useEffect(() => {
+  const close = (e: MouseEvent) => {
+    const target = e.target as HTMLElement;
+
+    if (
+      target.closest('.menu') ||                // inside dropdown
+      target.closest('[data-dropdown-trigger]') // clicking trigger
+    ) {
+      return;
+    }
 
     setOpenMenu(null);
   };
@@ -936,13 +944,15 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 
 <td className="px-3 py-2.5 text-center relative group">
 <div
+  data-dropdown-trigger
   onClick={(e) => {
     e.stopPropagation();
-setOpenMenu({
-  type: 'violation',
-  id: player.governorId,
-  anchor: e.currentTarget as HTMLElement
-});
+
+    setOpenMenu({
+      type: 'violation',
+      id: player.governorId,
+      anchor: e.currentTarget as HTMLElement
+    });
   }}
   className="cursor-pointer flex flex-wrap justify-center gap-1 min-h-[18px]"
 >
@@ -1013,15 +1023,16 @@ setOpenMenu({
 <td className="px-3 py-2.5 text-center relative">
   <div className="relative z-10">
 <div
-onClick={(e) => {
-  e.stopPropagation();
+  data-dropdown-trigger
+  onClick={(e) => {
+    e.stopPropagation();
 
-setOpenMenu({
-  type: 'handled',
-  id: player.governorId,
-  anchor: e.currentTarget as HTMLElement
-});
-}}
+    setOpenMenu({
+      type: 'handled',
+      id: player.governorId,
+      anchor: e.currentTarget as HTMLElement
+    });
+  }}
   className="cursor-pointer text-xs"
 >
 {!player.handled || player.handled === 'No action' ? (
