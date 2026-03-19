@@ -106,8 +106,7 @@ export default function WantedList() {
 const [openMenu, setOpenMenu] = useState<{
   type: 'violation' | 'handled';
   id: number;
-  x: number;
-  y: number;
+  anchor: HTMLElement;
 } | null>(null);
   
   const [filterMode, setFilterMode] = useState<'all' | 'violators' | 'wanted' | 'left'>('all');
@@ -939,18 +938,11 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 <div
   onClick={(e) => {
     e.stopPropagation();
-const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-
-setOpenMenu(
-  openMenu?.type === 'violation' && openMenu?.id === player.governorId
-    ? null
-    : {
-        type: 'violation',
-        id: player.governorId,
-        x: rect.left,
-        y: rect.bottom
-      }
-);
+setOpenMenu({
+  type: 'violation',
+  id: player.governorId,
+  anchor: e.currentTarget as HTMLElement
+});
   }}
   className="cursor-pointer flex flex-wrap justify-center gap-1 min-h-[18px]"
 >
@@ -980,12 +972,13 @@ setOpenMenu(
   openMenu?.type === 'violation' &&
   openMenu?.id === player.governorId && (
  <div
-className="menu fixed z-[9999] bg-[#0f141a] border border-gray-700 rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.8)] p-2 space-y-1 w-36"
-   style={{
-    isolation: 'isolate',
-     top: openMenu?.y,
-    left: openMenu?.x
-  }}
+className="menu fixed z-[9999] bg-[#0f141a] border border-[var(--border)] rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.8)] p-2 space-y-1 w-36" 
+   const rect = openMenu.anchor.getBoundingClientRect();
+
+style={{
+  top: rect.bottom + window.scrollY,
+  left: rect.left + window.scrollX
+}}
 >
       {VIOLATION_OPTIONS.map((v) => (
         <div
@@ -1021,18 +1014,11 @@ className="menu fixed z-[9999] bg-[#0f141a] border border-gray-700 rounded-lg sh
 onClick={(e) => {
   e.stopPropagation();
 
-const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-
-  setOpenMenu(
-    openMenu?.type === 'handled' && openMenu?.id === player.governorId
-      ? null
-      : {
-          type: 'handled',
-          id: player.governorId,
-          x: rect.left,
-          y: rect.bottom
-        }
-  );
+setOpenMenu({
+  type: 'handled',
+  id: player.governorId,
+  anchor: e.currentTarget as HTMLElement
+});
 }}
   className="cursor-pointer text-xs"
 >
@@ -1061,11 +1047,12 @@ className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${
  openMenu?.type === 'handled' &&
  openMenu?.id === player.governorId && (
  <div
-className="menu fixed z-[9999] bg-[#0f141a] border border-gray-700 rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.8)] p-2 space-y-1 w-36"  
-   style={{
- isolation: 'isolate',
-     top: openMenu?.y,
-  left: openMenu?.x
+className="menu fixed z-[9999] bg-[#0f141a] border border-[var(--border)] rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.8)] p-2 space-y-1 w-36" 
+   const rect = openMenu.anchor.getBoundingClientRect();
+
+style={{
+  top: rect.bottom + window.scrollY,
+  left: rect.left + window.scrollX
 }}
 >
    {['No action', 'Pending', 'On wanted list', 'Left'].map((v) => {
