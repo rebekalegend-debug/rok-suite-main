@@ -728,7 +728,7 @@ if (saved) {
 setLoaded(true)
 
 }
-
+if (!checkedAuth) return null
   if(loading){
     return (
       <div className="p-8 text-center text-gray-400">
@@ -736,7 +736,7 @@ setLoaded(true)
       </div>
     )
   }
-if (!checkedAuth) return null
+
 return (
 <div className="relative">
 
