@@ -322,28 +322,26 @@ setPlayers((prev:any[]) =>
 
 </td>
 <td className="p-3" onPointerDown={stop}>
-{
-(() => {
+{(() => {
+  const kvk = kvkContributionPercent(player.kvkContribution)
 
-const kvk = kvkContributionPercent(player.kvkContribution)
+  const color =
+    kvk.color === "green"
+      ? "border-green-500 text-green-400 bg-green-500/10"
+      : kvk.color === "yellow"
+      ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
+      : kvk.color === "orange"
+      ? "border-orange-500 text-orange-400 bg-orange-500/10"
+      : "border-red-500 text-red-400 bg-red-500/10"
 
-let color =
-  kvk.color === "green"
-    ? "border-green-500 text-green-400 bg-green-500/10"
-    : kvk.color === "yellow"
-    ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
-    : kvk.color === "orange"
-    ? "border-orange-500 text-orange-400 bg-orange-500/10"
-    : "border-red-500 text-red-400 bg-red-500/10"
-
-return (
-  <span className={`${badge} ${color}`}>
-    {kvk.label}
-  </span>
-)
-
-})()
-}
+  return (
+    <>
+      <span className={`${badge} ${color}`}>
+        {kvk.label}
+      </span>
+    </>
+  )
+})()}
 </td>
      <td className="p-3" onPointerDown={stop}>
 {
