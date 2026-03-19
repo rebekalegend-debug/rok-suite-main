@@ -1010,9 +1010,8 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
           {v}
         </div>
       ))}
-  </div>
-);
-})()}
+ </div>
+)}
 </td>
 
                      
