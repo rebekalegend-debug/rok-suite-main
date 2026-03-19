@@ -12,6 +12,7 @@ import { matchesSearch } from '@/lib/search';
 import { AlertCircle } from "lucide-react";
 import { Radar } from "lucide-react";
 import { fetchPrevNamesSheet } from '@/lib/kingdom/parse';
+import { createPortal } from 'react-dom';
 const VIOLATION_OPTIONS = ['First', 'Second', 'Third', 'KD Break'];
 
 type WantedPlayer = {
@@ -824,7 +825,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 
       {/* Desktop table */}
       {!loading && !error && (
- <div className="hidden md:block overflow-visible">
+<div className="hidden md:block">
         <div className="overflow-x-auto">
   <table className="w-full">
     <thead className="sticky top-0 z-10 bg-[var(--background-card)]">
@@ -867,7 +868,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                   return (
                   <tr
   key={player.governorId || player.name}
-  className={`relative z-0 border-b border-[var(--border)] hover:bg-[var(--background-secondary)]/50 transition-colors`}
+  className={`border-b border-[var(--border)] hover:bg-[var(--background-secondary)]/50 transition-colors`}
 >
                     <td className={`px-3 py-2.5 text-xs font-mono text-center ${
   isDone ? 'text-[var(--text-muted)]' : 'text-[var(--text-muted)]'
@@ -979,13 +980,14 @@ onClick={(e) => {
 
 {isAdmin &&
   openMenu?.type === 'violation' &&
-  openMenu?.id === player.governorId && (
+  openMenu?.id === player.governorId &&
+  createPortal(
     <div
-      className="menu fixed z-[9999] bg-[#0f141a] border border-[var(--border)] rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.8)] p-2 space-y-1 w-36"
-   style={{
-  top: openMenu.y + window.scrollY,
-  left: openMenu.x + window.scrollX
-}}
+      className="menu fixed z-[999999] bg-[#0f141a] border border-[var(--border)] rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.8)] p-2 space-y-1 w-36"
+      style={{
+        top: openMenu.y,
+        left: openMenu.x
+      }}
     >
       {VIOLATION_OPTIONS.map((v) => (
         <div
@@ -995,28 +997,19 @@ onClick={(e) => {
             toggleViolation(player, v);
             setOpenMenu(null);
           }}
-          className={`cursor-pointer px-2 py-1 rounded text-xs ${
-            player.violation?.includes(v)
-              ? v === 'First'
-                ? 'bg-yellow-500/20 text-yellow-300'
-                : v === 'Second'
-                ? 'bg-orange-500/20 text-orange-300'
-                : v === 'Third'
-                ? 'bg-red-500/20 text-red-300'
-                : 'bg-purple-500/20 text-purple-300'
-              : 'hover:bg-[var(--background-secondary)] text-[var(--text-muted)]'
-          }`}
+          className="cursor-pointer px-2 py-1 rounded text-xs hover:bg-[var(--background-secondary)]"
         >
           {v}
         </div>
       ))}
- </div>
-)}
+    </div>,
+    document.body
+  )}
 </td>
 
                      
 <td className="px-3 py-2.5 text-center relative">
-  <div className="relative z-10">
+  <div>
 <div
 data-dropdown-trigger="true"
   onClick={(e) => {
@@ -1026,8 +1019,8 @@ data-dropdown-trigger="true"
   setOpenMenu({
     type: 'handled',
     id: player.governorId,
-    x: rect.left,
-    y: rect.bottom
+   x: rect.left + window.scrollX,
+y: rect.bottom + window.scrollY
   });
 }}
   className="cursor-pointer text-xs"
@@ -1055,13 +1048,14 @@ className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${
 
 {isAdmin &&
   openMenu?.type === 'handled' &&
-  openMenu?.id === player.governorId && (
+  openMenu?.id === player.governorId &&
+  createPortal(
     <div
-      className="menu fixed z-[9999] bg-[#0f141a] border border-[var(--border)] rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.8)] p-2 space-y-1 w-36"
-     style={{
-  top: openMenu.y + window.scrollY,
-  left: openMenu.x + window.scrollX
-}}
+      className="menu fixed z-[999999] bg-[#0f141a] border border-[var(--border)] rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.8)] p-2 space-y-1 w-36"
+      style={{
+        top: openMenu.y,
+        left: openMenu.x
+      }}
     >
       {['No action', 'Pending', 'On wanted list', 'Left'].map((v) => {
         const active = (player.handled || 'No action') === v;
@@ -1090,8 +1084,9 @@ className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${
           </div>
         );
       })}
-    </div>
-)}
+    </div>,
+    document.body
+  )}
       </div>
 </td>
 
