@@ -861,13 +861,13 @@ onInput={(e) => {
   setMail(raw)
 }}
 >
-</div> {/* close mail box */}
-</div> {/* close mail container */}
-</div> {/* close MAIL SECTION */}
+</div> 
+</div> 
+</div>  
 
-</div> {/* main card */}
-</div> {/* page container */}
-</div> {/* blur wrapper */}
-</div> {/* root */}
+</div> 
+</div>  
+</div>  
+</div>  
 )
 }
