@@ -186,17 +186,13 @@ violation: (() => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastRefreshed, setLastRefreshed] = useState<Date | null>(null);
 
- useEffect(() => {
-  const close = (e: MouseEvent) => {
-    const target = e.target as HTMLElement;
-
 useEffect(() => {
   const close = (e: MouseEvent) => {
     const target = e.target as HTMLElement;
 
     if (
-      target.closest('.menu') ||                // inside dropdown
-      target.closest('[data-dropdown-trigger]') // clicking trigger
+      target.closest('.menu') || 
+      target.closest('[data-dropdown-trigger]')
     ) {
       return;
     }
@@ -464,7 +460,7 @@ if (hasViolation) {
     toZeroCount,
     toZeroPower,
   };
-}, [filtered]);
+}, [players]);
   
   
   const duplicateNames = useMemo(() => {
