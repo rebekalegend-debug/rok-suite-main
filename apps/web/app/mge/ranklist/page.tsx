@@ -1,5 +1,5 @@
 'use client'
-
+import { LogOut } from "lucide-react"
 import { useEffect, useState, useRef } from "react"
 import { getHeads, getPoints, kvkContributionPercent } from "@/utils/mgeRankLogic"
 import { autoRankPlayers } from "@/utils/mgeAutoRank"
@@ -256,7 +256,7 @@ return (
 
 {showRg && (
 
-<div className="absolute z-[9999] bottom-full left-0 mb-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto">
+<div className="absolute z-[9999] top-full left-0 mt-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto">
 
 {rgOptions.map(o=>{
 
@@ -363,7 +363,7 @@ eq==="Legendary"
 
 {showEq && (
 
-<div className="absolute z-[9999] bottom-full left-0 mb-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto">
+<div className="absolute z-[9999] top-full left-0 mt-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-xs shadow-lg max-h-48 overflow-y-auto">
 
 {["Legendary","Leg.Purple","Purple","Bad/Low"].map(v => {
   let color = "text-white"
@@ -453,7 +453,7 @@ return `<span style="color:${c}">${content}</span>`
   return html
 }
 export default function MgeRanklistPage() {
-
+const [error,setError] = useState(false)
 const [mail,setMail] = useState("")
 const editorRef = useRef<HTMLDivElement>(null)
 
@@ -480,8 +480,9 @@ function handleLogin() {
   if (inputPass === ADMIN_PASS) {
     localStorage.setItem("mge_admin", inputPass)
     setAuthorized(true)
+    setError(false) // ✅ add this
   } else {
-    alert("Wrong password")
+    setError(true)
   }
 }
 
@@ -696,28 +697,61 @@ return (
 
 {/* 🔒 LOCK OVERLAY */}
 {!authorized && (
-  <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm">
-    
-    <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-6 shadow-xl w-[300px] text-center space-y-4">
-      
-      <div className="text-white font-semibold">
-        Admin Access Required
-      </div>
+  <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-[4px]">
 
-      <input
-        type="password"
-        placeholder="Enter password..."
-        value={inputPass}
-        onChange={(e)=>setInputPass(e.target.value)}
-        className="w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded text-sm text-white outline-none"
-      />
+    <div className="bg-zinc-900/90 border border-yellow-500/30 rounded-xl p-6 shadow-[0_0_30px_rgba(255,215,120,0.25)] w-[320px] text-center space-y-5 relative overflow-hidden">
 
-      <button
-        onClick={handleLogin}
-        className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-semibold py-2 rounded"
-      >
-        Login
-      </button>
+      {/* glow layers */}
+      <div className="absolute inset-0 rounded-xl pointer-events-none border border-yellow-500/20 shadow-[0_0_40px_rgba(255,215,120,0.15)]" />
+      <div className="absolute inset-0 rounded-xl pointer-events-none bg-gradient-to-r from-transparent via-yellow-500/10 to-transparent opacity-40" />
+    🔒 Admin Access
+  </div>
+
+   <input
+  type="password"
+  placeholder="Enter password..."
+  value={inputPass}
+  onChange={(e)=>{
+    setInputPass(e.target.value)
+    setError(false)
+  }}
+  className={`
+    w-full px-3 py-2 rounded-md text-sm outline-none transition-all
+    bg-zinc-800 border
+    ${error
+      ? "border-red-500 shadow-[0_0_10px_rgba(255,0,0,0.4)] text-red-300 placeholder-red-400"
+      : "border-yellow-500/30 text-white focus:border-yellow-400 focus:shadow-[0_0_10px_rgba(255,215,100,0.4)]"
+    }
+  `}
+/>
+  {error && (
+  <div className="text-red-400 text-xs mt-1">
+    Wrong password
+  </div>
+)}
+
+    <button
+  onClick={handleLogin}
+  className="
+    relative w-full py-2 rounded-md font-semibold text-black
+    bg-gradient-to-r from-yellow-400 via-amber-300 to-yellow-500
+    shadow-[0_0_15px_rgba(255,215,100,0.5)]
+    hover:shadow-[0_0_30px_rgba(255,215,100,0.9)]
+    hover:scale-[1.03]
+    transition-all duration-300
+    overflow-hidden
+  "
+>
+  <span className="relative z-10">Unlock</span>
+
+  {/* ✨ shine */}
+  <span className="
+    absolute inset-0
+    bg-gradient-to-r from-transparent via-white/40 to-transparent
+    translate-x-[-100%]
+    animate-[shine_2.5s_linear_infinite]
+  " />
+</button>
 
     </div>
 
@@ -725,7 +759,7 @@ return (
 )}
 
 {/* 🔥 MAIN CONTENT */}
-<div className={!authorized ? "blur-md pointer-events-none select-none" : ""}>
+<div className={!authorized ? "blur-[2px] brightness-75 pointer-events-none select-none" : ""}>
   
 <div className="max-w-[1800px] mx-auto p-4 md:p-8">
 
@@ -737,19 +771,20 @@ style={{
 }}
 >
 
-<div className="flex justify-between items-center border-b pb-2 mb-4">
+<div className="relative flex items-center border-b border-yellow-500/30 pb-2 mb-4">
   
-  <h2 className="mge-title">
+ <h2 className="mge-title absolute left-1/2 -translate-x-1/2">
     .˳·˖✶𓆩MGE Ranklist𓆪✶˖·˳.
   </h2>
 
   {authorized && (
-    <button
-      onClick={handleLogout}
-      className="text-red-400 hover:text-red-300 flex items-center gap-1 text-sm"
-    >
-      Log out
-    </button>
+<button
+  onClick={handleLogout}
+  title="Log off"
+  className="ml-auto text-red-400 hover:text-red-300 flex items-center justify-center w-9 h-9 rounded-md hover:bg-red-500/10 transition"
+>
+  <LogOut size={18} />
+</button>
   )}
 
 </div>
