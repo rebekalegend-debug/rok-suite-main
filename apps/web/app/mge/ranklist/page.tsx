@@ -921,6 +921,5 @@ onInput={(e)=>{
 
 </div> {/* page container */}
 </div> {/* blur wrapper */}
-</div> {/* root */}
 )
 }
