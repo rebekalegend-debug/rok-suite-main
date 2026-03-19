@@ -704,60 +704,64 @@ return (
       {/* glow layers */}
       <div className="absolute inset-0 rounded-xl pointer-events-none border border-yellow-500/20 shadow-[0_0_40px_rgba(255,215,120,0.15)]" />
       <div className="absolute inset-0 rounded-xl pointer-events-none bg-gradient-to-r from-transparent via-yellow-500/10 to-transparent opacity-40" />
-    🔒 Admin Access
-  </div>
 
-   <input
-  type="password"
-  placeholder="Enter password..."
-  value={inputPass}
-  onChange={(e)=>{
-    setInputPass(e.target.value)
-    setError(false)
-  }}
-  className={`
-    w-full px-3 py-2 rounded-md text-sm outline-none transition-all
-    bg-zinc-800 border
-    ${error
-      ? "border-red-500 shadow-[0_0_10px_rgba(255,0,0,0.4)] text-red-300 placeholder-red-400"
-      : "border-yellow-500/30 text-white focus:border-yellow-400 focus:shadow-[0_0_10px_rgba(255,215,100,0.4)]"
-    }
-  `}
-/>
-  {error && (
-  <div className="text-red-400 text-xs mt-1">
-    Wrong password
-  </div>
-)}
+      {/* ✅ TITLE FIX */}
+      <div className="text-yellow-400 font-semibold tracking-wide text-lg">
+        🔒 Admin Access
+      </div>
 
-    <button
-  onClick={handleLogin}
-  className="
-    relative w-full py-2 rounded-md font-semibold text-black
-    bg-gradient-to-r from-yellow-400 via-amber-300 to-yellow-500
-    shadow-[0_0_15px_rgba(255,215,100,0.5)]
-    hover:shadow-[0_0_30px_rgba(255,215,100,0.9)]
-    hover:scale-[1.03]
-    transition-all duration-300
-    overflow-hidden
-  "
->
-  <span className="relative z-10">Unlock</span>
+      {/* INPUT */}
+      <input
+        type="password"
+        placeholder="Enter password..."
+        value={inputPass}
+        onChange={(e)=>{
+          setInputPass(e.target.value)
+          setError(false)
+        }}
+        className={`
+          w-full px-3 py-2 rounded-md text-sm outline-none transition-all
+          bg-zinc-800 border
+          ${error
+            ? "border-red-500 shadow-[0_0_10px_rgba(255,0,0,0.4)] text-red-300 placeholder-red-400"
+            : "border-yellow-500/30 text-white focus:border-yellow-400 focus:shadow-[0_0_10px_rgba(255,215,100,0.4)]"
+          }
+        `}
+      />
 
-  {/* ✨ shine */}
-  <span className="
-    absolute inset-0
-    bg-gradient-to-r from-transparent via-white/40 to-transparent
-    translate-x-[-100%]
-    animate-[shine_2.5s_linear_infinite]
-  " />
-</button>
+      {/* ERROR */}
+      {error && (
+        <div className="text-red-400 text-xs mt-1">
+          Wrong password
+        </div>
+      )}
+
+      {/* BUTTON */}
+      <button
+        onClick={handleLogin}
+        className="
+          relative w-full py-2 rounded-md font-semibold text-black
+          bg-gradient-to-r from-yellow-400 via-amber-300 to-yellow-500
+          shadow-[0_0_15px_rgba(255,215,100,0.5)]
+          hover:shadow-[0_0_30px_rgba(255,215,100,0.9)]
+          hover:scale-[1.03]
+          transition-all duration-300
+          overflow-hidden
+        "
+      >
+        <span className="relative z-10">Unlock</span>
+
+        <span className="
+          absolute inset-0
+          bg-gradient-to-r from-transparent via-white/40 to-transparent
+          translate-x-[-100%]
+          animate-[shine_2.5s_linear_infinite]
+        " />
+      </button>
 
     </div>
-
   </div>
 )}
-
 {/* 🔥 MAIN CONTENT */}
 <div className={!authorized ? "blur-[2px] brightness-75 pointer-events-none select-none" : ""}>
   
