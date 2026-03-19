@@ -508,7 +508,7 @@ const editorRef = useRef<HTMLDivElement>(null)
 const [players,setPlayers] = useState<Player[]>([])
 
   const ADMIN_PASS = process.env.NEXT_PUBLIC_ADMIN_PASSWORD
-
+const [checkedAuth, setCheckedAuth] = useState(false)
 const [authorized, setAuthorized] = useState(false)
 const [inputPass, setInputPass] = useState("")
 
@@ -518,6 +518,8 @@ useEffect(() => {
   if (saved === ADMIN_PASS) {
     setAuthorized(true)
   }
+
+  setCheckedAuth(true)
 }, [])
 
 
@@ -734,7 +736,7 @@ setLoaded(true)
       </div>
     )
   }
-
+if (!checkedAuth) return null
 return (
 <div className="relative">
 
@@ -911,12 +913,14 @@ onInput={(e)=>{
 </div>
 {/* close mail container */}
 
+  
 </div>
 {/* close MAIL SECTION */}
 
 </div>
-{/* close main card */}
+</div> {/* close main card */}
 
+</div> {/* page container */}
 </div> {/* blur wrapper */}
 </div> {/* root */}
 )
