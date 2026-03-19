@@ -971,8 +971,8 @@ setOpenMenu(
   openMenu?.type === 'violation' &&
   openMenu?.id === player.governorId && (
  <div
-  className="menu fixed z-[9999] bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-2xl p-2 space-y-1 w-32"
-  style={{
+className="menu fixed z-[9999] bg-[#0f141a] backdrop-blur-none border border-[var(--border)] rounded-lg shadow-2xl p-2 space-y-1 w-36"
+   style={{
     top: openMenu?.y,
     left: openMenu?.x
   }}
@@ -1051,7 +1051,7 @@ className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${
  openMenu?.type === 'handled' &&
  openMenu?.id === player.governorId && (
  <div
-className="menu fixed z-[9999] pointer-events-auto bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-2xl p-2 space-y-1 w-36"
+className="menu fixed z-[9999] bg-[#0f141a] backdrop-blur-none border border-[var(--border)] rounded-lg shadow-2xl p-2 space-y-1 w-36"  
    style={{
   top: openMenu?.y,
   left: openMenu?.x
