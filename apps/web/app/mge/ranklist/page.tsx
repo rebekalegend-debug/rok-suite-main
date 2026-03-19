@@ -355,7 +355,7 @@ setPlayers((prev:any[]) =>
       "Buy all, max tech!": "bg-green-600"
     }
 
-    const color = map[player.spend] || "bg-zinc-600"
+
 
     return (
       <span
