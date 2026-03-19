@@ -118,10 +118,9 @@ const [editing,setEditing] = useState(false)
   }
 
   return (
-  <tr
+<tr
   ref={setNodeRef}
   style={style}
-  {...attributes}
   className="border-t border-zinc-800 hover:bg-zinc-900"
 >
 
@@ -771,7 +770,7 @@ return (
 )}
 
 {/* 🔥 MAIN CONTENT */}
-<div className={!authorized ? "blur-md pointer-events-none select-none" : undefined}>
+<div className={!authorized ? "blur-md pointer-events-none select-none" : ""}>
   
 <div className="max-w-[1800px] mx-auto p-4 md:p-8">
 
@@ -902,8 +901,8 @@ ref={editorRef}
 contentEditable
 suppressContentEditableWarning
 className="w-full min-h-[260px] p-4 rounded-lg bg-[#070c12] text-sm leading-relaxed outline-none text-zinc-200 whitespace-pre-wrap"
-onInput={(e)=>{
-  const raw = e.currentTarget.innerText
+onInput={(e: React.FormEvent<HTMLDivElement>) => {
+  const raw = (e.currentTarget as HTMLDivElement).innerText
   setMail(raw)
 }}
 >
