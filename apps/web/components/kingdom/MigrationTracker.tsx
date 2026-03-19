@@ -1145,8 +1145,8 @@ className="menu fixed z-[9999] bg-[#0f141a] backdrop-blur-none border border-[va
               )}
             </tbody>
            </table>
-      </div>   {/* ✅ closes overflow-x-auto */}
-    </div>     {/* ✅ closes md:block wrapper */}
+      </div>  
+    </div> 
   )}
 
 
