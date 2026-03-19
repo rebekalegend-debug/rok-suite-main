@@ -40,7 +40,7 @@
     "mge": "MGE",
     "Tracking": "Tracking",
     "kingdom": "Kingdom",
-    "violationTrack": "Violation Tracker",
+    "violationTrack": "Violation",
     "allianceSorter": "Alliance Sorter",
     "wanted": "Wanted",
     "aooPlanner": "AoO Planner",
@@ -51,7 +51,7 @@
     "wipBadge": "WIP",
     "stats": "KvK Stats",
     "kvkMap": "KvK Map",
-    "kingdomStats": "Migration Tracker"
+    "kingdomStats": "Migration"
   },
   "home": {
     "tagline": "Kingdom 3237 • Rise of Kingdoms",
