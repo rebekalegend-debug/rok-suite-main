@@ -979,8 +979,7 @@ onClick={(e) => {
 
 {isAdmin &&
   openMenu?.type === 'violation' &&
-  openMenu?.id === player.governorId &&
-  openMenu.anchor && (
+  openMenu?.id === player.governorId && (
     <div
       className="menu fixed z-[9999] bg-[#0f141a] border border-[var(--border)] rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.8)] p-2 space-y-1 w-36"
    style={{
@@ -1056,8 +1055,7 @@ className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${
 
 {isAdmin &&
   openMenu?.type === 'handled' &&
-  openMenu?.id === player.governorId &&
-  openMenu.anchor && (
+  openMenu?.id === player.governorId && (
     <div
       className="menu fixed z-[9999] bg-[#0f141a] border border-[var(--border)] rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.8)] p-2 space-y-1 w-36"
      style={{
