@@ -117,10 +117,13 @@ const [editing,setEditing] = useState(false)
     transition
   }
 
-  return (
+return (
+
 <tr
   ref={setNodeRef}
   style={style}
+  {...attributes}
+  {...listeners}
   className="border-t border-zinc-800 hover:bg-zinc-900"
 >
 
@@ -182,7 +185,7 @@ const [editing,setEditing] = useState(false)
 </td>
 <td
   className="p-3 font-semibold cursor-grab"
-  {...listeners}
+ 
 >
   {player.name}
 </td>
@@ -400,6 +403,7 @@ setPlayers((prev:any[]) =>
       <td className="p-3" onPointerDown={stop}>{player.main}</td>
 
     </tr>
+ 
   )
 }
 
@@ -852,7 +856,7 @@ ref={editorRef}
 contentEditable
 suppressContentEditableWarning
 className="w-full min-h-[260px] p-4 rounded-lg bg-[#070c12] text-sm leading-relaxed outline-none text-zinc-200 whitespace-pre-wrap"
-onInput={(e: React.FormEvent<HTMLDivElement>) => {
+onInput={(e) => {
   const raw = (e.currentTarget as HTMLDivElement).innerText
   setMail(raw)
 }}
