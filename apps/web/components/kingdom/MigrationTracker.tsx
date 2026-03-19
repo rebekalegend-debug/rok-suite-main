@@ -102,16 +102,15 @@ export default function WantedList() {
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [reasonFilter, setReasonFilter] = useState<string | null>(null);
-
-const [openMenu, setOpenMenu] = useState<{
-  type: 'violation' | 'handled';
-  id: number;
-  anchor: HTMLElement;
-} | null>(null);
   
   const [filterMode, setFilterMode] = useState<'all' | 'violators' | 'wanted' | 'left'>('all');
 const [allMembers, setAllMembers] = useState<any[]>([]);
-
+const [openMenu, setOpenMenu] = useState<{
+  type: 'violation' | 'handled';
+  id: number;
+  x: number;
+  y: number;
+} | null>(null);
   // Sort state
   const [sortRules, setSortRules] = useState<SortRule[]>(DEFAULT_SORT_RULES);
 
@@ -825,7 +824,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 
       {/* Desktop table */}
       {!loading && !error && (
-   <div className="hidden md:block overflow-visible relative z-0">
+ <div className="hidden md:block overflow-visible">
         <div className="overflow-x-auto">
   <table className="w-full">
     <thead className="sticky top-0 z-10 bg-[var(--background-card)]">
@@ -943,15 +942,17 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 <td className="px-3 py-2.5 text-center relative group">
 <div
  data-dropdown-trigger="true"
-  onClick={(e) => {
-    e.stopPropagation();
+onClick={(e) => {
+  e.stopPropagation();
+  const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
 
-    setOpenMenu({
-      type: 'violation',
-      id: player.governorId,
-      anchor: e.currentTarget as HTMLElement
-    });
-  }}
+  setOpenMenu({
+    type: 'violation',
+    id: player.governorId,
+    x: rect.left,
+    y: rect.bottom
+  });
+}}
   className="cursor-pointer flex flex-wrap justify-center gap-1 min-h-[18px]"
 >
   {player.violation?.length ? (
@@ -982,10 +983,10 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
   openMenu.anchor && (
     <div
       className="menu fixed z-[9999] bg-[#0f141a] border border-[var(--border)] rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.8)] p-2 space-y-1 w-36"
-      style={{
-        top: openMenu.anchor.getBoundingClientRect().bottom + window.scrollY,
-        left: openMenu.anchor.getBoundingClientRect().left + window.scrollX
-      }}
+   style={{
+  top: openMenu.y + window.scrollY,
+  left: openMenu.x + window.scrollX
+}}
     >
       {VIOLATION_OPTIONS.map((v) => (
         <div
@@ -1020,14 +1021,16 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 <div
 data-dropdown-trigger="true"
   onClick={(e) => {
-    e.stopPropagation();
+  e.stopPropagation();
+  const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
 
-    setOpenMenu({
-      type: 'handled',
-      id: player.governorId,
-      anchor: e.currentTarget as HTMLElement
-    });
-  }}
+  setOpenMenu({
+    type: 'handled',
+    id: player.governorId,
+    x: rect.left,
+    y: rect.bottom
+  });
+}}
   className="cursor-pointer text-xs"
 >
 {!player.handled || player.handled === 'No action' ? (
@@ -1057,10 +1060,10 @@ className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${
   openMenu.anchor && (
     <div
       className="menu fixed z-[9999] bg-[#0f141a] border border-[var(--border)] rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.8)] p-2 space-y-1 w-36"
-      style={{
-        top: openMenu.anchor.getBoundingClientRect().bottom + window.scrollY,
-        left: openMenu.anchor.getBoundingClientRect().left + window.scrollX
-      }}
+     style={{
+  top: openMenu.y + window.scrollY,
+  left: openMenu.x + window.scrollX
+}}
     >
       {['No action', 'Pending', 'On wanted list', 'Left'].map((v) => {
         const active = (player.handled || 'No action') === v;
