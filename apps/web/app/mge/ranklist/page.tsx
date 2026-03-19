@@ -124,30 +124,22 @@ const [editing,setEditing] = useState(false)
   className="border-t border-zinc-800 hover:bg-zinc-900"
 >
 
- <td className="p-3" onPointerDown={stop}>
-{(() => {
-
-  const heads = getHeads(rank)
-
-  return (
-    <span
-      className={`${badge} ${
-        heads >= 90
-          ? "border-green-500 text-green-400 bg-green-500/10"
-          : heads >= 60
-          ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
-          : heads >= 30
-          ? "border-orange-500 text-orange-400 bg-orange-500/10"
-          : heads > 0
-          ? "border-red-500 text-red-400 bg-red-500/10"
-          : "border-zinc-500 text-zinc-400 bg-zinc-500/10"
-      }`}
-    >
-      {heads}
-    </span>
-  )
-
-})()}
+<td className="p-3" onPointerDown={stop}>
+  <span
+    className={`${badge} ${
+      getHeads(rank) >= 90
+        ? "border-green-500 text-green-400 bg-green-500/10"
+        : getHeads(rank) >= 60
+        ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
+        : getHeads(rank) >= 30
+        ? "border-orange-500 text-orange-400 bg-orange-500/10"
+        : getHeads(rank) > 0
+        ? "border-red-500 text-red-400 bg-red-500/10"
+        : "border-zinc-500 text-zinc-400 bg-zinc-500/10"
+    }`}
+  >
+    {getHeads(rank)}
+  </span>
 </td>
      <td className="p-3" onPointerDown={stop}>
 
@@ -173,30 +165,21 @@ const [editing,setEditing] = useState(false)
 
 </td>
       <td className="p-3 font-semibold">{rank}</td>
-      <td className="p-3" onPointerDown={stop}>
- {(() => {
-
-  const wr = Number(player.desiredRank)
-
-  return (
-    <span
-      className={`${badge} ${
-        wr <= 2
-          ? "border-green-500 text-green-400 bg-green-500/10"
-          : wr <= 5
-          ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
-          : wr <= 10
-          ? "border-orange-500 text-orange-400 bg-orange-500/10"
-          : "border-red-500 text-red-400 bg-red-500/10"
-      }`}
-    >
-      {player.desiredRank}
-    </span>
-  )
-
-})()}
+     <td className="p-3" onPointerDown={stop}>
+  <span
+    className={`${badge} ${
+      Number(player.desiredRank) <= 2
+        ? "border-green-500 text-green-400 bg-green-500/10"
+        : Number(player.desiredRank) <= 5
+        ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
+        : Number(player.desiredRank) <= 10
+        ? "border-orange-500 text-orange-400 bg-orange-500/10"
+        : "border-red-500 text-red-400 bg-red-500/10"
+    }`}
+  >
+    {player.desiredRank}
+  </span>
 </td>
-
 <td
   className="p-3 font-semibold cursor-grab"
   {...listeners}
@@ -206,30 +189,23 @@ const [editing,setEditing] = useState(false)
      <td className="p-3" onPointerDown={stop}>{player.commander}</td>
 
 <td className="p-3" onPointerDown={stop}>
-{(() => {
-
-  const p = player.purpose
-
-  if(!p)
-    return <span className="text-zinc-400 text-xs">N/A</span>
-
-  return (
+  {!player.purpose ? (
+    <span className="text-zinc-400 text-xs">N/A</span>
+  ) : (
     <span
       className={`${badge} ${
-        p === "Meta R/G Leader"
+        player.purpose === "Meta R/G Leader"
           ? "border-green-500 text-green-400 bg-green-500/10"
-        : p === "Non-Meta R/G Leader" || p === "Field fight"
+        : player.purpose === "Non-Meta R/G Leader" || player.purpose === "Field fight"
           ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
-        : p === "Own city garrison"
+        : player.purpose === "Own city garrison"
           ? "border-orange-500 text-orange-400 bg-orange-500/10"
         : "border-red-500 text-red-400 bg-red-500/10"
       }`}
     >
-      {p}
+      {player.purpose}
     </span>
-  )
-
-})()}
+  )}
 </td>
 
 <td ref={rgRef} className="p-3 relative" onPointerDown={stop}>
@@ -321,62 +297,37 @@ setPlayers((prev:any[]) =>
 
 </td>
 <td className="p-3" onPointerDown={stop}>
-{(() => {
-  const kvk = kvkContributionPercent(player.kvkContribution)
-
-  const color =
-    kvk.color === "green"
-      ? "border-green-500 text-green-400 bg-green-500/10"
-      : kvk.color === "yellow"
-      ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
-      : kvk.color === "orange"
-      ? "border-orange-500 text-orange-400 bg-orange-500/10"
-      : "border-red-500 text-red-400 bg-red-500/10"
-
-  return (
-    <>
-      <span className={`${badge} ${color}`}>
-        {kvk.label}
-      </span>
-    </>
-  )
-})()}
+  <span
+    className={`${badge} ${
+      kvkContributionPercent(player.kvkContribution).color === "green"
+        ? "border-green-500 text-green-400 bg-green-500/10"
+        : kvkContributionPercent(player.kvkContribution).color === "yellow"
+        ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
+        : kvkContributionPercent(player.kvkContribution).color === "orange"
+        ? "border-orange-500 text-orange-400 bg-orange-500/10"
+        : "border-red-500 text-red-400 bg-red-500/10"
+    }`}
+  >
+    {kvkContributionPercent(player.kvkContribution).label}
+  </span>
 </td>
-     <td className="p-3" onPointerDown={stop}>
-{
-  (() => {
-
-    const map:any = {
-      "F2P": "bg-red-600",
-      "Only 50% Mine Boost": "bg-orange-500",
-      "Only Crystal Quest": "bg-orange-500",
-      "50% Boost + Crystal Quest": "bg-orange-500",
-      "50% + C.Q. + Few pop up bundles": "bg-yellow-500",
-      "Buy all, max tech!": "bg-green-600"
-    }
-
-
-
-    return (
-      <span
-  className={`${badge} ${
-    player.spend === "Buy all, max tech!"
-      ? "border-green-500 text-green-400 bg-green-500/10"
-      : (player.spend || "").includes("Few")
-      ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
-      : (player.spend || "").includes("Crystal")
-      ? "border-orange-500 text-orange-400 bg-orange-500/10"
-      : "border-red-500 text-red-400 bg-red-500/10"
-  }`}
->
-        {player.spend}
-      </span>
-    )
-
-  })()
-}
+ <td className="p-3" onPointerDown={stop}>
+  <span
+    className={`${badge} ${
+      player.spend === "Buy all, max tech!"
+        ? "border-green-500 text-green-400 bg-green-500/10"
+        : (player.spend || "").includes("Few")
+        ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
+        : (player.spend || "").includes("Crystal")
+        ? "border-orange-500 text-orange-400 bg-orange-500/10"
+        : "border-red-500 text-red-400 bg-red-500/10"
+    }`}
+  >
+    {player.spend}
+  </span>
 </td>
-  <td ref={eqRef} className="p-3 relative" onPointerDown={stop}>
+
+<td ref={eqRef} className="p-3 relative" onPointerDown={stop}>
 
 <div
   className="cursor-pointer"
