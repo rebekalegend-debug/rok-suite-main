@@ -917,7 +917,6 @@ onInput={(e)=>{
 </div>
 {/* close MAIL SECTION */}
 
-</div>
 </div> {/* close main card */}
 
 </div> {/* page container */}
