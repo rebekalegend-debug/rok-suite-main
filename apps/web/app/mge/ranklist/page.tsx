@@ -917,8 +917,6 @@ onInput={(e)=>{
 </div>
 {/* close main card */}
 
-{/* page container */}
-</div> {/* page container */}
 </div> {/* blur wrapper */}
 </div> {/* root */}
 )
