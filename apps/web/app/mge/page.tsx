@@ -8,7 +8,9 @@ declare global {
   }
 }
 function getMgeStatus() {
-  const now = new Date()
+const now = (window as any).__TEST_TIME__
+  ? new Date((window as any).__TEST_TIME__)
+  : new Date()
 
   const base = new Date(Date.UTC(2026, 2, 9, 0, 0, 0))
 
