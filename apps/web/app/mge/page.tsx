@@ -8,9 +8,9 @@ declare global {
   }
 }
 function getMgeStatus() {
-const now = (window as any).__TEST_TIME__
-  ? new Date((window as any).__TEST_TIME__)
-  : new Date()
+  const now = (window as any).__TEST_TIME__
+    ? new Date((window as any).__TEST_TIME__)
+    : new Date()
 
   const base = new Date(Date.UTC(2026, 2, 9, 0, 0, 0))
 
@@ -20,11 +20,15 @@ const now = (window as any).__TEST_TIME__
   const diff = now.getTime() - base.getTime()
   const cycles = Math.floor(diff / TWO_WEEKS)
 
-  const currentStart = new Date(base.getTime() + cycles * TWO_WEEKS)
+  // ✅ correct cycle anchor
+let currentStart = new Date(base.getTime() + cycles * TWO_WEEKS)
+
+if (now < currentStart) {
+  currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
+}
+
   const nextStart = new Date(currentStart.getTime() + TWO_WEEKS)
-
   const currentEnd = new Date(currentStart.getTime() + 7 * ONE_DAY)
-
   const registrationClose = new Date(nextStart.getTime() - ONE_DAY)
 
   const isClosed =
