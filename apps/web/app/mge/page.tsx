@@ -2,7 +2,29 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { AppSidebar } from '@/components/AppSidebar';
+function getMgeStatus() {
+  const now = new Date()
 
+  const base = new Date(Date.UTC(2026, 2, 9, 0, 0, 0))
+
+  const TWO_WEEKS = 14 * 24 * 60 * 60 * 1000
+  const ONE_DAY = 24 * 60 * 60 * 1000
+
+  const diff = now.getTime() - base.getTime()
+  const cycles = Math.floor(diff / TWO_WEEKS)
+
+  const currentStart = new Date(base.getTime() + cycles * TWO_WEEKS)
+  const nextStart = new Date(currentStart.getTime() + TWO_WEEKS)
+
+  const currentEnd = new Date(currentStart.getTime() + 7 * ONE_DAY)
+
+  const registrationClose = new Date(nextStart.getTime() - ONE_DAY)
+
+  const isClosed =
+    now >= registrationClose && now < currentEnd
+
+  return { isClosed }
+}
 export default function MgePage() {
 
 const [form, setForm] = useState({
@@ -47,7 +69,7 @@ const [submitting,setSubmitting] = useState(false)
   const [members,setMembers] = useState<{id:string,name:string}[]>([])
 const [search,setSearch] = useState("")
   const [selectedMember,setSelectedMember] = useState<{id:string,name:string} | null>(null)
-
+const [mgeClosed, setMgeClosed] = useState(false)
 const [submitError,setSubmitError] = useState(false)
 
 const [missing,setMissing] = useState({
@@ -60,7 +82,18 @@ const [missing,setMissing] = useState({
   equipment:false
 })
 
+useEffect(() => {
+  function check() {
+    const { isClosed } = getMgeStatus()
+    setMgeClosed(isClosed)
+  }
 
+  check()
+
+  const interval = setInterval(check, 60000) // update every minute
+
+  return () => clearInterval(interval)
+}, [])
   
 useEffect(() => {
 
@@ -236,10 +269,27 @@ skills.skill4 > 0
   
 return (
 <AppSidebar>
-<div
-className="min-h-screen"
-style={{ background: "var(--background)" }}
->
+
+  {/* 🔥 POPUP (NOT BLURRED) */}
+  {mgeClosed && (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-[2px]">
+      <div className="bg-zinc-900/95 rounded-xl p-6 w-[340px] text-center flex flex-col gap-4 shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
+        <div className="text-lg font-semibold text-yellow-400">
+          ⚔️ MGE Registration Closed
+        </div>
+        <div className="text-sm text-zinc-300 leading-relaxed">
+          Registration is closed.<br/>
+          Ranking phase in progress.<br/><br/>
+          You will be able to apply again after MGE ends.
+        </div>
+      </div>
+    </div>
+  )}
+
+  {/* 🔥 ONLY THIS PART BLURS */}
+  <div className={mgeClosed ? "blur-[2px] brightness-75 pointer-events-none select-none" : ""}>
+
+        <div className="min-h-screen">
 
 <div className="max-w-4xl mx-auto p-4 md:p-8">
 
@@ -909,7 +959,8 @@ ${submitError
 )}
 </div> {/* closes card */}
 </div> {/* closes page container */}
-</div> {/* closes min-h-screen */}
+ </div> {/* min-h-screen */}
+  </div> {/* blur wrapper */}
 
 </AppSidebar>
 );
