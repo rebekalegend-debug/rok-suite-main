@@ -156,6 +156,8 @@ const [countdown, setCountdown] = useState({
   mode: "close" as "close" | "open",
   totalHours: 0,
   days: 0,
+  hours: 0,
+  minutes: 0,
   isUrgent: false
 })
 
