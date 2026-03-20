@@ -54,6 +54,21 @@ const tools = [
   iconHoverBg: 'group-hover:bg-amber-500/15',
   iconHoverColor: 'group-hover:text-amber-500',
 },
+ {
+  href: '/mge/ranklist',
+  titleKey: 'tools.mgeranklist.title',
+  descriptionKey: 'tools.mgeranklis.description',
+  icon: Trophy,
+
+  iconColor: 'text-amber-500',
+  iconGlow: 'drop-shadow-[0_0_6px_rgba(99,102,241,0.45)]',
+
+  hoverBorder: 'hover:border-amber-500/40',
+  hoverShadow: 'hover:shadow-amber-500/10',
+  iconHoverBg: 'group-hover:bg-amber-500/15',
+  iconHoverColor: 'group-hover:text-amber-500',
+},
+  
 {
   href: 'https://app.rokstats.online/kvk/ranking',
   titleKey: 'tools.events.title',
