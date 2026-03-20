@@ -250,8 +250,17 @@ style={{
   borderColor: "var(--border)"
 }}
 >
-<h2 className="mge-title border-b pb-2 mb-2">
-.˳·˖✶𓆩MGE Registration𓆪✶˖·˳.
+<h2
+  className="border-b pb-2 mb-2 text-center font-semibold leading-tight
+  text-[34px] sm:text-[44px] md:text-[56px]"
+  style={{
+    color: "#FFD76B",
+    textShadow: "0 0 18px rgba(255,215,107,0.35)",
+    wordBreak: "break-word"
+  }}
+>
+  <span className="hidden sm:inline">.˳·˖✶𓆩MGE Registration𓆪✶˖·˳.</span>
+  <span className="sm:hidden">𓆩 MGE Registration 𓆪</span>
 </h2>
 
 {alreadyApplied ? (
