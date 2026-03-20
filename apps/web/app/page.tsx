@@ -60,13 +60,13 @@ const tools = [
   descriptionKey: 'tools.mgeranklist.description',
   icon: Trophy,
 
-  iconColor: 'text-amber-500',
-  iconGlow: 'drop-shadow-[0_0_6px_rgba(99,102,241,0.45)]',
+  iconColor: 'text-violet-500',
+  iconGlow: 'drop-shadow-violet-500',
 
-  hoverBorder: 'hover:border-amber-500/40',
-  hoverShadow: 'hover:shadow-amber-500/10',
-  iconHoverBg: 'group-hover:bg-amber-500/15',
-  iconHoverColor: 'group-hover:text-amber-500',
+  hoverBorder: 'hover:border-violet-500/40',
+  hoverShadow: 'hover:shadow-violet-500/10',
+  iconHoverBg: 'group-hover:bg-violet-500/15',
+  iconHoverColor: 'group-hover:text-violet-500',
 },
   
 {
