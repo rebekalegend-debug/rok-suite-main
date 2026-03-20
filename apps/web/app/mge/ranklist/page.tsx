@@ -32,7 +32,7 @@ type Player = {
   purpose?: string
 }
 const badge = "px-3 py-1 rounded-md text-xs font-semibold border"
-function Row({ player, rank, setPlayers }: any) {
+function Row({ player, rank, setPlayers, totalPlayers }: any) {
 
   const {
     attributes,
@@ -50,7 +50,7 @@ const eqRef = useRef<any>(null)
 const eq = player.eq || "N/A"
 const [showEq,setShowEq] = useState(false)
 
-  const defaultPoints = getPoints(rank)
+  const defaultPoints = getPoints(rank, totalPlayers)
 
 const initial =
   defaultPoints === "∞"
@@ -60,8 +60,8 @@ const initial =
 const [value,setValue] = useState<number>(initial)
 const [editing,setEditing] = useState(false)
   
-  useEffect(() => {
-  const pts = getPoints(rank)
+useEffect(() => {
+  const pts = getPoints(rank, totalPlayers)
 
   const newValue =
     pts === "∞"
@@ -69,8 +69,7 @@ const [editing,setEditing] = useState(false)
       : Number(pts.replace("M",""))
 
   setValue(newValue)
-
-}, [rank])
+}, [rank, totalPlayers])
   
   
   useEffect(() => {
@@ -415,7 +414,7 @@ function parseRokMail(text:string, players:Player[]){
   const ranks = players.map((p,index)=>{
 
     const rank = index + 1
-    const pts = getPoints(rank)
+    const pts = getPoints(rank, players.length)
     const pointsText = pts === "∞" ? "Unlimited" : pts
 
     return `${rank}. ${p.name} - ${pointsText}`
@@ -553,7 +552,7 @@ let raw = mail
 const ranks = players.map((p,index)=>{
 
   const rank = index + 1
-  const pts = getPoints(rank)
+  const pts = getPoints(rank, players.length)
   const pointsText = pts === "∞" ? "Unlimited" : pts
 
   return `${rank}. ${p.name} - ${pointsText}`
@@ -574,7 +573,7 @@ async function saveList(updated:any[]) {
   return [
   p.id,                      // A ID
   getHeads(rank),            // B Heads
-  getPoints(rank),           // C Points
+  getPoints(rank, updated.length),           // C Points
   rank,                      // D Rank
   p.desiredRank,             // E W.Rank
   p.name,                    // F Name
@@ -834,6 +833,7 @@ return (
   player={p}
   rank={rank}
   setPlayers={setPlayers}
+  totalPlayers={players.length}
 />
 )
 
