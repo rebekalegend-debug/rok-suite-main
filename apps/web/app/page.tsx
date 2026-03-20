@@ -57,7 +57,7 @@ const tools = [
  {
   href: '/mge/ranklist',
   titleKey: 'tools.mgeranklist.title',
-  descriptionKey: 'tools.mgeranklis.description',
+  descriptionKey: 'tools.mgeranklist.description',
   icon: Trophy,
 
   iconColor: 'text-amber-500',
