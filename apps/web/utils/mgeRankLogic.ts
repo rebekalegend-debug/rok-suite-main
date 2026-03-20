@@ -9,28 +9,11 @@ export function getHeads(rank: number) {
   return 0
 }
 
-export function getPoints(rank: number) {
+export function getPoints(rank: number, total: number) {
   if (rank === 1) return "∞"
-  if (rank === 2) return "20M"
-  if (rank >= 16) return "5M"
 
-  const map: Record<number, number> = {
-    3: 18,
-    4: 17,
-    5: 16,
-    6: 15,
-    7: 14,
-    8: 13,
-    9: 12,
-    10: 11,
-    11: 10,
-    12: 9,
-    13: 8,
-    14: 7,
-    15: 6
-  }
-
-  return map[rank] + "M"
+  const value = 6 + (total - rank)
+  return value + "M"
 }
 
 export function formatMillions(value: number) {
