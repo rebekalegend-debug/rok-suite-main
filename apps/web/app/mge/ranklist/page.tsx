@@ -697,7 +697,7 @@ return (
 
 {/* 🔒 LOCK OVERLAY */}
 {!authorized && (
-  <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-[2px]">
+  <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm">
 
 <div className="bg-zinc-900/95 rounded-xl p-6 w-[320px] text-center space-y-5 relative overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
       {/* glow layers */}
