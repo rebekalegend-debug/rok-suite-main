@@ -88,14 +88,19 @@ let mode: "close" | "open"
 
   const diffMs = target.getTime() - now.getTime()
 
-const totalHours = Math.floor(diffMs / (1000 * 60 * 60))
+const totalMinutes = Math.floor(diffMs / (1000 * 60))
+const totalHours = Math.floor(totalMinutes / 60)
+
 const days = Math.floor(totalHours / 24)
 const hours = totalHours % 24
+const minutes = totalMinutes % 60
 
- return {
+return {
   mode,
   totalHours,
   days,
+  hours,
+  minutes,
   isUrgent: totalHours <= 24
 }
 }
@@ -404,18 +409,22 @@ style={{
     <span className={countdown.isUrgent ? "text-red-400" : "text-white"}>
     MGE Registration closes in{" "}
 {
-  countdown.days >= 2
-    ? `${countdown.days} day${countdown.days > 1 ? "s" : ""}`
-    : `${countdown.totalHours} hour${countdown.totalHours > 1 ? "s" : ""}`
+countdown.days >= 2
+  ? `${countdown.days} day${countdown.days > 1 ? "s" : ""}`
+  : countdown.totalHours >= 1
+  ? `${countdown.totalHours} hour${countdown.totalHours > 1 ? "s" : ""}`
+  : `${countdown.minutes} min`
 }
     </span>
   ) : (
     <span className="text-green-400">
 MGE Registration opens in{" "}
 {
-  countdown.days >= 2
-    ? `${countdown.days} day${countdown.days > 1 ? "s" : ""}`
-    : `${countdown.totalHours} hour${countdown.totalHours > 1 ? "s" : ""}`
+countdown.days >= 2
+  ? `${countdown.days} day${countdown.days > 1 ? "s" : ""}`
+  : countdown.totalHours >= 1
+  ? `${countdown.totalHours} hour${countdown.totalHours > 1 ? "s" : ""}`
+  : `${countdown.minutes} min`
 }
     </span>
   )}
