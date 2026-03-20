@@ -25,6 +25,53 @@ function getMgeStatus() {
 
   return { isClosed }
 }
+
+function getMgeCountdown() {
+  const now = window.__TEST_TIME__ 
+    ? new Date(window.__TEST_TIME__) 
+    : new Date()
+
+  const base = new Date(Date.UTC(2026, 2, 9, 0, 0, 0))
+
+  const TWO_WEEKS = 14 * 24 * 60 * 60 * 1000
+  const ONE_DAY = 24 * 60 * 60 * 1000
+
+  const diff = now.getTime() - base.getTime()
+  const cycles = Math.floor(diff / TWO_WEEKS)
+
+  const currentStart = new Date(base.getTime() + cycles * TWO_WEEKS)
+  const nextStart = new Date(currentStart.getTime() + TWO_WEEKS)
+  const currentEnd = new Date(currentStart.getTime() + 7 * ONE_DAY)
+
+  const registrationClose = new Date(nextStart.getTime() - ONE_DAY)
+
+  let target
+  let mode // "close" or "open"
+
+  if (now < registrationClose) {
+    target = registrationClose
+    mode = "close"
+  } else if (now < currentEnd) {
+    target = currentEnd
+    mode = "open"
+  } else {
+    target = registrationClose
+    mode = "close"
+  }
+
+  const diffMs = target.getTime() - now.getTime()
+
+  const hours = Math.floor(diffMs / (1000 * 60 * 60))
+  const days = Math.floor(hours / 24)
+
+  return {
+    mode,
+    hours,
+    days,
+    isUrgent: hours <= 24
+  }
+}
+
 export default function MgePage() {
 
 const [form, setForm] = useState({
@@ -72,6 +119,14 @@ const [search,setSearch] = useState("")
 const [mgeClosed, setMgeClosed] = useState(false)
 const [submitError,setSubmitError] = useState(false)
 
+const [countdown, setCountdown] = useState({
+  mode: "close",
+  hours: 0,
+  days: 0,
+  isUrgent: false
+})
+
+  
 const [missing,setMissing] = useState({
   member:false,
   commander:false,
@@ -82,6 +137,20 @@ const [missing,setMissing] = useState({
   equipment:false
 })
 
+
+useEffect(() => {
+  function update() {
+    setCountdown(getMgeCountdown())
+  }
+
+  update()
+
+  const interval = setInterval(update, 60000)
+
+  return () => clearInterval(interval)
+}, [])
+
+  
 useEffect(() => {
   function check() {
     const { isClosed } = getMgeStatus()
@@ -313,6 +382,31 @@ style={{
   <span className="sm:hidden">MGE Registration</span>
 </h2>
 
+  
+  
+<div className="text-center mt-2 text-sm font-medium">
+
+  {countdown.mode === "close" ? (
+    <span className={countdown.isUrgent ? "text-red-400" : "text-white"}>
+      MGE Registration closes in{" "}
+      {countdown.days >= 1
+        ? `${countdown.days} day${countdown.days > 1 ? "s" : ""}`
+        : `${countdown.hours} hour${countdown.hours > 1 ? "s" : ""}`}
+    </span>
+  ) : (
+    <span className="text-green-400">
+      MGE Registration opens in{" "}
+      {countdown.days >= 1
+        ? `${countdown.days} day${countdown.days > 1 ? "s" : ""}`
+        : `${countdown.hours} hour${countdown.hours > 1 ? "s" : ""}`}
+    </span>
+  )}
+
+</div>
+
+
+  
+  
 {alreadyApplied ? (
 <>
 <p className="mge-info">
