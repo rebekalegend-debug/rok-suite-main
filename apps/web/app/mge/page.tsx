@@ -697,7 +697,7 @@ onChange={e=>{
 <option value="Only 50% Mine Boost">Only 50% Mine Boost</option>
 <option value="Only Crystal Quest">Only Crystal Quest</option>
 <option value="50% Boost + Crystal Quest">50% Boost + Crystal Quest</option>
-<option value="50% + C.Q. + Few pop up bundles">50% + C.Q. + Few pop up bundles</option>
+<option value="50% + C.Q. + Few bundles">50% + C.Q. + Few bundles</option>
 <option value="Buy all, max tech!">Buy all, max tech!</option>
 
 </select>
