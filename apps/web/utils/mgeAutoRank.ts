@@ -9,7 +9,6 @@ export type RankPlayer = {
   main: string
   rg?: string[]
   eq?: string
-  skills?: string
   purpose?: string
 }
 
@@ -106,29 +105,7 @@ function spendScore(spend:string){
   return 0
 }
 
-/* ---------------------------------- */
-/* SKILL WASTE PROTECTION */
-/* ---------------------------------- */
 
-function headsNeeded(skills?:string){
-
-  if(!skills) return 999
-
-  const map:Record<string,number> = {
-
-    "5520":45,
-    "5530":45,
-    "5540":50,
-    "5550":50,
-    "5552":75,
-    "5553":75,
-    "5554":80,
-    "5555":0
-
-  }
-
-  return map[skills] ?? 999
-}
 
 /* ---------------------------------- */
 /* TOTAL SCORE */
