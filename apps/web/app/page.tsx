@@ -137,7 +137,7 @@ const tools = [
   href: '/kingdom/kingdom-stats',
   titleKey: 'tools.kingdomStats.title',
   descriptionKey: 'tools.kingdomStats.description',
-  icon: BarChart3,
+  icon: Radar,
 
   iconColor: 'text-green-500',
   iconGlow: 'drop-shadow-[0_0_6px_rgba(34,197,94,0.45)]',
