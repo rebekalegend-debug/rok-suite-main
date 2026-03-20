@@ -656,13 +656,13 @@ onChange={e=>{
 <option value="">Select Rank - GH - Aprox Points</option>
 
 <option value="1">1 = 180GH (Unlimited)</option>
-<option value="2">2 = 90GH (19->25M)</option>
-<option value="3">3 = 60GH (18->20M)</option>
-<option value="4">4 = 50GH (17->20M)</option>
+<option value="2">2 = 90GH (19-25M)</option>
+<option value="3">3 = 60GH (18-20M)</option>
+<option value="4">4 = 50GH (17-20M)</option>
 <option value="5">5 = 40GH (16M)</option>
 <option value="6">6 = 30GH (15M)</option>
-<option value="7-10">7 - 10 = 20GH (11->14M)</option>
-<option value="11-15">11 - 15 = 10GH (6->10M)</option>
+<option value="7-10">7 - 10 = 20GH (11-14M)</option>
+<option value="11-15">11 - 15 = 10GH (6-10M)</option>
 
 </select>
 </div>
