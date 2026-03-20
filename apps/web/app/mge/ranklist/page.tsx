@@ -693,75 +693,50 @@ if (!checkedAuth) return null
   }
 
 return (
-<AppSidebar>
-  <Suspense fallback={<div className="p-8 text-gray-400">Loading...</div>}>
-    <div className="relative">
+<div className="relative">
 
-{/* 🔒 LOCK OVERLAY */}
-{!authorized && (
-<div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-[2px]">
-<div className="bg-zinc-900/95 rounded-xl p-6 w-[320px] text-center flex flex-col gap-4 relative overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
-      {/* glow layers */}
-      <div className="absolute inset-0 rounded-xl pointer-events-none border border-yellow-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.6)]" />
-      <div className="absolute inset-0 rounded-xl pointer-events-none bg-gradient-to-r from-transparent via-yellow-500/10 to-transparent opacity-40" />
+  {/* 🔒 LOCK OVERLAY (STAYS HERE) */}
+  {!authorized && (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-[2px]">
+      <div className="bg-zinc-900/95 rounded-xl p-6 w-[320px] text-center flex flex-col gap-4 relative overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
 
-      {/* ✅ TITLE FIX */}
-     <div className="font-semibold text-lg tracking-wide bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,215,100,0.5)]">
-  🔒 Admin Access
-</div>
+        <div className="absolute inset-0 rounded-xl pointer-events-none border border-yellow-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.6)]" />
+        <div className="absolute inset-0 rounded-xl pointer-events-none bg-gradient-to-r from-transparent via-yellow-500/10 to-transparent opacity-40" />
 
-      {/* INPUT */}
-      <input
-        type="password"
-        placeholder="Enter password..."
-        value={inputPass}
-        onChange={(e)=>{
-          setInputPass(e.target.value)
-          setError(false)
-        }}
-        className={`
-          w-full px-3 py-2 rounded-md text-sm outline-none transition-all
-          bg-zinc-800 border
-          ${error
-            ? "border-red-500 shadow-[0_0_10px_rgba(255,0,0,0.4)] text-red-300 placeholder-red-400"
-            : "border-yellow-500/30 text-white focus:border-yellow-400 focus:shadow-[0_0_10px_rgba(255,215,100,0.4)]"
-          }
-        `}
-      />
-
-      {/* ERROR */}
-      {error && (
-        <div className="text-red-400 text-xs mt-1">
-          Wrong password
+        <div className="font-semibold text-lg tracking-wide bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
+          🔒 Admin Access
         </div>
-      )}
 
-      {/* BUTTON */}
-      <button
-        onClick={handleLogin}
-        className="
-          relative w-full py-2 rounded-md font-semibold text-black
-          bg-gradient-to-r from-yellow-400 via-amber-300 to-yellow-500
-          shadow-[0_0_15px_rgba(255,215,100,0.5)]
-          hover:shadow-[0_0_30px_rgba(255,215,100,0.9)]
-          hover:scale-[1.03]
-          transition-all duration-300
-          overflow-hidden
-        "
-      >
-        <span className="relative z-10">Unlock</span>
+        <input
+          type="password"
+          placeholder="Enter password..."
+          value={inputPass}
+          onChange={(e)=>{
+            setInputPass(e.target.value)
+            setError(false)
+          }}
+          className={`w-full px-3 py-2 rounded-md text-sm bg-zinc-800 border ${
+            error
+              ? "border-red-500 text-red-300"
+              : "border-yellow-500/30 text-white"
+          }`}
+        />
 
-        <span className="
-          absolute inset-0
-          bg-gradient-to-r from-transparent via-white/40 to-transparent
-          translate-x-[-100%]
-          animate-[shine_2.5s_linear_infinite]
-        " />
-      </button>
+        {error && <div className="text-red-400 text-xs">Wrong password</div>}
 
+        <button onClick={handleLogin} className="bg-yellow-400 py-2 rounded-md font-semibold text-black">
+          Unlock
+        </button>
+
+      </div>
     </div>
-  </div>
-)}
+  )}
+
+  {/* 👇 SIDEBAR WRAPS CONTENT ONLY */}
+  <AppSidebar>
+    <Suspense fallback={<div className="p-8 text-gray-400">Loading...</div>}>
+
+
 {/* 🔥 MAIN CONTENT */}
 <div className={!authorized ? "blur-[2px] brightness-75 pointer-events-none select-none" : ""}>
   
@@ -905,9 +880,8 @@ onInput={(e) => {
 </div> 
 </div>  
 
-</div> 
-</div>  
-</div>  
+</div>
+</div>
 </div>
   </Suspense>
 </AppSidebar>
