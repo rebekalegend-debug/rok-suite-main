@@ -154,20 +154,7 @@ export function autoRankPlayers<T extends RankPlayer>(players:T[]):T[]{
 
   const sorted = [...players].sort((a,b)=>{
 
-    /* ----------------------- */
-    /* SKILL HEAD PROTECTION */
-    /* ----------------------- */
-
-    const ha = headsNeeded(a.skills)
-    const hb = headsNeeded(b.skills)
-
-    if(ha !== hb){
-
-      if(ha <= 80 && hb > 80) return 1
-      if(hb <= 80 && ha > 80) return -1
-
-    }
-
+ 
     /* ----------------------- */
     /* TOTAL SCORE */
     /* ----------------------- */
