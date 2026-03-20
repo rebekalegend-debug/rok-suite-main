@@ -27,10 +27,14 @@ if (now < currentStart) {
   currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
 }
 
-  const nextStart = new Date(currentStart.getTime() + TWO_WEEKS)
-  const currentEnd = new Date(currentStart.getTime() + 7 * ONE_DAY)
-  const registrationClose = new Date(currentStart.getTime() + 2 * ONE_DAY)
+ // 🔥 MGE starts at end of cycle (day 13)
+const mgeStart = new Date(currentStart.getTime() + 13 * ONE_DAY)
 
+// 🔥 registration closes 24h before MGE
+const registrationClose = new Date(mgeStart.getTime() - ONE_DAY)
+
+// optional: MGE ends after 7 days
+const currentEnd = new Date(mgeStart.getTime() + 7 * ONE_DAY)
   const isClosed =
     now >= registrationClose && now < currentEnd
 
@@ -56,11 +60,14 @@ let currentStart = new Date(base.getTime() + cycles * TWO_WEEKS)
 if (now < currentStart) {
   currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
 }
-  const nextStart = new Date(currentStart.getTime() + TWO_WEEKS)
-  const currentEnd = new Date(currentStart.getTime() + 7 * ONE_DAY)
+ // 🔥 MGE starts at end of cycle (day 13)
+const mgeStart = new Date(currentStart.getTime() + 13 * ONE_DAY)
 
-  const registrationClose = new Date(currentStart.getTime() + 2 * ONE_DAY)
+// 🔥 registration closes 24h before MGE
+const registrationClose = new Date(mgeStart.getTime() - ONE_DAY)
 
+// optional: MGE ends after 7 days
+const currentEnd = new Date(mgeStart.getTime() + 7 * ONE_DAY)
   let target
 let mode: "close" | "open"
 
