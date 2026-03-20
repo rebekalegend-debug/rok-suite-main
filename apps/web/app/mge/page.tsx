@@ -52,7 +52,7 @@ function getMgeCountdown() {
   const registrationClose = new Date(nextStart.getTime() - ONE_DAY)
 
   let target
-  let mode // "close" or "open"
+let mode: "close" | "open"
 
   if (now < registrationClose) {
     target = registrationClose
