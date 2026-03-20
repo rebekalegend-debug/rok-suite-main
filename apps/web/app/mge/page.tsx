@@ -29,7 +29,7 @@ if (now < currentStart) {
 
   const nextStart = new Date(currentStart.getTime() + TWO_WEEKS)
   const currentEnd = new Date(currentStart.getTime() + 7 * ONE_DAY)
-  const registrationClose = new Date(nextStart.getTime() - ONE_DAY)
+  const registrationClose = new Date(currentStart.getTime() + 2 * ONE_DAY)
 
   const isClosed =
     now >= registrationClose && now < currentEnd
@@ -59,7 +59,7 @@ if (now < currentStart) {
   const nextStart = new Date(currentStart.getTime() + TWO_WEEKS)
   const currentEnd = new Date(currentStart.getTime() + 7 * ONE_DAY)
 
-  const registrationClose = new Date(nextStart.getTime() - ONE_DAY)
+  const registrationClose = new Date(currentStart.getTime() + 2 * ONE_DAY)
 
   let target
 let mode: "close" | "open"
