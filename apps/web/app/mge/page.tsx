@@ -150,15 +150,16 @@ const [missing,setMissing] = useState({
 useEffect(() => {
   function update() {
     setCountdown(getMgeCountdown())
+    setMgeClosed(getMgeStatus().isClosed)
   }
+
+  ;(window as any).forceUpdateMGE = update
 
   update()
 
   const interval = setInterval(update, 60000)
-
   return () => clearInterval(interval)
 }, [])
-
   
 useEffect(() => {
   function check() {
