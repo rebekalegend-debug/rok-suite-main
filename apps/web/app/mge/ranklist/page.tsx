@@ -16,7 +16,8 @@ import {
 } from "@dnd-kit/sortable"
 
 import { CSS } from "@dnd-kit/utilities"
-
+import { AppSidebar } from '@/components/AppSidebar';
+import { Suspense } from 'react';
 
 type Player = {
   id: string
@@ -692,7 +693,9 @@ if (!checkedAuth) return null
   }
 
 return (
-<div className="relative">
+<AppSidebar>
+  <Suspense fallback={<div className="p-8 text-gray-400">Loading...</div>}>
+    <div className="relative">
 
 {/* 🔒 LOCK OVERLAY */}
 {!authorized && (
@@ -905,6 +908,8 @@ onInput={(e) => {
 </div> 
 </div>  
 </div>  
-</div>  
+</div>
+  </Suspense>
+</AppSidebar>
 )
 }
