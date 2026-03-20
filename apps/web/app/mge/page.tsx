@@ -383,10 +383,23 @@ return (
           ⚔️ MGE Registration Closed
         </div>
         <div className="text-sm text-zinc-300 leading-relaxed">
-          Registration is closed.<br/>
-          Ranking phase in progress.<br/><br/>
-          You will be able to apply again after MGE ends.
-        </div>
+
+ <div className="text-green-400 font-semibold text-base">
+    MGE Registration opens in{" "}
+    {
+      countdown.days >= 2
+        ? `${countdown.days} day${countdown.days > 1 ? "s" : ""}`
+        : countdown.totalHours >= 1
+        ? `${countdown.totalHours} hour${countdown.totalHours > 1 ? "s" : ""}`
+        : `${countdown.minutes} min`
+    }
+  </div>
+
+  <br/>
+
+  Ranking phase in progress.
+
+</div>
       </div>
     </div>
   )}
