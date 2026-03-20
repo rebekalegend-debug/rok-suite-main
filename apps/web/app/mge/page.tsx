@@ -260,7 +260,7 @@ style={{
   }}
 >
   <span className="hidden sm:inline">.˳·˖✶𓆩MGE Registration𓆪✶˖·˳.</span>
-  <span className="sm:hidden">𓆩 MGE Registration 𓆪</span>
+  <span className="sm:hidden">MGE Registration</span>
 </h2>
 
 {alreadyApplied ? (
