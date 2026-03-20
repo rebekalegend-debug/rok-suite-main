@@ -51,7 +51,11 @@ function getMgeCountdown() {
   const diff = now.getTime() - base.getTime()
   const cycles = Math.floor(diff / TWO_WEEKS)
 
-  const currentStart = new Date(base.getTime() + cycles * TWO_WEEKS)
+let currentStart = new Date(base.getTime() + cycles * TWO_WEEKS)
+
+if (now < currentStart) {
+  currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
+}
   const nextStart = new Date(currentStart.getTime() + TWO_WEEKS)
   const currentEnd = new Date(currentStart.getTime() + 7 * ONE_DAY)
 
