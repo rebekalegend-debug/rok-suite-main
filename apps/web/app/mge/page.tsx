@@ -67,15 +67,16 @@ function getMgeCountdown() {
 
   const diffMs = target.getTime() - now.getTime()
 
-  const hours = Math.floor(diffMs / (1000 * 60 * 60))
-  const days = Math.floor(hours / 24)
+const totalHours = Math.floor(diffMs / (1000 * 60 * 60))
+const days = Math.floor(totalHours / 24)
+const hours = totalHours % 24
 
-  return {
-    mode,
-    hours,
-    days,
-    isUrgent: hours <= 24
-  }
+ return {
+  mode,
+  totalHours,
+  days,
+  isUrgent: totalHours <= 24
+}
 }
 
 export default function MgePage() {
@@ -382,7 +383,7 @@ style={{
       MGE Registration closes in{" "}
       {countdown.days >= 1
         ? `${countdown.days} day${countdown.days > 1 ? "s" : ""}`
-        : `${countdown.hours} hour${countdown.hours > 1 ? "s" : ""}`}
+         : `${countdown.totalHours} hour${countdown.totalHours > 1 ? "s" : ""}`
     </span>
   ) : (
     <span className="text-green-400">
