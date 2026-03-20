@@ -98,6 +98,12 @@
         "title": "MGE",
         "description": "MGE Registration page"
       },
+
+      "mgerankilst": {
+        "title": "MGE Ranklist",
+        "description": "MGE Ranklist page"
+      },
+      
       "migrationTracker": {
         "title": "Violation Track",
         "description": "Track MGE, 20GH and KD rule breakers"
@@ -115,8 +121,8 @@
         "description": "Interactive KvK map"
       },
       "kingdomStats": {
-        "title": "Kingdom Stats",
-        "description": "Daily member rankings, power trends, and historical kingdom data"
+        "title": "Migration",
+        "description": "Track name change's and appear and disappeared members in KD"
       }
     },
     "guide": {
