@@ -91,17 +91,22 @@ let mode: "close" | "open"
 const totalMinutes = Math.floor(diffMs / (1000 * 60))
 const totalHours = Math.floor(totalMinutes / 60)
 
-const days = Math.floor(totalHours / 24)
-const hours = totalHours % 24
-const minutes = totalMinutes % 60
+const totalSeconds = Math.floor(diffMs / 1000)
+
+const days = Math.floor(totalSeconds / 86400)
+const hours = Math.floor((totalSeconds % 86400) / 3600)
+const minutes = Math.floor((totalSeconds % 3600) / 60)
+const seconds = totalSeconds % 60
+const seconds = totalSeconds % 60
 
 return {
   mode,
-  totalHours,
+  target, // 🔥 IMPORTANT (for date display)
   days,
   hours,
   minutes,
-  isUrgent: totalHours <= 24
+  seconds,
+  isUrgent: totalSeconds <= 86400
 }
 }
 
@@ -154,10 +159,11 @@ const [submitError,setSubmitError] = useState(false)
 
 const [countdown, setCountdown] = useState({
   mode: "close" as "close" | "open",
-  totalHours: 0,
+  target: new Date(),
   days: 0,
   hours: 0,
   minutes: 0,
+  seconds: 0,
   isUrgent: false
 })
 
@@ -183,7 +189,7 @@ useEffect(() => {
 
   update()
 
-  const interval = setInterval(update, 60000)
+  const interval = setInterval(update, 1000)
   return () => clearInterval(interval)
 }, [])
   
@@ -370,7 +376,16 @@ skills.skill2 > 0 ||
 skills.skill3 > 0 ||
 skills.skill4 > 0
 
-
+function formatUTC(date: Date) {
+  return date.toLocaleString("en-GB", {
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    timeZone: "UTC"
+  }) + " UTC"
+}
   
 return (
 <AppSidebar>
@@ -382,22 +397,23 @@ return (
         <div className="text-lg font-semibold text-yellow-400">
           ⚔️ MGE Registration Closed
         </div>
-        <div className="text-sm text-zinc-300 leading-relaxed">
+       <div className="text-sm leading-relaxed space-y-2">
 
- <div className="text-green-400 font-semibold text-base">
-    MGE Registration opens in{" "}
-    {
-      countdown.days >= 2
-        ? `${countdown.days} day${countdown.days > 1 ? "s" : ""}`
-        : countdown.totalHours >= 1
-        ? `${countdown.totalHours} hour${countdown.totalHours > 1 ? "s" : ""}`
-        : `${countdown.minutes} min`
-    }
-  </div>
+<div className="text-emerald-400 font-semibold text-base">
+⚔️ MGE Registration opens in{" "}
+{countdown.days}D{" "}
+{String(countdown.hours).padStart(2,"0")}:
+{String(countdown.minutes).padStart(2,"0")}:
+{String(countdown.seconds).padStart(2,"0")}
+</div>
 
-  <br/>
+<div className="text-xs text-zinc-400">
+at {formatUTC(countdown.target)}
+</div>
 
-  Ranking phase in progress.
+<div className="text-zinc-400 pt-2">
+Ranking phase in progress.
+</div>
 
 </div>
       </div>
@@ -420,29 +436,19 @@ style={{
 >
   <div className="text-center mt-2 text-sm font-medium">
 
-  {countdown.mode === "close" ? (
-    <span className={countdown.isUrgent ? "text-red-400" : "text-white"}>
-    MGE Registration closes in{" "}
-{
-countdown.days >= 2
-  ? `${countdown.days} day${countdown.days > 1 ? "s" : ""}`
-  : countdown.totalHours >= 1
-  ? `${countdown.totalHours} hour${countdown.totalHours > 1 ? "s" : ""}`
-  : `${countdown.minutes} min`
-}
-    </span>
-  ) : (
-    <span className="text-green-400">
-MGE Registration opens in{" "}
-{
-countdown.days >= 2
-  ? `${countdown.days} day${countdown.days > 1 ? "s" : ""}`
-  : countdown.totalHours >= 1
-  ? `${countdown.totalHours} hour${countdown.totalHours > 1 ? "s" : ""}`
-  : `${countdown.minutes} min`
-}
-    </span>
-  )}
+<span className={countdown.isUrgent ? "text-red-400" : "text-white"}>
+{countdown.mode === "close"
+  ? "MGE Registration closes in "
+  : "MGE Registration opens in "}
+{countdown.days}D{" "}
+{String(countdown.hours).padStart(2,"0")}:
+{String(countdown.minutes).padStart(2,"0")}:
+{String(countdown.seconds).padStart(2,"0")}
+<br/>
+<span className="text-xs text-zinc-400">
+at {formatUTC(countdown.target)}
+</span>
+</span>
 
 </div>
 
