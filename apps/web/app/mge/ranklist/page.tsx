@@ -693,11 +693,17 @@ if (!checkedAuth) return null
   }
 
 return (
+<AppSidebar>
+    
+  <Suspense fallback={<div className="p-8 text-gray-400">Loading...</div>}>
+
+
+{/* 🔥 MAIN CONTENT */}
 <div className="relative">
 
-  {/* 🔒 LOCK OVERLAY (STAYS HERE) */}
   {!authorized && (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-[2px]">
+    <div className="absolute inset-0 z-[50] flex items-center justify-center bg-black/70 backdrop-blur-[2px]">
+
       <div className="bg-zinc-900/95 rounded-xl p-6 w-[320px] text-center flex flex-col gap-4 relative overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
 
         <div className="absolute inset-0 rounded-xl pointer-events-none border border-yellow-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.6)]" />
@@ -724,21 +730,19 @@ return (
 
         {error && <div className="text-red-400 text-xs">Wrong password</div>}
 
-        <button onClick={handleLogin} className="bg-yellow-400 py-2 rounded-md font-semibold text-black">
+        <button
+          onClick={handleLogin}
+          className="bg-yellow-400 py-2 rounded-md font-semibold text-black"
+        >
           Unlock
         </button>
 
       </div>
+
     </div>
   )}
 
-  {/* 👇 SIDEBAR WRAPS CONTENT ONLY */}
-  <AppSidebar>
-    <Suspense fallback={<div className="p-8 text-gray-400">Loading...</div>}>
-
-
-{/* 🔥 MAIN CONTENT */}
-<div className={!authorized ? "blur-[2px] brightness-75 pointer-events-none select-none" : ""}>
+  <div className={!authorized ? "blur-[2px] brightness-75 pointer-events-none select-none" : ""}>
   
 <div className="max-w-[1800px] mx-auto p-4 md:p-8">
 
@@ -885,6 +889,6 @@ onInput={(e) => {
 </div>
   </Suspense>
 </AppSidebar>
-  </div>
+
 )
 }
