@@ -24,14 +24,13 @@ function rgScore(rg?: string[]) {
 
   for (const r of rg) {
 
-    if (r === "Both") score += 6
-    else if (r === "Rally") score += 5
-    else if (r === "Garrison") score += 5
-    else if (r === "Rally-Y") score += 3
-    else if (r === "Garrison-Y") score += 3
-    else if (r === "R4") score += 2
-    else if (r === "R5") score += 2
-    else if (r === "No") score += 0
+   if (r === "Both") score += 3
+else if (r === "Rally") score += 2
+else if (r === "Garrison") score += 2
+else if (r === "Rally-Y") score += 1
+else if (r === "Garrison-Y") score += 1
+else if (r === "R4") score += 1
+else if (r === "R5") score += 1
 
   }
 
@@ -46,10 +45,11 @@ function kvkScore(kvk:number){
 
   const percent = Math.round(kvk / 1_000_000)
 
-  if (percent >= 300) return 5
-  if (percent >= 100) return 4
-  if (percent >= 50) return 2
-  if (percent > 0) return 1
+if (percent >= 300) return 10
+if (percent >= 200) return 8
+if (percent >= 100) return 6
+if (percent >= 50) return 3
+if (percent > 0) return 1
 
   return 0
 }
