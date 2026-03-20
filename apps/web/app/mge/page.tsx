@@ -380,17 +380,21 @@ style={{
 
   {countdown.mode === "close" ? (
     <span className={countdown.isUrgent ? "text-red-400" : "text-white"}>
-      MGE Registration closes in{" "}
-      {countdown.days >= 1
-        ? `${countdown.days} day${countdown.days > 1 ? "s" : ""}`
-         : `${countdown.totalHours} hour${countdown.totalHours > 1 ? "s" : ""}`
+    MGE Registration closes in{" "}
+{
+  countdown.days >= 2
+    ? `${countdown.days} day${countdown.days > 1 ? "s" : ""}`
+    : `${countdown.totalHours} hour${countdown.totalHours > 1 ? "s" : ""}`
+}
     </span>
   ) : (
     <span className="text-green-400">
-      MGE Registration opens in{" "}
-      {countdown.days >= 1
-        ? `${countdown.days} day${countdown.days > 1 ? "s" : ""}`
-        : `${countdown.hours} hour${countdown.hours > 1 ? "s" : ""}`}
+MGE Registration opens in{" "}
+{
+  countdown.days >= 2
+    ? `${countdown.days} day${countdown.days > 1 ? "s" : ""}`
+    : `${countdown.totalHours} hour${countdown.totalHours > 1 ? "s" : ""}`
+}
     </span>
   )}
 
