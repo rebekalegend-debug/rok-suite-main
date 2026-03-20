@@ -701,7 +701,7 @@ return (
 
 <div className="bg-zinc-900/95 rounded-xl p-6 w-[320px] text-center space-y-5 relative overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
       {/* glow layers */}
-      <div className="absolute inset-0 rounded-xl pointer-events-none border border-yellow-500/20 shadow-[0_0_40px_rgba(255,215,120,0.15)]" />
+      <div className="absolute inset-0 rounded-xl pointer-events-none border border-yellow-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.6)]" />
       <div className="absolute inset-0 rounded-xl pointer-events-none bg-gradient-to-r from-transparent via-yellow-500/10 to-transparent opacity-40" />
 
       {/* ✅ TITLE FIX */}
