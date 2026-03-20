@@ -243,12 +243,14 @@ useEffect(() => {
     return () => window.removeEventListener('keydown', handleEscape);
   }, []);
 
-  const isActive = (href: string) => {
-    if (href === '/') return pathname === '/';
-    // Special case: /guide/alliance should not highlight /guide
-    if (href === '/guide' && pathname.startsWith('/guide/alliance')) return false;
-    return pathname.startsWith(href);
-  };
+const isActive = (href: string) => {
+  if (href === '/') return pathname === '/';
+
+  // ✅ FIX: prevent /mge from activating on /mge/ranklist
+  if (href === '/mge') return pathname === '/mge';
+
+  return pathname.startsWith(href);
+};
 
   const SidebarContent = () => (
     <>
