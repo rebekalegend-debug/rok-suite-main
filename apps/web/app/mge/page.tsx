@@ -127,8 +127,8 @@ const [mgeClosed, setMgeClosed] = useState(false)
 const [submitError,setSubmitError] = useState(false)
 
 const [countdown, setCountdown] = useState({
-  mode: "close",
-  hours: 0,
+  mode: "close" as "close" | "open",
+  totalHours: 0,
   days: 0,
   isUrgent: false
 })
