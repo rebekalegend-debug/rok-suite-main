@@ -147,28 +147,33 @@ const commander = formData.get("commander") as string
   const comment = formData.get("comment") as string
   const skills = formData.get("skills") as string
 
-  async function uploadFile(file: File | null) {
-    if (!file) return ""
+async function uploadFile(file: File | null, userId: string) {
+  if (!file) return ""
 
-    const buffer = Buffer.from(await file.arrayBuffer())
-    const fileName = `${Date.now()}-${file.name}`
+  const buffer = Buffer.from(await file.arrayBuffer())
 
-    const { error } = await supabase.storage
-      .from("mge-screenshots")
-      .upload(fileName, buffer, { contentType: file.type })
+  const fileExt = file.name.split('.').pop()
+  const filePath = `equipment/${userId}.${fileExt}` // 👈 FIXED PATH
 
-    if (error) throw error
+  const { error } = await supabase.storage
+    .from("mge-screenshots")
+    .upload(filePath, buffer, {
+      contentType: file.type,
+      upsert: true // 👈 THIS ENABLES OVERWRITE
+    })
 
-    const { data } = supabase.storage
-      .from("mge-screenshots")
-      .getPublicUrl(fileName)
+  if (error) throw error
 
-    return data.publicUrl
-  }
+  const { data } = supabase.storage
+    .from("mge-screenshots")
+    .getPublicUrl(filePath)
+
+  // 🔥 cache bust (important)
+  return `${data.publicUrl}?t=${Date.now()}`
+}
 
  
-  const gearUrl = await uploadFile(gearFile)
-
+const gearUrl = await uploadFile(gearFile, id)
  const sheetAuth = new google.auth.GoogleAuth({
   credentials:{
     client_email: process.env.GOOGLE_CLIENT_EMAIL,
