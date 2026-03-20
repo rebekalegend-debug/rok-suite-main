@@ -632,7 +632,7 @@ onChange={e=>{
 
 {/* RANK */}
 <div className="pt-4 border-t border-[var(--border)]">
-  <label className="form-label">🏅 Waanted Rank: </label>
+  <label className="form-label">🏅 Wanted Rank: </label>
 <select
 className={`w-full px-3 py-2 rounded
 focus:outline-none focus:ring-0 focus:ring-offset-0
@@ -653,16 +653,16 @@ onChange={e=>{
 }}
 >
 
-<option value="">Select Rank</option>
+<option value="">Select Rank - GH - Aprox Points</option>
 
-<option value="1">1 = 180GH</option>
-<option value="2">2 = 90GH</option>
-<option value="3">3 = 60GH</option>
-<option value="4">4 = 50GH</option>
-<option value="5">5 = 40GH</option>
-<option value="6">6 = 30GH</option>
-<option value="7-10">7 - 10 = 20GH</option>
-<option value="11-15">11 - 15 = 10GH</option>
+<option value="1">1 = 180GH (Unlimited)</option>
+<option value="2">2 = 90GH (19->25M)</option>
+<option value="3">3 = 60GH (18->20M)</option>
+<option value="4">4 = 50GH (17->20M)</option>
+<option value="5">5 = 40GH (16M)</option>
+<option value="6">6 = 30GH (15M)</option>
+<option value="7-10">7 - 10 = 20GH (11->14M)</option>
+<option value="11-15">11 - 15 = 10GH (6->10M)</option>
 
 </select>
 </div>
