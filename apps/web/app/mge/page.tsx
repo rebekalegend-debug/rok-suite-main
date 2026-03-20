@@ -375,22 +375,7 @@ style={{
   borderColor: "var(--border)"
 }}
 >
-<h2
-  className="border-b pb-2 mb-2 text-center font-semibold leading-tight
-  text-[34px] sm:text-[44px] md:text-[56px]"
-  style={{
-    color: "#FFD76B",
-    textShadow: "0 0 18px rgba(255,215,107,0.35)",
-    wordBreak: "break-word"
-  }}
->
-  <span className="hidden sm:inline">.˳·˖✶𓆩MGE Registration𓆪✶˖·˳.</span>
-  <span className="sm:hidden">MGE Registration</span>
-</h2>
-
-  
-  
-<div className="text-center mt-2 text-sm font-medium">
+  <div className="text-center mt-2 text-sm font-medium">
 
   {countdown.mode === "close" ? (
     <span className={countdown.isUrgent ? "text-red-400" : "text-white"}>
@@ -409,6 +394,22 @@ style={{
   )}
 
 </div>
+
+<h2
+  className="border-b pb-2 mb-2 text-center font-semibold leading-tight
+  text-[34px] sm:text-[44px] md:text-[56px]"
+  style={{
+    color: "#FFD76B",
+    textShadow: "0 0 18px rgba(255,215,107,0.35)",
+    wordBreak: "break-word"
+  }}
+>
+  <span className="hidden sm:inline">.˳·˖✶𓆩MGE Registration𓆪✶˖·˳.</span>
+  <span className="sm:hidden">MGE Registration</span>
+</h2>
+
+  
+  
 
 
   
