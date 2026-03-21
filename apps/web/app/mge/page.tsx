@@ -12,7 +12,7 @@ function getMgeStatus() {
     ? new Date((window as any).__TEST_TIME__)
     : new Date()
 
-  const base = new Date(Date.UTC(2026, 2, 9, 0, 0, 0))
+  const base = new Date(Date.UTC(2025, 2, 24, 0, 0, 0)) // March 24 2025
 
   const TWO_WEEKS = 14 * 24 * 60 * 60 * 1000
   const ONE_DAY = 24 * 60 * 60 * 1000
@@ -49,7 +49,7 @@ function getMgeCountdown() {
     ? new Date((window as any).__TEST_TIME__) 
     : new Date()
 
-  const base = new Date(Date.UTC(2026, 2, 9, 0, 0, 0))
+  const base = new Date(Date.UTC(2025, 2, 24, 0, 0, 0)) // March 24 2025
 
   const TWO_WEEKS = 14 * 24 * 60 * 60 * 1000
   const ONE_DAY = 24 * 60 * 60 * 1000
