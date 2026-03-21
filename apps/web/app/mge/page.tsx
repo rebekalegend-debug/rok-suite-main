@@ -17,14 +17,10 @@ function getMgeStatus() {
   const TWO_WEEKS = 14 * 24 * 60 * 60 * 1000
   const ONE_DAY = 24 * 60 * 60 * 1000
 
-  const diff = now.getTime() - base.getTime()
-  const cycles = Math.floor(diff / TWO_WEEKS)
+let currentStart = new Date(base)
 
-  // ✅ correct cycle anchor
-let currentStart = new Date(base.getTime() + cycles * TWO_WEEKS)
-
-if (now < currentStart) {
-  currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
+while (currentStart.getTime() + TWO_WEEKS <= now.getTime()) {
+  currentStart = new Date(currentStart.getTime() + TWO_WEEKS)
 }
 
  // 🔥 MGE starts at end of cycle (day 13)
@@ -54,13 +50,10 @@ function getMgeCountdown() {
   const TWO_WEEKS = 14 * 24 * 60 * 60 * 1000
   const ONE_DAY = 24 * 60 * 60 * 1000
 
-  const diff = now.getTime() - base.getTime()
-  const cycles = Math.floor(diff / TWO_WEEKS)
+let currentStart = new Date(base)
 
-let currentStart = new Date(base.getTime() + cycles * TWO_WEEKS)
-
-if (now < currentStart) {
-  currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
+while (currentStart.getTime() + TWO_WEEKS <= now.getTime()) {
+  currentStart = new Date(currentStart.getTime() + TWO_WEEKS)
 }
  // 🔥 MGE starts at end of cycle (day 13)
 const mgeStart = new Date(
