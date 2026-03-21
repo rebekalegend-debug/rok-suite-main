@@ -181,6 +181,26 @@ const touchStartY = useRef<number | null>(null);
       },
     ],
   },
+// 💗 SUPPORT CATEGORY
+{
+  titleKey: 'support',
+  titleColor: 'text-pink-400',
+  items: [
+    {
+      labelKey: 'coffee',
+      href: 'https://ko-fi.com/littlequeen',
+      icon: <Crown size={20} className="text-pink-400 drop-shadow-[0_0_6px_rgba(236,72,153,0.7)]" />,
+
+      hoverColor: 'group-hover:text-pink-400',
+      hoverBg: 'hover:bg-pink-500/10',
+      activeColor: 'text-white',
+      activeBg: 'bg-gradient-to-r from-pink-500 to-rose-500'
+    
+    },
+  ],
+},
+
+    
 ];
   // Close mobile menu on route change
   useEffect(() => {
