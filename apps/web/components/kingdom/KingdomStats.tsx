@@ -72,6 +72,27 @@ const cleanMembers = useMemo(() => {
 
   return Array.from(map.values())
 }, [members])
+
+const snapshotMembers = useMemo(() => {
+  if (cleanMembers.length === 0) return []
+
+  let latest = 0
+
+  for (const m of cleanMembers) {
+    if (!m.lastSeen) continue
+    const t = new Date(m.lastSeen).getTime()
+    if (t > latest) latest = t
+  }
+
+  const latestDate = new Date(latest).toISOString().slice(0, 10)
+
+  return cleanMembers.filter(m =>
+    m.lastSeen &&
+    new Date(m.lastSeen).toISOString().slice(0, 10) === latestDate
+  )
+}, [cleanMembers])
+
+
   
   // Table state
   const [selectedKingdom, setSelectedKingdom] = useState<number>(3237);
@@ -84,33 +105,7 @@ setLoadingMembers(true)
 const res = await fetch(`/api/top-kingdom?kingdom=${selectedKingdom}`)
 const data = await res.json()
 
-if (!Array.isArray(data)) {
-  setMembers([])
-  setLoadingMembers(false)
-  return
-}
-
-// ✅ STEP 1: find latest lastSeen date
-let latest = 0
-
-for (const m of data) {
-  if (!m.lastSeen) continue
-  const t = new Date(m.lastSeen).getTime()
-  if (t > latest) latest = t
-}
-
-// normalize to DAY (ignore hours)
-const latestDate = new Date(latest).toISOString().slice(0, 10)
-
-// ✅ STEP 2: keep ONLY that day
-const filtered = data.filter(m => {
-  if (!m.lastSeen) return false
-  return new Date(m.lastSeen).toISOString().slice(0, 10) === latestDate
-})
-
-// ✅ ONLY THIS
-setMembers(filtered)
-
+setMembers(Array.isArray(data) ? data : [])
 setLoadingMembers(false)
 
 }
@@ -221,12 +216,12 @@ if (filterMode === 'out') {
 
   return data
 
-}, [members, search, filterMode, sortField, sortDir])
-// ADD IT HERE ↓↓↓
+}, [cleanMembers, search, filterMode, sortField, sortDir])
+
 
 
 const top300Data = useMemo(() => {
-  const current = cleanMembers.filter(m => !m.migratedOut)
+ const current = snapshotMembers
 
   const sorted = [...current].sort((a, b) => b.power - a.power)
 
@@ -246,21 +241,19 @@ const top300Data = useMemo(() => {
     power: totalPower,
     seed: getSeed(totalPower)
   }
-}, [cleanMembers])
+}, [snapshotMembers])
 
-const currentMembers = useMemo(() => {
-  return cleanMembers.filter(m => m.migratedOut === null)
-}, [cleanMembers])
+const currentMembers = snapshotMembers
   
 const currentTotalPower = useMemo(() => {
-  return currentMembers.reduce((sum, m) => {
+  return snapshotMembers.reduce((sum, m) => {
     const p = typeof m.power === "number"
       ? m.power
       : parseInt(String(m.power).replace(/[^\d]/g, ""), 10)
 
     return sum + (isNaN(p) ? 0 : p)
   }, 0)
-}, [currentMembers])
+}, [snapshotMembers])
   
 const dataUpdated = useMemo(() => {
 
@@ -440,16 +433,16 @@ color="yellow"
 title="Mig.in / Wake up / New acc (7d)"
 icon={Eye}
 value={
-members.filter(m=>{
-if(!m.migratedIn) return false
-return Date.now() - new Date(m.migratedIn).getTime() <= 7*86400000
+snapshotMembers.filter(m=>{
+  if(!m.migratedIn) return false
+  return Date.now() - new Date(m.migratedIn).getTime() <= 7*86400000
 }).length
 }
 sub={`${formatCompact(
-members
+snapshotMembers
 .filter(m=>{
-if(!m.migratedIn) return false
-return Date.now() - new Date(m.migratedIn).getTime() <= 7*86400000
+  if(!m.migratedIn) return false
+  return Date.now() - new Date(m.migratedIn).getTime() <= 7*86400000
 })
 .reduce((a,b)=>a+b.power,0)
 )} total power`}
@@ -467,16 +460,16 @@ color="orange"
 title="Mig.out / Off map (1M)"
 icon={EyeOff}
 value={
-members.filter(m=>{
-if(!m.migratedOut) return false
-return Date.now() - new Date(m.migratedOut).getTime() <= 30*86400000
+snapshotMembers.filter(m=>{
+  if(!m.migratedOut) return false
+  return Date.now() - new Date(m.migratedOut).getTime() <= 30*86400000
 }).length
 }
 sub={`${formatCompact(
-members
+snapshotMembers
 .filter(m=>{
-if(!m.migratedOut) return false
-return Date.now() - new Date(m.migratedOut).getTime() <= 30*86400000
+  if(!m.migratedOut) return false
+  return Date.now() - new Date(m.migratedOut).getTime() <= 30*86400000
 })
 .reduce((a,b)=>a+b.power,0)
 )} total power`}
