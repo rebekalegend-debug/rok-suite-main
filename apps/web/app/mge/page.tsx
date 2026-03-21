@@ -312,11 +312,7 @@ setMissing(newMissing)
 
 const hasError = Object.values(newMissing).some(v => v)
 
-if(!confirmed){
-  setConfirmError(true)
-  document.querySelector("#confirm-box")?.scrollIntoView(...)
-  return
-}
+
 if(!selectedMember || hasError){
 
   setSubmitError(true)
