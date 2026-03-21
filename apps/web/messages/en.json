@@ -123,7 +123,7 @@
         "title": "KvK War Room",
         "description": "Interactive KvK map"
       },
-      "kingdomStats": {
+      "migrationTracker": {
         "title": "Migration",
         "description": "Track name change's and appear and disappeared members in KD"
       }
