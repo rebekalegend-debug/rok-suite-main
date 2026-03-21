@@ -1161,23 +1161,22 @@ I confirm that I have fully read and understood the rules, penalties, and the ra
 </div>
 
 {/* SUBMIT */}
-<div
-  className="flex justify-center pt-4"
-onClick={(e) => {
-  if (!confirmed && !submitting) {
-    e.preventDefault()
-    e.stopPropagation()
-    triggerConfirmError()
-  }
-}}
->
+<div className="flex justify-center pt-4">
   <button
-    disabled={submitting || !confirmed}
-    onClick={submitApplication}
+    onClick={(e) => {
+      if (!confirmed) {
+        e.preventDefault()
+        triggerConfirmError()
+        return
+      }
+
+      submitApplication()
+    }}
     className={`px-6 py-2 rounded-lg text-black font-semibold transition
+    ${shakeConfirm ? "animate-shake" : ""} 
     ${
       !confirmed
-        ? "bg-zinc-600 text-zinc-400 cursor-not-allowed"
+        ? "bg-zinc-600 text-zinc-400 cursor-pointer" // 🔥 IMPORTANT (not not-allowed)
         : submitError || confirmError
         ? "bg-red-500 shadow-[0_0_16px_rgba(255,60,60,0.8)]"
         : "bg-gradient-to-r from-[#FFD76B] via-[#FFC94A] to-[#FFB347] hover:brightness-110 shadow-[0_4px_14px_rgba(255,200,90,0.35)]"
