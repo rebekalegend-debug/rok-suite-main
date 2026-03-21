@@ -198,8 +198,15 @@ const currentMembers = useMemo(() => {
 }, [members])
   
 const currentTotalPower = useMemo(() => {
-  return currentMembers.reduce((sum, m) => sum + Number(m.power || 0), 0)
+  return currentMembers.reduce((sum, m) => {
+    const p = typeof m.power === "number"
+      ? m.power
+      : parseInt(String(m.power).replace(/[^\d]/g, ""), 10)
+
+    return sum + (isNaN(p) ? 0 : p)
+  }, 0)
 }, [currentMembers])
+  
 const dataUpdated = useMemo(() => {
 
 if(members.length === 0) return null
