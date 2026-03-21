@@ -215,8 +215,8 @@ const tools = [
 
   ${isCoffee ? `
     border-pink-500/40
-    shadow-[0_0_30px_rgba(236,72,153,0.25)]
-    hover:shadow-[0_0_60px_rgba(236,72,153,0.5)]
+ shadow-[0_0_20px_rgba(236,72,153,0.2)]
+hover:shadow-[0_0_35px_rgba(236,72,153,0.35)]
     overflow-hidden
   ` : ''}
 
@@ -231,10 +231,7 @@ const tools = [
       <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 via-transparent to-pink-400/10" />
     </div>
 
-    {/* shine */}
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      <div className="absolute top-0 left-[-100%] w-[200%] h-full bg-gradient-to-r from-transparent via-white/20 to-transparent rotate-12 group-hover:animate-shine" />
-    </div>
+   
 
     {/* sparkles */}
     <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -253,7 +250,7 @@ group-hover:scale-110
 transition-all duration-200
 flex-shrink-0
 
-${isCoffee ? "bg-pink-500/10 ring-1 ring-pink-500/30" : ""}
+${isCoffee ? "bg-pink-500/10" : ""}
 `}>
                           <Icon
   className={`
