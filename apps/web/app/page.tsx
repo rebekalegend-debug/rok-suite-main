@@ -19,6 +19,7 @@ import {
   Crosshair,
   Map,
   BarChart3,
+  Target, 
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
