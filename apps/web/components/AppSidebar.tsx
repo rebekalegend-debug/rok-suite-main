@@ -186,7 +186,7 @@ const touchStartY = useRef<number | null>(null);
   items: [
     {
       labelKey: 'coffee',
-      href: 'https://ko-fi.com/littlequeen',
+      href: '/support',
       icon: <Crown size={20} className="text-pink-400 drop-shadow-[0_0_6px_rgba(236,72,153,0.7)]" />,
 
       hoverColor: 'group-hover:text-pink-400',
