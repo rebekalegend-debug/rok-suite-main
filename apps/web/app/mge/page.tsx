@@ -395,7 +395,7 @@ return (
 
 <div className="text-emerald-400 font-semibold text-base">
 ⚔️ MGE Registration opens in{" "}
-{countdown.days}D{" "}
+{countdown.days > 0 && `${countdown.days}D `}
 {String(countdown.hours).padStart(2,"0")}:
 {String(countdown.minutes).padStart(2,"0")}:
 {String(countdown.seconds).padStart(2,"0")}
@@ -434,7 +434,7 @@ style={{
 {countdown.mode === "close"
   ? "MGE Registration closes in "
   : "MGE Registration opens in "}
-{countdown.days}D{" "}
+{countdown.days > 0 && `${countdown.days}D `}
 {String(countdown.hours).padStart(2,"0")}:
 {String(countdown.minutes).padStart(2,"0")}:
 {String(countdown.seconds).padStart(2,"0")}
