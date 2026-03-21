@@ -84,7 +84,33 @@ setLoadingMembers(true)
 const res = await fetch(`/api/top-kingdom?kingdom=${selectedKingdom}`)
 const data = await res.json()
 
-setMembers(Array.isArray(data) ? data : [])
+if (!Array.isArray(data)) {
+  setMembers([])
+  setLoadingMembers(false)
+  return
+}
+
+// ✅ STEP 1: find latest lastSeen date
+let latest = 0
+
+for (const m of data) {
+  if (!m.lastSeen) continue
+  const t = new Date(m.lastSeen).getTime()
+  if (t > latest) latest = t
+}
+
+// normalize to DAY (ignore hours)
+const latestDate = new Date(latest).toISOString().slice(0, 10)
+
+// ✅ STEP 2: keep ONLY that day
+const filtered = data.filter(m => {
+  if (!m.lastSeen) return false
+  return new Date(m.lastSeen).toISOString().slice(0, 10) === latestDate
+})
+
+// ✅ ONLY THIS
+setMembers(filtered)
+
 setLoadingMembers(false)
 
 }
