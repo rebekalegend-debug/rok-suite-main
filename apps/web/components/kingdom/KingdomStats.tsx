@@ -209,11 +209,11 @@ const top300Data = useMemo(() => {
     power: totalPower,
     seed: getSeed(totalPower)
   }
-}, [members])
+}, [cleanMembers])
 
 const currentMembers = useMemo(() => {
-  return members.filter(m => m.migratedOut === null)
-}, [members])
+  return cleanMembers.filter(m => m.migratedOut === null)
+}, [cleanMembers])
   
 const currentTotalPower = useMemo(() => {
   return currentMembers.reduce((sum, m) => {
