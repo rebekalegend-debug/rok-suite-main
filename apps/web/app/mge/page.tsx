@@ -389,12 +389,12 @@ return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-[2px]">
       <div className="bg-zinc-900/95 rounded-xl p-6 w-[340px] text-center flex flex-col gap-4 shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
         <div className="text-lg font-semibold text-yellow-400">
-          ⚔️ MGE Registration Closed
+          ⚔️ MGE Closed ⚔️
         </div>
        <div className="text-sm leading-relaxed space-y-2">
 
 <div className="text-emerald-400 font-semibold text-base">
-⚔️ MGE Registration opens in{" "}
+Registration opens in{" "}
 {countdown.days > 0 && `${countdown.days}D `}
 {String(countdown.hours).padStart(2,"0")}:
 {String(countdown.minutes).padStart(2,"0")}:
