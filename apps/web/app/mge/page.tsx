@@ -134,7 +134,7 @@ const [skills,setSkills] = useState({
 })
 
 const [alreadyApplied,setAlreadyApplied] = useState(false)
-  
+  const [shakeConfirm, setShakeConfirm] = useState(false)
 const [commanderBlurred,setCommanderBlurred] = useState(false)
 const memberInputRef = useRef<HTMLInputElement>(null)
 const commanderInputRef = useRef<HTMLInputElement>(null)
@@ -184,7 +184,21 @@ const [missing,setMissing] = useState({
   equipment:false
 })
 
+function triggerConfirmError() {
+  setConfirmError(true)
+  setShakeConfirm(true)
 
+  document.querySelector("#confirm-box")?.scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  })
+
+  setTimeout(() => {
+    setShakeConfirm(false)
+    setConfirmError(false) // 🔥 ADD THIS
+  }, 800)
+}
+  
 useEffect(() => {
   function update() {
     setCountdown(getMgeCountdown())
@@ -1109,7 +1123,9 @@ Save
 {/* CONFIRMATION */}
 <div
   id="confirm-box"
-  className="pt-6 border-t border-[var(--border)] space-y-3"
+  className={`pt-6 border-t border-[var(--border)] space-y-3 ${
+    shakeConfirm ? "animate-shake" : ""
+  }`}
 >
 
 <label className={`flex items-start gap-3 cursor-pointer text-sm leading-relaxed transition
@@ -1134,16 +1150,27 @@ I confirm that I have fully read and understood the rules, penalties, and the ra
 
 </label>
 {!confirmed && (
-  <div className={`text-xs text-center mt-1 ${
-    confirmError ? "text-red-400" : "text-zinc-500"
-  }`}>
+  <div
+    className={`text-xs text-center mt-1 ${
+      confirmError ? "text-red-400" : "text-zinc-500"
+    } ${shakeConfirm ? "animate-shake" : ""}`}
+  >
     Please confirm before submitting
   </div>
 )}
 </div>
 
 {/* SUBMIT */}
-<div className="flex justify-center pt-4">
+<div
+  className="flex justify-center pt-4"
+onClick={(e) => {
+  if (!confirmed && !submitting) {
+    e.preventDefault()
+    e.stopPropagation()
+    triggerConfirmError()
+  }
+}}
+>
   <button
     disabled={submitting || !confirmed}
     onClick={submitApplication}
