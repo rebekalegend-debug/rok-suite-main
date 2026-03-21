@@ -460,13 +460,13 @@ color="orange"
 title="Mig.out / Off map (1M)"
 icon={EyeOff}
 value={
-snapshotMembers.filter(m=>{
+cleanMembers.filter(m=>{
   if(!m.migratedOut) return false
   return Date.now() - new Date(m.migratedOut).getTime() <= 30*86400000
 }).length
 }
 sub={`${formatCompact(
-snapshotMembers
+cleanMembers
 .filter(m=>{
   if(!m.migratedOut) return false
   return Date.now() - new Date(m.migratedOut).getTime() <= 30*86400000
