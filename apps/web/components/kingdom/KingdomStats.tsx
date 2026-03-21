@@ -190,7 +190,9 @@ const top300Data = useMemo(() => {
 const currentMembers = useMemo(() => {
   return members.filter(m => !m.migratedOut)
 }, [members])
-  
+  const currentTotalPower = useMemo(() => {
+  return currentMembers.reduce((sum, m) => sum + m.power, 0)
+}, [currentMembers])
 const dataUpdated = useMemo(() => {
 
 if(members.length === 0) return null
@@ -355,9 +357,7 @@ color="green"
 title={`KD Members (${top300Data.seed} Seed)`}
 icon={Users}
 value={currentMembers.length}
-sub={`${formatCompact(
-  currentMembers.reduce((a,b)=>a+b.power,0)
-)} total power`}
+sub={`${formatCompact(currentTotalPower)} total power`}
 color="yellow"
 />
 </div>
