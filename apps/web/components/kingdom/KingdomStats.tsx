@@ -38,6 +38,30 @@ const kingdoms = KINGDOMS;
 const [members,setMembers] = useState<Member[]>([])
 const [loadingMembers,setLoadingMembers] = useState(true)
 
+const cleanMembers = useMemo(() => {
+  const map = new Map<string, Member>()
+
+  for (const m of members) {
+    if (!m.id || m.id === "0") continue
+
+    const power = typeof m.power === "number"
+      ? m.power
+      : parseInt(String(m.power).replace(/[^\d]/g, ""), 10)
+
+    const existing = map.get(m.id)
+
+    if (!existing || power > existing.power) {
+      map.set(m.id, {
+        ...m,
+        power: isNaN(power) ? 0 : power
+      })
+    }
+  }
+
+  return Array.from(map.values())
+}, [members])
+
+  
   // Table state
   const [selectedKingdom, setSelectedKingdom] = useState<number>(3237);
 React.useEffect(()=>{
@@ -82,7 +106,7 @@ const chartKingdomIds = useMemo(
   // Sort & filter (already limited to top 400 by the hook)
 const filtered = useMemo(() => {
 
-let data = [...members]
+let data = [...cleanMembers]
 
 // 🔍 SEARCH
   if (search) {
@@ -165,7 +189,7 @@ if (filterMode === 'out') {
 
 
 const top300Data = useMemo(() => {
-  const current = members.filter(m => !m.migratedOut)
+  const current = cleanMembers.filter(m => !m.migratedOut)
 
   const sorted = [...current].sort((a, b) => b.power - a.power)
 
@@ -354,8 +378,8 @@ Scan will auto run daily in every kingdom and updates data • Data sourced from
 <GlowCard
 title="All Members"
 icon={Radar}
-value={members.length}
-sub={`${formatCompact(members.reduce((a,b)=>a+b.power,0))} total power`}
+value={cleanMembers.length}
+sub={`${formatCompact(cleanMembers.reduce((a,b)=>a+b.power,0))} total power`}
 color="green"
 />
 </div>
