@@ -75,16 +75,25 @@ const currentEnd = new Date(mgeStart.getTime() + 7 * ONE_DAY)
   let target
 let mode: "close" | "open"
 
-  if (now < registrationClose) {
-    target = registrationClose
-    mode = "close"
-  } else if (now < currentEnd) {
-    target = currentEnd
-    mode = "open"
-  } else {
-    target = registrationClose
-    mode = "close"
-  }
+ if (now < registrationClose) {
+  target = registrationClose
+  mode = "close"
+} else if (now < currentEnd) {
+  target = currentEnd
+  mode = "open"
+} else {
+  // always recalc next cycle clean
+  const nextStart = new Date(currentStart.getTime() + TWO_WEEKS)
+
+  const nextMgeStart = new Date(
+    nextStart.getTime() + 13 * ONE_DAY + (23 * 60 + 59) * 60 * 1000
+  )
+
+  const nextRegistrationClose = new Date(nextMgeStart.getTime() - ONE_DAY)
+
+  target = nextRegistrationClose
+  mode = "close"
+}
 
   const diffMs = target.getTime() - now.getTime()
 const totalSeconds = Math.floor(diffMs / 1000)
