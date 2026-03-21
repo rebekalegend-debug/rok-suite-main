@@ -161,7 +161,8 @@ const [search,setSearch] = useState("")
   const [selectedMember,setSelectedMember] = useState<{id:string,name:string} | null>(null)
 const [mgeClosed, setMgeClosed] = useState(false)
 const [submitError,setSubmitError] = useState(false)
-
+const [confirmed, setConfirmed] = useState(false)
+const [confirmError, setConfirmError] = useState(false)
 const [countdown, setCountdown] = useState({
   mode: "close" as "close" | "open",
   target: new Date(),
@@ -311,6 +312,11 @@ setMissing(newMissing)
 
 const hasError = Object.values(newMissing).some(v => v)
 
+if(!confirmed){
+  setConfirmError(true)
+  document.querySelector("#confirm-box")?.scrollIntoView(...)
+  return
+}
 if(!selectedMember || hasError){
 
   setSubmitError(true)
@@ -1103,18 +1109,60 @@ Save
 
 
   
-<div className="flex justify-center pt-4">
-<button
-disabled={submitting}
-onClick={submitApplication}
-className={`px-6 py-2 rounded-lg text-black font-semibold transition
-${submitError
-  ? "bg-red-500 shadow-[0_0_16px_rgba(255,60,60,0.8)]"
-  : "bg-gradient-to-r from-[#FFD76B] via-[#FFC94A] to-[#FFB347] hover:brightness-110 shadow-[0_4px_14px_rgba(255,200,90,0.35)]"
-}`}
+<div className="pt-4">
+{/* CONFIRMATION */}
+<div
+  id="confirm-box"
+  className="pt-6 border-t border-[var(--border)] space-y-3"
 >
-{submitting ? "Submitting..." : "Submit Application"}
-</button>
+
+<label className={`flex items-start gap-3 cursor-pointer text-sm leading-relaxed transition
+${confirmError ? "text-red-400" : confirmed ? "text-[#FFD76B]" : "text-zinc-300"}
+`}>
+
+<input
+type="checkbox"
+checked={confirmed}
+onChange={(e)=>{
+  setConfirmed(e.target.checked)
+  if(e.target.checked) setConfirmError(false)
+}}
+className={`mt-1 w-4 h-4 cursor-pointer
+${confirmed ? "accent-[#FFD76B] scale-110" : "accent-zinc-500"}
+transition`}
+/>
+
+<span>
+I confirm that I have fully read and understood the rules, penalties, and the ranking system explained in this form. I agree to follow all rules and accept any consequences if I break the rules.
+</span>
+
+</label>
+{!confirmed && (
+  <div className={`text-xs text-center mt-1 ${
+    confirmError ? "text-red-400" : "text-zinc-500"
+  }`}>
+    Please confirm before submitting
+  </div>
+)}
+</div>
+
+{/* SUBMIT */}
+<div className="flex justify-center pt-4">
+  <button
+    disabled={submitting || !confirmed}
+    onClick={submitApplication}
+    className={`px-6 py-2 rounded-lg text-black font-semibold transition
+    ${
+      !confirmed
+        ? "bg-zinc-600 text-zinc-400 cursor-not-allowed"
+        : submitError || confirmError
+        ? "bg-red-500 shadow-[0_0_16px_rgba(255,60,60,0.8)]"
+        : "bg-gradient-to-r from-[#FFD76B] via-[#FFC94A] to-[#FFB347] hover:brightness-110 shadow-[0_4px_14px_rgba(255,200,90,0.35)]"
+    }`}
+  >
+    {submitting ? "Submitting..." : "Submit Application"}
+  </button>
+</div>
 </div>
 
 
