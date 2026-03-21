@@ -158,7 +158,7 @@ const tools = [
 
    // cofee
 {
-  href: 'https://ko-fi.com/littlequeen',
+  href: '/support',
   titleKey: 'tools.coffee.title',
   descriptionKey: 'tools.coffee.description',
   icon: Crown, // 👑 VIP feel
