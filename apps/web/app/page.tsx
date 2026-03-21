@@ -230,24 +230,21 @@ const tools = [
       <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 via-transparent to-pink-400/10" />
     </div>
 
-    {/* 🔥 shine sweep */}
+    {/* shine */}
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       <div className="absolute top-0 left-[-100%] w-[200%] h-full bg-gradient-to-r from-transparent via-white/20 to-transparent rotate-12 group-hover:animate-shine" />
     </div>
+
+    {/* sparkles */}
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      <div className="absolute top-2 right-3 w-1 h-1 bg-pink-400 rounded-full animate-ping" />
+      <div className="absolute bottom-3 left-4 w-1 h-1 bg-pink-300 rounded-full animate-ping delay-300" />
+    </div>
   </>
 )}
-    <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 via-transparent to-pink-400/10" />
-  </div>
-)}
-                  
-                     {isCoffee && (
-  <div className="absolute inset-0 pointer-events-none overflow-hidden">
-    <div className="absolute top-2 right-3 w-1 h-1 bg-pink-400 rounded-full animate-ping" />
-    <div className="absolute bottom-3 left-4 w-1 h-1 bg-pink-300 rounded-full animate-ping delay-300" />
-  </div>
-)}
-                     <div className="flex items-start gap-3">
-                       <div className={`
+                    
+<div className="flex items-start gap-3">
+<div className={`
 p-2 rounded-lg
 bg-[var(--background-secondary)]
 ${tool.iconHoverBg}
