@@ -188,13 +188,7 @@ const top300Data = useMemo(() => {
 }, [members])
 
 const currentMembers = useMemo(() => {
-  const now = Date.now()
-
-  return members.filter(m => 
-    m.migratedOut === null &&
-    m.lastSeen &&
-    now - new Date(m.lastSeen).getTime() < 48 * 60 * 60 * 1000
-  )
+  return members.filter(m => m.migratedOut === null)
 }, [members])
   
 const currentTotalPower = useMemo(() => {
