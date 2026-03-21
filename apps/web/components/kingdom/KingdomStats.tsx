@@ -50,7 +50,19 @@ const cleanMembers = useMemo(() => {
 
     const existing = map.get(m.id)
 
-    if (!existing || power > existing.power) {
+    // ✅ KEEP LATEST ENTRY (not highest power)
+    if (!existing) {
+      map.set(m.id, {
+        ...m,
+        power: isNaN(power) ? 0 : power
+      })
+      continue
+    }
+
+    const currentTime = m.lastSeen ? new Date(m.lastSeen).getTime() : 0
+    const existingTime = existing.lastSeen ? new Date(existing.lastSeen).getTime() : 0
+
+    if (currentTime > existingTime) {
       map.set(m.id, {
         ...m,
         power: isNaN(power) ? 0 : power
@@ -60,7 +72,6 @@ const cleanMembers = useMemo(() => {
 
   return Array.from(map.values())
 }, [members])
-
   
   // Table state
   const [selectedKingdom, setSelectedKingdom] = useState<number>(3237);
