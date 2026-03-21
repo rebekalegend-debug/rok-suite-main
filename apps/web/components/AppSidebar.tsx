@@ -172,8 +172,6 @@ const touchStartY = useRef<number | null>(null);
         labelKey: 'betaTools',
         href: '/beta-tools',
         icon: <FlaskConical size={20} className="text-blue-500" />,
-        badgeKey: 'wipBadge',
-        badgeColor: 'bg-[#ffb547]/20 text-[#ffb547]',
         hoverColor: 'group-hover:text-blue-500',
         hoverBg: 'hover:bg-blue-500/10',
         activeColor: 'text-white',
