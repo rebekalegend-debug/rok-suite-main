@@ -87,16 +87,10 @@ let mode: "close" | "open"
   }
 
   const diffMs = target.getTime() - now.getTime()
-
-const totalMinutes = Math.floor(diffMs / (1000 * 60))
-const totalHours = Math.floor(totalMinutes / 60)
-
 const totalSeconds = Math.floor(diffMs / 1000)
-
 const days = Math.floor(totalSeconds / 86400)
 const hours = Math.floor((totalSeconds % 86400) / 3600)
 const minutes = Math.floor((totalSeconds % 3600) / 60)
-const seconds = totalSeconds % 60
 const seconds = totalSeconds % 60
 
 return {
