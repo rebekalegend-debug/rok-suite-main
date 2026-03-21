@@ -414,7 +414,11 @@ color="green"
 />
 </div>
 
-<div onClick={()=>setFilterMode('current')} className="cursor-pointer">
+<div onClick={() => {
+  setFilterMode('current')
+  setSortField('power')
+  setSortDir('desc')
+}} className="cursor-pointer">
 <GlowCard
 title={`KD Members (${top300Data.seed} Seed)`}
 icon={Users}
