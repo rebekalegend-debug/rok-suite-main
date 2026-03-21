@@ -94,6 +94,7 @@
         "title": "RoK Mail",
         "description": "Format in-game mail with bold, italic, colors, symbols, and AI assistance"
       },
+      
       "mge": {
         "title": "MGE",
         "description": "MGE Registration page"
@@ -102,8 +103,12 @@
         "title": "MGE Ranklist",
         "description": "MGE Ranklist page"
       },
-      
-      "migrationTracker": {
+       },
+      "cofee": {
+        "title": "Support",
+        "description": "Buy me a coffee"
+      },
+      "violation": {
         "title": "Violation Track",
         "description": "Track MGE, 20GH and KD rule breakers"
       },
