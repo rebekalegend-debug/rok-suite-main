@@ -12,7 +12,7 @@ function getMgeStatus() {
     ? new Date((window as any).__TEST_TIME__)
     : new Date()
 
-  const base = new Date(Date.UTC(2026, 2, 9, 0, 0, 0)) // March 24 2025
+  const base = new Date(Date.UTC(2026, 2, 23, 0, 0, 0)) // March 24 2025
 
   const TWO_WEEKS = 14 * 24 * 60 * 60 * 1000
   const ONE_DAY = 24 * 60 * 60 * 1000
@@ -28,11 +28,11 @@ if (now < currentStart) {
 
  // 🔥 MGE starts at end of cycle (day 13)
 const mgeStart = new Date(
-  currentStart.getTime() + 13 * ONE_DAY + (23 * 60 + 59) * 60 * 1000
+  currentStart.getTime() + (23 * 60 + 59) * 60 * 1000
 )
 
 // 🔥 registration closes 24h before MGE
-const registrationClose = new Date(mgeStart.getTime() - ONE_DAY)
+const registrationClose = new Date(mgeStart.getTime() - 2 * ONE_DAY)
 
 // optional: MGE ends after 7 days
 const currentEnd = new Date(mgeStart.getTime() + 7 * ONE_DAY)
@@ -48,7 +48,7 @@ function getMgeCountdown() {
     ? new Date((window as any).__TEST_TIME__) 
     : new Date()
 
-  const base = new Date(Date.UTC(2026, 2, 9, 0, 0, 0)) // March 24 2025
+  const base = new Date(Date.UTC(2026, 2, 23, 0, 0, 0)) // March 24 2025
 
   const TWO_WEEKS = 14 * 24 * 60 * 60 * 1000
   const ONE_DAY = 24 * 60 * 60 * 1000
@@ -63,11 +63,12 @@ if (now < currentStart) {
 }
  // 🔥 MGE starts at end of cycle (day 13)
 const mgeStart = new Date(
-  currentStart.getTime() + 13 * ONE_DAY + (23 * 60 + 59) * 60 * 1000
+  currentStart.getTime() + (23 * 60 + 59) * 60 * 1000
 )
 
-// 🔥 registration closes 24h before MGE
-const registrationClose = new Date(mgeStart.getTime() - ONE_DAY)
+const registrationClose = new Date(
+  mgeStart.getTime() - 2 * ONE_DAY
+)
 
 // optional: MGE ends after 7 days
 const currentEnd = new Date(mgeStart.getTime() + 7 * ONE_DAY)
@@ -85,10 +86,12 @@ let mode: "close" | "open"
   const nextStart = new Date(currentStart.getTime() + TWO_WEEKS)
 
   const nextMgeStart = new Date(
-    nextStart.getTime() + 13 * ONE_DAY + (23 * 60 + 59) * 60 * 1000
-  )
+  nextStart.getTime() + (23 * 60 + 59) * 60 * 1000
+)
 
-  const nextRegistrationClose = new Date(nextMgeStart.getTime() - ONE_DAY)
+const nextRegistrationClose = new Date(
+  nextMgeStart.getTime() - 2 * ONE_DAY
+)
 
   target = nextRegistrationClose
   mode = "close"
