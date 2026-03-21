@@ -222,7 +222,7 @@ const tools = [
   ${isCoffee ? "hover:scale-[1.03] animate-[pulse_3s_infinite]" : ""}
 `}
 >
-                     {isCoffee && (
+                   
 {isCoffee && (
   <>
     {/* glow */}
