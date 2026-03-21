@@ -163,6 +163,32 @@ if (filterMode === 'out') {
 }, [members, search, filterMode, sortField, sortDir])
 // ADD IT HERE ↓↓↓
 
+
+const top300Data = useMemo(() => {
+  const current = members.filter(m => !m.migratedOut)
+
+  const sorted = [...current].sort((a, b) => b.power - a.power)
+
+  const top = sorted.slice(0, Math.min(300, sorted.length))
+
+  const totalPower = top.reduce((sum, m) => sum + m.power, 0)
+
+  function getSeed(power: number) {
+    if (power > 9.7e9) return "A"
+    if (power > 7.8e9) return "B"
+    if (power > 6.2e9) return "C"
+    return "D"
+  }
+
+  return {
+    count: top.length,
+    power: totalPower,
+    seed: getSeed(totalPower)
+  }
+}, [members])
+
+
+  
 const dataUpdated = useMemo(() => {
 
 if(members.length === 0) return null
@@ -324,14 +350,10 @@ color="green"
 
 <div onClick={()=>setFilterMode('current')} className="cursor-pointer">
 <GlowCard
-title="Current Members in KD"
+title={`KD Top 300 (${top300Data.seed} Seed)`}
 icon={Users}
-value={members.filter(m=>!m.migratedOut).length}
-sub={`${formatCompact(
-members
-.filter(m=>!m.migratedOut)
-.reduce((a,b)=>a+b.power,0)
-)} total power`}
+value={top300Data.count}
+sub={`${formatCompact(top300Data.power)} total power`}
 color="yellow"
 />
 </div>
