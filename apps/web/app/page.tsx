@@ -26,128 +26,151 @@ export default function Home() {
   const t = useTranslations('home');
 
 const tools = [
-{
-  href: '/calendar',
-  titleKey: 'tools.calendar.title',
-  descriptionKey: 'tools.calendar.description',
-  icon: Calendar,
 
-  iconColor: 'text-rose-500',
-  iconGlow: 'drop-shadow-[0_0_6px_rgba(244,63,94,0.45)]',
-
-  hoverBorder: 'hover:border-rose-500/40',
-  hoverShadow: 'hover:shadow-rose-500/10',
-  iconHoverBg: 'group-hover:bg-rose-500/15',
-  iconHoverColor: 'group-hover:text-rose-600',
-},
+  // 🟥 WANTED
   {
-  href: '/mge',
-  titleKey: 'tools.mge.title',
-  descriptionKey: 'tools.mge.description',
-  icon: Shield,
+    href: '/kingdom/wanted',
+    titleKey: 'tools.wanted.title',
+    descriptionKey: 'tools.wanted.description',
+    icon: Crosshair,
 
-  iconColor: 'text-amber-500',
-  iconGlow: 'drop-shadow-[0_0_6px_rgba(99,102,241,0.45)]',
+    iconColor: 'text-red-500',
+    iconGlow: 'drop-shadow-[0_0_6px_rgba(239,68,68,0.45)]',
 
-  hoverBorder: 'hover:border-amber-500/40',
-  hoverShadow: 'hover:shadow-amber-500/10',
-  iconHoverBg: 'group-hover:bg-amber-500/15',
-  iconHoverColor: 'group-hover:text-amber-500',
-},
- {
-  href: '/mge/ranklist',
-  titleKey: 'tools.mgeranklist.title',
-  descriptionKey: 'tools.mgeranklist.description',
-  icon: Trophy,
+    hoverBorder: 'hover:border-red-500/40',
+    hoverShadow: 'hover:shadow-red-500/10',
+    iconHoverBg: 'group-hover:bg-red-500/15',
+    iconHoverColor: 'group-hover:text-red-600',
+  },
 
-  iconColor: 'text-violet-500',
-  iconGlow: 'drop-shadow-violet-500',
+  // 🟠 VIOLATION
+  {
+    href: '/kingdom/violations',
+    titleKey: 'tools.violation.title',
+    descriptionKey: 'tools.violation.description',
+    icon: Target, // or your icon
 
-  hoverBorder: 'hover:border-violet-500/40',
-  hoverShadow: 'hover:shadow-violet-500/10',
-  iconHoverBg: 'group-hover:bg-violet-500/15',
-  iconHoverColor: 'group-hover:text-violet-500',
-},
-  
+    iconColor: 'text-orange-500',
+    iconGlow: 'drop-shadow-[0_0_6px_rgba(249,115,22,0.45)]',
+
+    hoverBorder: 'hover:border-orange-500/40',
+    hoverShadow: 'hover:shadow-orange-500/10',
+    iconHoverBg: 'group-hover:bg-orange-500/15',
+    iconHoverColor: 'group-hover:text-orange-600',
+  },
+
+  // 📅 CALENDAR
+  {
+    href: '/calendar',
+    titleKey: 'tools.calendar.title',
+    descriptionKey: 'tools.calendar.description',
+    icon: Calendar,
+
+    iconColor: 'text-rose-500',
+    iconGlow: 'drop-shadow-[0_0_6px_rgba(244,63,94,0.45)]',
+
+    hoverBorder: 'hover:border-rose-500/40',
+    hoverShadow: 'hover:shadow-rose-500/10',
+    iconHoverBg: 'group-hover:bg-rose-500/15',
+    iconHoverColor: 'group-hover:text-rose-600',
+  },
+
+  // 🛡️ MGE
+  {
+    href: '/mge',
+    titleKey: 'tools.mge.title',
+    descriptionKey: 'tools.mge.description',
+    icon: Shield,
+
+    iconColor: 'text-amber-500',
+    iconGlow: 'drop-shadow-[0_0_6px_rgba(251,191,36,0.45)]',
+
+    hoverBorder: 'hover:border-amber-500/40',
+    hoverShadow: 'hover:shadow-amber-500/10',
+    iconHoverBg: 'group-hover:bg-amber-500/15',
+    iconHoverColor: 'group-hover:text-amber-500',
+  },
+
+  // 🟢 MIGRATION
+  {
+    href: '/kingdom/migration-tracker',
+    titleKey: 'tools.migrationTracker.title',
+    descriptionKey: 'tools.migrationTracker.description',
+    icon: Radar,
+
+    iconColor: 'text-green-500',
+    iconGlow: 'drop-shadow-[0_0_6px_rgba(34,197,94,0.45)]',
+
+    hoverBorder: 'hover:border-green-500/40',
+    hoverShadow: 'hover:shadow-green-500/10',
+    iconHoverBg: 'group-hover:bg-green-500/15',
+    iconHoverColor: 'group-hover:text-green-600',
+  },
+
+  // 📜 MAIL
+  {
+    href: '/rok-mail',
+    titleKey: 'tools.rokMail.title',
+    descriptionKey: 'tools.rokMail.description',
+    icon: ScrollText,
+
+    iconColor: 'text-pink-500',
+    iconGlow: 'drop-shadow-[0_0_6px_rgba(236,72,153,0.45)]',
+
+    hoverBorder: 'hover:border-pink-500/40',
+    hoverShadow: 'hover:shadow-pink-500/10',
+    iconHoverBg: 'group-hover:bg-pink-500/15',
+    iconHoverColor: 'group-hover:text-pink-600',
+  },
+
+  // 🟣 MGE RANKLIST
+  {
+    href: '/mge/ranklist',
+    titleKey: 'tools.mgeranklist.title',
+    descriptionKey: 'tools.mgeranklist.description',
+    icon: Trophy,
+
+    iconColor: 'text-violet-500',
+    iconGlow: 'drop-shadow-[0_0_6px_rgba(139,92,246,0.45)]',
+
+    hoverBorder: 'hover:border-violet-500/40',
+    hoverShadow: 'hover:shadow-violet-500/10',
+    iconHoverBg: 'group-hover:bg-violet-500/15',
+    iconHoverColor: 'group-hover:text-violet-500',
+  },
+
+  // 🟡 KvK STATS
+  {
+    href: 'https://app.rokstats.online/kvk/ranking',
+    titleKey: 'tools.events.title',
+    descriptionKey: 'tools.events.description',
+    icon: Trophy,
+
+    iconColor: 'text-amber-500',
+    iconGlow: 'drop-shadow-[0_0_6px_rgba(251,191,36,0.45)]',
+
+    hoverBorder: 'hover:border-amber-500/40',
+    hoverShadow: 'hover:shadow-amber-500/10',
+    iconHoverBg: 'group-hover:bg-amber-500/15',
+    iconHoverColor: 'group-hover:text-amber-600',
+  },
+
+   // cofee
 {
-  href: 'https://app.rokstats.online/kvk/ranking',
-  titleKey: 'tools.events.title',
-  descriptionKey: 'tools.events.description',
-  icon: Trophy,
+  href: 'https://ko-fi.com/littlequeen',
+  titleKey: 'tools.coffee.title',
+  descriptionKey: 'tools.coffee.description',
+  icon: Crown, // 👑 VIP feel
 
-  iconColor: 'text-amber-500',
-  iconGlow: 'drop-shadow-[0_0_6px_rgba(251,191,36,0.45)]',
+  iconColor: 'text-pink-400',
+  iconGlow: 'drop-shadow-[0_0_10px_rgba(236,72,153,0.7)]',
 
-  hoverBorder: 'hover:border-amber-500/40',
-  hoverShadow: 'hover:shadow-amber-500/10',
-  iconHoverBg: 'group-hover:bg-amber-500/15',
-  iconHoverColor: 'group-hover:text-amber-600',
+  hoverBorder: 'hover:border-pink-400/60',
+  hoverShadow: 'hover:shadow-pink-500/20',
+  iconHoverBg: 'group-hover:bg-pink-500/20',
+  iconHoverColor: 'group-hover:text-pink-300',
 },
-
-{
-  href: '/rok-mail',
-  titleKey: 'tools.rokMail.title',
-  descriptionKey: 'tools.rokMail.description',
-  icon: ScrollText,
-
-  iconColor: 'text-pink-500',
-  iconGlow: 'drop-shadow-[0_0_6px_rgba(236,72,153,0.45)]',
-
-  hoverBorder: 'hover:border-pink-500/40',
-  hoverShadow: 'hover:shadow-pink-500/10',
-  iconHoverBg: 'group-hover:bg-pink-500/15',
-  iconHoverColor: 'group-hover:text-pink-600',
-},
-
-
-
-{
-  href: '/kingdom/migration-tracker',
-  titleKey: 'tools.migrationTracker.title',
-  descriptionKey: 'tools.migrationTracker.description',
-  icon: Radar,
-
-  iconColor: 'text-orange-500',
-  iconGlow: 'drop-shadow-[0_0_6px_rgba(249,115,22,0.45)]',
-
-  hoverBorder: 'hover:border-orange-500/40',
-  hoverShadow: 'hover:shadow-orange-500/10',
-  iconHoverBg: 'group-hover:bg-orange-500/15',
-  iconHoverColor: 'group-hover:text-orange-600',
-},
-
-{
-  href: '/kingdom/wanted',
-  titleKey: 'tools.wanted.title',
-  descriptionKey: 'tools.wanted.description',
-  icon: Crosshair,
-
-  iconColor: 'text-red-500',
-  iconGlow: 'drop-shadow-[0_0_6px_rgba(239,68,68,0.45)]',
-
-  hoverBorder: 'hover:border-red-500/40',
-  hoverShadow: 'hover:shadow-red-500/10',
-  iconHoverBg: 'group-hover:bg-red-500/15',
-  iconHoverColor: 'group-hover:text-red-600',
-},
-
-
-
-{
-  href: '/kingdom/kingdom-stats',
-  titleKey: 'tools.kingdomStats.title',
-  descriptionKey: 'tools.kingdomStats.description',
-  icon: Radar,
-
-  iconColor: 'text-green-500',
-  iconGlow: 'drop-shadow-[0_0_6px_rgba(34,197,94,0.45)]',
-
-  hoverBorder: 'hover:border-green-500/40',
-  hoverShadow: 'hover:shadow-green-500/10',
-  iconHoverBg: 'group-hover:bg-green-500/15',
-  iconHoverColor: 'group-hover:text-green-600',
-},
-  ] as const;
+] as const;
 
   return (
     <AppSidebar>
@@ -172,20 +195,67 @@ const tools = [
               {t('sections.interactiveTools')}
             </h2>
 
+
+
+
+            
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {tools.map((tool) => {
-                const Icon = tool.icon;
+             {tools.map((tool) => {
+  const Icon = tool.icon;
+  const isCoffee = tool.href.includes('ko-fi.com'); 
                 return (
                   <Link key={tool.href} href={tool.href}>
-                    <div className={`group p-4 rounded-xl bg-[var(--background-card)] border border-[var(--border)] shadow-[var(--card-shadow)] ${tool.hoverBorder} hover:bg-[var(--background-hover)] hover:-translate-y-0.5 hover:shadow-[var(--card-shadow-hover)] ${tool.hoverShadow} transition-all duration-200 cursor-pointer h-full`}>
-                      <div className="flex items-start gap-3">
-                        <div className={`
+                   <div
+  className={`group relative p-4 rounded-xl border transition-all duration-300 cursor-pointer h-full
+  bg-[var(--background-card)] border-[var(--border)] shadow-[var(--card-shadow)]
+  ${tool.hoverBorder}
+  hover:bg-[var(--background-hover)] hover:-translate-y-0.5 hover:shadow-[var(--card-shadow-hover)]
+  ${tool.hoverShadow}
+
+  ${isCoffee ? `
+    border-pink-500/40
+    shadow-[0_0_30px_rgba(236,72,153,0.25)]
+    hover:shadow-[0_0_60px_rgba(236,72,153,0.5)]
+    overflow-hidden
+  ` : ''}
+
+  ${isCoffee ? "hover:scale-[1.03] animate-[pulse_3s_infinite]" : ""}
+`}
+>
+                     {isCoffee && (
+{isCoffee && (
+  <>
+    {/* glow */}
+    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none">
+      <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 via-transparent to-pink-400/10" />
+    </div>
+
+    {/* 🔥 shine sweep */}
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute top-0 left-[-100%] w-[200%] h-full bg-gradient-to-r from-transparent via-white/20 to-transparent rotate-12 group-hover:animate-shine" />
+    </div>
+  </>
+)}
+    <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 via-transparent to-pink-400/10" />
+  </div>
+)}
+                  
+                     {isCoffee && (
+  <div className="absolute inset-0 pointer-events-none overflow-hidden">
+    <div className="absolute top-2 right-3 w-1 h-1 bg-pink-400 rounded-full animate-ping" />
+    <div className="absolute bottom-3 left-4 w-1 h-1 bg-pink-300 rounded-full animate-ping delay-300" />
+  </div>
+)}
+                     <div className="flex items-start gap-3">
+                       <div className={`
 p-2 rounded-lg
 bg-[var(--background-secondary)]
 ${tool.iconHoverBg}
 group-hover:scale-110
 transition-all duration-200
 flex-shrink-0
+
+${isCoffee ? "bg-pink-500/10 ring-1 ring-pink-500/30" : ""}
 `}>
                           <Icon
   className={`
@@ -199,7 +269,9 @@ flex-shrink-0
                         </div>
 
                         <div className="flex-1 min-w-0">
-                          <h3 className="text-sm font-medium text-[var(--foreground)] mb-0.5 transition-colors duration-200">
+                         <h3 className={`text-sm font-semibold mb-0.5 transition-all duration-200
+${isCoffee ? "text-pink-300 tracking-wide" : "text-[var(--foreground)]"}
+`}>
                             {t(tool.titleKey)}
                           </h3>
                           <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
