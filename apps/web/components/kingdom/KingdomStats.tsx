@@ -187,7 +187,9 @@ const top300Data = useMemo(() => {
   }
 }, [members])
 
-
+const currentMembers = useMemo(() => {
+  return members.filter(m => !m.migratedOut)
+}, [members])
   
 const dataUpdated = useMemo(() => {
 
@@ -350,10 +352,12 @@ color="green"
 
 <div onClick={()=>setFilterMode('current')} className="cursor-pointer">
 <GlowCard
-title={`KD Top 300 (${top300Data.seed} Seed)`}
+title={`KD Members (${top300Data.seed} Seed)`}
 icon={Users}
-value={top300Data.count}
-sub={`${formatCompact(top300Data.power)} total power`}
+value={currentMembers.length}
+sub={`${formatCompact(
+  currentMembers.reduce((a,b)=>a+b.power,0)
+)} total power`}
 color="yellow"
 />
 </div>
