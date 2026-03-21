@@ -181,7 +181,7 @@ const touchStartY = useRef<number | null>(null);
   },
 // 💗 SUPPORT CATEGORY
 {
-  titleKey: '/support',
+  titleKey: 'support',
   titleColor: 'text-pink-400',
   items: [
     {
