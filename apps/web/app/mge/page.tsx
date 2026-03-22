@@ -12,10 +12,15 @@ function getMgeStatus() {
     ? new Date((window as any).__TEST_TIME__)
     : new Date()
 
-  const base = new Date(Date.UTC(2026, 2, 23, 0, 0, 0)) // March 24 2025
-
-  const TWO_WEEKS = 14 * 24 * 60 * 60 * 1000
   const ONE_DAY = 24 * 60 * 60 * 1000
+const TWO_WEEKS = 14 * ONE_DAY
+
+// ✅ REAL MGE START (from your calendar)
+const KNOWN_MGE_START = new Date(Date.UTC(2026, 2, 23, 0, 0, 0)) 
+// (March 23 MGE start — adjust hour if needed)
+
+// derive cycle start (13 days before MGE)
+const base = new Date(KNOWN_MGE_START.getTime() - 13 * ONE_DAY)
 
 const diff = now.getTime() - base.getTime()
 const cycles = Math.floor(diff / TWO_WEEKS)
@@ -27,17 +32,16 @@ if (now < currentStart) {
 }
 
  // 🔥 MGE starts at end of cycle (day 13)
-const mgeStart = new Date(
-  currentStart.getTime() + (13 * ONE_DAY) + (23 * 60 + 59) * 60 * 1000
-)
+const mgeStart = new Date(currentStart.getTime() + 13 * ONE_DAY)
 
-// 🔥 registration closes 24h before MGE
-const registrationClose = new Date(mgeStart.getTime() - 2 * ONE_DAY)
+// 🔥 correct rules
+const registrationClose = new Date(mgeStart.getTime() - ONE_DAY)
+const mgeEnd = new Date(mgeStart.getTime() + 6 * ONE_DAY)
+const registrationOpen = new Date(mgeEnd.getTime() + ONE_DAY)
 
-// optional: MGE ends after 7 days
-const currentEnd = new Date(mgeStart.getTime() + 7 * ONE_DAY)
- const isClosed =
-  now >= registrationClose && now < mgeStart
+// 🔥 CLOSED from close → until reopen
+const isClosed =
+  now >= registrationClose && now < registrationOpen
 
   return { isClosed }
 }
@@ -48,10 +52,15 @@ function getMgeCountdown() {
     ? new Date((window as any).__TEST_TIME__) 
     : new Date()
 
-  const base = new Date(Date.UTC(2026, 2, 23, 0, 0, 0)) // March 24 2025
-
-  const TWO_WEEKS = 14 * 24 * 60 * 60 * 1000
   const ONE_DAY = 24 * 60 * 60 * 1000
+const TWO_WEEKS = 14 * ONE_DAY
+
+// ✅ REAL MGE START (from your calendar)
+const KNOWN_MGE_START = new Date(Date.UTC(2026, 2, 23, 0, 0, 0)) 
+// (March 23 MGE start — adjust hour if needed)
+
+// derive cycle start (13 days before MGE)
+const base = new Date(KNOWN_MGE_START.getTime() - 13 * ONE_DAY)
 
 const diff = now.getTime() - base.getTime()
 const cycles = Math.floor(diff / TWO_WEEKS)
@@ -61,59 +70,38 @@ let currentStart = new Date(base.getTime() + cycles * TWO_WEEKS)
 if (now < currentStart) {
   currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
 }
- // 🔥 MGE starts at end of cycle (day 13)
-const mgeStart = new Date(
-  currentStart.getTime() + (13 * ONE_DAY) + (23 * 60 + 59) * 60 * 1000
-)
+const mgeStart = new Date(currentStart.getTime() + 13 * ONE_DAY)
 
-const registrationClose = new Date(
-  mgeStart.getTime() - 2 * ONE_DAY
-)
+const registrationClose = new Date(mgeStart.getTime() - ONE_DAY)
+const mgeEnd = new Date(mgeStart.getTime() + 6 * ONE_DAY)
+const registrationOpen = new Date(mgeEnd.getTime() + ONE_DAY)
 
-// optional: MGE ends after 7 days
-const currentEnd = new Date(mgeStart.getTime() + 7 * ONE_DAY)
-let target
+let target: Date
 let mode: "close" | "open" | "mge"
 
 if (now < registrationClose) {
-  // 🟢 registration open
+  // 🟢 OPEN → counting to close
   target = registrationClose
   mode = "close"
 
 } else if (now < mgeStart) {
-  // 🔴 registration closed (THIS IS YOUR CASE)
+  // 🔴 CLOSED → before MGE
   target = mgeStart
   mode = "mge"
 
-} else if (now < currentEnd) {
-  // ⚔️ MGE running
-  const nextStart = new Date(currentStart.getTime() + TWO_WEEKS)
-
-  const nextMgeStart = new Date(
-    nextStart.getTime() + 13 * ONE_DAY + (23 * 60 + 59) * 60 * 1000
-  )
-
-  const nextRegistrationClose = new Date(
-    nextMgeStart.getTime() - 2 * ONE_DAY
-  )
-
-  target = nextRegistrationClose
+} else if (now < registrationOpen) {
+  // 🔴 CLOSED → MGE running + cooldown
+  target = registrationOpen
   mode = "open"
 
 } else {
-  // fallback → next cycle
+  // 🟢 OPEN again → next cycle
   const nextStart = new Date(currentStart.getTime() + TWO_WEEKS)
-
-  const nextMgeStart = new Date(
-    nextStart.getTime() + 13 * ONE_DAY + (23 * 60 + 59) * 60 * 1000
-  )
-
-  const nextRegistrationClose = new Date(
-    nextMgeStart.getTime() - 2 * ONE_DAY
-  )
+  const nextMgeStart = new Date(nextStart.getTime() + 13 * ONE_DAY)
+  const nextRegistrationClose = new Date(nextMgeStart.getTime() - ONE_DAY)
 
   target = nextRegistrationClose
-  mode = "open"
+  mode = "close"
 }
 
   const diffMs = target.getTime() - now.getTime()
@@ -450,11 +438,13 @@ return (
        <div className="text-sm leading-relaxed space-y-2">
 
 <div className="text-emerald-400 font-semibold text-base">
-Registration opens in{" "}
-{countdown.days > 0 && `${countdown.days}D `}
-{String(countdown.hours).padStart(2,"0")}:
-{String(countdown.minutes).padStart(2,"0")}:
-{String(countdown.seconds).padStart(2,"0")}
+  {countdown.mode === "mge" && "MGE starts in "}
+  {countdown.mode === "open" && "Registration opens in "}
+  
+  {countdown.days > 0 && `${countdown.days}D `}
+  {String(countdown.hours).padStart(2,"0")}:
+  {String(countdown.minutes).padStart(2,"0")}:
+  {String(countdown.seconds).padStart(2,"0")}
 </div>
 
 <div className="text-xs text-zinc-400">
@@ -488,8 +478,8 @@ style={{
 
 <span className={countdown.isUrgent ? "text-red-400" : "text-white"}>
 {countdown.mode === "close" && "MGE Registration closes in "}
-{countdown.mode === "mge" && "⚔️ MGE starts in "}
-{countdown.mode === "open" && "MGE Registration opens in "}
+{countdown.mode === "mge" && "MGE starts in "}
+{countdown.mode === "open" && "Registration opens in "}
 {countdown.days > 0 && `${countdown.days}D `}
 {String(countdown.hours).padStart(2,"0")}:
 {String(countdown.minutes).padStart(2,"0")}:
