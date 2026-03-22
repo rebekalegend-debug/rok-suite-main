@@ -427,22 +427,16 @@ at {formatUTC(countdown.target)}
   {/* 🔥 ONLY THIS PART BLURS */}
  
 
-       <div className="min-h-screen">
+   <div className="flex">
 
-  <div className={
+
+
+<div
+  className={`max-w-4xl mx-auto p-4 md:p-8 ${
     mgeClosed
       ? "blur-[2px] brightness-75 pointer-events-none select-none"
       : ""
-  }>
-
-<div className="max-w-4xl mx-auto p-4 md:p-8">
-
-<div
-className="p-6 rounded-lg border space-y-4 gold-glow"
-style={{
-  background: "var(--background-card)",
-  borderColor: "var(--border)"
-}}
+  }`}
 >
   <div className="text-center mt-2 text-sm font-medium">
 
