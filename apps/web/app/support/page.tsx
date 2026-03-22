@@ -22,18 +22,15 @@ export default function SupportPage() {
     
     <div className="rounded-2xl overflow-hidden">
       
-      <iframe
-        src="https://ko-fi.com/littlequeen/?hidefeed=true&widget=true&embed=true&preview=true"
-        className="border-0"
-        style={{
-          width: '426px',         
-          height: '575px',         
-          marginLeft: '-13px',    
-          marginRight: '-13px',   
-        }}
-        scrolling="no"
-        title="littlequeen"
-      />
+  <iframe
+  src="https://ko-fi.com/littlequeen/?hidefeed=true&widget=true&embed=true&preview=true"
+  className="border-0 w-full max-w-[426px] md:max-w-[426px] md:-ml-[13px] md:-mr-[13px]"
+  style={{
+    height: '575px',
+  }}
+  scrolling="no"
+  title="littlequeen"
+/>
 
    
 
