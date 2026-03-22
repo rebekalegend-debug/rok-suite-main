@@ -427,17 +427,18 @@ at {formatUTC(countdown.target)}
   {/* 🔥 ONLY THIS PART BLURS */}
  
 
-   <div className="flex">
+<div className="flex">
 
+  <div className="flex-1 flex justify-center">
 
-
-<div
-  className={`max-w-4xl mx-auto p-4 md:p-8 ${
-    mgeClosed
-      ? "blur-[2px] brightness-75 pointer-events-none select-none"
-      : ""
-  }`}
->
+    <div
+      className={`w-full max-w-4xl p-4 md:p-8 ${
+        mgeClosed
+          ? "blur-[2px] brightness-75 pointer-events-none select-none"
+          : ""
+      }`}
+    >
+ <div className="w-full max-w-4xl p-4 md:p-8">
   <div className="text-center mt-2 text-sm font-medium">
 
 <span className={countdown.isUrgent ? "text-red-400" : "text-white"}>
@@ -1181,7 +1182,7 @@ I agree to follow all rules and accept any consequences if I break them.
 </div> {/* closes card */}
 </div> {/* closes page container */}
  
-  
+
 
 
 </AppSidebar>
