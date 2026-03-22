@@ -431,13 +431,20 @@ at {formatUTC(countdown.target)}
 
   <div className="flex-1 flex justify-center">
 
+    {/* 🔥 NEW INNER WRAPPER */}
     <div
       className={`w-full max-w-4xl p-4 md:p-8 ${
         mgeClosed
-          ? "blur-[2px] brightness-75 pointer-events-none select-none"
+          ? "pointer-events-none select-none"
           : ""
       }`}
     >
+
+      <div
+        className={`${
+          mgeClosed ? "blur-[2px] brightness-75" : ""
+        }`}
+      >
 
   <div className="text-center mt-2 text-sm font-medium">
 
@@ -1183,7 +1190,7 @@ I agree to follow all rules and accept any consequences if I break them.
 </div> {/* closes page container */}
 
 </div> {/* closes blur wrapper */}
-
+</div>
 
 </AppSidebar>
 );
