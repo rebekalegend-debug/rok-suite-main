@@ -1237,7 +1237,7 @@ I agree to follow all rules and accept any consequences if I break them.
 </div> {/* closes page container */}
  </div> {/* min-h-screen */}
    </div> {/* blur wrapper */}
-</div> {/* min-h-screen */}
+
 
 </AppSidebar>
 );
