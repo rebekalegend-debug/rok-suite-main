@@ -7,88 +7,46 @@ declare global {
     __TEST_TIME__?: string
   }
 }
-function getMgeStatus() {
+
+function getMgeTimes(now: Date) {
+  const ONE_DAY = 86400000
+  const TWO_WEEKS = 14 * ONE_DAY
+
+  const KNOWN_MGE_START = new Date(Date.UTC(2026, 2, 23, 0, 0, 0))
+
+  const diff = now.getTime() - KNOWN_MGE_START.getTime()
+  const cycles = Math.floor(diff / TWO_WEEKS)
+
+  let adjustedCycles = cycles
+
+  // 🔥 fix negative time drift
+  if (diff < 0 && diff % TWO_WEEKS !== 0) {
+    adjustedCycles = cycles - 1
+  }
+
+  const currentMgeStart = new Date(
+    KNOWN_MGE_START.getTime() + adjustedCycles * TWO_WEEKS
+  )
+
+  const mgeEnd = new Date(currentMgeStart.getTime() + 6 * ONE_DAY)
+
+  const registrationClose = new Date(currentMgeStart.getTime() - ONE_DAY)
+  const registrationOpen = new Date(mgeEnd.getTime() + ONE_DAY)
+
+  return {
+    currentMgeStart,
+    mgeEnd,
+    registrationClose,
+    registrationOpen
+  }
+}
+
+function getMgeCountdown() {
   const now = (window as any).__TEST_TIME__
     ? new Date((window as any).__TEST_TIME__)
     : new Date()
 
-  const ONE_DAY = 24 * 60 * 60 * 1000
-const TWO_WEEKS = 14 * ONE_DAY
-
-// ✅ REAL MGE START (from your calendar)
-const KNOWN_MGE_START = new Date(Date.UTC(2026, 2, 23, 0, 0, 0)) 
-// (March 23 MGE start — adjust hour if needed)
-
-// derive cycle start (13 days before MGE)
-const base = new Date(KNOWN_MGE_START.getTime() - 13 * ONE_DAY)
-
-const diff = now.getTime() - base.getTime()
-const cycles = Math.floor(diff / TWO_WEEKS)
-
-let currentStart = new Date(base.getTime() + cycles * TWO_WEEKS)
-
-// safety
-if (now < currentStart) {
-  currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
-}
-
-// 🔥 FIX: stay in current cycle during MGE
-if (currentStart.getTime() > now.getTime()) {
-  currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
-}
-
- // 🔥 MGE starts at end of cycle (day 13)
-const mgeStart = new Date(currentStart.getTime() + 13 * ONE_DAY)
-
-// 🔥 correct rules
-const registrationClose = new Date(mgeStart.getTime() - ONE_DAY)
-const mgeEnd = new Date(mgeStart.getTime() + 6 * ONE_DAY)
-const registrationOpen = new Date(mgeEnd.getTime() + ONE_DAY)
-
-// 🔥 CLOSED from close → until reopen
-const isClosed =
-  now >= registrationClose && now < registrationOpen
-
-  return { isClosed }
-}
-
-function getMgeCountdown() {
-
-  const now = (window as any).__TEST_TIME__ 
-    ? new Date((window as any).__TEST_TIME__) 
-    : new Date()
-
-  const ONE_DAY = 24 * 60 * 60 * 1000
-  const TWO_WEEKS = 14 * ONE_DAY
-
-  // ✅ REAL MGE START
-  const KNOWN_MGE_START = new Date(Date.UTC(2026, 2, 23, 0, 0, 0))
-
-  // derive cycle start (13 days before MGE)
-  const base = new Date(KNOWN_MGE_START.getTime() - 13 * ONE_DAY)
-
-  // 🔥 REQUIRED (you deleted this before)
-  const diff = now.getTime() - base.getTime()
-  const cycles = Math.floor(diff / TWO_WEEKS)
-
-  let currentStart = new Date(base.getTime() + cycles * TWO_WEEKS)
-
-  // safety: avoid future cycle
-  if (now < currentStart) {
-    currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
-  }
-
-  // 🔥 FIX: stay in current cycle during MGE
- if (currentStart.getTime() > now.getTime()) {
-  currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
-}
-
-
-  const mgeStart = new Date(currentStart.getTime() + 13 * ONE_DAY)
-
-  const registrationClose = new Date(mgeStart.getTime() - ONE_DAY)
-  const mgeEnd = new Date(mgeStart.getTime() + 6 * ONE_DAY)
-  const registrationOpen = new Date(mgeEnd.getTime() + ONE_DAY)
+  const { registrationClose, registrationOpen } = getMgeTimes(now)
 
   let target: Date
   let mode: "OPEN" | "CLOSED"
@@ -96,38 +54,43 @@ function getMgeCountdown() {
   if (now < registrationClose) {
     target = registrationClose
     mode = "OPEN"
-
   } else if (now < registrationOpen) {
     target = registrationOpen
     mode = "CLOSED"
-
   } else {
-    const nextStart = new Date(currentStart.getTime() + TWO_WEEKS)
-    const nextMgeStart = new Date(nextStart.getTime() + 13 * ONE_DAY)
-    const nextRegistrationClose = new Date(nextMgeStart.getTime() - ONE_DAY)
+    const nextNow = new Date(now.getTime() + 14 * 86400000)
+    const next = getMgeTimes(nextNow)
 
-    target = nextRegistrationClose
+    target = next.registrationClose
     mode = "OPEN"
   }
 
   const diffMs = target.getTime() - now.getTime()
   const totalSeconds = Math.floor(diffMs / 1000)
-  const days = Math.floor(totalSeconds / 86400)
-  const hours = Math.floor((totalSeconds % 86400) / 3600)
-  const minutes = Math.floor((totalSeconds % 3600) / 60)
-  const seconds = totalSeconds % 60
 
   return {
     mode,
     target,
-    days,
-    hours,
-    minutes,
-    seconds,
+    days: Math.floor(totalSeconds / 86400),
+    hours: Math.floor((totalSeconds % 86400) / 3600),
+    minutes: Math.floor((totalSeconds % 3600) / 60),
+    seconds: totalSeconds % 60,
     isUrgent: totalSeconds <= 86400
   }
 }
 
+function getMgeStatus() {
+  const now = (window as any).__TEST_TIME__
+    ? new Date((window as any).__TEST_TIME__)
+    : new Date()
+
+  const { registrationClose, registrationOpen } = getMgeTimes(now)
+
+  const isClosed =
+    now >= registrationClose && now < registrationOpen
+
+  return { isClosed }
+}
 export default function MgePage() {
 
 const [form, setForm] = useState({
