@@ -36,8 +36,8 @@ const registrationClose = new Date(mgeStart.getTime() - 2 * ONE_DAY)
 
 // optional: MGE ends after 7 days
 const currentEnd = new Date(mgeStart.getTime() + 7 * ONE_DAY)
-  const isClosed =
-    now >= registrationClose && now < currentEnd
+ const isClosed =
+  now >= registrationClose && now < mgeStart
 
   return { isClosed }
 }
@@ -72,29 +72,48 @@ const registrationClose = new Date(
 
 // optional: MGE ends after 7 days
 const currentEnd = new Date(mgeStart.getTime() + 7 * ONE_DAY)
-  let target
-let mode: "close" | "open"
+let target
+let mode: "close" | "open" | "mge"
 
- if (now < registrationClose) {
+if (now < registrationClose) {
+  // 🟢 registration open
   target = registrationClose
   mode = "close"
+
+} else if (now < mgeStart) {
+  // 🔴 registration closed (THIS IS YOUR CASE)
+  target = mgeStart
+  mode = "mge"
+
 } else if (now < currentEnd) {
-  target = currentEnd
-  mode = "open"
-} else {
-  // always recalc next cycle clean
+  // ⚔️ MGE running
   const nextStart = new Date(currentStart.getTime() + TWO_WEEKS)
 
   const nextMgeStart = new Date(
-  nextStart.getTime() + (23 * 60 + 59) * 60 * 1000
-)
+    nextStart.getTime() + 13 * ONE_DAY + (23 * 60 + 59) * 60 * 1000
+  )
 
-const nextRegistrationClose = new Date(
-  nextMgeStart.getTime() - 2 * ONE_DAY
-)
+  const nextRegistrationClose = new Date(
+    nextMgeStart.getTime() - 2 * ONE_DAY
+  )
 
   target = nextRegistrationClose
-  mode = "close"
+  mode = "open"
+
+} else {
+  // fallback → next cycle
+  const nextStart = new Date(currentStart.getTime() + TWO_WEEKS)
+
+  const nextMgeStart = new Date(
+    nextStart.getTime() + 13 * ONE_DAY + (23 * 60 + 59) * 60 * 1000
+  )
+
+  const nextRegistrationClose = new Date(
+    nextMgeStart.getTime() - 2 * ONE_DAY
+  )
+
+  target = nextRegistrationClose
+  mode = "open"
 }
 
   const diffMs = target.getTime() - now.getTime()
@@ -458,9 +477,9 @@ style={{
   <div className="text-center mt-2 text-sm font-medium">
 
 <span className={countdown.isUrgent ? "text-red-400" : "text-white"}>
-{countdown.mode === "close"
-  ? "MGE Registration closes in "
-  : "MGE Registration opens in "}
+{countdown.mode === "close" && "MGE Registration closes in "}
+{countdown.mode === "mge" && "⚔️ MGE starts in "}
+{countdown.mode === "open" && "MGE Registration opens in "}
 {countdown.days > 0 && `${countdown.days}D `}
 {String(countdown.hours).padStart(2,"0")}:
 {String(countdown.minutes).padStart(2,"0")}:
