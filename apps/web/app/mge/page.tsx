@@ -36,7 +36,7 @@ if (now < currentStart) {
 if (currentStart.getTime() > now.getTime()) {
   currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
 }
-
+const mgeStartCheck = new Date(currentStart.getTime() + 13 * ONE_DAY)
 if (now >= mgeStartCheck) {
   currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
 }
@@ -85,7 +85,7 @@ function getMgeCountdown() {
  if (currentStart.getTime() > now.getTime()) {
   currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
 }
-
+const mgeStartCheck = new Date(currentStart.getTime() + 13 * ONE_DAY)
   if (now >= mgeStartCheck) {
     currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
   }
