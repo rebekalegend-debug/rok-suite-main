@@ -223,9 +223,17 @@ function triggerConfirmError() {
 }
   
 useEffect(() => {
-  function update() {
-    setCountdown(getMgeCountdown())
-    setMgeClosed(getMgeStatus().isClosed)
+ function update() {
+  const status = getMgeStatus()
+  const countdownData = getMgeCountdown()
+
+  console.log("NOW:", new Date())
+  console.log("STATUS:", status)
+  console.log("COUNTDOWN MODE:", countdownData.mode)
+
+  setCountdown(countdownData)
+  setMgeClosed(status.isClosed)
+}
   }
 
   ;(window as any).forceUpdateMGE = update
