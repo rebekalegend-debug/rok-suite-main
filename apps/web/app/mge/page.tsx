@@ -23,6 +23,7 @@ const KNOWN_MGE_START = new Date(Date.UTC(2026, 2, 23, 0, 0, 0))
 const base = new Date(KNOWN_MGE_START.getTime() - 13 * ONE_DAY)
 
 const diff = now.getTime() - base.getTime()
+const diff = now.getTime() - base.getTime()
 const cycles = Math.floor(diff / TWO_WEEKS)
 
 let currentStart = new Date(base.getTime() + cycles * TWO_WEEKS)
@@ -31,6 +32,17 @@ if (now < currentStart) {
   currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
 }
 
+const mgeStartCheck = new Date(currentStart.getTime() + 13 * ONE_DAY)
+
+if (now >= mgeStartCheck) {
+  currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
+}
+
+let currentStart = new Date(base.getTime() + cycles * TWO_WEEKS)
+
+if (now < currentStart) {
+  currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
+}
  // 🔥 MGE starts at end of cycle (day 13)
 const mgeStart = new Date(currentStart.getTime() + 13 * ONE_DAY)
 
@@ -53,68 +65,74 @@ function getMgeCountdown() {
     : new Date()
 
   const ONE_DAY = 24 * 60 * 60 * 1000
-const TWO_WEEKS = 14 * ONE_DAY
+  const TWO_WEEKS = 14 * ONE_DAY
 
-// ✅ REAL MGE START (from your calendar)
-const KNOWN_MGE_START = new Date(Date.UTC(2026, 2, 23, 0, 0, 0)) 
-// (March 23 MGE start — adjust hour if needed)
+  // ✅ REAL MGE START
+  const KNOWN_MGE_START = new Date(Date.UTC(2026, 2, 23, 0, 0, 0))
 
-// derive cycle start (13 days before MGE)
-const base = new Date(KNOWN_MGE_START.getTime() - 13 * ONE_DAY)
+  // derive cycle start (13 days before MGE)
+  const base = new Date(KNOWN_MGE_START.getTime() - 13 * ONE_DAY)
 
-const diff = now.getTime() - base.getTime()
-const cycles = Math.floor(diff / TWO_WEEKS)
+  // 🔥 REQUIRED (you deleted this before)
+  const diff = now.getTime() - base.getTime()
+  const cycles = Math.floor(diff / TWO_WEEKS)
 
-let currentStart = new Date(base.getTime() + cycles * TWO_WEEKS)
+  let currentStart = new Date(base.getTime() + cycles * TWO_WEEKS)
 
-if (now < currentStart) {
-  currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
-}
-const mgeStart = new Date(currentStart.getTime() + 13 * ONE_DAY)
+  // safety: avoid future cycle
+  if (now < currentStart) {
+    currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
+  }
 
-const registrationClose = new Date(mgeStart.getTime() - ONE_DAY)
-const mgeEnd = new Date(mgeStart.getTime() + 6 * ONE_DAY)
-const registrationOpen = new Date(mgeEnd.getTime() + ONE_DAY)
+  // 🔥 FIX: stay in current cycle during MGE
+  const mgeStartCheck = new Date(currentStart.getTime() + 13 * ONE_DAY)
 
-let target: Date
-let mode: "OPEN" | "CLOSED"
+  if (now >= mgeStartCheck) {
+    currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
+  }
 
-if (now < registrationClose) {
-  // 🟢 OPEN
-  target = registrationClose
-  mode = "OPEN"
+  const mgeStart = new Date(currentStart.getTime() + 13 * ONE_DAY)
 
-} else if (now < registrationOpen) {
-  // 🔴 CLOSED
-  target = registrationOpen
-  mode = "CLOSED"
+  const registrationClose = new Date(mgeStart.getTime() - ONE_DAY)
+  const mgeEnd = new Date(mgeStart.getTime() + 6 * ONE_DAY)
+  const registrationOpen = new Date(mgeEnd.getTime() + ONE_DAY)
 
-} else {
-  // 🟢 OPEN NEXT
-  const nextStart = new Date(currentStart.getTime() + TWO_WEEKS)
-  const nextMgeStart = new Date(nextStart.getTime() + 13 * ONE_DAY)
-  const nextRegistrationClose = new Date(nextMgeStart.getTime() - ONE_DAY)
+  let target: Date
+  let mode: "OPEN" | "CLOSED"
 
-  target = nextRegistrationClose
-  mode = "OPEN"
-}
+  if (now < registrationClose) {
+    target = registrationClose
+    mode = "OPEN"
+
+  } else if (now < registrationOpen) {
+    target = registrationOpen
+    mode = "CLOSED"
+
+  } else {
+    const nextStart = new Date(currentStart.getTime() + TWO_WEEKS)
+    const nextMgeStart = new Date(nextStart.getTime() + 13 * ONE_DAY)
+    const nextRegistrationClose = new Date(nextMgeStart.getTime() - ONE_DAY)
+
+    target = nextRegistrationClose
+    mode = "OPEN"
+  }
 
   const diffMs = target.getTime() - now.getTime()
-const totalSeconds = Math.floor(diffMs / 1000)
-const days = Math.floor(totalSeconds / 86400)
-const hours = Math.floor((totalSeconds % 86400) / 3600)
-const minutes = Math.floor((totalSeconds % 3600) / 60)
-const seconds = totalSeconds % 60
+  const totalSeconds = Math.floor(diffMs / 1000)
+  const days = Math.floor(totalSeconds / 86400)
+  const hours = Math.floor((totalSeconds % 86400) / 3600)
+  const minutes = Math.floor((totalSeconds % 3600) / 60)
+  const seconds = totalSeconds % 60
 
-return {
-  mode,
-  target, // 🔥 IMPORTANT (for date display)
-  days,
-  hours,
-  minutes,
-  seconds,
-  isUrgent: totalSeconds <= 86400
-}
+  return {
+    mode,
+    target,
+    days,
+    hours,
+    minutes,
+    seconds,
+    isUrgent: totalSeconds <= 86400
+  }
 }
 
 export default function MgePage() {
