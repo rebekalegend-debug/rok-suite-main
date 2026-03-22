@@ -427,9 +427,7 @@ at {formatUTC(countdown.target)}
   {/* 🔥 ONLY THIS PART BLURS */}
  
 
-<div className="flex">
-
-  <div className="flex-1 flex justify-center">
+<div className="ml-[260px] flex justify-center">
 
     {/* 🔥 ROOT ISOLATION CONTAINER */}
     <div className="relative w-full max-w-4xl p-4 md:p-8">
@@ -1185,9 +1183,9 @@ I agree to follow all rules and accept any consequences if I break them.
  </div> {/* 🔥 END BLUR CONTENT */}
 
       {/* 🔥 OVERLAY (BLOCK INTERACTION, NOT SIDEBAR) */}
-      {mgeClosed && (
-        <div className="absolute inset-0 z-10 pointer-events-auto" />
-      )}
+     {mgeClosed && (
+  <div className="absolute inset-0 z-10 pointer-events-none" />
+)}
 
     </div> {/* ROOT ISOLATION */}
   </div>
