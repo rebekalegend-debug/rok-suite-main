@@ -182,8 +182,18 @@ const [mgeClosed, setMgeClosed] = useState(false)
 const [submitError,setSubmitError] = useState(false)
 const [confirmed, setConfirmed] = useState(false)
 const [confirmError, setConfirmError] = useState(false)
-const [countdown, setCountdown] = useState({
-  mode: "close" as "close" | "open",
+type CountdownMode = "close" | "open" | "mge"
+
+const [countdown, setCountdown] = useState<{
+  mode: CountdownMode
+  target: Date
+  days: number
+  hours: number
+  minutes: number
+  seconds: number
+  isUrgent: boolean
+}>({
+  mode: "close",
   target: new Date(),
   days: 0,
   hours: 0,
