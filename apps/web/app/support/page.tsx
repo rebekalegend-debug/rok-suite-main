@@ -20,7 +20,7 @@ export default function SupportPage() {
         {/* Ko-fi iframe */}
 <div className="flex justify-center items-center min-h-[70vh] px-3">
 
-  <div className="w-full max-w-[420px] rounded-2xl overflow-hidden border border-pink-500/30 shadow-[0_0_40px_rgba(236,72,153,0.25)] bg-black flex justify-center">
+<div className="w-full bg-transparent max-w-[420px] rounded-2xl overflow-hidden border border-pink-500/30 shadow-[0_0_40px_rgba(236,72,153,0.25)] flex justify-center">
     
     <div className="overflow-hidden">
       
@@ -28,17 +28,17 @@ export default function SupportPage() {
         src="https://ko-fi.com/littlequeen/?hidefeed=true&widget=true&embed=true&preview=true"
         className="border-0"
         style={{
-          width: '440px',          // 👈 slightly bigger than container
-          height: '575px',         // 👈 your exact height
-          marginLeft: '-10px',     // 👈 crop LEFT
-          marginRight: '-10px',    // 👈 crop RIGHT
+          width: '426px',         
+          height: '575px',         
+          marginLeft: '-13px',    
+          marginRight: '-13px',   
         }}
         scrolling="no"
         title="littlequeen"
       />
 
-    </div>
-
+   
+ </div>
   </div>
 
 </div>
