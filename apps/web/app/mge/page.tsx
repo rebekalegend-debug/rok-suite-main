@@ -176,7 +176,7 @@ const [countdown, setCountdown] = useState<{
   seconds: number
   isUrgent: boolean
 }>({
-  mode: "close",
+  mode: "CLOSED",
   target: new Date(),
   days: 0,
   hours: 0,
