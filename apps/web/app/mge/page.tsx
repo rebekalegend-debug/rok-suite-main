@@ -36,10 +36,7 @@ if (now < currentStart) {
 if (currentStart.getTime() > now.getTime()) {
   currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
 }
-const mgeStartCheck = new Date(currentStart.getTime() + 13 * ONE_DAY)
-if (now >= mgeStartCheck) {
-  currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
-}
+
  // 🔥 MGE starts at end of cycle (day 13)
 const mgeStart = new Date(currentStart.getTime() + 13 * ONE_DAY)
 
@@ -85,10 +82,7 @@ function getMgeCountdown() {
  if (currentStart.getTime() > now.getTime()) {
   currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
 }
-const mgeStartCheck = new Date(currentStart.getTime() + 13 * ONE_DAY)
-  if (now >= mgeStartCheck) {
-    currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
-  }
+
 
   const mgeStart = new Date(currentStart.getTime() + 13 * ONE_DAY)
 
