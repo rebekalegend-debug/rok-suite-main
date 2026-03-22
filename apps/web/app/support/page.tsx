@@ -18,25 +18,23 @@ export default function SupportPage() {
         </div>
 
         {/* Ko-fi iframe */}
- <div className="flex justify-center items-center min-h-[70vh] px-2">
+<div className="flex justify-center items-center min-h-[70vh] px-3">
 
-  <div className="rounded-2xl overflow-hidden border border-pink-500/30 shadow-[0_0_40px_rgba(236,72,153,0.25)] bg-black">
+  <div className="w-full max-w-[420px] rounded-2xl overflow-hidden border border-pink-500/30 shadow-[0_0_40px_rgba(236,72,153,0.25)] bg-black">
     
     <iframe
       src="https://ko-fi.com/littlequeen/?hidefeed=true&widget=true&embed=true&preview=true"
-      className="border-0"
+      className="w-full border-0"
       style={{
-        width: '100%',
-        maxWidth: '420px',   // 👈 keeps it centered + responsive
-        height: '600px',     // 👈 stronger crop (removes "Powered by")
+        height: '570px',   // 👈 stronger bottom cut
       }}
+      scrolling="no"       // 👈 removes scrollbar
       title="littlequeen"
     />
 
   </div>
 
 </div>
-
         
       </div>
     </AppSidebar>
