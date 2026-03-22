@@ -438,7 +438,7 @@ at {formatUTC(countdown.target)}
           : ""
       }`}
     >
- <div className="w-full max-w-4xl p-4 md:p-8">
+
   <div className="text-center mt-2 text-sm font-medium">
 
 <span className={countdown.isUrgent ? "text-red-400" : "text-white"}>
@@ -1181,9 +1181,10 @@ I agree to follow all rules and accept any consequences if I break them.
 )}
 </div> {/* closes card */}
 </div> {/* closes page container */}
- 
 
-
+</div> {/* closes blur wrapper */}
+</div> {/* closes flex-1 */}
+</div> {/* closes flex */}
 
 </AppSidebar>
 );
