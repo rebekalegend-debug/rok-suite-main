@@ -14,19 +14,11 @@ function getMgeTimes(now: Date) {
 
   const KNOWN_MGE_START = new Date(Date.UTC(2026, 2, 23, 0, 0, 0))
 
-  const diff = now.getTime() - KNOWN_MGE_START.getTime()
-  const cycles = Math.floor(diff / TWO_WEEKS)
+ let currentMgeStart = new Date(KNOWN_MGE_START)
 
-  let adjustedCycles = cycles
-
-  // 🔥 fix negative time drift
-  if (diff < 0 && diff % TWO_WEEKS !== 0) {
-    adjustedCycles = cycles - 1
-  }
-
-  const currentMgeStart = new Date(
-    KNOWN_MGE_START.getTime() + adjustedCycles * TWO_WEEKS
-  )
+while (currentMgeStart.getTime() + TWO_WEEKS <= now.getTime()) {
+  currentMgeStart = new Date(currentMgeStart.getTime() + TWO_WEEKS)
+}
 
   const mgeEnd = new Date(currentMgeStart.getTime() + 6 * ONE_DAY)
 
