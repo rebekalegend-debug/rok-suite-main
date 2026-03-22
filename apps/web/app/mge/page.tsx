@@ -23,24 +23,21 @@ const KNOWN_MGE_START = new Date(Date.UTC(2026, 2, 23, 0, 0, 0))
 const base = new Date(KNOWN_MGE_START.getTime() - 13 * ONE_DAY)
 
 const diff = now.getTime() - base.getTime()
-const diff = now.getTime() - base.getTime()
 const cycles = Math.floor(diff / TWO_WEEKS)
 
 let currentStart = new Date(base.getTime() + cycles * TWO_WEEKS)
 
+// safety
 if (now < currentStart) {
   currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
 }
 
-const mgeStartCheck = new Date(currentStart.getTime() + 13 * ONE_DAY)
+// 🔥 FIX: stay in current cycle during MGE
+if (currentStart.getTime() > now.getTime()) {
+  currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
+}
 
 if (now >= mgeStartCheck) {
-  currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
-}
-
-let currentStart = new Date(base.getTime() + cycles * TWO_WEEKS)
-
-if (now < currentStart) {
   currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
 }
  // 🔥 MGE starts at end of cycle (day 13)
@@ -85,7 +82,9 @@ function getMgeCountdown() {
   }
 
   // 🔥 FIX: stay in current cycle during MGE
-  const mgeStartCheck = new Date(currentStart.getTime() + 13 * ONE_DAY)
+ if (currentStart.getTime() > now.getTime()) {
+  currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
+}
 
   if (now >= mgeStartCheck) {
     currentStart = new Date(currentStart.getTime() - TWO_WEEKS)
