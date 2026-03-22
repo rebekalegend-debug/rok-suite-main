@@ -227,9 +227,10 @@ useEffect(() => {
   const status = getMgeStatus()
   const countdownData = getMgeCountdown()
 
-  console.log("NOW:", new Date())
+ if (!(window as any).__loggedOnce) {
   console.log("STATUS:", status)
-  console.log("COUNTDOWN MODE:", countdownData.mode)
+  ;(window as any).__loggedOnce = true
+}
 
   setCountdown(countdownData)
   setMgeClosed(status.isClosed)
@@ -473,9 +474,15 @@ Ranking phase in progress.
   )}
 
   {/* 🔥 ONLY THIS PART BLURS */}
-  <div className={mgeClosed ? "blur-[2px] brightness-75 pointer-events-none select-none" : ""}>
+ 
 
-        <div className="min-h-screen">
+       <div className="min-h-screen">
+
+  <div className={
+    mgeClosed
+      ? "blur-[2px] brightness-75 pointer-events-none select-none"
+      : ""
+  }>
 
 <div className="max-w-4xl mx-auto p-4 md:p-8">
 
@@ -1229,7 +1236,8 @@ I agree to follow all rules and accept any consequences if I break them.
 </div> {/* closes card */}
 </div> {/* closes page container */}
  </div> {/* min-h-screen */}
-  </div> {/* blur wrapper */}
+   </div> {/* blur wrapper */}
+</div> {/* min-h-screen */}
 
 </AppSidebar>
 );
