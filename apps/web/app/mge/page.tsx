@@ -402,7 +402,7 @@ return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-[2px]">
       <div className="bg-zinc-900/95 rounded-xl p-6 w-[340px] text-center flex flex-col gap-4 shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
         <div className="text-lg font-semibold text-yellow-400">
-          ⚔️ MGE Closed ⚔️
+          ⚔️ Closed ⚔️
         </div>
        <div className="text-sm leading-relaxed space-y-2">
 
@@ -417,10 +417,6 @@ return (
 
 <div className="text-xs text-zinc-400">
 at {formatUTC(countdown.target)}
-</div>
-
-<div className="text-zinc-400 pt-2">
-Ranking phase in progress.
 </div>
 
 </div>
