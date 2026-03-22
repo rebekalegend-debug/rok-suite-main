@@ -77,26 +77,26 @@ const mgeEnd = new Date(mgeStart.getTime() + 6 * ONE_DAY)
 const registrationOpen = new Date(mgeEnd.getTime() + ONE_DAY)
 
 let target: Date
-let mode: "close" | "open" | "mge"
+let mode: "OPEN" | "CLOSED"
 
 if (now < registrationClose) {
   // 🟢 OPEN
   target = registrationClose
-  mode = "close"
+  mode = "OPEN"
 
 } else if (now < registrationOpen) {
-  // 🔴 FULL CLOSED PERIOD (YOUR RULE)
+  // 🔴 CLOSED
   target = registrationOpen
-  mode = "open"
+  mode = "CLOSED"
 
 } else {
-  // 🟢 OPEN AGAIN (NEXT CYCLE)
+  // 🟢 OPEN NEXT
   const nextStart = new Date(currentStart.getTime() + TWO_WEEKS)
   const nextMgeStart = new Date(nextStart.getTime() + 13 * ONE_DAY)
   const nextRegistrationClose = new Date(nextMgeStart.getTime() - ONE_DAY)
 
   target = nextRegistrationClose
-  mode = "close"
+  mode = "OPEN"
 }
 
   const diffMs = target.getTime() - now.getTime()
@@ -165,7 +165,7 @@ const [mgeClosed, setMgeClosed] = useState(false)
 const [submitError,setSubmitError] = useState(false)
 const [confirmed, setConfirmed] = useState(false)
 const [confirmError, setConfirmError] = useState(false)
-type CountdownMode = "close" | "open" | "mge"
+type CountdownMode = "OPEN" | "CLOSED"
 
 const [countdown, setCountdown] = useState<{
   mode: CountdownMode
@@ -471,7 +471,7 @@ style={{
   <div className="text-center mt-2 text-sm font-medium">
 
 <span className={countdown.isUrgent ? "text-red-400" : "text-white"}>
-{countdown.mode === "close"
+{countdown.mode === "OPEN"
   ? "MGE Registration closes in "
   : "Registration opens in "}
 {countdown.days > 0 && `${countdown.days}D `}
