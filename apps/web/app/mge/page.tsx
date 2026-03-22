@@ -1183,7 +1183,6 @@ I agree to follow all rules and accept any consequences if I break them.
 </div> {/* closes page container */}
 
 </div> {/* closes blur wrapper */}
-</div> {/* closes flex-1 */}
 </div> {/* closes flex */}
 
 </AppSidebar>
