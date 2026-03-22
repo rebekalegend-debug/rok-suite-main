@@ -395,7 +395,8 @@ function formatUTC(date: Date) {
 }
   
 return (
-<AppSidebar>
+<>
+  <AppSidebar />
 
   {/* 🔥 POPUP (NOT BLURRED) */}
   {mgeClosed && (
