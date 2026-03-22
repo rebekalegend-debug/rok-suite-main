@@ -431,20 +431,16 @@ at {formatUTC(countdown.target)}
 
   <div className="flex-1 flex justify-center">
 
-    {/* 🔥 NEW INNER WRAPPER */}
-    <div
-      className={`w-full max-w-4xl p-4 md:p-8 ${
-        mgeClosed
-          ? "pointer-events-none select-none"
-          : ""
-      }`}
-    >
+    {/* 🔥 ROOT ISOLATION CONTAINER */}
+    <div className="relative w-full max-w-4xl p-4 md:p-8">
 
+      {/* 🔥 BLUR ONLY CONTENT */}
       <div
-        className={`${
+        className={`transition ${
           mgeClosed ? "blur-[2px] brightness-75" : ""
         }`}
       >
+
 
   <div className="text-center mt-2 text-sm font-medium">
 
@@ -1186,10 +1182,15 @@ I agree to follow all rules and accept any consequences if I break them.
 
 </>
 )}
-</div> {/* closes card */}
-</div> {/* closes page container */}
+ </div> {/* 🔥 END BLUR CONTENT */}
 
-</div> {/* closes blur wrapper */}
+      {/* 🔥 OVERLAY (BLOCK INTERACTION, NOT SIDEBAR) */}
+      {mgeClosed && (
+        <div className="absolute inset-0 z-10 pointer-events-auto" />
+      )}
+
+    </div> {/* ROOT ISOLATION */}
+  </div>
 </div>
 
 </AppSidebar>
