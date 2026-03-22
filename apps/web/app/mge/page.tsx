@@ -399,7 +399,7 @@ return (
 
   {/* 🔥 POPUP (NOT BLURRED) */}
   {mgeClosed && (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-[2px]">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70">
       <div className="bg-zinc-900/95 rounded-xl p-6 w-[340px] text-center flex flex-col gap-4 shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
         <div className="text-lg font-semibold text-yellow-400">
           ⚔️ Closed ⚔️
