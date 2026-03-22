@@ -1181,7 +1181,7 @@ I agree to follow all rules and accept any consequences if I break them.
 </div> {/* closes card */}
 </div> {/* closes page container */}
  </div> {/* min-h-screen */}
-   </div> {/* blur wrapper */}
+  
 
 
 </AppSidebar>
