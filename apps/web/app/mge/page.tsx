@@ -28,7 +28,7 @@ if (now < currentStart) {
 
  // 🔥 MGE starts at end of cycle (day 13)
 const mgeStart = new Date(
-  currentStart.getTime() + (23 * 60 + 59) * 60 * 1000
+  currentStart.getTime() + (13 * ONE_DAY) + (23 * 60 + 59) * 60 * 1000
 )
 
 // 🔥 registration closes 24h before MGE
@@ -63,7 +63,7 @@ if (now < currentStart) {
 }
  // 🔥 MGE starts at end of cycle (day 13)
 const mgeStart = new Date(
-  currentStart.getTime() + (23 * 60 + 59) * 60 * 1000
+  currentStart.getTime() + (13 * ONE_DAY) + (23 * 60 + 59) * 60 * 1000
 )
 
 const registrationClose = new Date(
