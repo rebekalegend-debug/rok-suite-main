@@ -80,22 +80,17 @@ let target: Date
 let mode: "close" | "open" | "mge"
 
 if (now < registrationClose) {
-  // 🟢 OPEN → counting to close
+  // 🟢 OPEN
   target = registrationClose
   mode = "close"
 
-} else if (now < mgeStart) {
-  // 🔴 CLOSED → before MGE
-  target = mgeStart
-  mode = "mge"
-
 } else if (now < registrationOpen) {
-  // 🔴 CLOSED → MGE running + cooldown
+  // 🔴 FULL CLOSED PERIOD (YOUR RULE)
   target = registrationOpen
   mode = "open"
 
 } else {
-  // 🟢 OPEN again → next cycle
+  // 🟢 OPEN AGAIN (NEXT CYCLE)
   const nextStart = new Date(currentStart.getTime() + TWO_WEEKS)
   const nextMgeStart = new Date(nextStart.getTime() + 13 * ONE_DAY)
   const nextRegistrationClose = new Date(nextMgeStart.getTime() - ONE_DAY)
@@ -438,8 +433,7 @@ return (
        <div className="text-sm leading-relaxed space-y-2">
 
 <div className="text-emerald-400 font-semibold text-base">
-  {countdown.mode === "mge" && "MGE starts in "}
-  {countdown.mode === "open" && "Registration opens in "}
+  Registration opens in{" "}
   
   {countdown.days > 0 && `${countdown.days}D `}
   {String(countdown.hours).padStart(2,"0")}:
@@ -477,9 +471,9 @@ style={{
   <div className="text-center mt-2 text-sm font-medium">
 
 <span className={countdown.isUrgent ? "text-red-400" : "text-white"}>
-{countdown.mode === "close" && "MGE Registration closes in "}
-{countdown.mode === "mge" && "MGE starts in "}
-{countdown.mode === "open" && "Registration opens in "}
+{countdown.mode === "close"
+  ? "MGE Registration closes in "
+  : "Registration opens in "}
 {countdown.days > 0 && `${countdown.days}D `}
 {String(countdown.hours).padStart(2,"0")}:
 {String(countdown.minutes).padStart(2,"0")}:
