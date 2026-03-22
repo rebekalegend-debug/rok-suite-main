@@ -236,7 +236,7 @@ useEffect(() => {
 }
   }
 
-  ;(window as any).forceUpdateMGE = update
+  (window as any).forceUpdateMGE = update
 
   update()
 
