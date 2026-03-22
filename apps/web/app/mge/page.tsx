@@ -1192,6 +1192,6 @@ I agree to follow all rules and accept any consequences if I break them.
   </div>
 </div>
 
-</AppSidebar>
+
 );
 }
