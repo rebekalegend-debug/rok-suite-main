@@ -21,11 +21,11 @@ export default function SupportPage() {
       
 <iframe
   src="https://ko-fi.com/littlequeen/?hidefeed=true&widget=true&embed=true&preview=true"
-  className="border-0 w-full max-w-[426px] md:w-[440px]"
+  className="border-0 rounded-2xl w-full max-w-[426px] md:w-[440px]"
   style={{
     height: '575px',
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    marginLeft: '13px',
+    marginRight: '13px',
   }}
   scrolling="no"
   title="littlequeen"
