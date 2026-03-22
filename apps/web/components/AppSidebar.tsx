@@ -163,24 +163,8 @@ const touchStartY = useRef<number | null>(null);
     ],
   },
 
-  // RESOURCES CATEGORY
-  {
-    titleKey: 'resources',
-    titleColor: 'text-cyan-500',
-    items: [
-      {
-        labelKey: 'betaTools',
-        href: '/beta-tools',
-        icon: <FlaskConical size={20} className="text-blue-500" />,
-        hoverColor: 'group-hover:text-blue-500',
-        hoverBg: 'hover:bg-blue-500/10',
-        activeColor: 'text-white',
-        activeBg: 'bg-gradient-to-r from-blue-500 to-indigo-500',
-      },
-    ],
-  },
-// 💗 SUPPORT CATEGORY
-{
+    // 💗 SUPPORT CATEGORY
+    {
   titleKey: 'support',
   titleColor: 'text-pink-400',
   items: [
@@ -197,6 +181,24 @@ const touchStartY = useRef<number | null>(null);
     },
   ],
 },
+  // RESOURCES CATEGORY
+  {
+    titleKey: 'resources',
+    titleColor: 'text-cyan-500',
+    items: [
+      {
+        labelKey: 'betaTools',
+        href: '/beta-tools',
+        icon: <FlaskConical size={20} className="text-blue-500" />,
+        hoverColor: 'group-hover:text-blue-500',
+        hoverBg: 'hover:bg-blue-500/10',
+        activeColor: 'text-white',
+        activeBg: 'bg-gradient-to-r from-blue-500 to-indigo-500',
+      },
+    ],
+  }
+
+
 
     
 ];
