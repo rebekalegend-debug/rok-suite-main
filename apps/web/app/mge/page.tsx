@@ -234,8 +234,7 @@ useEffect(() => {
   setCountdown(countdownData)
   setMgeClosed(status.isClosed)
 }
-  }
-
+ 
   (window as any).forceUpdateMGE = update
 
   update()
