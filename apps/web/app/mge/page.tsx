@@ -395,9 +395,9 @@ function formatUTC(date: Date) {
   
 return (
 <>
-  <AppSidebar>{null}</AppSidebar>
+  <AppSidebar>
 
-  {/* POPUP - fixed overlay, offset to not cover sidebar */}
+  {/* POPUP - fixed overlay */}
   {mgeClosed && (
     <div
       className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none"
@@ -1146,6 +1146,8 @@ I agree to follow all rules and accept any consequences if I break them.
 
     </div> {/* ROOT ISOLATION */}
   </div>
+
+  </AppSidebar>
 
 </>
 );
