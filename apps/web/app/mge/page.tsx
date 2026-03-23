@@ -395,7 +395,7 @@ function formatUTC(date: Date) {
   
 return (
 <>
-  <AppSidebar />
+  <AppSidebar>{null}</AppSidebar>
 
   {/* POPUP - fixed overlay, offset to not cover sidebar */}
   {mgeClosed && (
