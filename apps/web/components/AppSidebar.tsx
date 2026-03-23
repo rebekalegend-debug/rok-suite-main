@@ -356,7 +356,7 @@ const isActive = (href: string) => {
   );
 
   return (
-    <div className="min-h-screen bg-[var(--background)] flex">
+  <div className="bg-[var(--background)] flex">
       {/* Desktop Sidebar */}
       <aside
       className={`hidden lg:flex flex-col fixed left-0 top-0 h-screen bg-[var(--background-secondary)] border-r border-pink-200/40 transition-all duration-300 z-40 ${
