@@ -185,7 +185,6 @@ return (
 </td>
 <td
   className="p-3 font-semibold cursor-grab"
- 
 >
   {player.name}
 </td>
@@ -480,7 +479,7 @@ function handleLogin() {
   if (inputPass === ADMIN_PASS) {
     localStorage.setItem("mge_admin", inputPass)
     setAuthorized(true)
-    setError(false) // ✅ add this
+    setError(false)
   } else {
     setError(true)
   }
@@ -572,20 +571,20 @@ async function saveList(updated:any[]) {
     const rank = index+1
 
   return [
-  p.id,                      // A ID
-  getHeads(rank),            // B Heads
-  getPoints(rank, updated.length),           // C Points
-  rank,                      // D Rank
-  p.desiredRank,             // E W.Rank
-  p.name,                    // F Name
-  p.commander,               // G Need
-  p.purpose || "",           // H Purpose
-  p.rg?.join(", ") || "",    // I R&G
-  p.kvkContribution,         // J KvK C.
-  p.spend,                   // K Spend
-  p.eq || "",                // L EQ
-  p.skills,                  // M Skill
-  p.main                     // N Main
+  p.id,
+  getHeads(rank),
+  getPoints(rank, updated.length),
+  rank,
+  p.desiredRank,
+  p.name,
+  p.commander,
+  p.purpose || "",
+  p.rg?.join(", ") || "",
+  p.kvkContribution,
+  p.spend,
+  p.eq || "",
+  p.skills,
+  p.main
 ]
 
   })
@@ -628,9 +627,6 @@ useEffect(()=>{
   useEffect(()=>{
     load()
   },[])
-
-
-
 
 
   
@@ -697,52 +693,45 @@ return (
     
   <Suspense fallback={<div className="p-8 text-gray-400">Loading...</div>}>
 
-
-{/* 🔥 MAIN CONTENT */}
-<div className="relative">
-
-  {!authorized && (
-    <div className="absolute inset-0 z-[50] flex items-center justify-center bg-black/70 backdrop-blur-[2px]">
-
-      <div className="bg-zinc-900/95 rounded-xl p-6 w-[320px] text-center flex flex-col gap-4 relative overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
-
-        <div className="absolute inset-0 rounded-xl pointer-events-none border border-yellow-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.6)]" />
-        <div className="absolute inset-0 rounded-xl pointer-events-none bg-gradient-to-r from-transparent via-yellow-500/10 to-transparent opacity-40" />
-
-        <div className="font-semibold text-lg tracking-wide bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
-          🔒 Admin Access
-        </div>
-
-        <input
-          type="password"
-          placeholder="Enter password..."
-          value={inputPass}
-          onChange={(e)=>{
-            setInputPass(e.target.value)
-            setError(false)
-          }}
-          className={`w-full px-3 py-2 rounded-md text-sm bg-zinc-800 border ${
-            error
-              ? "border-red-500 text-red-300"
-              : "border-yellow-500/30 text-white"
-          }`}
-        />
-
-        {error && <div className="text-red-400 text-xs">Wrong password</div>}
-
-        <button
-          onClick={handleLogin}
-          className="bg-yellow-400 py-2 rounded-md font-semibold text-black"
-        >
-          Unlock
-        </button>
-
+{/* ADMIN LOCK OVERLAY - offset so it doesn't cover sidebar */}
+{!authorized && (
+  <div
+    className="fixed inset-0 z-[50] flex items-center justify-center bg-black/70 backdrop-blur-[2px]"
+    style={{ left: '260px' }}
+  >
+    <div className="bg-zinc-900/95 rounded-xl p-6 w-[320px] text-center flex flex-col gap-4 relative overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
+      <div className="absolute inset-0 rounded-xl pointer-events-none border border-yellow-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.6)]" />
+      <div className="absolute inset-0 rounded-xl pointer-events-none bg-gradient-to-r from-transparent via-yellow-500/10 to-transparent opacity-40" />
+      <div className="font-semibold text-lg tracking-wide bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
+        🔒 Admin Access
       </div>
-
+      <input
+        type="password"
+        placeholder="Enter password..."
+        value={inputPass}
+        onChange={(e)=>{
+          setInputPass(e.target.value)
+          setError(false)
+        }}
+        className={`w-full px-3 py-2 rounded-md text-sm bg-zinc-800 border ${
+          error
+            ? "border-red-500 text-red-300"
+            : "border-yellow-500/30 text-white"
+        }`}
+      />
+      {error && <div className="text-red-400 text-xs">Wrong password</div>}
+      <button
+        onClick={handleLogin}
+        className="bg-yellow-400 py-2 rounded-md font-semibold text-black"
+      >
+        Unlock
+      </button>
     </div>
-  )}
+  </div>
+)}
 
-  <div className={!authorized ? "blur-[2px] brightness-75 pointer-events-none select-none" : ""}>
+{/* MAIN CONTENT */}
+<div className={!authorized ? "blur-[1px] brightness-90 pointer-events-none select-none" : ""}>
   
 <div className="max-w-[1800px] mx-auto p-4 md:p-8">
 
@@ -830,12 +819,8 @@ return (
 </div>
 {/* END TABLE BOX */}
 
-
-
 {/* DIVIDER LINE */}
 <div className="my-8 border-t border-yellow-500/30"></div>
-
-
 
 {/* MAIL SECTION */}
 <div>
@@ -887,7 +872,7 @@ onInput={(e) => {
  </div> 
 </div>
 </div>
-</div>
+
   </Suspense>
 </AppSidebar>
 
