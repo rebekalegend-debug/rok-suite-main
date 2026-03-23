@@ -890,29 +890,37 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
       <AlertCircle size={14} className="text-red-500 ml-1" />
     )}
 
-    {player.prevNames?.trim() && (
-      <div className="relative group inline-flex">
-        <button className="text-[var(--text-muted)] hover:text-[var(--foreground)]">
-          <History size={12} />
-        </button>
+{player.prevNames?.trim() && (
+  <div className="relative inline-flex">
+    <button
+      className="text-[var(--text-muted)] hover:text-[var(--foreground)]"
+      onMouseEnter={(e) => {
+        const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+        setTooltip({ id: player.governorId, x: rect.right + 6, y: rect.top })
+      }}
+      onMouseLeave={() => setTooltip(null)}
+    >
+      <History size={12} />
+    </button>
 
-        <div className="absolute left-5 top-4 hidden group-hover:block z-[99999] pointer-events-none"
-          style={{ position: 'fixed', transform: 'none' }}>
-
-          <div className="bg-[var(--background-card)] border border-[var(--border)] rounded-lg px-3 py-2 shadow-lg text-xs whitespace-nowrap">
-            <div className="font-semibold text-[var(--text-secondary)] mb-1">
-              {player.prevNames.split(',').length} previous names
-            </div>
-
-            <div className="space-y-0.5 text-[var(--text-muted)]">
-              {player.prevNames.split(',').map((n, i) => (
-                <div key={i}>{n.trim()}</div>
-              ))}
-            </div>
-          </div>
+    {tooltip?.id === player.governorId && createPortal(
+      <div
+        className="fixed z-[99999] pointer-events-none bg-[var(--background-card)] border border-[var(--border)] rounded-lg px-3 py-2 shadow-lg text-xs whitespace-nowrap"
+        style={{ top: tooltip.y, left: tooltip.x }}
+      >
+        <div className="font-semibold text-[var(--text-secondary)] mb-1">
+          {player.prevNames.split(',').length} previous names
         </div>
-      </div>
+        <div className="space-y-0.5 text-[var(--text-muted)]">
+          {player.prevNames.split(',').map((n, i) => (
+            <div key={i}>{n.trim()}</div>
+          ))}
+        </div>
+      </div>,
+      document.body
     )}
+  </div>
+)}
   </div>
 </td>
                    <td className={`px-3 py-2.5 font-mono text-xs text-center ${
