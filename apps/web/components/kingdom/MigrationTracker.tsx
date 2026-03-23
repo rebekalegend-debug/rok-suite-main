@@ -826,7 +826,8 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
       {/* Desktop table */}
       {!loading && !error && (
 <div className="hidden md:block">
-        <div className="overflow-x-auto">
+       <div className="overflow-x-auto overflow-y-visible">
+
   <table className="w-full">
     <thead className="sticky top-0 z-10 bg-[var(--background-card)]">
              <tr className="border-b border-[var(--border)]">
@@ -895,7 +896,9 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
           <History size={12} />
         </button>
 
-        <div className="absolute left-5 top-4 hidden group-hover:block z-[9999] pointer-events-none">
+        <div className="absolute left-5 top-4 hidden group-hover:block z-[99999] pointer-events-none"
+          style={{ position: 'fixed', transform: 'none' }}>
+
           <div className="bg-[var(--background-card)] border border-[var(--border)] rounded-lg px-3 py-2 shadow-lg text-xs whitespace-nowrap">
             <div className="font-semibold text-[var(--text-secondary)] mb-1">
               {player.prevNames.split(',').length} previous names
