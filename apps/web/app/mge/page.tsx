@@ -401,7 +401,6 @@ return (
   {mgeClosed && (
     <div
       className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none"
-      style={{ left: '260px' }}
     >
       <div className="bg-zinc-900/95 rounded-xl p-6 w-[340px] text-center flex flex-col gap-4 shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
         <div className="text-lg font-semibold text-yellow-400">
@@ -424,7 +423,7 @@ return (
   )}
 
   {/* PAGE CONTENT - only this part blurs */}
-  <div className="ml-[260px] flex justify-center items-start">
+  <div className="flex justify-center items-start">
     <div className="w-full max-w-4xl p-4 md:p-8">
 
       {/* BLUR ONLY CONTENT */}
