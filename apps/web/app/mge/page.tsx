@@ -173,7 +173,7 @@ function triggerConfirmError() {
 
   setTimeout(() => {
     setShakeConfirm(false)
-    setConfirmError(false) // 🔥 ADD THIS
+    setConfirmError(false)
   }, 800)
 }
   
@@ -207,7 +207,7 @@ useEffect(() => {
 
   check()
 
-  const interval = setInterval(check, 60000) // update every minute
+  const interval = setInterval(check, 60000)
 
   return () => clearInterval(interval)
 }, [])
@@ -284,7 +284,6 @@ async function loadMembers(){
     console.log("Members updated:", updateResult)
   }
 
-  // NOW fetch members
   const res = await fetch("/api/mge-application")
   const list = await res.json()
 
@@ -398,48 +397,42 @@ return (
 <>
   <AppSidebar />
 
-  {/* 🔥 POPUP (NOT BLURRED) */}
+  {/* POPUP - fixed overlay, offset to not cover sidebar */}
   {mgeClosed && (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70">
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 pointer-events-auto"
+      style={{ left: '260px' }}
+    >
       <div className="bg-zinc-900/95 rounded-xl p-6 w-[340px] text-center flex flex-col gap-4 shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
         <div className="text-lg font-semibold text-yellow-400">
           ⚔️ Closed ⚔️
         </div>
-       <div className="text-sm leading-relaxed space-y-2">
-
-<div className="text-emerald-400 font-semibold text-base">
-  Registration opens in{" "}
-  
-  {countdown.days > 0 && `${countdown.days}D `}
-  {String(countdown.hours).padStart(2,"0")}:
-  {String(countdown.minutes).padStart(2,"0")}:
-  {String(countdown.seconds).padStart(2,"0")}
-</div>
-
-<div className="text-xs text-zinc-400">
-at {formatUTC(countdown.target)}
-</div>
-
-</div>
+        <div className="text-sm leading-relaxed space-y-2">
+          <div className="text-emerald-400 font-semibold text-base">
+            Registration opens in{" "}
+            {countdown.days > 0 && `${countdown.days}D `}
+            {String(countdown.hours).padStart(2,"0")}:
+            {String(countdown.minutes).padStart(2,"0")}:
+            {String(countdown.seconds).padStart(2,"0")}
+          </div>
+          <div className="text-xs text-zinc-400">
+            at {formatUTC(countdown.target)}
+          </div>
+        </div>
       </div>
     </div>
   )}
 
-  {/* 🔥 ONLY THIS PART BLURS */}
- 
-
-<div className="ml-[260px] flex justify-center">
-
-    {/* 🔥 ROOT ISOLATION CONTAINER */}
+  {/* PAGE CONTENT - only this part blurs */}
+  <div className="ml-[260px] flex justify-center">
     <div className="relative w-full max-w-4xl p-4 md:p-8">
 
-      {/* 🔥 BLUR ONLY CONTENT */}
+      {/* BLUR ONLY CONTENT */}
       <div
         className={`transition ${
-          mgeClosed ? "blur-[2px] brightness-75" : ""
+          mgeClosed ? "blur-[2px] brightness-75 pointer-events-none select-none" : ""
         }`}
       >
-
 
   <div className="text-center mt-2 text-sm font-medium">
 
@@ -472,12 +465,6 @@ at {formatUTC(countdown.target)}
   <span className="sm:hidden">MGE Registration</span>
 </h2>
 
-  
-  
-
-
-  
-  
 {alreadyApplied ? (
 <>
 <p className="mge-info">
@@ -571,8 +558,6 @@ onChange={(e)=>{
 }}
 />
 
-
-
 </div>
 
 {/* SEARCH RESULTS */}
@@ -596,8 +581,6 @@ onClick={() => {
 setMissing(prev => ({...prev, member:false}))
   setSearch("")
   setMemberError(false)
-
- 
 }}
 >
 
@@ -612,10 +595,6 @@ setMissing(prev => ({...prev, member:false}))
 </div>
 )}
 
-
-
-
-  
 </div>
 
 <div className="pt-4 border-t border-[var(--border)]">
@@ -704,8 +683,6 @@ setMissing(prev => ({...prev, commander:false}))
 
 </div>
 
-  
-
 <label className="form-label flex items-center gap-2 mb-3">
 🔢 Commander skill lvl:
 <span className="text-xs opacity-60 flex items-center gap-1">
@@ -720,7 +697,6 @@ className={`rounded-lg p-4 transition cursor-pointer ${
     : "gold-glow-soft hover:gold-glow"
 }`}
 >
-
 
 {/* SKILL GRID */}
 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -817,8 +793,6 @@ onChange={(e)=>{
 }}
 />
 </label>
-
-  
 
 </div>
       
@@ -1000,11 +974,6 @@ onChange={e=>setForm({...form,comment:e.target.value})}
   
 </div>
 
-
-
-
-
-  
 <button
 onClick={()=>setShowAdmin(true)}
 className="
@@ -1101,13 +1070,6 @@ Save
 </div>
 )}
 
-
-
-
-
-
-
-  
 <div className="pt-4">
 {/* CONFIRMATION */}
 <div
@@ -1167,7 +1129,7 @@ I agree to follow all rules and accept any consequences if I break them.
     ${shakeConfirm ? "animate-shake" : ""} 
     ${
       !confirmed
-        ? "bg-zinc-600 text-zinc-400 cursor-pointer" // 🔥 IMPORTANT (not not-allowed)
+        ? "bg-zinc-600 text-zinc-400 cursor-pointer"
         : submitError || confirmError
         ? "bg-red-500 shadow-[0_0_16px_rgba(255,60,60,0.8)]"
         : "bg-gradient-to-r from-[#FFD76B] via-[#FFC94A] to-[#FFB347] hover:brightness-110 shadow-[0_4px_14px_rgba(255,200,90,0.35)]"
@@ -1178,20 +1140,14 @@ I agree to follow all rules and accept any consequences if I break them.
 </div>
 </div>
 
-
-
+</>
 )}
- </div> {/* 🔥 END BLUR CONTENT */}
 
-      {/* 🔥 OVERLAY (BLOCK INTERACTION, NOT SIDEBAR) */}
-     {mgeClosed && (
-  <div className="absolute inset-0 z-10 pointer-events-none" />
-)}
+      </div> {/* END BLUR CONTENT */}
 
     </div> {/* ROOT ISOLATION */}
   </div>
-</div>
 
-
+</>
 );
 }
