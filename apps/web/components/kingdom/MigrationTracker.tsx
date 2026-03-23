@@ -1018,9 +1018,8 @@ data-dropdown-trigger="true"
 
   setOpenMenu({
     type: 'handled',
-    id: player.governorId,
-   x: rect.left + window.scrollX,
-y: rect.bottom + window.scrollY
+    x: rect.left,
+y: rect.bottom
   });
 }}
   className="cursor-pointer text-xs"
