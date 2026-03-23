@@ -46,7 +46,7 @@ const tools = [
 
   // 🟠 VIOLATION
   {
-    href: '/kingdom/violations',
+    href: '/kingdom/violation-track',
     titleKey: 'tools.violation.title',
     descriptionKey: 'tools.violation.description',
     icon: Target, // or your icon
