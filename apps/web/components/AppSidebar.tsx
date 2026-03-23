@@ -276,11 +276,11 @@ const isActive = (href: string) => {
     <>
       {/* Logo */}
       <div className={`flex items-center gap-3 px-4 py-5 border-b border-[var(--border)] ${isCollapsed ? 'justify-center' : ''}`}>
-<div className="w-9 h-9 rounded-xl overflow-hidden shadow-lg shadow-pink-500/30 flex-shrink-0">
+<div className="flex-shrink-0">
   <img
     src="https://cdn.discordapp.com/icons/1469700544162566320/4194c5b16d7be574e4e0675ea5966d20.webp?size=160&quality=lossless"
     alt="Queenium Logo"
-    className="w-full h-full object-cover"
+    className="w-9 h-9 object-contain drop-shadow-[0_0_12px_rgba(236,72,153,0.6)]"
   />
 </div>
         {!isCollapsed && (
@@ -388,11 +388,11 @@ const isActive = (href: string) => {
             <Menu size={20} />
           </button>
           <div className="flex items-center gap-2">
-          <div className="w-9 h-9 rounded-xl overflow-hidden shadow-lg shadow-pink-500/30 flex-shrink-0">
+     <div className="flex-shrink-0">
   <img
     src="https://cdn.discordapp.com/icons/1469700544162566320/4194c5b16d7be574e4e0675ea5966d20.webp?size=160&quality=lossless"
     alt="Queenium Logo"
-    className="w-full h-full object-cover"
+    className="w-9 h-9 object-contain drop-shadow-[0_0_12px_rgba(236,72,153,0.6)]"
   />
 </div>
             <span className="text-sm font-semibold text-[var(--foreground)]">{t('siteTitle')}</span>
