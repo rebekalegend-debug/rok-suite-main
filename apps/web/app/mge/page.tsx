@@ -424,7 +424,7 @@ return (
 
   {/* PAGE CONTENT - only this part blurs */}
   <div className="flex justify-center items-start">
-    <div className="w-full max-w-4xl px-4 md:px-8 pt-2 md:pt-4">
+    <div className="w-full max-w-4xl p-4 md:p-8">
 
       {/* BLUR ONLY CONTENT */}
       <div
