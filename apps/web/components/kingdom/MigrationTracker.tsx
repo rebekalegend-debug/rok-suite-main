@@ -1018,6 +1018,7 @@ data-dropdown-trigger="true"
 
   setOpenMenu({
     type: 'handled',
+   id: player.governorId,
     x: rect.left,
 y: rect.bottom
   });
