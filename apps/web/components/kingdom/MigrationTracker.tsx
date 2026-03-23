@@ -103,7 +103,8 @@ export default function WantedList() {
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [reasonFilter, setReasonFilter] = useState<string | null>(null);
-  
+  const [tooltip, setTooltip] = useState<{ id: number; x: number; y: number } | null>(null)
+
   const [filterMode, setFilterMode] = useState<'all' | 'violators' | 'wanted' | 'left'>('all');
 const [allMembers, setAllMembers] = useState<any[]>([]);
 const [openMenu, setOpenMenu] = useState<{
