@@ -696,7 +696,7 @@ return (
 {/* ADMIN LOCK OVERLAY - offset so it doesn't cover sidebar */}
 {!authorized && (
   <div
-    className="fixed inset-0 z-[50] flex items-center justify-center bg-black/70 backdrop-blur-[2px]"
+    className="fixed inset-0 z-[50] flex items-center justify-center backdrop-blur-[2px]"
     style={{ left: '260px' }}
   >
     <div className="bg-zinc-900/95 rounded-xl p-6 w-[320px] text-center flex flex-col gap-4 relative overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
