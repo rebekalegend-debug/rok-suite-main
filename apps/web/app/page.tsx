@@ -94,7 +94,7 @@ const tools = [
 
   // 🟢 MIGRATION
   {
-    href: '/kingdom/migration-tracker',
+    href: '/kingdom-stats',
     titleKey: 'tools.migrationTracker.title',
     descriptionKey: 'tools.migrationTracker.description',
     icon: Radar,
