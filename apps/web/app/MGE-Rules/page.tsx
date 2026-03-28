@@ -10,6 +10,8 @@ export default function MgeRulesPage() {
           <h1 className="text-4xl font-bold">⚔️ MGE Rules</h1>
           <p className="text-[var(--text-secondary)]">
             Clear rules. Fair competition. No excuses.
+             <br />
+            For any questions pm Harley Quinn!
           </p>
         </div>
 
