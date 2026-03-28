@@ -489,12 +489,22 @@ Submit New Application
 ) : (
 <>
 <p className="mge-info">
-To ensure your registration is processed correctly, all fields in this form must be completed correctly.
-<br />
-Missing information may result in your registration not being considered properly and could affect your ranking!
-<br />
-Notice that if you do not have discord to read the rules, you must contact Harley Quinn to send to you directly!
-Discord restriction in your country is not an excuse for not knowing them!  
+  To ensure your registration is processed correctly, all fields in this form must be completed correctly.
+  <br />
+  Missing information may result in your registration not being considered properly and could affect your ranking!
+  <br /><br />
+
+  Before you register please read carefully the rules!
+  <br />
+
+  <a
+    href="https://queenium.vercel.app/MGE-Rules"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="inline-block mt-2 px-4 py-2 rounded-xl bg-pink-500 hover:bg-pink-600 text-white font-semibold transition"
+  >
+    Open rules!
+  </a>
 </p>
 
 <div className="space-y-2">
@@ -1096,7 +1106,7 @@ transition`}
 />
 
 <span>
-I confirm that I have fully read and understood the rules, penalties, and the ranking system explained in discord [📜⭑𝐑𝐮𝐥𝐞𝐬] channel.
+I confirm that I have fully read and understood the rules, penalties, and the ranking system explained in this form!.
 <br />
 I agree to follow all rules and accept any consequences if I break them.
 </span>
