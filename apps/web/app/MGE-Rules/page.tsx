@@ -54,7 +54,7 @@ export default function MgeRulesPage() {
   </p>
 
   <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-400/30 text-blue-200">
-    ⚠️ <b>Rule:</b>Points over 5M ≤ 1M = 1M!</b>.
+    ⚠️ <b>Rule:</b> Points over 5M ≤ 1M = 1M!
   </div>
 
   <p>
