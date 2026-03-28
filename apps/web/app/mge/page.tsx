@@ -501,7 +501,13 @@ Submit New Application
     href="https://queenium.vercel.app/MGE-Rules"
     target="_blank"
     rel="noopener noreferrer"
-    className="inline-block mt-2 px-4 py-2 rounded-xl bg-pink-500 hover:bg-pink-600 text-white font-semibold transition"
+    className="inline-block mt-2 px-5 py-2.5 rounded-xl 
+bg-gradient-to-br from-[#ff3b3b] via-[#e60023] to-[#8b0000]
+hover:from-[#ff4d4d] hover:via-[#ff002a] hover:to-[#a30000]
+text-white font-semibold tracking-wide
+shadow-[0_0_20px_rgba(255,0,60,0.45)]
+border border-white/10
+transition-all duration-300"
   >
     Open rules!
   </a>
