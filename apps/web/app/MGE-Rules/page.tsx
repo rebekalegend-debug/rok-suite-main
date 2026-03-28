@@ -109,7 +109,7 @@ export default function MgeRulesPage() {
     </p>
 
     <div className="p-3 rounded-lg bg-white/5 border border-white/10">
-      Even if you reach 20M (your limit), you cannot overtake Rank 1 while they still hold 19M — because Limit &lt; actual rank points.
+      ‼️Even if you reach 20M (your limit), you cannot overtake Rank 1 while they still hold 19M — because Limit &lt; actual rank points.
     </div>
 
     <p>
@@ -121,7 +121,7 @@ export default function MgeRulesPage() {
     </p>
 
     <div className="p-3 rounded-lg bg-white/5 border border-white/10">
-      This ensures flexibility while keeping things under control. But need teamwork!
+     ⚖️ This ensures flexibility while keeping things under control. But need teamwork!
    </div>
 
   </div>
