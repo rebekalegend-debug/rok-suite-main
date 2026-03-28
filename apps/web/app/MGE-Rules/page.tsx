@@ -26,22 +26,21 @@ export default function MgeRulesPage() {
   </ul>
 
   <div className="p-4 rounded-xl bg-[#FFD700]/10 border border-[#FFD700]/30 text-[#FFE066]">
-    ⚠️ <b>Mandatory:</b> Reach at least <b>90% of your required points</b> before Stage 6 (Kill Event ends).
+    ⚠️ <b>Mandatory requirement:</b> Reach at least <b>90% of your required points</b> before Stage 6 (Kill Event ends).
   </div>
 
   <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-white/80">
     📌 <b>Important:</b> Rank order is ALWAYS more important than point limits.
     <br />
-    You cannot overtake someone just because they didn’t reach their cap.
+    You cannot overtake someone (without permission) just because they didn’t reach their cap.
   </div>
 
   <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 space-y-2">
-    <p className="text-red-300 font-semibold">❗ If you fail requirements:</p>
+    <p className="text-red-300 font-semibold">❗ If you are not willing or not ready to meet these requirements, you will face penalties including but not limited to:</p>
     <ul className="list-disc ml-5 space-y-1 text-sm">
-      <li>Your rank will be taken</li>
-      <li>You may be blacklisted (deprioritized)</li>
-      <li>Lower placements in future MGEs</li>
-      <li>Heavy resource fines 💸</li>
+      <li>Your rank will be taken by another ranked member!</li>
+      <li>Being blacklisted (not banned, but deprioritized in future MGE's)</li>
+      <li>Receiving lower placements in future MGEs and events</li>
     </ul>
   </div>
 </section>
@@ -51,69 +50,78 @@ export default function MgeRulesPage() {
   <h2 className="text-2xl font-semibold text-blue-300">⚔️ Unranked Rules</h2>
 
   <p>
-    📊 Point limit: <b>5M TOTAL for the entire week</b> (not per day).
+    ‼️ Point limit: <b>5M TOTAL for the entire week</b> (not per day).
   </p>
 
   <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-400/30 text-blue-200">
-    ⚠️ <b>Rule:</b> If you exceed by ≤1M → it counts as <b>1M full penalty</b>.
+    ⚠️ <b>Rule:</b>Points over 5M ≤ 1M = 1M!</b>.
   </div>
 
   <p>
-    📈 If you exceed by more than 1M → penalty is based on full excess.
+    📈 If you exceed 5M cap by less than 1 million points, even slightly, the fine will be calculated as if you exceeded by 1 million points.
   </p>
-
+  <p>
+    📈 If you exceed by more than 1 million points, the fine will be based on the actual excess.
+  </p>
   <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-white/80">
-    💬 If unsure → <b>ASK BEFORE acting</b> to avoid penalties.
+    💬 If unsure or have any questions → <b>ASK BEFORE acting</b> to avoid penalties.
   </div>
 
   <p>⚖️ Maintain fair competition at all times.</p>
 </section>
         {/* EXAMPLES */}
-  <section className="p-6 rounded-2xl bg-gradient-to-br from-violet-500/10 via-purple-500/5 to-indigo-500/10 border border-violet-400/20 backdrop-blur-md shadow-[0_0_40px_rgba(139,92,246,0.08)] space-y-4">
+ <section className="p-6 rounded-2xl bg-gradient-to-br from-violet-500/10 via-purple-500/5 to-indigo-500/10 border border-violet-400/20 backdrop-blur-md shadow-[0_0_40px_rgba(139,92,246,0.08)] space-y-4">
   <h2 className="text-2xl font-semibold text-violet-300">📚 Ranked Examples</h2>
 
   <div className="space-y-3 text-sm leading-relaxed">
 
     <p>
-      👉 Rank 2 (10M) vs Rank 3 (9M):
+      👉 Rank 2 (10M point limit) & Rank 3 (9M):
       <br />
-      Rank 3 can exceed 9M as long as they stay below Rank 2.
+      Rank 3 can exceed 9M as long as he stay below Rank 2.
     </p>
 
     <div className="p-3 rounded-lg bg-white/5 border border-white/10">
       ⭐ <b>Rule:</b> Limits exist, but <b>rank order is what matters.</b>
     </div>
 
-    <p>
-      🚨 If a cap breaker pushes you down:
-      <br />
-      You may exceed your limit to recover your position — but still respect higher ranks.
-    </p>
-
-    <p>
-      🔁 Chain recovery:
-      <br />
-      Rank 2 fixes Rank 1 → Rank 3 fixes Rank 2 → etc.
-    </p>
-
-    <div className="p-3 rounded-lg bg-yellow-400/10 border border-yellow-400/30 text-yellow-200">
-      ⚠️ Permission may be required when taking ranks in chain situations.
+    <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+      ⭐ <b>Rule:</b> When MGE ends, the final rankings must match the original rankings that were announced at the beginning.
     </div>
 
     <p>
-      ❌ Example:
+      🚨 If a cap breaker pushes you down:
       <br />
-      Rank 1 = 19M, Rank 2 limit = 20M
+      Rank 3 have 10M points limit and get pushed to Rank 4 because a "Cap Breaker" took hes rank with 11M points,
       <br />
-      You CANNOT pass Rank 1 even if under your limit.
+      he can exceed 10M to push the "cap breaker" down, but he must stay below Rank 2.
     </p>
 
     <p>
-      🚨 Extreme case:
-      <br />
-      Cap breaker hits 30M → you MUST exceed 30M to recover.
-      <br />
-      If not → next ranked player replaces you.
+      Rank 5 have 10M points limit, but drop to Rank 6 because a "Cap Breaker" stole Rank 1, only Rank 2 is allowed to break hes limit to reclaim hes Rank 1. After that, Rank 3 can break cap to push the "Cap Breaker" from Rank 2, and so on down the line.
+    </p>
+
+    <p>
+      Rank 1 has 30m limit<br />
+      (You)Rank 2 has a 20M limit.<br />
+      Rank 1 currently has 19M points<br />
+      You are currently Rank 2 with 18M points.
+    </p>
+
+    <p>
+      Even if you reach 20M (your limit), you cannot overtake Rank 1 while they still hold 19M — because Limit &lt; actual rank points.
+    </p>
+
+    <p>
+      If you have Rank 2 with a limit of 20m points, and a cap breaker breaks the point limit, comes and accumulates 30 million points, you drop down to rank 3, you will have to necessarily exceed the 30 million point to recover your rank 2, if you are not willing to do it, another ranked member in the order (in this case rank 3) will get your spot and push down the cap breaker from rank 2!
+    </p>
+
+    <p>
+      Be aware that permission is needed for rank 3, to stole rank in this case!
+    </p>
+
+    <p>
+      This ensures flexibility while keeping things under control. But need teamwork!
     </p>
 
   </div>
