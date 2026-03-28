@@ -3,102 +3,123 @@ import { AppSidebar } from '@/components/AppSidebar';
 export default function MgeRulesPage() {
   return (
     <AppSidebar>
-      <div className="max-w-4xl mx-auto p-6 space-y-10">
+      <div className="max-w-4xl mx-auto p-6 space-y-8">
 
         {/* TITLE */}
         <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold tracking-tight">⚔️ MGE Rules</h1>
+          <h1 className="text-4xl font-bold">⚔️ MGE Rules</h1>
           <p className="text-[var(--text-secondary)]">
-            Structured. Fair. Controlled.
+            Clear rules. Fair competition. No excuses.
           </p>
         </div>
 
         {/* RANKED RULES */}
-        <section className="relative p-6 rounded-2xl bg-gradient-to-br from-yellow-400/10 via-amber-400/5 to-orange-400/10 border border-yellow-400/20 backdrop-blur-md shadow-[0_0_40px_rgba(250,204,21,0.08)] space-y-4">
-          <h2 className="text-2xl font-semibold text-yellow-300">👑 Ranked Rules</h2>
+<section className="p-6 rounded-2xl bg-gradient-to-br from-[#FFD700]/10 via-[#FFC300]/5 to-[#FFB800]/10 border border-[#FFD700]/20 backdrop-blur-md shadow-[0_0_40px_rgba(255,215,0,0.08)] space-y-4">
+  <h2 className="text-2xl font-semibold text-[#FFD700]">👑 Ranked Rules</h2>
 
-          <ul className="space-y-2 text-[15px]">
-            <li>❌ <b>Do NOT steal ranks</b> from other ranked members.</li>
-            <li>⚖️ Maintain <b>fair competition</b>.</li>
-            <li>⚡ If your rank is stolen → you may <b>break your cap</b>.</li>
-            <li>🚨 Cap breaker → <b>must be pushed down</b>.</li>
-            <li>🕒 Be online in <b>final hours</b>.</li>
-          </ul>
+  <ul className="space-y-2">
+    <li>❌ <b>Do NOT steal ranks</b> from other ranked members.</li>
+    <li>⚖️ Maintain <b>fair competition</b> within the alliance.</li>
+    <li>⚡ If your rank is stolen → you may <b>break your cap</b> to recover it.</li>
+    <li>🚨 If a <b>cap breaker</b> appears → you MUST exceed them to protect ranking.</li>
+    <li>🕒 Be <b>online in final hours</b> of MGE to secure your position.</li>
+  </ul>
 
-          <div className="p-4 rounded-xl bg-yellow-400/10 border border-yellow-400/30 text-yellow-200">
-            ⚠️ <b>Mandatory:</b> Reach at least <b>90%</b> before Kill Event ends.
-          </div>
+  <div className="p-4 rounded-xl bg-[#FFD700]/10 border border-[#FFD700]/30 text-[#FFE066]">
+    ⚠️ <b>Mandatory:</b> Reach at least <b>90% of your required points</b> before Stage 6 (Kill Event ends).
+  </div>
 
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-white/80">
-            📌 <b>Core Rule:</b> <span className="text-yellow-300">Rank &gt; Points Limit</span>
-          </div>
+  <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-white/80">
+    📌 <b>Important:</b> Rank order is ALWAYS more important than point limits.
+    <br />
+    You cannot overtake someone just because they didn’t reach their cap.
+  </div>
 
-          <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300">
-            ❗ Failing rules leads to: rank loss • blacklist • lower priority • fines
-          </div>
-        </section>
+  <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 space-y-2">
+    <p className="text-red-300 font-semibold">❗ If you fail requirements:</p>
+    <ul className="list-disc ml-5 space-y-1 text-sm">
+      <li>Your rank will be taken</li>
+      <li>You may be blacklisted (deprioritized)</li>
+      <li>Lower placements in future MGEs</li>
+      <li>Heavy resource fines 💸</li>
+    </ul>
+  </div>
+</section>
 
         {/* UNRANKED RULES */}
-        <section className="relative p-6 rounded-2xl bg-gradient-to-br from-sky-400/10 via-cyan-400/5 to-blue-500/10 border border-blue-400/20 backdrop-blur-md shadow-[0_0_40px_rgba(59,130,246,0.08)] space-y-4">
-          <h2 className="text-2xl font-semibold text-blue-300">⚔️ Unranked Rules</h2>
+     <section className="p-6 rounded-2xl bg-gradient-to-br from-blue-500/10 via-sky-400/5 to-cyan-500/10 border border-blue-400/20 backdrop-blur-md shadow-[0_0_40px_rgba(59,130,246,0.08)] space-y-4">
+  <h2 className="text-2xl font-semibold text-blue-300">⚔️ Unranked Rules</h2>
 
-          <p className="text-[15px]">
-            📊 Limit: <b>5M TOTAL (weekly)</b>
-          </p>
+  <p>
+    📊 Point limit: <b>5M TOTAL for the entire week</b> (not per day).
+  </p>
 
-          <div className="p-4 rounded-xl bg-yellow-400/10 border border-yellow-400/30 text-yellow-200">
-            ⚠️ Exceed ≤1M → counted as <b>1M full penalty</b>
-          </div>
+  <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-400/30 text-blue-200">
+    ⚠️ <b>Rule:</b> If you exceed by ≤1M → it counts as <b>1M full penalty</b>.
+  </div>
 
-          <p className="text-[15px]">
-            📈 Above 1M → penalty = real excess
-          </p>
+  <p>
+    📈 If you exceed by more than 1M → penalty is based on full excess.
+  </p>
 
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-white/80">
-            💬 Ask before acting if unsure
-          </div>
+  <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-white/80">
+    💬 If unsure → <b>ASK BEFORE acting</b> to avoid penalties.
+  </div>
 
-          <p className="text-[15px]">⚖️ Keep competition fair</p>
-        </section>
-
+  <p>⚖️ Maintain fair competition at all times.</p>
+</section>
         {/* EXAMPLES */}
-        <section className="relative p-6 rounded-2xl bg-gradient-to-br from-purple-400/10 via-indigo-400/5 to-violet-500/10 border border-purple-400/20 backdrop-blur-md shadow-[0_0_40px_rgba(168,85,247,0.08)] space-y-4">
-          <h2 className="text-2xl font-semibold text-purple-300">📚 Ranked Examples</h2>
+  <section className="p-6 rounded-2xl bg-gradient-to-br from-violet-500/10 via-purple-500/5 to-indigo-500/10 border border-violet-400/20 backdrop-blur-md shadow-[0_0_40px_rgba(139,92,246,0.08)] space-y-4">
+  <h2 className="text-2xl font-semibold text-violet-300">📚 Ranked Examples</h2>
 
-          <div className="space-y-3 text-sm leading-relaxed">
+  <div className="space-y-3 text-sm leading-relaxed">
 
-            <p>
-              Rank 2 (10M) vs Rank 3 (9M) → Rank 3 may exceed but stay below Rank 2
-            </p>
+    <p>
+      👉 Rank 2 (10M) vs Rank 3 (9M):
+      <br />
+      Rank 3 can exceed 9M as long as they stay below Rank 2.
+    </p>
 
-            <div className="p-3 rounded-lg bg-white/5 border border-white/10">
-              ⭐ <b>Key:</b> Rank order defines outcome
-            </div>
+    <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+      ⭐ <b>Rule:</b> Limits exist, but <b>rank order is what matters.</b>
+    </div>
 
-            <p>
-              Cap breaker → exceed limit to recover rank
-            </p>
+    <p>
+      🚨 If a cap breaker pushes you down:
+      <br />
+      You may exceed your limit to recover your position — but still respect higher ranks.
+    </p>
 
-            <p>
-              Chain fix: Rank 2 → Rank 1, Rank 3 → Rank 2, etc.
-            </p>
+    <p>
+      🔁 Chain recovery:
+      <br />
+      Rank 2 fixes Rank 1 → Rank 3 fixes Rank 2 → etc.
+    </p>
 
-            <div className="p-3 rounded-lg bg-yellow-400/10 border border-yellow-400/30 text-yellow-200">
-              ⚠️ Permission may be required
-            </div>
+    <div className="p-3 rounded-lg bg-yellow-400/10 border border-yellow-400/30 text-yellow-200">
+      ⚠️ Permission may be required when taking ranks in chain situations.
+    </div>
 
-            <p>
-              ❌ You cannot pass someone just because you hit your cap
-            </p>
+    <p>
+      ❌ Example:
+      <br />
+      Rank 1 = 19M, Rank 2 limit = 20M
+      <br />
+      You CANNOT pass Rank 1 even if under your limit.
+    </p>
 
-            <p>
-              🚨 Extreme: If breaker hits 30M → you must exceed 30M
-            </p>
+    <p>
+      🚨 Extreme case:
+      <br />
+      Cap breaker hits 30M → you MUST exceed 30M to recover.
+      <br />
+      If not → next ranked player replaces you.
+    </p>
 
-          </div>
-        </section>
+  </div>
+</section>
 
-        {/* FINES */}
+   {/* FINES */}
         <section className="relative p-6 rounded-2xl bg-gradient-to-br from-red-500/10 via-rose-500/5 to-pink-500/10 border border-red-500/20 backdrop-blur-md shadow-[0_0_40px_rgba(239,68,68,0.1)] space-y-4">
           <h2 className="text-2xl font-semibold text-red-400">💰 Penalties & Fines</h2>
 
