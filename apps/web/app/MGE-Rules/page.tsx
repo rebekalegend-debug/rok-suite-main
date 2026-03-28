@@ -108,21 +108,21 @@ export default function MgeRulesPage() {
       You are currently Rank 2 with 18M points.
     </p>
 
-    <p>
+    <div className="p-3 rounded-lg bg-white/5 border border-white/10">
       Even if you reach 20M (your limit), you cannot overtake Rank 1 while they still hold 19M — because Limit &lt; actual rank points.
-    </p>
+    </div>
 
     <p>
       If you have Rank 2 with a limit of 20m points, and a cap breaker breaks the point limit, comes and accumulates 30 million points, you drop down to rank 3, you will have to necessarily exceed the 30 million point to recover your rank 2, if you are not willing to do it, another ranked member in the order (in this case rank 3) will get your spot and push down the cap breaker from rank 2!
     </p>
 
     <p>
-      Be aware that permission is needed for rank 3, to stole rank in this case!
+     ‼️ Be aware that permission is needed for rank 3, to stole rank in this case!
     </p>
 
-    <p>
+    <div className="p-3 rounded-lg bg-white/5 border border-white/10">
       This ensures flexibility while keeping things under control. But need teamwork!
-    </p>
+   </div>
 
   </div>
 </section>
@@ -132,9 +132,9 @@ export default function MgeRulesPage() {
           <h2 className="text-2xl font-semibold text-red-400">💰 Penalties & Fines</h2>
 
           <div className="space-y-2 text-[15px]">
-            <p>🥇 1st → <b>500 rss / point</b></p>
-            <p>🥈 2nd → <b>1000 rss / point</b></p>
-            <p>🥉 3rd → <b>2000 rss / point</b> + council review</p>
+            <p>🥇 1st offense → <b>500 rss for EACH point over</b></p>
+            <p>🥈 2nd offense → <b>1000 rss for EACH point over</b></p>
+            <p>🥉 3rd offense → <b>2000 rss for EACH point over</b> + council review</p>
           </div>
 
           <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/40 text-red-300 font-semibold">
@@ -142,17 +142,17 @@ export default function MgeRulesPage() {
           </div>
 
           <div className="text-sm space-y-1 text-white/80">
-            <p>📌 Minimum: <b>500M resources</b></p>
+            <p>📌 <b>The lowest fine you can get is 500M ress!</b></p>
             <p>❌ Not paying = ZERO</p>
-            <p>⚠️ ≤1M excess = counted as 1M</p>
+            <p>⚠️ Points over 5M ≤ 1M = 1M!</p>
           </div>
 
           <div className="p-4 rounded-xl bg-gradient-to-r from-red-500/20 to-pink-500/20 border border-red-500/40 text-red-300 font-bold text-center">
             ‼️ NO EXCUSES • NO EXCEPTIONS ‼️
           </div>
 
-          <p className="text-xs text-[var(--text-secondary)]">
-            Offenses may decay based on behavior, KvK contribution, and time.
+          <p className="text-s text-[var(--text-secondary)]">
+           Offense points may be erased with time, depends on how many you have allready, rank stole or just cap break was, how old is your offense, your KvK contribution, activity, behavior, etc...
           </p>
         </section>
 
