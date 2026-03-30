@@ -510,7 +510,7 @@ Players who have posted in the R&G forum channel on Discord
    <br />
 will have higher priority in ranking if they meet the requirements.
  <br /><br />
-Check [⚔️⭑𝐑𝐆⭑𝐋𝐞𝐚𝐝𝐞𝐫𝐬] channel on DC or click  
+Check [⚔️⭑𝐑𝐆⭑𝐋𝐞𝐚𝐝𝐞𝐫𝐬] channel on DC or click{" "}
  <a 
   href="https://discord.com/channels/1469700544162566320/1469722276353015919" 
   target="_blank" 
