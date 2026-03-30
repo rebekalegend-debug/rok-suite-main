@@ -297,8 +297,10 @@ loadMembers()
 }, [])
 async function submitApplication(){
 
+const hasManualInput = search.trim().length > 0
+
 const newMissing = {
-  member: !selectedMember,
+  member: !selectedMember && !hasManualInput,
   commander: !selectedCommander,
   purpose: !form.purpose,
   rank: !form.rank,
@@ -311,8 +313,7 @@ setMissing(newMissing)
 
 const hasError = Object.values(newMissing).some(v => v)
 
-
-if(!selectedMember || hasError){
+if((!selectedMember && !search.trim()) || hasError){
 
   setSubmitError(true)
 
@@ -322,9 +323,19 @@ if(!selectedMember || hasError){
 }
  const data = new FormData()
 
-data.append("id", selectedMember!.id)
-data.append("name", selectedMember!.name)
+let finalId = ""
+let finalName = ""
 
+if (selectedMember) {
+  finalId = selectedMember.id
+  finalName = selectedMember.name
+} else {
+  // manual input fallback
+  finalId = search.trim()
+  finalName = search.trim()
+}
+data.append("id", finalId)
+data.append("name", finalName)
 data.append("commander", selectedCommander)
 
 data.append("desiredRank", form.rank)
@@ -525,7 +536,7 @@ transition-all duration-300"
 ref={memberInputRef}
 type="text"
 autoComplete="off"
-placeholder="Search your name or ID..."
+placeholder="Search or type your name / ID..."
 className={`w-full px-3 py-2 rounded
 focus:outline-none focus:ring-0 focus:ring-offset-0
 focus:border-[#FFD76B]
