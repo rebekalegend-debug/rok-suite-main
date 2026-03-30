@@ -503,7 +503,26 @@ Submit New Application
   <br />
   Missing information may result in your registration not being considered properly and could affect your ranking!
   <br /><br />
+<br />
 
+⚠️ MGE is designed for Rally & Garrison leaders.
+
+Players who have posted in the R&G forum channel on Discord
+will have higher priority in ranking if they meet the requirements.
+
+Check [⚔️⭑𝐑𝐆⭑𝐋𝐞𝐚𝐝𝐞𝐫𝐬] channel on DC or click 
+<a 
+  href="https://discord.com/channels/1469700544162566320/1469722276353015919" 
+  target="_blank" 
+  rel="noopener noreferrer"
+  className="underline text-red-400 hover:text-red-300"
+>
+  here
+</a> to open it!
+
+<br /><br />
+
+  
   Before you register please read carefully the rules!
   <br />
 
