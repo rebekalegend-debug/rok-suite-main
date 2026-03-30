@@ -380,7 +380,9 @@ Track name change's and appear\disappeared members in KD
 </p>
 
 <p className="text-xs text-[var(--text-muted)] opacity-70 mt-1">
-Scan will auto run daily in every kingdom and updates data • Data sourced from Lilith newly released Tool (available since 2025/09/15)
+Scan will auto run daily in every kingdom and updates data • Data sourced from Lilith newly released Tool (available since 2025/09/15) 
+<br />
+https://rok-game-tools-global.lilith.com
 </p>
 </div>
 
