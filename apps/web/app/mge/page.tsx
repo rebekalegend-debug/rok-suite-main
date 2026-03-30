@@ -361,8 +361,7 @@ await fetch("/api/mge-application",{
   body:data
 })
 
-localStorage.setItem("mge_applied_id", selectedMember!.id)
-
+localStorage.setItem("mge_applied_id", finalId)
 setSubmitting(false)
 
 setAlreadyApplied(true)
