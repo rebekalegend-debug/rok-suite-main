@@ -154,32 +154,18 @@ let data = [...cleanMembers]
     data = data.filter(m => !m.migratedOut)
   }
 
- if (filterMode === 'in') {
-  data = data
-    .filter(m => {
-      if (!m.migratedIn) return false
-      return Date.now() - new Date(m.migratedIn).getTime() <= 7 * 86400000
-    })
-    .sort((a, b) =>
-      new Date(b.migratedIn || 0).getTime() -
-      new Date(a.migratedIn || 0).getTime()
-    )
-
-  return data
+if (filterMode === 'in') {
+  data = data.filter(m => {
+    if (!m.migratedIn) return false
+    return Date.now() - new Date(m.migratedIn).getTime() <= 7 * 86400000
+  })
 }
 
 if (filterMode === 'out') {
-  data = data
-    .filter(m => {
-      if (!m.migratedOut) return false
-      return Date.now() - new Date(m.migratedOut).getTime() <= 30 * 86400000
-    })
-    .sort((a, b) =>
-      new Date(b.migratedOut || 0).getTime() -
-      new Date(a.migratedOut || 0).getTime()
-    )
-
-  return data
+  data = data.filter(m => {
+    if (!m.migratedOut) return false
+    return Date.now() - new Date(m.migratedOut).getTime() <= 30 * 86400000
+  })
 }
 
   // 🔄 DEFAULT SORT (for all / current)
