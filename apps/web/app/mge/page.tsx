@@ -384,7 +384,7 @@ const filteredMembers = members
       m.id?.includes(q)
     )
   })
-  .sort((a,b)=>a.name.localeCompare(b.name))
+ .sort((a,b)=>(a.name || "").localeCompare(b.name || ""))
 
 const skillsFilled =
 skills.skill1 > 0 ||
