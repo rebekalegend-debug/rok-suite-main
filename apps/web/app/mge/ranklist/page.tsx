@@ -696,7 +696,7 @@ return (
 {/* ADMIN LOCK OVERLAY - offset so it doesn't cover sidebar */}
 {!authorized && (
   <div
-    className="fixed inset-0 z-[50] flex items-center justify-center backdrop-blur-[2px]"
+    className="fixed inset-0 z-[50] flex items-center justify-center backdrop-blur-xl"
     style={{ left: '260px' }}
   >
     <div className="bg-zinc-900/95 rounded-xl p-6 w-[320px] text-center flex flex-col gap-4 relative overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
@@ -731,7 +731,7 @@ return (
 )}
 
 {/* MAIN CONTENT */}
-<div className={!authorized ? "blur-[1px] brightness-90 pointer-events-none select-none" : ""}>
+<div className={!authorized ? "blur-[12px] brightness-50 pointer-events-none select-none" : ""}>
   
 <div className="max-w-[1800px] mx-auto p-4 md:p-8">
 
