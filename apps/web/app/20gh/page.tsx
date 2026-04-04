@@ -44,19 +44,24 @@ function get20ghCountdown() {
   let target: Date
   let mode: "OPEN" | "CLOSED"
 
-  if (now < registrationClose) {
-    target = registrationClose
-    mode = "OPEN"          // Registration is still open
-  } else if (now < registrationOpen) {
-    target = registrationOpen
-    mode = "CLOSED"        // Registration closed, waiting for next cycle
-  } else {
-    // Jump to next cycle
-    const nextNow = new Date(now.getTime() + 14 * 86400000)
-    const next = get20ghTimes(nextNow)
-    target = next.registrationClose
-    mode = "OPEN"
-  }
+ if (now < registrationOpen) {
+  // Not opened yet
+  target = registrationOpen
+  mode = "CLOSED"
+
+} else if (now < registrationClose) {
+  // Currently open
+  target = registrationClose
+  mode = "OPEN"
+
+} else {
+  // Closed → move to next cycle
+  const nextNow = new Date(now.getTime() + 14 * 86400000)
+  const next = get20ghTimes(nextNow)
+
+  target = next.registrationOpen
+  mode = "CLOSED"
+}
 
   const diffMs = target.getTime() - now.getTime()
   const totalSeconds = Math.floor(diffMs / 1000)
@@ -79,7 +84,7 @@ function get20ghStatus() {
 
   const { registrationClose, registrationOpen } = get20ghTimes(now)
 
-  const isClosed = now >= registrationClose && now < registrationOpen
+  const isClosed = now < registrationOpen || now >= registrationClose
 
   return { isClosed }
 }
