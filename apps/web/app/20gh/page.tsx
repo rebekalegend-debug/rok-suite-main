@@ -301,7 +301,7 @@ const hasManualInput = search.trim().length > 0
 
 const newMissing = {
   member: !selectedMember && !hasManualInput,
-  commander: !selectedCommander,
+  commander: !selectedCommander && !commanderSearch.trim(),
   purpose: !form.purpose,
   rank: !form.rank,
   kvk: !form.kvkSpending,
@@ -336,7 +336,8 @@ if (selectedMember) {
 }
 data.append("id", finalId)
 data.append("name", finalName)
-data.append("commander", selectedCommander)
+const finalCommander = selectedCommander || commanderSearch.trim()
+data.append("commander", finalCommander)
 
 data.append("desiredRank", form.rank)
 data.append("kvkSpending", form.kvkSpending)
@@ -370,10 +371,12 @@ setAlreadyApplied(true)
 }
 
   
-const filteredCommanders = commanders.filter(c =>
-  !commanderSearch ||
-  c.toLowerCase().includes(commanderSearch.toLowerCase())
-)
+const filteredCommanders = commanders
+  .filter(c =>
+    !commanderSearch ||
+    c.toLowerCase().includes(commanderSearch.toLowerCase())
+  )
+  .sort((a,b)=>a.localeCompare(b))
   
 const filteredMembers = members
   .filter(m => {
@@ -687,43 +690,44 @@ onBlur={()=>{
   setTimeout(()=>setCommanderFocus(false),150)
 }}
 onChange={(e)=>{
-  setCommanderSearch(e.target.value)
+  const value = e.target.value
+  setCommanderSearch(value)
   setSelectedCommander("")
+  setMissing(prev => ({ ...prev, commander:false }))
 }}
 />
 
 </div>
 
-{commanderFocus && !selectedCommander && filteredCommanders.length > 0 && (
+{commanderFocus && !selectedCommander && (
+  <div className="rounded mt-2 p-2 max-h-40 overflow-y-auto"
+    style={{
+      background:"var(--background-card)",
+      border:"1px solid var(--border)"
+    }}
+  >
 
-<div
-className="rounded mt-2 p-2 max-h-40 overflow-y-auto"
-style={{
-  background:"var(--background-card)",
-  border:"1px solid var(--border)"
-}}
->
+    {filteredCommanders.length > 0 ? (
+      filteredCommanders.map(c => (
+        <div
+          key={c}
+          className="px-2 py-1 hover:bg-slate-700 cursor-pointer rounded"
+          onClick={()=>{
+            setSelectedCommander(c)
+            setCommanderSearch("")
+            setMissing(prev => ({...prev, commander:false}))
+          }}
+ >
+          {c}
+        </div>
+      ))
+    ) : (
+      <div className="text-xs text-zinc-400 px-2 py-1">
+        No match found — you can still type manually
+      </div>
+    )}
 
-{filteredCommanders.map(c => (
-
-<div
-key={c}
-className="px-2 py-1 hover:bg-slate-700 cursor-pointer rounded"
-onClick={()=>{
-  setSelectedCommander(c)
-setMissing(prev => ({...prev, commander:false}))
-  setCommanderSearch("")
-}}
->
-
-{c}
-
-</div>
-
-))}
-
-</div>
-
+  </div>
 )}
 
 </div>
