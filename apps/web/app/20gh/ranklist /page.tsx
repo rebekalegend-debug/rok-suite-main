@@ -610,7 +610,7 @@ async function saveList(updated:any[]) {
   
 async function load(){
 
-  const res = await fetch("/api/20GH-apply-data-get")
+  const res = await fetch("/api/20gh-apply-data-get")
   const json = await res.json()
 
   if(!json.success){
