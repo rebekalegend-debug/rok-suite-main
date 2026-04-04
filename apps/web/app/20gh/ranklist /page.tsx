@@ -463,7 +463,7 @@ const [authorized, setAuthorized] = useState(false)
 const [inputPass, setInputPass] = useState("")
 
 useEffect(() => {
-  const saved = localStorage.getItem("mge_admin")
+  const saved = localStorage.getItem("20gh_admin")
 
   if (saved === ADMIN_PASS) {
     setAuthorized(true)
@@ -476,7 +476,7 @@ useEffect(() => {
   
 function handleLogin() {
   if (inputPass === ADMIN_PASS) {
-    localStorage.setItem("mge_admin", inputPass)
+    localStorage.setItem("20gh_admin", inputPass)
     setAuthorized(true)
     setError(false)
   } else {
@@ -485,7 +485,7 @@ function handleLogin() {
 }
 
 function handleLogout() {
-  localStorage.removeItem("mge_admin")
+  localStorage.removeItem("20gh_admin")
   setAuthorized(false)
 }
   
@@ -518,7 +518,7 @@ function handleDragEnd(event:any){
 
      const updated = arrayMove(players, oldIndex, newIndex)
 
-localStorage.setItem("mge_order", JSON.stringify(updated))
+localStorage.setItem("20gh_order", JSON.stringify(updated))
 
 
 return updated
@@ -581,7 +581,7 @@ async function saveList(updated:any[]) {
 }
 
   useEffect(()=>{
-  const saved = localStorage.getItem("mge_mail")
+  const saved = localStorage.getItem("20gh_mail")
   if(saved) setMail(saved)
 },[])
 
@@ -599,7 +599,7 @@ async function saveList(updated:any[]) {
 },[mail,players])
 
   useEffect(()=>{
-  localStorage.setItem("mge_mail",mail)
+  localStorage.setItem("20gh_mail",mail)
 },[mail])
 
   useEffect(()=>{
@@ -627,7 +627,7 @@ const sheetPlayers = json.data
   main: p["Main Troop Type"] || p.main
 
 }))
-  const saved = localStorage.getItem("mge_order")
+  const saved = localStorage.getItem("20gh_order")
 
 if (saved) {
 
@@ -661,7 +661,7 @@ if (!checkedAuth) return null
   if(loading){
     return (
       <div className="p-8 text-center text-gray-400">
-        Loading MGE data...
+        Loading 20GH data...
       </div>
     )
   }
@@ -724,7 +724,7 @@ style={{
 <div className="relative flex items-center border-b border-yellow-500/30 pb-2 mb-4">
   
  <h2 className="mge-title absolute left-1/2 -translate-x-1/2">
-    .˳·˖✶𓆩MGE Ranklist𓆪✶˖·˳.
+    .˳·˖✶𓆩20G Ranklist𓆪✶˖·˳.
   </h2>
 
   {authorized && (
