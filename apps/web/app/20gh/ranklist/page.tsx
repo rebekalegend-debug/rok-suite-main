@@ -2,7 +2,6 @@
 import { LogOut } from "lucide-react"
 import { useEffect, useState, useRef } from "react"
 import { getHeads, getPoints, kvkContributionPercent } from "@/utils/mgeRankLogic"
-import { autoRankPlayers } from "@/utils/mgeAutoRank"
 import {
   DndContext,
   closestCenter
@@ -464,7 +463,7 @@ const [authorized, setAuthorized] = useState(false)
 const [inputPass, setInputPass] = useState("")
 
 useEffect(() => {
-  const saved = localStorage.getItem("mge_admin")
+  const saved = localStorage.getItem("20gh_admin")
 
   if (saved === ADMIN_PASS) {
     setAuthorized(true)
@@ -477,7 +476,7 @@ useEffect(() => {
   
 function handleLogin() {
   if (inputPass === ADMIN_PASS) {
-    localStorage.setItem("mge_admin", inputPass)
+    localStorage.setItem("20gh_admin", inputPass)
     setAuthorized(true)
     setError(false)
   } else {
@@ -486,7 +485,7 @@ function handleLogin() {
 }
 
 function handleLogout() {
-  localStorage.removeItem("mge_admin")
+  localStorage.removeItem("20gh_admin")
   setAuthorized(false)
 }
   
@@ -504,22 +503,6 @@ useEffect(() => {
 }, [players])
 
   
-const [autoOrder,setAutoOrder] = useState(() => {
-  if (typeof window !== "undefined") {
-    const saved = localStorage.getItem("mge_auto")
-    return saved === "false" ? false : true
-  }
-  return true
-})
-
-  useEffect(() => {
-
-  if (!autoOrder) return
-
-  setPlayers(prev => autoRankPlayers(prev))
-
-}, [autoOrder, players.length])
-  
 function handleDragEnd(event:any){
 
   const {active,over} = event
@@ -535,7 +518,7 @@ function handleDragEnd(event:any){
 
      const updated = arrayMove(players, oldIndex, newIndex)
 
-localStorage.setItem("mge_order", JSON.stringify(updated))
+localStorage.setItem("20gh_order", JSON.stringify(updated))
 
 
 return updated
@@ -589,7 +572,7 @@ async function saveList(updated:any[]) {
 
   })
 
-  await fetch("/api/mge-save-list",{
+  await fetch("/api/20gh-save-list",{
     method:"POST",
     headers:{ "Content-Type":"application/json"},
     body:JSON.stringify({rows})
@@ -597,13 +580,8 @@ async function saveList(updated:any[]) {
 
 }
 
-
-useEffect(()=>{
-  localStorage.setItem("mge_auto", String(autoOrder))
-},[autoOrder])
-
   useEffect(()=>{
-  const saved = localStorage.getItem("mge_mail")
+  const saved = localStorage.getItem("20gh_mail")
   if(saved) setMail(saved)
 },[])
 
@@ -621,7 +599,7 @@ useEffect(()=>{
 },[mail,players])
 
   useEffect(()=>{
-  localStorage.setItem("mge_mail",mail)
+  localStorage.setItem("20gh_mail",mail)
 },[mail])
 
   useEffect(()=>{
@@ -632,7 +610,7 @@ useEffect(()=>{
   
 async function load(){
 
-  const res = await fetch("/api/mge-apply-data-get")
+  const res = await fetch("/api/20gh-apply-data-get")
   const json = await res.json()
 
   if(!json.success){
@@ -649,7 +627,7 @@ const sheetPlayers = json.data
   main: p["Main Troop Type"] || p.main
 
 }))
-  const saved = localStorage.getItem("mge_order")
+  const saved = localStorage.getItem("20gh_order")
 
 if (saved) {
 
@@ -683,7 +661,7 @@ if (!checkedAuth) return null
   if(loading){
     return (
       <div className="p-8 text-center text-gray-400">
-        Loading MGE data...
+        Loading 20GH data...
       </div>
     )
   }
@@ -746,7 +724,7 @@ style={{
 <div className="relative flex items-center border-b border-yellow-500/30 pb-2 mb-4">
   
  <h2 className="mge-title absolute left-1/2 -translate-x-1/2">
-    .˳·˖✶𓆩MGE Ranklist𓆪✶˖·˳.
+    .˳·˖✶𓆩20G Ranklist𓆪✶˖·˳.
   </h2>
 
   {authorized && (
@@ -765,7 +743,7 @@ style={{
 <div className="relative overflow-visible mt-6 rounded-lg border border-yellow-500/40 bg-[#0f141a] backdrop-blur-sm shadow-[0_0_20px_rgba(255,215,107,0.25)]">
 <DndContext
 collisionDetection={closestCenter}
-onDragEnd={!autoOrder ? handleDragEnd : undefined}
+onDragEnd={handleDragEnd}
 >
 
 <SortableContext
@@ -838,16 +816,6 @@ className="text-yellow-400 cursor-pointer hover:text-yellow-300"
 onClick={copyMail}
 >
 Copy Mail
-</span>
-  
-<span
-className="cursor-pointer"
-onClick={()=>setAutoOrder(!autoOrder)}
->
-Auto rank:
-<span className={`ml-1 ${autoOrder ? "text-green-400" : "text-red-400"}`}>
-[{autoOrder ? "ON" : "OFF"}]
-</span>
 </span>
 
 </div>
