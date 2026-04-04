@@ -14,7 +14,7 @@ function get20ghTimes(now: Date) {
 
   // Known start of a 20GH event (use a real past or future 20GH start date at 00:00 UTC)
   // From your calendar, you can use e.g. 2026-04-17 as anchor
-  const KNOWN_20GH_START = new Date(Date.UTC(2026, 4, 3, 0, 0, 0))   // April 17, 2026
+  const KNOWN_20GH_START = new Date(Date.UTC(2026, 3, 3, 0, 0, 0))   // April 17, 2026
 
   let current20ghStart = new Date(KNOWN_20GH_START)
 
