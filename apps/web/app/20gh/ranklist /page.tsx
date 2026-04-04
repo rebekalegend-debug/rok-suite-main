@@ -572,7 +572,7 @@ async function saveList(updated:any[]) {
 
   })
 
-  await fetch("/api/mge-save-list",{
+  await fetch("/api/20gh-save-list",{
     method:"POST",
     headers:{ "Content-Type":"application/json"},
     body:JSON.stringify({rows})
