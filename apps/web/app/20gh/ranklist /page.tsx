@@ -2,7 +2,6 @@
 import { LogOut } from "lucide-react"
 import { useEffect, useState, useRef } from "react"
 import { getHeads, getPoints, kvkContributionPercent } from "@/utils/mgeRankLogic"
-import { autoRankPlayers } from "@/utils/mgeAutoRank"
 import {
   DndContext,
   closestCenter
@@ -504,22 +503,6 @@ useEffect(() => {
 }, [players])
 
   
-const [autoOrder,setAutoOrder] = useState(() => {
-  if (typeof window !== "undefined") {
-    const saved = localStorage.getItem("mge_auto")
-    return saved === "false" ? false : true
-  }
-  return true
-})
-
-  useEffect(() => {
-
-  if (!autoOrder) return
-
-  setPlayers(prev => autoRankPlayers(prev))
-
-}, [autoOrder, players.length])
-  
 function handleDragEnd(event:any){
 
   const {active,over} = event
@@ -597,11 +580,6 @@ async function saveList(updated:any[]) {
 
 }
 
-
-useEffect(()=>{
-  localStorage.setItem("mge_auto", String(autoOrder))
-},[autoOrder])
-
   useEffect(()=>{
   const saved = localStorage.getItem("mge_mail")
   if(saved) setMail(saved)
@@ -632,7 +610,7 @@ useEffect(()=>{
   
 async function load(){
 
-  const res = await fetch("/api/mge-apply-data-get")
+  const res = await fetch("/api/20GH-apply-data-get")
   const json = await res.json()
 
   if(!json.success){
@@ -765,7 +743,7 @@ style={{
 <div className="relative overflow-visible mt-6 rounded-lg border border-yellow-500/40 bg-[#0f141a] backdrop-blur-sm shadow-[0_0_20px_rgba(255,215,107,0.25)]">
 <DndContext
 collisionDetection={closestCenter}
-onDragEnd={!autoOrder ? handleDragEnd : undefined}
+onDragEnd={handleDragEnd}
 >
 
 <SortableContext
@@ -838,16 +816,6 @@ className="text-yellow-400 cursor-pointer hover:text-yellow-300"
 onClick={copyMail}
 >
 Copy Mail
-</span>
-  
-<span
-className="cursor-pointer"
-onClick={()=>setAutoOrder(!autoOrder)}
->
-Auto rank:
-<span className={`ml-1 ${autoOrder ? "text-green-400" : "text-red-400"}`}>
-[{autoOrder ? "ON" : "OFF"}]
-</span>
 </span>
 
 </div>
