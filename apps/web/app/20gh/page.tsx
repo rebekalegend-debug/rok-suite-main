@@ -127,8 +127,8 @@ const [submitting,setSubmitting] = useState(false)
   const [members,setMembers] = useState<{id:string,name:string}[]>([])
 const [search,setSearch] = useState("")
   const [selectedMember,setSelectedMember] = useState<{id:string,name:string} | null>(null)
-const [twentytwentyGhClosed, setTwentytwentyGhClosed] = useState(false)
-const [submitError,setSubmitError] = useState(false)
+const [TwentyGhClosed, setTwentyGhClosed] = useState(false)
+  const [submitError,setSubmitError] = useState(false)
 const [confirmed, setConfirmed] = useState(false)
 const [confirmError, setConfirmError] = useState(false)
 type CountdownMode = "OPEN" | "CLOSED"
@@ -188,7 +188,7 @@ useEffect(() => {
 }
 
   setCountdown(countdownData)
-  settwentyGhClosed(status.isClosed)
+  setTwentyGhClosed(status.isClosed)
 }
  
   (window as any).forceUpdate20GH = update
@@ -202,7 +202,7 @@ useEffect(() => {
 useEffect(() => {
   function check() {
     const { isClosed } = get20ghStatus()
-    settwentyGhClosed(isClosed)
+    setTwentyGhClosed(isClosed)
   }
 
   check()
@@ -411,7 +411,7 @@ return (
   <AppSidebar>
 
   {/* POPUP - fixed overlay */}
-  {twentyGhClosed && (
+  {TwentyGhClosed && (
     <div
       className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none"
       style={{ left: '260px' }}
@@ -443,7 +443,7 @@ return (
       {/* BLUR ONLY CONTENT */}
       <div
         className={`transition ${
-          twentyGhClosed ? "blur-[1px] brightness-90 pointer-events-none select-none" : ""
+          TwentyGhClosed ? "blur-[1px] brightness-90 pointer-events-none select-none" : ""
         }`}
       >
 
