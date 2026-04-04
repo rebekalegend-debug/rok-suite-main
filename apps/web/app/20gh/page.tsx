@@ -8,51 +8,52 @@ declare global {
   }
 }
 
-function getMgeTimes(now: Date) {
+function get20ghTimes(now: Date) {
   const ONE_DAY = 86400000
   const TWO_WEEKS = 14 * ONE_DAY
 
-  const KNOWN_MGE_START = new Date(Date.UTC(2026, 2, 23, 0, 0, 0))
+  // Known start of a 20GH event (use a real past or future 20GH start date at 00:00 UTC)
+  // From your calendar, you can use e.g. 2026-04-17 as anchor
+  const KNOWN_20GH_START = new Date(Date.UTC(2026, 4, 17, 0, 0, 0))   // April 17, 2026
 
- let currentMgeStart = new Date(KNOWN_MGE_START)
+  let current20ghStart = new Date(KNOWN_20GH_START)
 
-while (currentMgeStart.getTime() + TWO_WEEKS <= now.getTime()) {
-  currentMgeStart = new Date(currentMgeStart.getTime() + TWO_WEEKS)
-}
+  while (current20ghStart.getTime() + TWO_WEEKS <= now.getTime()) {
+    current20ghStart = new Date(current20ghStart.getTime() + TWO_WEEKS)
+  }
 
-  const mgeEnd = new Date(currentMgeStart.getTime() + 6 * ONE_DAY)
+  // Registration opens 4 days before the event (on the 13th in your example)
+  const registrationOpen = new Date(current20ghStart.getTime() - 4 * ONE_DAY)
 
-  const registrationClose = new Date(currentMgeStart.getTime() - ONE_DAY)
-  const registrationOpen = new Date(mgeEnd.getTime() + ONE_DAY)
+  // Registration closes 1 day before the event (on the 16th at 00:00 UTC)
+  const registrationClose = new Date(current20ghStart.getTime() - ONE_DAY)
 
   return {
-    currentMgeStart,
-    mgeEnd,
-    registrationClose,
-    registrationOpen
+    current20ghStart,
+    registrationOpen,
+    registrationClose
   }
 }
-
-function getMgeCountdown() {
+function get20ghCountdown() {
   const now = (window as any).__TEST_TIME__
     ? new Date((window as any).__TEST_TIME__)
     : new Date()
 
-  const { registrationClose, registrationOpen } = getMgeTimes(now)
+  const { registrationClose, registrationOpen } = get20ghTimes(now)
 
   let target: Date
   let mode: "OPEN" | "CLOSED"
 
   if (now < registrationClose) {
     target = registrationClose
-    mode = "OPEN"
+    mode = "OPEN"          // Registration is still open
   } else if (now < registrationOpen) {
     target = registrationOpen
-    mode = "CLOSED"
+    mode = "CLOSED"        // Registration closed, waiting for next cycle
   } else {
+    // Jump to next cycle
     const nextNow = new Date(now.getTime() + 14 * 86400000)
-    const next = getMgeTimes(nextNow)
-
+    const next = get20ghTimes(nextNow)
     target = next.registrationClose
     mode = "OPEN"
   }
@@ -71,19 +72,18 @@ function getMgeCountdown() {
   }
 }
 
-function getMgeStatus() {
+function get20ghStatus() {
   const now = (window as any).__TEST_TIME__
     ? new Date((window as any).__TEST_TIME__)
     : new Date()
 
-  const { registrationClose, registrationOpen } = getMgeTimes(now)
+  const { registrationClose, registrationOpen } = get20ghTimes(now)
 
-  const isClosed =
-    now >= registrationClose && now < registrationOpen
+  const isClosed = now >= registrationClose && now < registrationOpen
 
   return { isClosed }
 }
-export default function MgePage() {
+export default function twghPage() {
 
 const [form, setForm] = useState({
   id: '',
@@ -127,7 +127,7 @@ const [submitting,setSubmitting] = useState(false)
   const [members,setMembers] = useState<{id:string,name:string}[]>([])
 const [search,setSearch] = useState("")
   const [selectedMember,setSelectedMember] = useState<{id:string,name:string} | null>(null)
-const [mgeClosed, setMgeClosed] = useState(false)
+const [twentyGhClosed, setTwentyGhClosed] = useState(false)
 const [submitError,setSubmitError] = useState(false)
 const [confirmed, setConfirmed] = useState(false)
 const [confirmError, setConfirmError] = useState(false)
@@ -179,8 +179,8 @@ function triggerConfirmError() {
   
 useEffect(() => {
  function update() {
-  const status = getMgeStatus()
-  const countdownData = getMgeCountdown()
+  const status = get20ghStatus()
+  const countdownData = get20ghCountdown()
 
  if (!(window as any).__loggedOnce) {
   console.log("STATUS:", status)
@@ -191,7 +191,7 @@ useEffect(() => {
   setMgeClosed(status.isClosed)
 }
  
-  (window as any).forceUpdateMGE = update
+  (window as any).forceUpdate20GH = update
 
   update()
 
@@ -201,7 +201,7 @@ useEffect(() => {
   
 useEffect(() => {
   function check() {
-    const { isClosed } = getMgeStatus()
+    const { isClosed } = get20ghStatus()
     setMgeClosed(isClosed)
   }
 
@@ -216,14 +216,14 @@ useEffect(() => {
 
 async function checkApplication(){
 
-  const savedId = localStorage.getItem("mge_applied_id")
+  const savedId = localStorage.getItem("20gh_applied_id")
 
   if(!savedId){
     setAlreadyApplied(false)
     return
   }
 
-  const res = await fetch("/api/mge-application",{ method:"PUT" })
+  const res = await fetch("/api/20gh-application",{ method:"PUT" })
   const applied = await res.json()
 
   const exists = applied.some((m:any)=>String(m.id) === String(savedId))
@@ -231,7 +231,7 @@ async function checkApplication(){
   if(exists){
     setAlreadyApplied(true)
   } else {
-    localStorage.removeItem("mge_applied_id")
+    localStorage.removeItem("20gh_applied_id")
     setAlreadyApplied(false)
   }
 
@@ -248,7 +248,7 @@ async function loadCommanders(){
 
   setLoadingCommanders(true)
 
-  const res = await fetch("/api/mge-commanders")
+  const res = await fetch("/api/20gh-commanders")
   const list = await res.json()
 
   setCommanders(list)
@@ -270,7 +270,7 @@ async function loadMembers(){
 
     console.log("Updating members from Lilith...")
 
-    const update = await fetch("/api/mge-application",{
+    const update = await fetch("/api/20gh-application",{
       method:"POST",
       headers:{
         "Content-Type":"application/json",
@@ -284,7 +284,7 @@ async function loadMembers(){
     console.log("Members updated:", updateResult)
   }
 
-  const res = await fetch("/api/mge-application")
+  const res = await fetch("/api/20gh-application")
   const list = await res.json()
 
   console.log("Members from sheet:", list.length)
@@ -357,12 +357,12 @@ if(commanderFile){
 
  setSubmitting(true)
 
-await fetch("/api/mge-application",{
+await fetch("/api/20gh-application",{
   method:"POST",
   body:data
 })
 
-localStorage.setItem("mge_applied_id", finalId)
+localStorage.setItem("20gh_applied_id", finalId)
 setSubmitting(false)
 
 setAlreadyApplied(true)
@@ -451,7 +451,7 @@ return (
 
 <span className={countdown.isUrgent ? "text-red-400" : "text-white"}>
 {countdown.mode === "OPEN"
-  ? "MGE Registration closes in "
+  ? "20GH Registration closes in "
   : "Registration opens in "}
 {countdown.days > 0 && `${countdown.days}D `}
 {String(countdown.hours).padStart(2,"0")}:
@@ -474,8 +474,8 @@ at {formatUTC(countdown.target)}
     wordBreak: "break-word"
   }}
 >
-  <span className="hidden sm:inline">.˳·˖✶𓆩MGE Registration𓆪✶˖·˳.</span>
-  <span className="sm:hidden">MGE Registration</span>
+  <span className="hidden sm:inline">.˳·˖✶𓆩20GH Registration𓆪✶˖·˳.</span>
+  <span className="sm:hidden">20GH Registration</span>
 </h2>
 
 {alreadyApplied ? (
@@ -488,7 +488,7 @@ If you want to modify your application click on the button below.
 <div className="flex justify-center pt-4">
 <button
 onClick={()=>{
-  localStorage.removeItem("mge_applied_id")
+  localStorage.removeItem("20gh_applied_id")
   setAlreadyApplied(false)
 }}
 className="px-6 py-2 rounded-lg text-black font-semibold
@@ -1084,7 +1084,7 @@ onClick={()=>{
 localStorage.setItem("rok_pauth", pauth)
 localStorage.setItem("rok_bauth", bauth)
 
-fetch("/api/mge-application",{
+fetch("/api/20gh-application",{
  method:"POST",
  headers:{
   "Content-Type":"application/json",
@@ -1096,7 +1096,7 @@ fetch("/api/mge-application",{
 .then(async data=>{
  console.log("Members updated:",data)
 
- const res = await fetch("/api/mge-application")
+ const res = await fetch("/api/20gh-application")
  const list = await res.json()
 
  setMembers(list)
