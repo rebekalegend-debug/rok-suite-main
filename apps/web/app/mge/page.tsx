@@ -73,20 +73,7 @@ function getMgeCountdown() {
   };
 }
 
-  const diffMs = target.getTime() - now.getTime()
-  const totalSeconds = Math.floor(diffMs / 1000)
-
-  return {
-    mode,
-    target,
-    days: Math.floor(totalSeconds / 86400),
-    hours: Math.floor((totalSeconds % 86400) / 3600),
-    minutes: Math.floor((totalSeconds % 3600) / 60),
-    seconds: totalSeconds % 60,
-    isUrgent: totalSeconds <= 86400
-  }
-}
-
+ 
 function getMgeStatus() {
   const now = (window as any).__TEST_TIME__
     ? new Date((window as any).__TEST_TIME__)
