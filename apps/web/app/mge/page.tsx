@@ -42,22 +42,21 @@ function getMgeCountdown() {
   let mode: "OPEN" | "CLOSED";
   let target: Date;
 
-  if (now < registrationClose) {
-    // Countdown to registration close
-    target = registrationClose;
-    mode = "OPEN";
-  } else if (now >= registrationClose && now < registrationOpen) {
-    // Countdown to registration open (currently closed)
-    target = registrationOpen;
-    mode = "CLOSED";
-  } else {
-    // Now is after registrationOpen, get the next MGE cycle
-    let nextCycle = getMgeTimes(new Date(now.getTime() + 1)); // add 1ms to move past current cycle
-    registrationClose = nextCycle.registrationClose;
-    registrationOpen = nextCycle.registrationOpen;
-    target = registrationClose;
-    mode = "OPEN";
-  }
+if (now < registrationClose) {
+  mode = "OPEN"
+  target = registrationClose
+} else if (now < registrationOpen) {
+  mode = "CLOSED"
+  target = registrationOpen
+} else {
+  // advance ONE full cycle
+  const nextStart = new Date(currentMgeStart.getTime() + TWO_WEEKS)
+
+  const nextClose = new Date(nextStart.getTime() - ONE_DAY)
+
+  mode = "OPEN"
+  target = nextClose
+}
 
   const diffMs = target.getTime() - now.getTime();
   const totalSeconds = Math.floor(diffMs / 1000);
