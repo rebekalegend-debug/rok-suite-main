@@ -39,23 +39,21 @@ function get20ghCountdown() {
     ? new Date((window as any).__TEST_TIME__)
     : new Date()
 
-  const { registrationClose, registrationOpen } = get20ghTimes(now)
+  const times = get20ghTimes(now)
+const { registrationClose, registrationOpen } = times
 
   let target: Date
   let mode: "OPEN" | "CLOSED"
 
- if (now < registrationOpen) {
-  // Not opened yet
+if (now < registrationOpen) {
   target = registrationOpen
   mode = "CLOSED"
 
-} else if (now < registrationClose) {
-  // Currently open
+} else if (now >= registrationOpen && now < registrationClose) {
   target = registrationClose
   mode = "OPEN"
 
 } else {
-  // Closed → move to next cycle
   const nextNow = new Date(now.getTime() + 14 * 86400000)
   const next = get20ghTimes(nextNow)
 
@@ -63,8 +61,16 @@ function get20ghCountdown() {
   mode = "CLOSED"
 }
 
-  const diffMs = target.getTime() - now.getTime()
-  const totalSeconds = Math.floor(diffMs / 1000)
+ const diffMs = Math.max(0, target.getTime() - now.getTime())
+
+// 🔥 force instant phase switch at boundary
+if (diffMs === 0) {
+  setTimeout(() => {
+    (window as any).forceUpdate20GH?.()
+  }, 50)
+}
+
+const totalSeconds = Math.floor(diffMs / 1000)
 
   return {
     mode,
