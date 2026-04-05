@@ -59,34 +59,39 @@ if (now <= registrationClose) {
   mode = "OPEN"
 }
 
-if (diffMs <= 0) {
-  // force refresh cycle
+const diffMsRaw = target.getTime() - now.getTime()
+
+let modeFinal = mode
+let targetFinal = target
+
+// 🔥 fix boundary (prevents 00:00:00 bug)
+if (diffMsRaw <= 0) {
   const ONE_DAY = 86400000
   const TWO_WEEKS = 14 * ONE_DAY
 
   if (mode === "OPEN") {
-    // switch to CLOSED phase
-    target = new Date(target.getTime() + 8 * ONE_DAY) // close → next open
-    mode = "CLOSED"
+    // switch to CLOSED → next open
+    targetFinal = new Date(target.getTime() + 8 * ONE_DAY)
+    modeFinal = "CLOSED"
   } else {
-    // switch to next OPEN phase
-    target = new Date(target.getTime() + 6 * ONE_DAY) // open → next close
-    mode = "OPEN"
+    // switch to next OPEN → next close
+    targetFinal = new Date(target.getTime() + 6 * ONE_DAY)
+    modeFinal = "OPEN"
   }
-
-  diffMs = target.getTime() - now.getTime();
 }
-  const totalSeconds = Math.floor(diffMs / 1000);
 
-  return {
-    mode,
-    target,
-    days: Math.floor(totalSeconds / 86400),
-    hours: Math.floor((totalSeconds % 86400) / 3600),
-    minutes: Math.floor((totalSeconds % 3600) / 60),
-    seconds: totalSeconds % 60,
-    isUrgent: totalSeconds <= 86400
-  };
+const diffMs = Math.max(0, targetFinal.getTime() - now.getTime())
+const totalSeconds = Math.floor(diffMs / 1000)
+
+return {
+  mode: modeFinal,
+  target: targetFinal,
+  days: Math.floor(totalSeconds / 86400),
+  hours: Math.floor((totalSeconds % 86400) / 3600),
+  minutes: Math.floor((totalSeconds % 3600) / 60),
+  seconds: totalSeconds % 60,
+  isUrgent: totalSeconds <= 86400
+}
 }
 
  
