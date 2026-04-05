@@ -23,18 +23,31 @@ export default function GH20RulesPage() {
 
   async function loadMembers() {
     try {
-      const res = await fetch("/api/mge-apply-data-get")
-      const json = await res.json()
+      const [membersRes, kvkRes] = await Promise.all([
+        fetch("/api/mge-application"),       // 👈 names + ids
+        fetch("/api/mge-apply-data-get")     // 👈 kvk merged data
+      ])
 
-      if (!json.success) return
+      const membersJson = await membersRes.json()
+      const kvkJson = await kvkRes.json()
 
-      const mapped = json.data.map((p: any) => ({
-        id: p.id,
-        name: p.name,
-        kvkContribution: Number(p.kvkContribution || 0)
+      if (!kvkJson.success) return
+
+      // 🔥 create kvk map
+      const kvkMap: Record<string, number> = {}
+
+      kvkJson.data.forEach((p: any) => {
+        kvkMap[p.id] = Number(p.kvkContribution || 0)
+      })
+
+      // 🔥 merge
+      const merged = membersJson.map((m: any) => ({
+        id: m.id,
+        name: m.name,
+        kvkContribution: kvkMap[m.id] || 0
       }))
 
-      setMembers(mapped)
+      setMembers(merged)
 
     } catch (err) {
       console.error(err)
@@ -43,7 +56,7 @@ export default function GH20RulesPage() {
     }
   }
 
-  // 🔥 SMART SEARCH (same as your reg page)
+  // 🔥 SEARCH (same as reg page)
   function normalize(str: string) {
     return str
       .toLowerCase()
@@ -97,14 +110,9 @@ export default function GH20RulesPage() {
         {/* TITLE */}
         <div className="text-center space-y-2">
           <h1 className="text-4xl font-bold">🏆 20GH Rules</h1>
-          <p className="text-[var(--text-secondary)]">
-            Top 10 is restricted. Everything else is free.
-            <br />
-            For any questions pm Harley Quinn!
-          </p>
         </div>
 
-        {/* 🔎 PLAYER LOOKUP */}
+        {/* 🔎 SEARCH */}
         <section className="p-6 rounded-2xl bg-gradient-to-br from-purple-500/10 via-indigo-500/5 to-blue-500/10 border border-purple-400/20 space-y-4">
           <h2 className="text-2xl font-semibold text-purple-300">
             🔎 Player KvK Lookup
@@ -114,7 +122,7 @@ export default function GH20RulesPage() {
             placeholder="Search player name..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full p-3 rounded-xl bg-black/30 border border-white/10 outline-none focus:border-purple-400"
+            className="w-full p-3 rounded-xl bg-black/30 border border-white/10"
           />
 
           {loadingMembers && (
@@ -122,17 +130,13 @@ export default function GH20RulesPage() {
           )}
 
           <div className="space-y-2">
-
             {results.map((p) => {
               const kvk = kvkContributionPercent(p.kvkContribution)
 
               return (
-                <div
-                  key={p.id}
-                  className="p-3 rounded-xl bg-white/5 border border-white/10 flex flex-col hover:bg-white/10 transition"
-                >
+                <div key={p.id} className="p-3 rounded-xl bg-white/5 border border-white/10">
 
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between">
                     <div>
                       <div className="font-semibold">{p.name}</div>
                       <div className="text-xs text-white/50">
@@ -140,42 +144,22 @@ export default function GH20RulesPage() {
                       </div>
                     </div>
 
-                    <span
-                      className={`px-3 py-1 rounded-md text-xs font-semibold border ${
-                        kvk.color === "green"
-                          ? "border-green-500 text-green-400 bg-green-500/10"
-                          : kvk.color === "yellow"
-                          ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
-                          : kvk.color === "orange"
-                          ? "border-orange-500 text-orange-400 bg-orange-500/10"
-                          : "border-red-500 text-red-400 bg-red-500/10"
-                      }`}
-                    >
+                    <span className="text-xs">
                       {kvk.label}
                     </span>
                   </div>
 
-                  {/* 🔥 AUTO RULE CHECK */}
                   {p.kvkContribution < 100_000_000 && (
-                    <div className="text-xs text-red-400 mt-1 font-semibold">
-                      🚨 Will be fined if entering Top 10
+                    <div className="text-red-400 text-xs mt-1">
+                      🚨 Will be fined in Top 10
                     </div>
                   )}
 
                 </div>
               )
             })}
-
-            {!loadingMembers && search && results.length === 0 && (
-              <p className="text-sm text-red-400">
-                No player found
-              </p>
-            )}
-
           </div>
         </section>
-
-        {/* KEEP YOUR RULE SECTIONS BELOW */}
 
       </div>
     </AppSidebar>
