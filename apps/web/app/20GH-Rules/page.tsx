@@ -29,45 +29,56 @@ export default function GH20RulesPage() {
       .trim()
   }
 
-  async function loadMembers() {
-    try {
-      const [membersRes, kvkRes] = await Promise.all([
-        fetch("/api/mge-application"),       // names + ids
-        fetch("/api/mge-apply-data-get")     // kvk data
-      ])
+async function loadMembers() {
+  try {
+    const [membersRes, kvkRes] = await Promise.all([
+      fetch("/api/mge-application"),       // names + ids
+      fetch("/api/mge-apply-data-get")     // KvK sheet
+    ])
 
-      const membersJson = await membersRes.json()
-      const kvkJson = await kvkRes.json()
+    const membersJson = await membersRes.json()
+    const kvkJson = await kvkRes.json()
 
-      if (!kvkJson.success) return
+    if (!kvkJson.success) return
 
-      // ✅ build kvk map (CLEANED)
-      const kvkMap: Record<string, number> = {}
+    // 🔥 create kvk map (FIXED FIELD)
+    const kvkMap: Record<string, number> = {}
 
-      kvkJson.data.forEach((p: any) => {
-        const id = cleanId(p.id)
-        kvkMap[id] = Number(p.kvkContribution || 0)
-      })
+    kvkJson.data.forEach((p: any) => {
 
-      // ✅ merge (CLEANED)
-      const merged = membersJson.map((m: any) => {
-        const id = cleanId(m.id)
+      const id = String(p.id).trim()
 
-        return {
-          id,
-          name: m.name,
-          kvkContribution: kvkMap[id] || 0
-        }
-      })
+      // 👇 VERY IMPORTANT: support all possible column names
+      const kvk =
+        p.kvkContribution ??
+        p["KvK C"] ??
+        p["kvk c"] ??
+        p["kvkContribution"] ??
+        0
 
-      setMembers(merged)
+      kvkMap[id] = Number(kvk) || 0
+    })
 
-    } catch (err) {
-      console.error(err)
-    } finally {
-      setLoadingMembers(false)
-    }
+    // 🔥 merge
+    const merged = membersJson.map((m: any) => {
+
+      const id = String(m.id).trim()
+
+      return {
+        id,
+        name: m.name,
+        kvkContribution: kvkMap[id] || 0
+      }
+    })
+
+    setMembers(merged)
+
+  } catch (err) {
+    console.error(err)
+  } finally {
+    setLoadingMembers(false)
   }
+}
 
   // 🔥 SEARCH
   function normalize(str: string) {
