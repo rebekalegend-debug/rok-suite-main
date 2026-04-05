@@ -162,7 +162,10 @@ async function uploadFile(file: File | null, userId: string) {
       upsert: true // 👈 THIS ENABLES OVERWRITE
     })
 
-  if (error) throw error
+ if (error) {
+  console.error("UPLOAD ERROR:", error)
+  return ""
+}
 
   const { data } = supabase.storage
     .from("mge-screenshots")
