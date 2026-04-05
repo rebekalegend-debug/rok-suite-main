@@ -458,17 +458,17 @@ return (
   <div className="text-center mt-2 text-sm font-medium">
 
 <span className={countdown.isUrgent ? "text-red-400" : "text-white"}>
-{countdown.mode === "OPEN"
-  ? "MGE Registration closes in "
-  : "Registration opens in "}
-{countdown.days > 0 && `${countdown.days}D `}
-{String(countdown.hours).padStart(2,"0")}:
-{String(countdown.minutes).padStart(2,"0")}:
-{String(countdown.seconds).padStart(2,"0")}
-<br/>
-<span className="text-xs text-zinc-400">
-at {formatUTC(countdown.target)}
-</span>
+  {countdown.mode === "OPEN"
+    ? "MGE Registration closes in "
+    : "Registration opens in "}
+  {countdown.days > 0 && `${countdown.days}D `}
+  {String(countdown.hours).padStart(2,"0")}:
+  {String(countdown.minutes).padStart(2,"0")}:
+  {String(countdown.seconds).padStart(2,"0")}
+  <br/>
+  <span className="text-xs text-zinc-400">
+    at {formatUTC(countdown.target)}
+  </span>
 </span>
 
 </div>
