@@ -537,21 +537,11 @@ Submit New Application
   Missing information may result in your registration not being considered properly and could affect your ranking!
   <br /><br />
 
-⚠️ MGE is designed for Rally & Garrison leaders.
+⚠️ 20GH is designed for our top fighters.
 <br />
-Players who have posted in the R&G forum channel on Discord
+Players who have the most KvK contribution
    <br />
-will have higher priority in ranking if they meet the requirements.
- <br /><br />
-Check [⚔️⭑𝐑𝐆⭑𝐋𝐞𝐚𝐝𝐞𝐫𝐬] channel on DC or click{" "}
- <a 
-  href="https://discord.com/channels/1469700544162566320/1469722276353015919" 
-  target="_blank" 
-  rel="noopener noreferrer"
-  className="underline text-red-400 hover:text-red-300"
-> 
-   HERE
-</a> to open it!
+will have the highest priority in ranking.
 
 <br /><br />
 
@@ -560,7 +550,7 @@ Check [⚔️⭑𝐑𝐆⭑𝐋𝐞𝐚𝐝𝐞𝐫𝐬] channel on DC or click{
   <br />
 
   <a
-    href="https://queenium.vercel.app/MGE-Rules"
+    href="https://queenium.vercel.app/20GH-Rules"
     target="_blank"
     rel="noopener noreferrer"
     className="inline-block mt-2 px-5 py-2.5 rounded-xl 
