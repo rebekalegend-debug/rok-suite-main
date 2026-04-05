@@ -42,7 +42,7 @@ function getMgeCountdown() {
   let mode: "OPEN" | "CLOSED";
   let target: Date;
 
-if (now < registrationClose) {
+if (now <= registrationClose) {
   mode = "OPEN"
   target = registrationClose
 } else if (now < registrationOpen) {
@@ -59,7 +59,23 @@ if (now < registrationClose) {
   mode = "OPEN"
 }
 
- const diffMs = Math.max(0, target.getTime() - now.getTime());
+if (diffMs <= 0) {
+  // force refresh cycle
+  const ONE_DAY = 86400000
+  const TWO_WEEKS = 14 * ONE_DAY
+
+  if (mode === "OPEN") {
+    // switch to CLOSED phase
+    target = new Date(target.getTime() + 8 * ONE_DAY) // close → next open
+    mode = "CLOSED"
+  } else {
+    // switch to next OPEN phase
+    target = new Date(target.getTime() + 6 * ONE_DAY) // open → next close
+    mode = "OPEN"
+  }
+
+  diffMs = target.getTime() - now.getTime();
+}
   const totalSeconds = Math.floor(diffMs / 1000);
 
   return {
