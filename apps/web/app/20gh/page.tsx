@@ -16,11 +16,12 @@ function get20ghTimes(now: Date) {
   // From your calendar, you can use e.g. 2026-04-17 as anchor
   const KNOWN_20GH_START = new Date(Date.UTC(2026, 3, 3, 0, 0, 0))   // April 17, 2026
 
-  let current20ghStart = new Date(KNOWN_20GH_START)
+ let current20ghStart = new Date(KNOWN_20GH_START)
 
-  while (current20ghStart.getTime() + TWO_WEEKS <= now.getTime()) {
-    current20ghStart = new Date(current20ghStart.getTime() + TWO_WEEKS)
-  }
+// move forward until it's in the future
+while (current20ghStart.getTime() <= now.getTime()) {
+  current20ghStart = new Date(current20ghStart.getTime() + TWO_WEEKS)
+}
 
   // Registration opens 4 days before the event (on the 13th in your example)
   const registrationOpen = new Date(current20ghStart.getTime() - 4 * ONE_DAY)
