@@ -1,6 +1,6 @@
 'use client'
 
-import { AppSidebar } from '@/components/AppSidebar';
+import { AppSidebar } from '@/components/AppSidebar'
 import { useEffect, useState } from "react"
 import { kvkContributionPercent } from "@/utils/mgeRankLogic"
 
@@ -15,72 +15,63 @@ export default function GH20RulesPage() {
   const [members, setMembers] = useState<Player[]>([])
   const [search, setSearch] = useState("")
   const [results, setResults] = useState<Player[]>([])
-  const [loadingMembers, setLoadingMembers] = useState(true)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     loadMembers()
   }, [])
 
-  // 🔥 CLEAN ID (fix for '1609... issue)
-  function cleanId(id: any) {
-    return String(id)
+  // 🔥 CLEAN ID (VERY IMPORTANT)
+  function cleanId(v: any) {
+    return String(v || "")
       .replace(/'/g, "")
-      .replace(/\s+/g, "")
       .trim()
+      .replace(/\s+/g, "")
   }
 
-async function loadMembers() {
-  try {
-    const [membersRes, kvkRes] = await Promise.all([
-      fetch("/api/mge-application"),       // names + ids
-      fetch("/api/mge-apply-data-get")     // KvK sheet
-    ])
+  async function loadMembers() {
+    try {
 
-    const membersJson = await membersRes.json()
-    const kvkJson = await kvkRes.json()
+      const [membersRes, kvkRes] = await Promise.all([
+        fetch("/api/mge-application"),      // names + ids
+        fetch("/api/mge-apply-data-get")    // kvk data
+      ])
 
-    if (!kvkJson.success) return
+      const membersJson = await membersRes.json()
+      const kvkJson = await kvkRes.json()
 
-    // 🔥 create kvk map (FIXED FIELD)
-    const kvkMap: Record<string, number> = {}
+      if (!kvkJson.success) return
 
-    kvkJson.data.forEach((p: any) => {
+      // 🔥 build kvk map (CLEANED)
+      const kvkMap: Record<string, number> = {}
 
-      const id = String(p.id).trim()
+      kvkJson.data.forEach((p: any) => {
+        const id = cleanId(p.id)
+        kvkMap[id] = Number(p.kvkContribution) || 0
+      })
 
-      // 👇 VERY IMPORTANT: support all possible column names
-      const kvk =
-        p.kvkContribution ??
-        p["KvK C"] ??
-        p["kvk c"] ??
-        p["kvkContribution"] ??
-        0
+      // 🔥 merge with CLEAN IDs
+      const merged = membersJson.map((m: any) => {
 
-      kvkMap[id] = Number(kvk) || 0
-    })
+        const id = cleanId(m.id)
 
-    // 🔥 merge
-    const merged = membersJson.map((m: any) => {
+        return {
+          id,
+          name: m.name,
+          kvkContribution: kvkMap[id] || 0
+        }
+      })
 
-      const id = String(m.id).trim()
+      setMembers(merged)
 
-      return {
-        id,
-        name: m.name,
-        kvkContribution: kvkMap[id] || 0
-      }
-    })
-
-    setMembers(merged)
-
-  } catch (err) {
-    console.error(err)
-  } finally {
-    setLoadingMembers(false)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoading(false)
+    }
   }
-}
 
-  // 🔥 SEARCH
+  // 🔎 SEARCH (same as reg page)
   function normalize(str: string) {
     return str
       .toLowerCase()
@@ -108,6 +99,7 @@ async function loadMembers() {
   }
 
   useEffect(() => {
+
     if (!search.trim()) {
       setResults([])
       return
@@ -125,19 +117,19 @@ async function loadMembers() {
       .slice(0, 10)
 
     setResults(filtered)
+
   }, [search, members])
 
   return (
     <AppSidebar>
       <div className="max-w-4xl mx-auto p-6 space-y-8">
 
-        {/* TITLE */}
         <div className="text-center space-y-2">
           <h1 className="text-4xl font-bold">🏆 20GH Rules</h1>
         </div>
 
-        {/* 🔎 SEARCH */}
         <section className="p-6 rounded-2xl bg-gradient-to-br from-purple-500/10 via-indigo-500/5 to-blue-500/10 border border-purple-400/20 space-y-4">
+
           <h2 className="text-2xl font-semibold text-purple-300">
             🔎 Player KvK Lookup
           </h2>
@@ -149,7 +141,7 @@ async function loadMembers() {
             className="w-full p-3 rounded-xl bg-black/30 border border-white/10"
           />
 
-          {loadingMembers && (
+          {loading && (
             <p className="text-sm text-white/60">Loading members...</p>
           )}
 
@@ -158,10 +150,7 @@ async function loadMembers() {
               const kvk = kvkContributionPercent(p.kvkContribution)
 
               return (
-                <div
-                  key={p.id}
-                  className="p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition"
-                >
+                <div key={p.id} className="p-3 rounded-xl bg-white/5 border border-white/10">
 
                   <div className="flex justify-between">
                     <div>
@@ -171,13 +160,13 @@ async function loadMembers() {
                       </div>
                     </div>
 
-                    <span className="text-xs font-semibold">
+                    <span className="text-xs">
                       {kvk.label}
                     </span>
                   </div>
 
                   {p.kvkContribution < 100_000_000 && (
-                    <div className="text-red-400 text-xs mt-1 font-semibold">
+                    <div className="text-red-400 text-xs mt-1">
                       🚨 Will be fined in Top 10
                     </div>
                   )}
@@ -185,17 +174,11 @@ async function loadMembers() {
                 </div>
               )
             })}
-
-            {!loadingMembers && search && results.length === 0 && (
-              <p className="text-sm text-red-400">
-                No player found
-              </p>
-            )}
-
           </div>
+
         </section>
 
       </div>
     </AppSidebar>
-  );
+  )
 }
