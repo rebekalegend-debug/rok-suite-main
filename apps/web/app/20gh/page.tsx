@@ -189,17 +189,21 @@ function triggerConfirmError() {
 }
   
 useEffect(() => {
- function update() {
-  const status = get20ghStatus()
+function update() {
+  const now = (window as any).__TEST_TIME__
+    ? new Date((window as any).__TEST_TIME__)
+    : new Date()
+
+  const times = get20ghTimes(now)
+
+  const isOpen =
+    now >= times.registrationOpen &&
+    now < times.registrationClose
+
   const countdownData = get20ghCountdown()
 
- if (!(window as any).__loggedOnce) {
-  console.log("STATUS:", status)
-  ;(window as any).__loggedOnce = true
-}
-
   setCountdown(countdownData)
-  setTwentyGhClosed(status.isClosed)
+  setTwentyGhClosed(!isOpen)
 }
  
   (window as any).forceUpdate20GH = update
@@ -210,18 +214,7 @@ useEffect(() => {
   return () => clearInterval(interval)
 }, [])
   
-useEffect(() => {
-  function check() {
-    const { isClosed } = get20ghStatus()
-    setTwentyGhClosed(isClosed)
-  }
 
-  check()
-
-  const interval = setInterval(check, 60000)
-
-  return () => clearInterval(interval)
-}, [])
   
 useEffect(() => {
 
@@ -433,7 +426,9 @@ return (
         </div>
         <div className="text-sm leading-relaxed space-y-2">
           <div className="text-emerald-400 font-semibold text-base">
-            Registration opens in{" "}
+            {TwentyGhClosed
+  ? "Registration opens in "
+  : "20GH Registration closes in "}
           {countdown.days > 0 && `${countdown.days}D `}
 {countdown.hours === 0 && countdown.minutes === 0 && countdown.seconds === 0
   ? (countdown.mode === "OPEN"
@@ -464,9 +459,9 @@ return (
   <div className="text-center mt-2 text-sm font-medium">
 
 <span className={countdown.isUrgent ? "text-red-400" : "text-white"}>
-{countdown.mode === "OPEN"
-  ? "20GH Registration closes in "
-  : "Registration opens in "}
+{TwentyGhClosed
+  ? "Registration opens in "
+  : "20GH Registration closes in "}
 {countdown.days > 0 && `${countdown.days}D `}
 {String(countdown.hours).padStart(2,"0")}:
 {String(countdown.minutes).padStart(2,"0")}:
