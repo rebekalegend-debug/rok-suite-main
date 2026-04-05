@@ -350,23 +350,36 @@ data.append(
  `${skills.skill1}${skills.skill2}${skills.skill3}${skills.skill4}`
 )
 
-if(commanderFile){
- data.append("equipment", commanderFile)
+if (commanderFile) {
+  data.append("equipment", commanderFile)
 }
 
- setSubmitting(true)
+setSubmitting(true)
 
-await fetch("/api/mge-application",{
-  method:"POST",
-  body:data
-})
+try {
+  const res = await fetch("/api/mge-application", {
+    method: "POST",
+    body: data
+  })
 
-localStorage.setItem("mge_applied_id", finalId)
-setSubmitting(false)
+  if (!res.ok) {
+    throw new Error("Request failed")
+  }
 
-setAlreadyApplied(true)
+  const result = await res.json()
+  console.log("SUBMIT RESULT:", result)
 
+  // ✅ ONLY set success AFTER real success
+  localStorage.setItem("mge_applied_id", finalId)
+  setAlreadyApplied(true)
 
+} catch (err) {
+  console.error("SUBMIT ERROR:", err)
+
+  alert("❌ Submission failed. Please try again.")
+
+  setSubmitting(false)
+  return
 }
 
   
