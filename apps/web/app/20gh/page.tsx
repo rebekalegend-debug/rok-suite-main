@@ -434,9 +434,11 @@ return (
         <div className="text-sm leading-relaxed space-y-2">
           <div className="text-emerald-400 font-semibold text-base">
             Registration opens in{" "}
-           {countdown.days > 0 && `${countdown.days}D `}
-{countdown.days === 0 && countdown.hours === 0 && countdown.minutes === 0 && countdown.seconds === 0
-  ? "Updating..."
+          {countdown.days > 0 && `${countdown.days}D `}
+{countdown.hours === 0 && countdown.minutes === 0 && countdown.seconds === 0
+  ? (countdown.mode === "OPEN"
+      ? "Closing now..."
+      : "Opening now...")
   : `${String(countdown.hours).padStart(2,"0")}:${String(countdown.minutes).padStart(2,"0")}:${String(countdown.seconds).padStart(2,"0")}`
 }
           </div>
