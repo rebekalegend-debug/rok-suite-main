@@ -372,7 +372,7 @@ try {
 
 } catch (err) {
   console.error("SUBMIT ERROR:", err)
-  alert("❌ Submission failed. Please try again.")
+  alert("❌ Submission failed. Please try again with another screenshoot!.")
 } finally {
   setSubmitting(false)
 }
