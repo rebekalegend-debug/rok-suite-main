@@ -21,11 +21,19 @@ export default function GH20RulesPage() {
     loadMembers()
   }, [])
 
+  // 🔥 CLEAN ID (fix for '1609... issue)
+  function cleanId(id: any) {
+    return String(id)
+      .replace(/'/g, "")
+      .replace(/\s+/g, "")
+      .trim()
+  }
+
   async function loadMembers() {
     try {
       const [membersRes, kvkRes] = await Promise.all([
-        fetch("/api/mge-application"),       // 👈 names + ids
-        fetch("/api/mge-apply-data-get")     // 👈 kvk merged data
+        fetch("/api/mge-application"),       // names + ids
+        fetch("/api/mge-apply-data-get")     // kvk data
       ])
 
       const membersJson = await membersRes.json()
@@ -33,19 +41,24 @@ export default function GH20RulesPage() {
 
       if (!kvkJson.success) return
 
-      // 🔥 create kvk map
+      // ✅ build kvk map (CLEANED)
       const kvkMap: Record<string, number> = {}
 
       kvkJson.data.forEach((p: any) => {
-        kvkMap[p.id] = Number(p.kvkContribution || 0)
+        const id = cleanId(p.id)
+        kvkMap[id] = Number(p.kvkContribution || 0)
       })
 
-      // 🔥 merge
-      const merged = membersJson.map((m: any) => ({
-        id: m.id,
-        name: m.name,
-        kvkContribution: kvkMap[m.id] || 0
-      }))
+      // ✅ merge (CLEANED)
+      const merged = membersJson.map((m: any) => {
+        const id = cleanId(m.id)
+
+        return {
+          id,
+          name: m.name,
+          kvkContribution: kvkMap[id] || 0
+        }
+      })
 
       setMembers(merged)
 
@@ -56,7 +69,7 @@ export default function GH20RulesPage() {
     }
   }
 
-  // 🔥 SEARCH (same as reg page)
+  // 🔥 SEARCH
   function normalize(str: string) {
     return str
       .toLowerCase()
@@ -134,7 +147,10 @@ export default function GH20RulesPage() {
               const kvk = kvkContributionPercent(p.kvkContribution)
 
               return (
-                <div key={p.id} className="p-3 rounded-xl bg-white/5 border border-white/10">
+                <div
+                  key={p.id}
+                  className="p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition"
+                >
 
                   <div className="flex justify-between">
                     <div>
@@ -144,13 +160,13 @@ export default function GH20RulesPage() {
                       </div>
                     </div>
 
-                    <span className="text-xs">
+                    <span className="text-xs font-semibold">
                       {kvk.label}
                     </span>
                   </div>
 
                   {p.kvkContribution < 100_000_000 && (
-                    <div className="text-red-400 text-xs mt-1">
+                    <div className="text-red-400 text-xs mt-1 font-semibold">
                       🚨 Will be fined in Top 10
                     </div>
                   )}
@@ -158,6 +174,13 @@ export default function GH20RulesPage() {
                 </div>
               )
             })}
+
+            {!loadingMembers && search && results.length === 0 && (
+              <p className="text-sm text-red-400">
+                No player found
+              </p>
+            )}
+
           </div>
         </section>
 
