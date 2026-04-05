@@ -306,7 +306,7 @@ const newMissing = {
   rank: !form.rank,
   kvk: !form.kvkSpending,
   troop: !form.troopType,
-  equipment: !commanderFile
+ equipment: false
 }
 
 setMissing(newMissing)
@@ -362,24 +362,19 @@ try {
     body: data
   })
 
-  if (!res.ok) {
-    throw new Error("Request failed")
-  }
+  if (!res.ok) throw new Error("Request failed")
 
   const result = await res.json()
   console.log("SUBMIT RESULT:", result)
 
-  // ✅ ONLY set success AFTER real success
   localStorage.setItem("mge_applied_id", finalId)
   setAlreadyApplied(true)
 
 } catch (err) {
   console.error("SUBMIT ERROR:", err)
-
   alert("❌ Submission failed. Please try again.")
-
+} finally {
   setSubmitting(false)
-  return
 }
 
   
