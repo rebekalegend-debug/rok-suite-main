@@ -312,77 +312,87 @@ loadMembers()
 }, [])
 async function submitApplication(){
 
-const hasManualInput = search.trim().length > 0
+  const hasManualInput = search.trim().length > 0
 
-const newMissing = {
-  member: !selectedMember && !hasManualInput,
-  commander: !selectedCommander && !commanderSearch.trim(),
-  purpose: !form.purpose,
-  rank: !form.rank,
-  kvk: !form.kvkSpending,
-  troop: !form.troopType,
-  equipment: !commanderFile
-}
+  const newMissing = {
+    member: !selectedMember && !hasManualInput,
+    commander: !selectedCommander && !commanderSearch.trim(),
+    purpose: !form.purpose,
+    rank: !form.rank,
+    kvk: !form.kvkSpending,
+    troop: !form.troopType,
+    equipment: false
+  }
 
-setMissing(newMissing)
+  setMissing(newMissing)
 
-const hasError = Object.values(newMissing).some(v => v)
+  const hasError = Object.values(newMissing).some(v => v)
 
-if((!selectedMember && !search.trim()) || hasError){
+  if((!selectedMember && !search.trim()) || hasError){
+    setSubmitError(true)
+    setTimeout(()=>setSubmitError(false),1200)
+    return
+  }
 
-  setSubmitError(true)
+  const data = new FormData()
 
-  setTimeout(()=>setSubmitError(false),1200)
+  let finalId = ""
+  let finalName = ""
 
-  return
-}
- const data = new FormData()
+  if (selectedMember) {
+    finalId = selectedMember.id
+    finalName = selectedMember.name
+  } else {
+    finalId = search.trim()
+    finalName = search.trim()
+  }
 
-let finalId = ""
-let finalName = ""
+  const finalCommander = selectedCommander || commanderSearch.trim()
 
-if (selectedMember) {
-  finalId = selectedMember.id
-  finalName = selectedMember.name
-} else {
-  // manual input fallback
-  finalId = search.trim()
-  finalName = search.trim()
-}
-data.append("id", finalId)
-data.append("name", finalName)
-const finalCommander = selectedCommander || commanderSearch.trim()
-data.append("commander", finalCommander)
+  data.append("id", finalId)
+  data.append("name", finalName)
+  data.append("commander", finalCommander)
 
-data.append("desiredRank", form.rank)
-data.append("kvkSpending", form.kvkSpending)
-data.append("purpose", form.purpose)
-data.append("troopType", form.troopType)
-data.append("pair", form.pair || "")
-data.append("comment", form.comment || "")
+  data.append("desiredRank", form.rank)
+  data.append("kvkSpending", form.kvkSpending)
+  data.append("purpose", form.purpose)
+  data.append("troopType", form.troopType)
+  data.append("pair", form.pair || "")
+  data.append("comment", form.comment || "")
 
-data.append(
- "skills",
- `${skills.skill1}${skills.skill2}${skills.skill3}${skills.skill4}`
-)
+  data.append(
+    "skills",
+    `${skills.skill1}${skills.skill2}${skills.skill3}${skills.skill4}`
+  )
 
-if(commanderFile){
- data.append("equipment", commanderFile)
-}
+  if (commanderFile) {
+    data.append("equipment", commanderFile)
+  }
 
- setSubmitting(true)
+  setSubmitting(true)
 
-await fetch("/api/20gh-application",{
-  method:"POST",
-  body:data
-})
+  try {
+    const res = await fetch("/api/20gh-application", {
+      method: "POST",
+      body: data
+    })
 
-localStorage.setItem("20gh_applied_id", finalId)
-setSubmitting(false)
+    // 🔥 SAME FIX AS MGE
+    if (!res.ok) throw new Error("Request failed")
 
-setAlreadyApplied(true)
+    const result = await res.json()
+    console.log("SUBMIT RESULT:", result)
 
+    localStorage.setItem("20gh_applied_id", finalId)
+    setAlreadyApplied(true)
 
+  } catch (err) {
+    console.error("SUBMIT ERROR:", err)
+
+    alert("❌ Submission failed. Please try again with another screenshot!")
+  } finally {
+    setSubmitting(false)
+  }
 }
 
   
