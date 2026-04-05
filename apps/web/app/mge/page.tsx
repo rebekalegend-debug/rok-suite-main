@@ -96,16 +96,8 @@ return {
 
  
 function getMgeStatus() {
-  const now = (window as any).__TEST_TIME__
-    ? new Date((window as any).__TEST_TIME__)
-    : new Date()
-
-  const { registrationClose, registrationOpen } = getMgeTimes(now)
-
-  const isClosed =
-    now >= registrationClose && now < registrationOpen
-
-  return { isClosed }
+  const countdown = getMgeCountdown()
+  return { isClosed: countdown.mode === "CLOSED" }
 }
 export default function MgePage() {
 
