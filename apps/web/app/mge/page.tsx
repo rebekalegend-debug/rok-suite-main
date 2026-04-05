@@ -36,26 +36,42 @@ while (currentMgeStart.getTime() + TWO_WEEKS <= now.getTime()) {
 function getMgeCountdown() {
   const now = (window as any).__TEST_TIME__
     ? new Date((window as any).__TEST_TIME__)
-    : new Date()
+    : new Date();
 
-  const { registrationClose, registrationOpen } = getMgeTimes(now)
-
-  let target: Date
-  let mode: "OPEN" | "CLOSED"
+  let { registrationClose, registrationOpen } = getMgeTimes(now);
+  let mode: "OPEN" | "CLOSED";
+  let target: Date;
 
   if (now < registrationClose) {
-    target = registrationClose
-    mode = "OPEN"
-  } else if (now < registrationOpen) {
-    target = registrationOpen
-    mode = "CLOSED"
+    // Countdown to registration close
+    target = registrationClose;
+    mode = "OPEN";
+  } else if (now >= registrationClose && now < registrationOpen) {
+    // Countdown to registration open (currently closed)
+    target = registrationOpen;
+    mode = "CLOSED";
   } else {
-    const nextNow = new Date(now.getTime() + 14 * 86400000)
-    const next = getMgeTimes(nextNow)
-
-    target = next.registrationClose
-    mode = "OPEN"
+    // Now is after registrationOpen, get the next MGE cycle
+    let nextCycle = getMgeTimes(new Date(now.getTime() + 1)); // add 1ms to move past current cycle
+    registrationClose = nextCycle.registrationClose;
+    registrationOpen = nextCycle.registrationOpen;
+    target = registrationClose;
+    mode = "OPEN";
   }
+
+  const diffMs = target.getTime() - now.getTime();
+  const totalSeconds = Math.floor(diffMs / 1000);
+
+  return {
+    mode,
+    target,
+    days: Math.floor(totalSeconds / 86400),
+    hours: Math.floor((totalSeconds % 86400) / 3600),
+    minutes: Math.floor((totalSeconds % 3600) / 60),
+    seconds: totalSeconds % 60,
+    isUrgent: totalSeconds <= 86400
+  };
+}
 
   const diffMs = target.getTime() - now.getTime()
   const totalSeconds = Math.floor(diffMs / 1000)
