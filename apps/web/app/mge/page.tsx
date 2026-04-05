@@ -448,7 +448,7 @@ return (
       {/* BLUR ONLY CONTENT */}
       <div
         className={`transition ${
-          mgeClosed ? "blur-[1px] brightness-90 pointer-events-none select-none" : ""
+          mgeClosed ? " pointer-events-none select-none" : ""
         }`}
       >
 
