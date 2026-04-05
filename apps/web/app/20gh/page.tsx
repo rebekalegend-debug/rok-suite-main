@@ -39,42 +39,52 @@ function get20ghCountdown() {
     ? new Date((window as any).__TEST_TIME__)
     : new Date()
 
-  const times = get20ghTimes(now)
-const { registrationClose, registrationOpen } = times
+  const ONE_DAY = 86400000
+  const TWO_WEEKS = 14 * ONE_DAY
+
+  const { registrationClose, registrationOpen } = get20ghTimes(now)
 
   let target: Date
   let mode: "OPEN" | "CLOSED"
 
-if (now < registrationOpen) {
-  target = registrationOpen
-  mode = "CLOSED"
+  if (now < registrationOpen) {
+    target = registrationOpen
+    mode = "CLOSED"
 
-} else if (now >= registrationOpen && now < registrationClose) {
-  target = registrationClose
-  mode = "OPEN"
+  } else if (now >= registrationOpen && now < registrationClose) {
+    target = registrationClose
+    mode = "OPEN"
 
-} else {
-  const nextNow = new Date(now.getTime() + 14 * 86400000)
-  const next = get20ghTimes(nextNow)
+  } else {
+    const nextRegistrationOpen = new Date(registrationOpen.getTime() + TWO_WEEKS)
+    target = nextRegistrationOpen
+    mode = "CLOSED"
+  }
 
-  target = next.registrationOpen
-  mode = "CLOSED"
-}
+  const diffMsRaw = target.getTime() - now.getTime()
 
- const diffMs = Math.max(0, target.getTime() - now.getTime())
+  let targetFinal = target
+  let modeFinal = mode
 
-// 🔥 force instant phase switch at boundary
-if (diffMs === 0) {
-  setTimeout(() => {
-    (window as any).forceUpdate20GH?.()
-  }, 50)
-}
+  // 🔥 CRITICAL FIX (same as MGE)
+  if (diffMsRaw <= 0) {
+    if (mode === "OPEN") {
+      // closing -> go to next open cycle
+      targetFinal = new Date(target.getTime() + 10 * ONE_DAY)
+      modeFinal = "CLOSED"
+    } else {
+      // opening -> go to close
+      targetFinal = new Date(target.getTime() + 3 * ONE_DAY)
+      modeFinal = "OPEN"
+    }
+  }
 
-const totalSeconds = Math.floor(diffMs / 1000)
+  const diffMs = Math.max(0, targetFinal.getTime() - now.getTime())
+  const totalSeconds = Math.floor(diffMs / 1000)
 
   return {
-    mode,
-    target,
+    mode: modeFinal,
+    target: targetFinal,
     days: Math.floor(totalSeconds / 86400),
     hours: Math.floor((totalSeconds % 86400) / 3600),
     minutes: Math.floor((totalSeconds % 3600) / 60),
