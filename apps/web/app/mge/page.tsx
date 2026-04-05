@@ -376,7 +376,7 @@ try {
 } finally {
   setSubmitting(false)
 }
-
+}
   
 const filteredCommanders = commanders.filter(c =>
   !commanderSearch ||
