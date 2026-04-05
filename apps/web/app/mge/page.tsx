@@ -49,16 +49,17 @@ if (now < registrationClose) {
   mode = "CLOSED"
   target = registrationOpen
 } else {
-  // advance ONE full cycle
-  const nextStart = new Date(currentMgeStart.getTime() + TWO_WEEKS)
+  // move to next cycle using current known values
+  const ONE_DAY = 86400000
+  const TWO_WEEKS = 14 * ONE_DAY
 
-  const nextClose = new Date(nextStart.getTime() - ONE_DAY)
+  const nextRegistrationClose = new Date(registrationClose.getTime() + TWO_WEEKS)
 
+  target = nextRegistrationClose
   mode = "OPEN"
-  target = nextClose
 }
 
-  const diffMs = target.getTime() - now.getTime();
+ const diffMs = Math.max(0, target.getTime() - now.getTime());
   const totalSeconds = Math.floor(diffMs / 1000);
 
   return {
