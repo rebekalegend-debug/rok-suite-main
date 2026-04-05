@@ -1,6 +1,62 @@
+'use client'
+
 import { AppSidebar } from '@/components/AppSidebar';
+import { useEffect, useState } from "react"
+import { kvkContributionPercent } from "@/utils/mgeRankLogic"
+
+type Player = {
+  id: string
+  name: string
+  kvkContribution: number
+}
 
 export default function GH20RulesPage() {
+
+  const [members, setMembers] = useState<Player[]>([])
+  const [search, setSearch] = useState("")
+  const [results, setResults] = useState<Player[]>([])
+  const [loadingMembers, setLoadingMembers] = useState(true)
+
+  useEffect(() => {
+    loadMembers()
+  }, [])
+
+  async function loadMembers() {
+    try {
+      const res = await fetch("/api/mge-apply-data-get")
+      const json = await res.json()
+
+      if (!json.success) return
+
+      const mapped = json.data.map((p: any) => ({
+        id: p.id,
+        name: p.name,
+        kvkContribution: Number(p.kvkContribution || 0)
+      }))
+
+      setMembers(mapped)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoadingMembers(false)
+    }
+  }
+
+  useEffect(() => {
+    if (!search.trim()) {
+      setResults([])
+      return
+    }
+
+    const filtered = members
+      .filter(p =>
+        p.name.toLowerCase().includes(search.toLowerCase())
+      )
+      .slice(0, 10)
+
+    setResults(filtered)
+  }, [search, members])
+
   return (
     <AppSidebar>
       <div className="max-w-4xl mx-auto p-6 space-y-8">
@@ -14,6 +70,63 @@ export default function GH20RulesPage() {
             For any questions pm Harley Quinn!
           </p>
         </div>
+
+        {/* 🔎 PLAYER LOOKUP */}
+        <section className="p-6 rounded-2xl bg-gradient-to-br from-purple-500/10 via-indigo-500/5 to-blue-500/10 border border-purple-400/20 space-y-4">
+          <h2 className="text-2xl font-semibold text-purple-300">
+            🔎 Player KvK Lookup
+          </h2>
+
+          <input
+            placeholder="Search player name..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full p-2 rounded-lg bg-black/30 border border-white/10"
+          />
+
+          {loadingMembers && (
+            <p className="text-sm text-white/60">Loading members...</p>
+          )}
+
+          <div className="space-y-2">
+
+            {results.map((p) => {
+              const kvk = kvkContributionPercent(p.kvkContribution)
+
+              return (
+                <div
+                  key={p.id}
+                  className="p-3 rounded-lg bg-white/5 border border-white/10 flex justify-between items-center"
+                >
+
+                  <span className="font-semibold">{p.name}</span>
+
+                  <span
+                    className={`px-3 py-1 rounded-md text-xs font-semibold border ${
+                      kvk.color === "green"
+                        ? "border-green-500 text-green-400 bg-green-500/10"
+                        : kvk.color === "yellow"
+                        ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
+                        : kvk.color === "orange"
+                        ? "border-orange-500 text-orange-400 bg-orange-500/10"
+                        : "border-red-500 text-red-400 bg-red-500/10"
+                    }`}
+                  >
+                    {kvk.label}
+                  </span>
+
+                </div>
+              )
+            })}
+
+            {!loadingMembers && search && results.length === 0 && (
+              <p className="text-sm text-red-400">
+                No player found
+              </p>
+            )}
+
+          </div>
+        </section>
 
         {/* TOP 10 RULES */}
         <section className="p-6 rounded-2xl bg-gradient-to-br from-[#FFD700]/10 via-[#FFC300]/5 to-[#FFB800]/10 border border-[#FFD700]/20 backdrop-blur-md shadow-[0_0_40px_rgba(255,215,0,0.08)] space-y-4">
