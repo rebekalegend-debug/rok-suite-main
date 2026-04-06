@@ -278,8 +278,11 @@ useEffect(() => {
 
 async function loadMembers(){
 
-  const pauth = localStorage.getItem("rok_pauth")
-  const bauth = localStorage.getItem("rok_bauth")
+ const tokenRes = await fetch("/api/tokens")
+const tokenData = await tokenRes.json()
+
+const pauth = tokenData.pauth
+const bauth = tokenData.bauth
 
   if (pauth && bauth) {
 
