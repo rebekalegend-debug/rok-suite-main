@@ -5,7 +5,7 @@ function latestLilithDay(){
   d.setUTCDate(d.getUTCDate() - 1)
   return d.toISOString().slice(0,10)
 }
-async function sendDiscordAlert(message: string) {
+async function sendDiscordAlert(message: string, success = false) {
   await fetch("https://discord.com/api/webhooks/1490842853784682497/rk1fpHVh_B5nS1ecgF0JKCirG8m5jAduRH-6oTrll8nqEiLbFU0Q1EBiISe2J2m32Fjg", {
     method: "POST",
     headers: {
@@ -14,9 +14,9 @@ async function sendDiscordAlert(message: string) {
     body: JSON.stringify({
       embeds: [
         {
-          title: "🚨 Migration Scan Failed",
+          title: success ? "✅ Migration Scan Done" : "🚨 Migration Scan Failed",
           description: message,
-          color: 16711680 // red
+          color: success ? 65280 : 16711680
         }
       ]
     })
@@ -190,6 +190,6 @@ if(!success){
   }
 
   console.log("Done up to:", latest)
-
+await sendDiscordAlert(`Done up to ${latest}`, true)
   return Response.json({ success:true })
 }
