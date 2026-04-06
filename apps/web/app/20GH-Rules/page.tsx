@@ -156,12 +156,21 @@ export default function GH20RulesPage() {
         {/* 🔎 SEARCH */}
         <section className="p-6 rounded-2xl bg-gradient-to-br from-purple-500/10 via-indigo-500/5 to-blue-500/10 border border-purple-400/20 space-y-4">
 
-          <h2 className="text-2xl font-semibold text-purple-300">
-            🔎 Player KvK Lookup
-          </h2>
+      <h2 className="text-2xl font-semibold text-purple-300">
+  Fast lookup to check if you meet req for 20GH! (If you can not find your name, check{" "}
+  <a 
+    href="https://app.rokstats.online/kvk/ranking" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    className="underline text-purple-400"
+  >
+    Rokstats
+  </a>
+  )
+</h2>
 
           <input
-            placeholder="Search player..."
+            placeholder="Search for your name or ID..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full p-3 rounded-xl bg-black/30 border border-white/10"
