@@ -103,7 +103,15 @@ const touchStartY = useRef<number | null>(null);
         activeColor: 'text-white',
         activeBg: 'bg-gradient-to-r from-orange-500 to-amber-500'
       },
-
+  {
+        labelKey: '20gh',
+        href: '/20gh',
+        icon: <Shield size={20} className="text-amber-500" />,
+        hoverColor: 'group-hover:text-amber-500',
+        hoverBg: 'hover:bg-amber-500/10',
+        activeColor: 'text-white',
+        activeBg: 'bg-gradient-to-r from-amber-500 to-yellow-500'
+      },
       {
         labelKey: 'mge',
         href: '/mge',
@@ -133,6 +141,16 @@ const touchStartY = useRef<number | null>(null);
         activeColor: 'text-white',
         activeBg: 'bg-gradient-to-r from-blue-500 to-indigo-500'
       },
+
+      {
+  labelKey: '20ghRanklist',
+  href: '/20gh/ranklist',
+  icon: <Trophy size={20} className="text-violet-500" />,
+  hoverColor: 'group-hover:text-violet-500',
+  hoverBg: 'hover:bg-violet-500/10',
+  activeColor: 'text-white',
+  activeBg: 'bg-gradient-to-r from-violet-500 to-purple-500'
+},
 {
   labelKey: 'mgeRanklist',
   href: '/mge/ranklist',
