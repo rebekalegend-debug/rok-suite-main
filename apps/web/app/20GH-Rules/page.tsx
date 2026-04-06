@@ -21,20 +21,19 @@ export default function GH20RulesPage() {
     loadMembers()
   }, [])
 
-  // 🔥 CLEAN ID (VERY IMPORTANT)
-  function cleanId(v: any) {
-    return String(v || "")
-      .replace(/'/g, "")
+  // 🔥 normalize ID (THIS FIXES YOUR BUG)
+  function normalizeId(id: any) {
+    return String(id || "")
+      .replace(/'/g, "")   // remove '
       .trim()
-      .replace(/\s+/g, "")
   }
 
   async function loadMembers() {
     try {
 
       const [membersRes, kvkRes] = await Promise.all([
-        fetch("/api/mge-application"),      // names + ids
-        fetch("/api/mge-apply-data-get")    // kvk data
+        fetch("/api/mge-application"),      // 👈 ONLY names + ids
+        fetch("/api/mge-apply-data-get")    // 👈 ONLY kvk (ignore rest)
       ])
 
       const membersJson = await membersRes.json()
@@ -42,18 +41,17 @@ export default function GH20RulesPage() {
 
       if (!kvkJson.success) return
 
-      // 🔥 build kvk map (CLEANED)
+      // ✅ build kvk map (ONLY using kvk field)
       const kvkMap: Record<string, number> = {}
 
       kvkJson.data.forEach((p: any) => {
-        const id = cleanId(p.id)
+        const id = normalizeId(p.id)
         kvkMap[id] = Number(p.kvkContribution) || 0
       })
 
-      // 🔥 merge with CLEAN IDs
+      // ✅ merge using members as base
       const merged = membersJson.map((m: any) => {
-
-        const id = cleanId(m.id)
+        const id = normalizeId(m.id)
 
         return {
           id,
@@ -71,7 +69,7 @@ export default function GH20RulesPage() {
     }
   }
 
-  // 🔎 SEARCH (same as reg page)
+  // 🔎 SEARCH
   function normalize(str: string) {
     return str
       .toLowerCase()
@@ -142,7 +140,7 @@ export default function GH20RulesPage() {
           />
 
           {loading && (
-            <p className="text-sm text-white/60">Loading members...</p>
+            <p className="text-sm text-white/60">Loading players...</p>
           )}
 
           <div className="space-y-2">
