@@ -666,7 +666,7 @@ setMissing(prev => ({...prev, member:false}))
 </div>
 
 <div className="pt-4 border-t border-[var(--border)]">
-<label className="form-label">👲 Wanted Commander</label>
+<label className="form-label">👲 For what commander you need the heads</label>
 
 <div className="relative">
 
@@ -923,16 +923,13 @@ onChange={e=>{
 }}
 >
 
-<option value="">Select Rank - GH - Aprox Points</option>
+<option value="">Select Rank - GH</option>
 
-<option value="1">1 = 180GH (Unlimited)</option>
-<option value="2">2 = 90GH (19-25M)</option>
-<option value="3">3 = 60GH (18-20M)</option>
-<option value="4">4 = 50GH (17-20M)</option>
-<option value="5">5 = 40GH (16M)</option>
-<option value="6">6 = 30GH (15M)</option>
-<option value="7-10">7 - 10 = 20GH (11-14M)</option>
-<option value="11-15">11 - 15 = 10GH (6-10M)</option>
+<option value="1">1 = 20GH</option>
+<option value="2">2 = 10GH</option>
+<option value="3">3 = 5GH</option>
+<option value="4">4 - 10 = 4GH</option>
+
 
 </select>
 </div>
@@ -1008,7 +1005,7 @@ onChange={e=>{
 
 {/* PAIR */}
 <div className="pt-4 border-t border-[var(--border)]">
-<label className="form-label">🤔 Commander Pair: </label>
+<label className="form-label">🤔 Commander Pair (Optional): </label>
 <input
 placeholder="For what commander\pair you need the wanted commander?"
 className={`w-full px-3 py-2 rounded
@@ -1026,7 +1023,7 @@ onChange={e=>setForm({...form,pair:e.target.value})}
 
 {/* COMMENT */}
 <div className="pt-4 border-t border-[var(--border)]">
-<label className="form-label">💭 Additional personal comment?!: </label>
+<label className="form-label">💭 Additional personal comment?! (Optional): </label>
 <textarea
 placeholder="Comment"
 className={`w-full px-3 py-2 rounded
