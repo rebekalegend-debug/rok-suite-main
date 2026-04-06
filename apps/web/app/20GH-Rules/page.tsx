@@ -12,65 +12,36 @@ type Player = {
 
 export default function GH20RulesPage() {
 
-  const [members, setMembers] = useState<Player[]>([])
+  const [players, setPlayers] = useState<Player[]>([])
   const [search, setSearch] = useState("")
   const [results, setResults] = useState<Player[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    loadMembers()
+    loadData()
   }, [])
 
-  // 🔥 ULTRA CLEAN ID
-  function clean(id: any) {
-    return String(id || "")
+  function clean(v: any) {
+    return String(v || "")
       .replace(/'/g, "")
-      .replace(/\s+/g, "")
       .trim()
   }
 
-  async function loadMembers() {
+  async function loadData() {
     try {
+      const res = await fetch("/api/mge-apply-data-get")
+      const json = await res.json()
 
-      const membersRes = await fetch("/api/mge-application")
-      const kvkRes = await fetch("/api/mge-apply-data-get")
+      if (!json.success) return
 
-      const membersJson = await membersRes.json()
-      const kvkJson = await kvkRes.json()
+      // 🔥 USE API AS PURE KVK DATASET
+      const cleaned = json.data.map((p: any) => ({
+        id: clean(p.id),
+        name: p.name, // 👈 already exists from your sheet
+        kvkContribution: Number(p.kvkContribution) || 0
+      }))
 
-      if (!kvkJson.success) return
-
-      // 🔥 STEP 1: FORCE KvK MAP ONLY
-      const kvkMap: Record<string, number> = {}
-
-      kvkJson.data.forEach((p: any) => {
-        const id = clean(p.id)
-
-        // 👇 ONLY take kvkContribution (ignore everything else)
-        kvkMap[id] = Number(p.kvkContribution) || 0
-      })
-
-      console.log("KVK MAP SAMPLE:", Object.entries(kvkMap).slice(0,5))
-
-      // 🔥 STEP 2: MERGE STRICTLY WITH MEMBERS
-      const merged = membersJson.map((m: any) => {
-
-        const id = clean(m.id)
-
-        const kvk = kvkMap[id]
-
-        if (!kvk) {
-          console.log("❌ NO MATCH:", id, m.name)
-        }
-
-        return {
-          id,
-          name: m.name,
-          kvkContribution: kvk || 0
-        }
-      })
-
-      setMembers(merged)
+      setPlayers(cleaned)
 
     } catch (err) {
       console.error(err)
@@ -115,7 +86,7 @@ export default function GH20RulesPage() {
 
     const query = normalize(search)
 
-    const filtered = members
+    const filtered = players
       .map(p => ({
         ...p,
         score: getScore(normalize(p.name), query)
@@ -126,7 +97,7 @@ export default function GH20RulesPage() {
 
     setResults(filtered)
 
-  }, [search, members])
+  }, [search, players])
 
   return (
     <AppSidebar>
