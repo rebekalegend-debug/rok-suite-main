@@ -75,7 +75,21 @@ const tools = [
     iconHoverBg: 'group-hover:bg-rose-500/15',
     iconHoverColor: 'group-hover:text-rose-600',
   },
+// 🛡️ 20gh
+  {
+    href: '/20gh',
+    titleKey: 'tools.20gh.title',
+    descriptionKey: 'tools.20gh.description',
+    icon: Shield,
 
+    iconColor: 'text-amber-500',
+    iconGlow: 'drop-shadow-[0_0_6px_rgba(251,191,36,0.45)]',
+
+    hoverBorder: 'hover:border-amber-500/40',
+    hoverShadow: 'hover:shadow-amber-500/10',
+    iconHoverBg: 'group-hover:bg-amber-500/15',
+    iconHoverColor: 'group-hover:text-amber-500',
+  },
   // 🛡️ MGE
   {
     href: '/mge',
@@ -122,6 +136,24 @@ const tools = [
     hoverShadow: 'hover:shadow-pink-500/10',
     iconHoverBg: 'group-hover:bg-pink-500/15',
     iconHoverColor: 'group-hover:text-pink-600',
+  },
+
+
+  
+  // 🟣 20GH RANKLIST
+  {
+    href: '/20gh/ranklist',
+    titleKey: 'tools.20ghranklist.title',
+    descriptionKey: 'tools.20ghranklist.description',
+    icon: Trophy,
+
+    iconColor: 'text-violet-500',
+    iconGlow: 'drop-shadow-[0_0_6px_rgba(139,92,246,0.45)]',
+
+    hoverBorder: 'hover:border-violet-500/40',
+    hoverShadow: 'hover:shadow-violet-500/10',
+    iconHoverBg: 'group-hover:bg-violet-500/15',
+    iconHoverColor: 'group-hover:text-violet-500',
   },
 
   // 🟣 MGE RANKLIST
