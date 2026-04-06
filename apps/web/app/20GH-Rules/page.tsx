@@ -21,10 +21,11 @@ export default function GH20RulesPage() {
     loadMembers()
   }, [])
 
-  // 🔥 normalize ID (THIS FIXES YOUR BUG)
+  // 🔥 STRONG ID NORMALIZER
   function normalizeId(id: any) {
     return String(id || "")
       .replace(/'/g, "")   // remove '
+      .replace(/\s+/g, "") // remove spaces
       .trim()
   }
 
@@ -32,8 +33,8 @@ export default function GH20RulesPage() {
     try {
 
       const [membersRes, kvkRes] = await Promise.all([
-        fetch("/api/mge-application"),      // 👈 ONLY names + ids
-        fetch("/api/mge-apply-data-get")    // 👈 ONLY kvk (ignore rest)
+        fetch("/api/mge-application"),
+        fetch("/api/mge-apply-data-get")
       ])
 
       const membersJson = await membersRes.json()
@@ -41,22 +42,22 @@ export default function GH20RulesPage() {
 
       if (!kvkJson.success) return
 
-      // ✅ build kvk map (ONLY using kvk field)
+      // ✅ build kvk map (normalized)
       const kvkMap: Record<string, number> = {}
 
       kvkJson.data.forEach((p: any) => {
-        const id = normalizeId(p.id)
-        kvkMap[id] = Number(p.kvkContribution) || 0
+        const clean = normalizeId(p.id)
+        kvkMap[clean] = Number(p.kvkContribution) || 0
       })
 
-      // ✅ merge using members as base
+      // ✅ merge (normalized)
       const merged = membersJson.map((m: any) => {
-        const id = normalizeId(m.id)
+        const clean = normalizeId(m.id)
 
         return {
-          id,
+          id: clean,
           name: m.name,
-          kvkContribution: kvkMap[id] || 0
+          kvkContribution: kvkMap[clean] || 0
         }
       })
 
