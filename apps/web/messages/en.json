@@ -38,6 +38,7 @@
     "events": "Events",
     "rokMail": "Mail Generator",
     "mge": "MGE",
+    "20gh": "20GH",
     "Tracking": "Tracking",
     "kingdom": "Kingdom",
     "violationTrack": "Violation",
@@ -52,6 +53,7 @@
     "stats": "KvK Stats",
     "kvkMap": "KvK Map",
     "kingdomStats": "Migration",
+    "20ghRanklist": "20GH Ranklist",
     "mgeRanklist": "MGE Ranklist"
   },
   "home": {
@@ -94,7 +96,13 @@
         "title": "RoK Mail",
         "description": "Format in-game mail with bold, italic, colors, symbols, and AI assistance"
       },
-      
+            "20gh": {
+        "title": "20GH",
+        "description": "20GH Registration page"
+      },
+      "20ghranklist": {
+        "title": "20GH Ranklist",
+        "description": "20GH Ranklist page"
       "mge": {
         "title": "MGE",
         "description": "MGE Registration page"
