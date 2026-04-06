@@ -21,43 +21,52 @@ export default function GH20RulesPage() {
     loadMembers()
   }, [])
 
-  // 🔥 STRONG ID NORMALIZER
-  function normalizeId(id: any) {
+  // 🔥 ULTRA CLEAN ID
+  function clean(id: any) {
     return String(id || "")
-      .replace(/'/g, "")   // remove '
-      .replace(/\s+/g, "") // remove spaces
+      .replace(/'/g, "")
+      .replace(/\s+/g, "")
       .trim()
   }
 
   async function loadMembers() {
     try {
 
-      const [membersRes, kvkRes] = await Promise.all([
-        fetch("/api/mge-application"),
-        fetch("/api/mge-apply-data-get")
-      ])
+      const membersRes = await fetch("/api/mge-application")
+      const kvkRes = await fetch("/api/mge-apply-data-get")
 
       const membersJson = await membersRes.json()
       const kvkJson = await kvkRes.json()
 
       if (!kvkJson.success) return
 
-      // ✅ build kvk map (normalized)
+      // 🔥 STEP 1: FORCE KvK MAP ONLY
       const kvkMap: Record<string, number> = {}
 
       kvkJson.data.forEach((p: any) => {
-        const clean = normalizeId(p.id)
-        kvkMap[clean] = Number(p.kvkContribution) || 0
+        const id = clean(p.id)
+
+        // 👇 ONLY take kvkContribution (ignore everything else)
+        kvkMap[id] = Number(p.kvkContribution) || 0
       })
 
-      // ✅ merge (normalized)
+      console.log("KVK MAP SAMPLE:", Object.entries(kvkMap).slice(0,5))
+
+      // 🔥 STEP 2: MERGE STRICTLY WITH MEMBERS
       const merged = membersJson.map((m: any) => {
-        const clean = normalizeId(m.id)
+
+        const id = clean(m.id)
+
+        const kvk = kvkMap[id]
+
+        if (!kvk) {
+          console.log("❌ NO MATCH:", id, m.name)
+        }
 
         return {
-          id: clean,
+          id,
           name: m.name,
-          kvkContribution: kvkMap[clean] || 0
+          kvkContribution: kvk || 0
         }
       })
 
@@ -123,9 +132,7 @@ export default function GH20RulesPage() {
     <AppSidebar>
       <div className="max-w-4xl mx-auto p-6 space-y-8">
 
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold">🏆 20GH Rules</h1>
-        </div>
+        <h1 className="text-4xl font-bold text-center">🏆 20GH Rules</h1>
 
         <section className="p-6 rounded-2xl bg-gradient-to-br from-purple-500/10 via-indigo-500/5 to-blue-500/10 border border-purple-400/20 space-y-4">
 
@@ -141,7 +148,7 @@ export default function GH20RulesPage() {
           />
 
           {loading && (
-            <p className="text-sm text-white/60">Loading players...</p>
+            <p className="text-sm text-white/60">Loading...</p>
           )}
 
           <div className="space-y-2">
@@ -159,9 +166,7 @@ export default function GH20RulesPage() {
                       </div>
                     </div>
 
-                    <span className="text-xs">
-                      {kvk.label}
-                    </span>
+                    <span className="text-xs">{kvk.label}</span>
                   </div>
 
                   {p.kvkContribution < 100_000_000 && (
