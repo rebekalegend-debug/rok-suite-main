@@ -96,14 +96,15 @@
         "title": "RoK Mail",
         "description": "Format in-game mail with bold, italic, colors, symbols, and AI assistance"
       },
-            "20gh": {
+         "20gh": {
         "title": "20GH",
         "description": "20GH Registration page"
       },
       "20ghranklist": {
         "title": "20GH Ranklist",
         "description": "20GH Ranklist page"
-      "mge": {
+      },
+        "mge": {
         "title": "MGE",
         "description": "MGE Registration page"
       },
