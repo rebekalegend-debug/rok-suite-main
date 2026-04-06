@@ -5,9 +5,27 @@ function latestLilithDay(){
   d.setUTCDate(d.getUTCDate() - 1)
   return d.toISOString().slice(0,10)
 }
+async function sendDiscordAlert(message: string) {
+  await fetch("https://discord.com/api/webhooks/1490842853784682497/rk1fpHVh_B5nS1ecgF0JKCirG8m5jAduRH-6oTrll8nqEiLbFU0Q1EBiISe2J2m32Fjg", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      embeds: [
+        {
+          title: "🚨 Migration Scan Failed",
+          description: message,
+          color: 16711680 // red
+        }
+      ]
+    })
+  })
+}
+
 
 export async function GET(){
-
+let alertSent = false
   const base = "https://rok-quinn.vercel.app"
   const latest = latestLilithDay()
 
@@ -72,36 +90,88 @@ export async function GET(){
       const url =
       `https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?start=${day}&end=${day}&search=&server_id=${kingdom}`
 
-      let data:any = null
+ let data:any = null
+let success = false
 
-      for(let i = 0; i < 10; i++){
+for(let i = 0; i < 10; i++){
 
-        const r = await fetch(url,{
-          headers:{
-            pauthorization:process.env.PAUTH!,
-            bauthorization:process.env.BAUTH!,
-            lang:"en_US"
-          }
-        })
+const controller = new AbortController()
+const timeout = setTimeout(() => controller.abort(), 15000) // 15s
 
-        const text = await r.text()
+let r
 
-        try {
-          data = JSON.parse(text)
-        } catch {
-          console.error("Lilith HTML:", text.slice(0,100))
-          data = null
-        }
+try {
+  r = await fetch(url,{
+    headers:{
+      pauthorization:process.env.PAUTH!,
+      bauthorization:process.env.BAUTH!,
+      lang:"en_US"
+    },
+    signal: controller.signal
+  })
+} catch (err) {
+  console.error("Fetch failed or timed out")
 
-        if(data?.data?.length > 0){
-          console.log("Snapshot ready:", kingdom, data.data.length)
-          break
-        }
+  if(!alertSent){
+    alertSent = true
+    await sendDiscordAlert(`🌐 API TIMEOUT\nThe Lilith API is not responding.`)
+  }
 
-        console.log("Retry:", kingdom, day)
-        await new Promise(r => setTimeout(r,60000))
-      }
+  break
+} finally {
+  clearTimeout(timeout)
+}
 
+  const text = await r.text()
+if(text.includes("Unauthorized") || text.includes("401")){
+  console.error("Auth error detected")
+
+  if(!alertSent){
+    alertSent = true
+
+    await sendDiscordAlert(
+      `🔐 AUTH ERROR
+Tokens are invalid or expired.
+Fix Vercel environment variables immediately.`
+    )
+  }
+
+  success = false
+  break
+}
+  try {
+    data = JSON.parse(text)
+  } catch {
+    console.error("Lilith HTML:", text.slice(0,100))
+    data = null
+  }
+
+  if(data?.data?.length > 0){
+    console.log("Snapshot ready:", kingdom, data.data.length)
+    success = true
+    break
+  }
+
+  console.log("Retry:", kingdom, day)
+
+  await new Promise(r => setTimeout(r,60000))
+}
+
+if(!success && !alertSent){
+  alertSent = true
+
+  await sendDiscordAlert(
+    `🚨 Migration Scan FAILED
+Date: ${day}
+Kingdom: ${kingdom}
+Likely cause: invalid tokens in Vercel environment variables.`
+  )
+}
+if(!success){
+  continue
+}
+
+      
       await fetch(`${base}/api/migration-sync`,{
         method:"POST",
         headers:{
