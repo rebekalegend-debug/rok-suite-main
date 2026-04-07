@@ -104,17 +104,17 @@ await refreshTokens()
       const url =
       `https://plat-rok-gametools-global-api.lilithgames.com/api/kindomMember?start=${day}&end=${day}&search=&server_id=${kingdom}`
 
- let data:any = null
+let data: any = null
 let success = false
-      
 let refreshCount = 0
+let text = "" // ✅ move outside
 
 for(let i = 0; i < 10; i++){
 
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), 15000)
 
-  let r
+  let r: Response | null = null
 
   try {
     r = await fetch(url,{
@@ -138,44 +138,66 @@ for(let i = 0; i < 10; i++){
     clearTimeout(timeout)
   }
 
-if(!r) break
+  if(!r) break
 
-console.log("STATUS:", r.status)
+  console.log("STATUS:", r.status)
 
-const text = await r.text()
+  text = await r.text()
 
-console.log("RESPONSE PREVIEW:", text.slice(0,300))
+  console.log("RESPONSE PREVIEW:", text.slice(0,300))
 
-// 🚫 Detect blocking
-if(text.includes("<html") || text.includes("cloudflare")){
-  console.error("🚫 BLOCKED BY CLOUDFLARE")
+  // 🚫 Detect blocking
+  if(text.includes("<html") || text.includes("cloudflare")){
+    console.error("🚫 BLOCKED BY CLOUDFLARE")
 
-  if(!alertSent){
-    alertSent = true
-    await sendDiscordAlert("🚫 API BLOCKED (Cloudflare / Bot Protection)")
+    if(!alertSent){
+      alertSent = true
+      await sendDiscordAlert("🚫 API BLOCKED (Cloudflare / Bot Protection)")
+    }
+
+    break
   }
 
-  break
-}
+  // 🔐 AUTH HANDLING
+  if(text.includes("Unauthorized") || text.includes("401")){
+    if(refreshCount < 2){
+      console.error("Auth error → refreshing tokens")
+
+      await refreshTokens()
+      refreshCount++
+
+      i--
+      continue
+    } else {
+      console.error("Auth failed after refresh", {
+        status: r.status,
+        body: text.slice(0,200)
+      })
+
+      if(!alertSent){
+        alertSent = true
+        await sendDiscordAlert("🔐 AUTH ERROR - token refresh failed")
+      }
+
+      break
+    }
   }
 
-  // ✅ PARSE HERE (INSIDE LOOP)
+  // ✅ PARSE
   try {
     data = JSON.parse(text)
   } catch {
-    console.error("Lilith HTML:", text.slice(0,100))
+    console.error("Invalid JSON:", text.slice(0,100))
     data = null
   }
 
-  // ✅ SUCCESS CHECK HERE
-if(data?.data?.length > 0){
-  console.log("Snapshot ready:", kingdom, data.data.length)
-  success = true
-
-  lastSuccessfulDay = day // ✅ TRACK REAL SUCCESS
-
-  break
-}
+  // ✅ SUCCESS
+  if(data?.data?.length > 0){
+    console.log("Snapshot ready:", kingdom, data.data.length)
+    success = true
+    lastSuccessfulDay = day
+    break
+  }
 
   console.log("Retry:", kingdom, day)
 
