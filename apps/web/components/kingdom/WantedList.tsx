@@ -1055,11 +1055,11 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
       }
 
       // 🔍 SEARCH FROM YOUR 3237 DATA
-      const results = players
-        .filter(p =>
-          p.name.toLowerCase().includes(value.toLowerCase())
-        )
-        .slice(0, 5); // limit results
+  const results = players
+  .filter(p =>
+    p.Name?.toLowerCase().includes(value.toLowerCase())
+  )
+  .slice(0, 5);
 
       setSearchResults(results);
       setShowResults(true);
@@ -1076,23 +1076,23 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
           key={i}
           onClick={() => {
             // ✅ AUTOFILL EVERYTHING
-            setNewPlayer({
-              governorId: String(p.governorId),
-              name: p.name,
-              power: String(p.power2 || ''),
-              alliance: p.alliance || '',
-              reason: '',
-              zero: 'no'
-            });
+          setNewPlayer({
+  governorId: String(p.ID),
+  name: p.Name,
+  power: String(p.Power || ''),
+  alliance: '', // you don't have this in 3237 sheet
+  reason: '',
+  zero: 'no'
+});
 
             setShowResults(false);
           }}
           className="px-3 py-2 cursor-pointer hover:bg-[var(--background-secondary)]"
         >
-          <div className="text-sm font-medium">{p.name}</div>
-          <div className="text-xs opacity-60">
-            {p.alliance} • {p.power2?.toLocaleString()}
-          </div>
+         <div className="text-sm font-medium">{p.Name}</div>
+<div className="text-xs opacity-60">
+  {Number(p.Power).toLocaleString()}
+</div>
         </div>
       ))}
 
