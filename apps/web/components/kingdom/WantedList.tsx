@@ -122,7 +122,8 @@ const REASONS = [
   "no"
 ];
 
-  
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+const [showResults, setShowResults] = useState(false);
   // Sort state
   const [sortRules, setSortRules] = useState<SortRule[]>(DEFAULT_SORT_RULES);
 
@@ -265,10 +266,10 @@ setPlayers(mergedPlayers);
 
 const handleSave = async () => {
   // ✅ VALIDATION (PUT HERE)
-  if (!newPlayer.governorId || !newPlayer.name) {
-    alert("Governor ID and Name are required");
-    return;
-  }
+if (!newPlayer.governorId) {
+  alert("Please select a player from search");
+  return;
+}
 
   if (players.some(p => p.governorId === Number(newPlayer.governorId))) {
     alert("Player already exists");
@@ -1040,39 +1041,64 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 
       <h2 className="text-lg font-semibold text-[var(--foreground)]">Add Wanted Player</h2>
 
-      <input
-        placeholder="Governor ID"
-        value={newPlayer.governorId}
-        onChange={e => setNewPlayer(p => ({ ...p, governorId: e.target.value }))}
-        className="w-full px-3 py-2 rounded-lg bg-[var(--background-secondary)] border border-[var(--border)]"
-      />
+     <div className="relative">
+  <input
+    placeholder="Search player..."
+    value={newPlayer.name}
+    onChange={e => {
+      const value = e.target.value;
+      setNewPlayer(prev => ({ ...prev, name: value }));
 
-      <input
-  placeholder="Name"
-  value={newPlayer.name}
-  onChange={e => {
-    const value = e.target.value;
+      if (!value) {
+        setSearchResults([]);
+        return;
+      }
 
-    // update name first
-    setNewPlayer(prev => ({ ...prev, name: value }));
+      // 🔍 SEARCH FROM YOUR 3237 DATA
+      const results = players
+        .filter(p =>
+          p.name.toLowerCase().includes(value.toLowerCase())
+        )
+        .slice(0, 5); // limit results
 
-    // 🔍 AUTOFILL (PUT HERE)
-    const existing = players.find(p =>
-      p.name.toLowerCase() === value.toLowerCase()
-    );
+      setSearchResults(results);
+      setShowResults(true);
+    }}
+    className="w-full px-3 py-2 rounded-lg bg-[var(--background-secondary)] border border-[var(--border)]"
+  />
 
-    if (existing) {
-      setNewPlayer({
-        governorId: String(existing.governorId),
-        name: existing.name,
-        power: String(existing.power2 || ''),
-        alliance: existing.alliance || '',
-        reason: '',
-        zero: 'no'
-      });
-    }
-  }}
-/>
+  {/* 🔽 DROPDOWN RESULTS */}
+  {showResults && searchResults.length > 0 && (
+    <div className="absolute z-50 mt-1 w-full bg-[var(--background-card)] border border-[var(--border)] rounded-lg shadow-lg max-h-48 overflow-y-auto">
+
+      {searchResults.map((p, i) => (
+        <div
+          key={i}
+          onClick={() => {
+            // ✅ AUTOFILL EVERYTHING
+            setNewPlayer({
+              governorId: String(p.governorId),
+              name: p.name,
+              power: String(p.power2 || ''),
+              alliance: p.alliance || '',
+              reason: '',
+              zero: 'no'
+            });
+
+            setShowResults(false);
+          }}
+          className="px-3 py-2 cursor-pointer hover:bg-[var(--background-secondary)]"
+        >
+          <div className="text-sm font-medium">{p.name}</div>
+          <div className="text-xs opacity-60">
+            {p.alliance} • {p.power2?.toLocaleString()}
+          </div>
+        </div>
+      ))}
+
+    </div>
+  )}
+</div>
 
       <input
         placeholder="Power"
