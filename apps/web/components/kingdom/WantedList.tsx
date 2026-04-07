@@ -273,7 +273,27 @@ useEffect(() => {
     setUndoAction(null);
   };
 
+ if (!confirm("Delete this player?")) return;
 
+  try {
+    const res = await fetch('/api/wanted-delete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ governorId }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.error);
+
+    // ✅ remove instantly from UI
+    setPlayers(prev => prev.filter(p => p.governorId !== governorId));
+
+  } catch (err) {
+    alert("Failed to delete");
+    console.error(err);
+  }
+};
 
 const handleSave = async () => {
   // ✅ VALIDATION (PUT HERE)
@@ -882,32 +902,45 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
   {handled === 'pending' ? 'NO ACTION' : handled}
 </span>
                       </td>
-                      {isOfficer && (
-                        <td className="px-3 py-2.5 text-center">
-                          <div className="flex items-center justify-center gap-1">
-                            <button
-                              onClick={() => handleMarkStatus(player.governorId, player.name, handled === 'zeroed' ? null : 'zeroed')}
-                              className={`px-2 py-1 rounded text-[10px] font-semibold border transition-colors ${
-                                handled === 'zeroed'
-                                  ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400'
-                                  : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)] hover:text-emerald-400 hover:border-emerald-500/40'
-                              }`}
-                            >
-                              ZEROED
-                            </button>
-                            <button
-                              onClick={() => handleMarkStatus(player.governorId, player.name, handled === 'left' ? null : 'left')}
-                              className={`px-2 py-1 rounded text-[10px] font-semibold border transition-colors ${
-                                handled === 'left'
-                                  ? 'bg-sky-500/20 border-sky-500/40 text-sky-400'
-                                  : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)] hover:text-sky-400 hover:border-sky-500/40'
-                              }`}
-                            >
-                              LEFT
-                            </button>
-                          </div>
-                        </td>
-                      )}
+{isOfficer && (
+  <td className="px-3 py-2.5 text-center">
+    <div className="flex items-center justify-center gap-2">
+
+      {/* ❌ DELETE BUTTON */}
+      <button
+        onClick={() => handleDelete(player.governorId)}
+        className="text-red-500 hover:text-red-700 text-sm"
+        title="Delete player"
+      >
+        ❌
+      </button>
+
+      {/* EXISTING BUTTONS */}
+      <button
+        onClick={() => handleMarkStatus(player.governorId, player.name, handled === 'zeroed' ? null : 'zeroed')}
+        className={`px-2 py-1 rounded text-[10px] font-semibold border transition-colors ${
+          handled === 'zeroed'
+            ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400'
+            : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)] hover:text-emerald-400 hover:border-emerald-500/40'
+        }`}
+      >
+        ZEROED
+      </button>
+
+      <button
+        onClick={() => handleMarkStatus(player.governorId, player.name, handled === 'left' ? null : 'left')}
+        className={`px-2 py-1 rounded text-[10px] font-semibold border transition-colors ${
+          handled === 'left'
+            ? 'bg-sky-500/20 border-sky-500/40 text-sky-400'
+            : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)] hover:text-sky-400 hover:border-sky-500/40'
+        }`}
+      >
+        LEFT
+      </button>
+
+    </div>
+  </td>
+)}
                     </tr>
                   );
                 })
@@ -986,30 +1019,33 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                   )}
 
                   {/* Officer actions */}
-                  {isOfficer && (
-                    <div className="flex gap-2 pt-1 border-t border-[var(--border)]/50">
-                      <button
-                        onClick={() => handleMarkStatus(player.governorId, player.name, handled === 'zeroed' ? null : 'zeroed')}
-                        className={`flex-1 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${
-                          handled === 'zeroed'
-                            ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400'
-                            : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)] hover:text-emerald-400 hover:border-emerald-500/40'
-                        }`}
-                      >
-                        ZEROED
-                      </button>
-                      <button
-                        onClick={() => handleMarkStatus(player.governorId, player.name, handled === 'left' ? null : 'left')}
-                        className={`flex-1 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${
-                          handled === 'left'
-                            ? 'bg-sky-500/20 border-sky-500/40 text-sky-400'
-                            : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)] hover:text-sky-400 hover:border-sky-500/40'
-                        }`}
-                      >
-                        LEFT
-                      </button>
-                    </div>
-                  )}
+{isOfficer && (
+  <div className="flex gap-2 pt-1 border-t border-[var(--border)]/50">
+
+    {/* ❌ DELETE */}
+    <button
+      onClick={() => handleDelete(player.governorId)}
+      className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-red-500/30 text-red-400 hover:bg-red-500/10"
+    >
+      ❌
+    </button>
+
+    <button
+      onClick={() => handleMarkStatus(player.governorId, player.name, handled === 'zeroed' ? null : 'zeroed')}
+      className="flex-1 ..."
+    >
+      ZEROED
+    </button>
+
+    <button
+      onClick={() => handleMarkStatus(player.governorId, player.name, handled === 'left' ? null : 'left')}
+      className="flex-1 ..."
+    >
+      LEFT
+    </button>
+
+  </div>
+)}
                 </div>
               );
             })
