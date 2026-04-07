@@ -23,9 +23,9 @@ export async function GET() {
       Power: row[2]
     }));
 
-    return NextResponse.json(data);
+  return NextResponse.json(data);
 
-catch (err: any) {
+} catch (err: any) {
   console.error("GOOGLE API ERROR:", err);
   return NextResponse.json({ 
     error: err.message || 'Failed',
