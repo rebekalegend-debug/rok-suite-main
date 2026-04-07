@@ -31,13 +31,16 @@ async function refreshTokens(){
 
   pauth = data.pauth
   bauth = data.bauth
-
-  console.log("Tokens refreshed")
+console.log("Tokens refreshed:", {
+  pauth: pauth.slice(0,20),
+  bauth: bauth.slice(0,20)
+})
+  
 }
 
 export async function GET(){
 let alertSent = false
- 
+ let lastSuccessfulDay: string | null = null
   const latest = latestLilithDay()
 await refreshTokens()
   console.log("Latest Lilith day:", latest)
@@ -135,30 +138,25 @@ for(let i = 0; i < 10; i++){
     clearTimeout(timeout)
   }
 
-  if(!r) break
+if(!r) break
 
-  const text = await r.text()
+console.log("STATUS:", r.status)
 
-  // 🔐 AUTH HANDLING
-  if(text.includes("Unauthorized") || text.includes("401")){
-    if(refreshCount < 2){
-      console.error("Auth error → refreshing tokens")
+const text = await r.text()
 
-      await refreshTokens()
-      refreshCount++
+console.log("RESPONSE PREVIEW:", text.slice(0,300))
 
-      i--
-      continue
-    } else {
-      console.error("Auth failed even after refresh")
+// 🚫 Detect blocking
+if(text.includes("<html") || text.includes("cloudflare")){
+  console.error("🚫 BLOCKED BY CLOUDFLARE")
 
-      if(!alertSent){
-        alertSent = true
-        await sendDiscordAlert("🔐 AUTH ERROR - token refresh failed")
-      }
+  if(!alertSent){
+    alertSent = true
+    await sendDiscordAlert("🚫 API BLOCKED (Cloudflare / Bot Protection)")
+  }
 
-      break
-    }
+  break
+}
   }
 
   // ✅ PARSE HERE (INSIDE LOOP)
@@ -170,11 +168,14 @@ for(let i = 0; i < 10; i++){
   }
 
   // ✅ SUCCESS CHECK HERE
-  if(data?.data?.length > 0){
-    console.log("Snapshot ready:", kingdom, data.data.length)
-    success = true
-    break
-  }
+if(data?.data?.length > 0){
+  console.log("Snapshot ready:", kingdom, data.data.length)
+  success = true
+
+  lastSuccessfulDay = day // ✅ TRACK REAL SUCCESS
+
+  break
+}
 
   console.log("Retry:", kingdom, day)
 
@@ -212,7 +213,8 @@ if(!success){
     current.setUTCDate(current.getUTCDate() + 1)
   }
 
-  console.log("Done up to:", latest)
-await sendDiscordAlert(`Done up to ${latest}`, true)
-  return Response.json({ success:true })
-}
+  console.log("Done up to:", lastSuccessfulDay || "nothing")
+await sendDiscordAlert(
+  `Done up to ${lastSuccessfulDay || "nothing"}`,
+  true
+)
