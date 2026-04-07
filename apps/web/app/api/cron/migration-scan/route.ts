@@ -103,59 +103,65 @@ await refreshTokens()
 
  let data:any = null
 let success = false
+      
 let refreshCount = 0
+
 for(let i = 0; i < 10; i++){
 
-const controller = new AbortController()
-const timeout = setTimeout(() => controller.abort(), 15000) // 15s
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 15000)
 
-let r
+  let r
 
-try {
-  r = await fetch(url,{
-    headers:{
-     pauthorization: pauth,
-bauthorization: bauth,
-      lang:"en_US"
-    },
-    signal: controller.signal
-  })
-} catch (err) {
-  console.error("Fetch failed or timed out")
-
-  if(!alertSent){
-    alertSent = true
-    await sendDiscordAlert(`🌐 API TIMEOUT\nThe Lilith API is not responding.`)
-  }
-
-  break
-} finally {
-  clearTimeout(timeout)
-}
-
-  if(!r) break
-const text = await r.text()
-if(text.includes("Unauthorized") || text.includes("401")){
-  if(refreshCount < 2){
-    console.error("Auth error → refreshing tokens")
-
-    await refreshTokens()
-    refreshCount++
-
-    i--
-    continue
-  } else {
-    console.error("Auth failed even after refresh")
+  try {
+    r = await fetch(url,{
+      headers:{
+        pauthorization: pauth,
+        bauthorization: bauth,
+        lang:"en_US"
+      },
+      signal: controller.signal
+    })
+  } catch (err) {
+    console.error("Fetch failed or timed out")
 
     if(!alertSent){
       alertSent = true
-      await sendDiscordAlert("🔐 AUTH ERROR - token refresh failed")
+      await sendDiscordAlert(`🌐 API TIMEOUT\nThe Lilith API is not responding.`)
     }
 
     break
+  } finally {
+    clearTimeout(timeout)
   }
-}
-}
+
+  if(!r) break
+
+  const text = await r.text()
+
+  // 🔐 AUTH HANDLING
+  if(text.includes("Unauthorized") || text.includes("401")){
+    if(refreshCount < 2){
+      console.error("Auth error → refreshing tokens")
+
+      await refreshTokens()
+      refreshCount++
+
+      i--
+      continue
+    } else {
+      console.error("Auth failed even after refresh")
+
+      if(!alertSent){
+        alertSent = true
+        await sendDiscordAlert("🔐 AUTH ERROR - token refresh failed")
+      }
+
+      break
+    }
+  }
+
+  // ✅ PARSE HERE (INSIDE LOOP)
   try {
     data = JSON.parse(text)
   } catch {
@@ -163,6 +169,7 @@ if(text.includes("Unauthorized") || text.includes("401")){
     data = null
   }
 
+  // ✅ SUCCESS CHECK HERE
   if(data?.data?.length > 0){
     console.log("Snapshot ready:", kingdom, data.data.length)
     success = true
@@ -173,7 +180,6 @@ if(text.includes("Unauthorized") || text.includes("401")){
 
   await new Promise(r => setTimeout(r,60000))
 }
-
 if(!success && !alertSent){
   alertSent = true
 
