@@ -1,5 +1,5 @@
 import { google } from "googleapis"
-
+const base = "https://rok-quinn.vercel.app"
 function latestLilithDay(){
   const d = new Date()
   d.setUTCDate(d.getUTCDate() - 1)
@@ -22,13 +22,24 @@ async function sendDiscordAlert(message: string, success = false) {
     })
   })
 }
+let pauth = ""
+let bauth = ""
 
+async function refreshTokens(){
+  const res = await fetch(`${base}/api/tokens`)
+  const data = await res.json()
+
+  pauth = data.pauth
+  bauth = data.bauth
+
+  console.log("Tokens refreshed")
+}
 
 export async function GET(){
 let alertSent = false
-  const base = "https://rok-quinn.vercel.app"
+ 
   const latest = latestLilithDay()
-
+await refreshTokens()
   console.log("Latest Lilith day:", latest)
 
   // 🔑 GOOGLE AUTH
@@ -92,7 +103,7 @@ let alertSent = false
 
  let data:any = null
 let success = false
-
+let refreshCount = 0
 for(let i = 0; i < 10; i++){
 
 const controller = new AbortController()
@@ -103,8 +114,8 @@ let r
 try {
   r = await fetch(url,{
     headers:{
-      pauthorization:process.env.PAUTH!,
-      bauthorization:process.env.BAUTH!,
+     pauthorization: pauth,
+bauthorization: bauth,
       lang:"en_US"
     },
     signal: controller.signal
@@ -122,22 +133,28 @@ try {
   clearTimeout(timeout)
 }
 
-  const text = await r.text()
+  if(!r) break
+const text = await r.text()
 if(text.includes("Unauthorized") || text.includes("401")){
-  console.error("Auth error detected")
+  if(refreshCount < 2){
+    console.error("Auth error → refreshing tokens")
 
-  if(!alertSent){
-    alertSent = true
+    await refreshTokens()
+    refreshCount++
 
-    await sendDiscordAlert(
-      `🔐 AUTH ERROR
-Tokens are invalid or expired.
-Fix Vercel environment variables immediately.`
-    )
+    i--
+    continue
+  } else {
+    console.error("Auth failed even after refresh")
+
+    if(!alertSent){
+      alertSent = true
+      await sendDiscordAlert("🔐 AUTH ERROR - token refresh failed")
+    }
+
+    break
   }
-
-  success = false
-  break
+}
 }
   try {
     data = JSON.parse(text)
