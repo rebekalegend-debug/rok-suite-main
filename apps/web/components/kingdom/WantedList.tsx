@@ -273,7 +273,8 @@ useEffect(() => {
     setUndoAction(null);
   };
 
- if (!confirm("Delete this player?")) return;
+const handleDelete = async (governorId: number) => {
+  if (!confirm("Delete this player?")) return;
 
   try {
     const res = await fetch('/api/wanted-delete', {
