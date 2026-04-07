@@ -273,8 +273,8 @@ useEffect(() => {
     setUndoAction(null);
   };
 
-const handleDelete = async (governorId: number) => {
-  if (!confirm("Delete this player?")) return;
+const handleDelete = async (governorId: number, name: string) => {
+  if (!confirm(`Delete ${name}?`)) return;
 
   try {
     const res = await fetch('/api/wanted-delete', {
@@ -287,7 +287,6 @@ const handleDelete = async (governorId: number) => {
 
     if (!res.ok) throw new Error(data.error);
 
-    // ✅ remove instantly from UI
     setPlayers(prev => prev.filter(p => p.governorId !== governorId));
 
   } catch (err) {
@@ -295,7 +294,7 @@ const handleDelete = async (governorId: number) => {
     console.error(err);
   }
 };
-
+  
 const handleSave = async () => {
   // ✅ VALIDATION (PUT HERE)
 if (!newPlayer.governorId) {
@@ -909,7 +908,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 
       {/* ❌ DELETE BUTTON */}
       <button
-        onClick={() => handleDelete(player.governorId)}
+        onClick={() => handleDelete(player.governorId, player.name)}
         className="text-red-500 hover:text-red-700 text-sm"
         title="Delete player"
       >
@@ -1025,7 +1024,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
 
     {/* ❌ DELETE */}
     <button
-      onClick={() => handleDelete(player.governorId)}
+      onClick={() => handleDelete(player.governorId, player.name)}
       className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-red-500/30 text-red-400 hover:bg-red-500/10"
     >
       ❌
