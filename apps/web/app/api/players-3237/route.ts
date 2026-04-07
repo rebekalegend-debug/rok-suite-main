@@ -25,7 +25,11 @@ export async function GET() {
 
     return NextResponse.json(data);
 
-  } catch (err) {
-    return NextResponse.json({ error: 'Failed' }, { status: 500 });
-  }
+catch (err: any) {
+  console.error("GOOGLE API ERROR:", err);
+  return NextResponse.json({ 
+    error: err.message || 'Failed',
+    details: err.toString()
+  }, { status: 500 });
+}
 }
