@@ -235,8 +235,12 @@ if(!success){
     current.setUTCDate(current.getUTCDate() + 1)
   }
 
-  console.log("Done up to:", lastSuccessfulDay || "nothing")
+console.log("Done up to:", lastSuccessfulDay || "nothing")
+
 await sendDiscordAlert(
   `Done up to ${lastSuccessfulDay || "nothing"}`,
   true
 )
+
+return Response.json({ success: true })
+}
