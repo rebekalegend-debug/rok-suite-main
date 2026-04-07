@@ -99,6 +99,30 @@ export default function WantedList() {
   const [handledFilter, setHandledFilter] = useState<'all' | 'pending' | 'zeroed' | 'left'>('all');
  
 
+const [showAddModal, setShowAddModal] = useState(false);
+const [newPlayer, setNewPlayer] = useState({
+  governorId: '',
+  name: '',
+  power: '',
+  alliance: '',
+  reason: '',
+  zero: 'no'
+});
+const REASONS = [
+  "Farm too high power",
+  "Illegal Migrant",
+  "Needs to Migrate",
+  "Farm Killer",
+  "Noncompliance",
+  "KD Rule break",
+  "Rogue",
+  "Inactive",
+  "Deadweight",
+  "MGE Break",
+  "no"
+];
+
+  
   // Sort state
   const [sortRules, setSortRules] = useState<SortRule[]>(DEFAULT_SORT_RULES);
 
@@ -237,6 +261,41 @@ setPlayers(mergedPlayers);
     setUndoAction(null);
   };
 
+
+
+const handleSave = async () => {
+  // ✅ VALIDATION (PUT HERE)
+  if (!newPlayer.governorId || !newPlayer.name) {
+    alert("Governor ID and Name are required");
+    return;
+  }
+
+  if (players.some(p => p.governorId === Number(newPlayer.governorId))) {
+    alert("Player already exists");
+    return;
+  }
+
+  // ⬇️ your existing fetch stays below
+  await fetch('/api/wanted-save', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      governorId: Number(newPlayer.governorId.trim()),
+      name: newPlayer.name.trim(),
+      power: Number(newPlayer.power.replace(/,/g, '')),
+      alliance: newPlayer.alliance.trim(),
+      reason: newPlayer.reason,
+      zero: newPlayer.zero
+    })
+  });
+
+  setShowAddModal(false);
+  fetchData();
+};
+
+  
   // Officer handling status: zeroed, left, or pending
   // Uses Supabase mark first, falls back to sheet "Zeroed" column
   const getHandledStatus = useCallback((player: WantedPlayer): 'pending' | 'zeroed' | 'left' => {
@@ -509,6 +568,17 @@ const hasActiveFilters =
               <span className="hidden sm:inline">Edit Sheet</span>
             </a>
           )}
+
+{isAdmin && (
+  <button
+    onClick={() => setShowAddModal(true)}
+    className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20 transition-colors"
+  >
+    ➕ Add Player
+  </button>
+)}
+
+          
         </div>
       </div>
 
@@ -963,7 +1033,102 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
           </div>
         </div>
       )}
+{/* Add Player Modal */}
+{showAddModal && (
+  <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="bg-[var(--background-card)] border border-[var(--border)] rounded-xl p-6 max-w-md w-full mx-4 shadow-xl space-y-3">
 
+      <h2 className="text-lg font-semibold text-[var(--foreground)]">Add Wanted Player</h2>
+
+      <input
+        placeholder="Governor ID"
+        value={newPlayer.governorId}
+        onChange={e => setNewPlayer(p => ({ ...p, governorId: e.target.value }))}
+        className="w-full px-3 py-2 rounded-lg bg-[var(--background-secondary)] border border-[var(--border)]"
+      />
+
+      <input
+  placeholder="Name"
+  value={newPlayer.name}
+  onChange={e => {
+    const value = e.target.value;
+
+    // update name first
+    setNewPlayer(prev => ({ ...prev, name: value }));
+
+    // 🔍 AUTOFILL (PUT HERE)
+    const existing = players.find(p =>
+      p.name.toLowerCase() === value.toLowerCase()
+    );
+
+    if (existing) {
+      setNewPlayer({
+        governorId: String(existing.governorId),
+        name: existing.name,
+        power: String(existing.power2 || ''),
+        alliance: existing.alliance || '',
+        reason: '',
+        zero: 'no'
+      });
+    }
+  }}
+/>
+
+      <input
+        placeholder="Power"
+        value={newPlayer.power}
+        onChange={e => setNewPlayer(p => ({ ...p, power: e.target.value }))}
+        className="w-full px-3 py-2 rounded-lg bg-[var(--background-secondary)] border border-[var(--border)]"
+      />
+
+      <input
+        placeholder="Alliance"
+        value={newPlayer.alliance}
+        onChange={e => setNewPlayer(p => ({ ...p, alliance: e.target.value }))}
+        className="w-full px-3 py-2 rounded-lg bg-[var(--background-secondary)] border border-[var(--border)]"
+      />
+
+      {/* Reason */}
+      <select
+        value={newPlayer.reason}
+        onChange={e => setNewPlayer(p => ({ ...p, reason: e.target.value }))}
+        className="w-full px-3 py-2 rounded-lg bg-[var(--background-secondary)] border border-[var(--border)]"
+      >
+        <option value="">Select reason</option>
+        {REASONS.map(r => (
+          <option key={r} value={r}>{r}</option>
+        ))}
+      </select>
+
+      {/* Zero */}
+      <select
+        value={newPlayer.zero}
+        onChange={e => setNewPlayer(p => ({ ...p, zero: e.target.value }))}
+        className="w-full px-3 py-2 rounded-lg bg-[var(--background-secondary)] border border-[var(--border)]"
+      >
+        <option value="yes">YES</option>
+        <option value="no">NO</option>
+      </select>
+
+      <div className="flex gap-2 pt-2">
+        <button
+          onClick={handleSave}
+          className="flex-1 py-2 rounded-lg font-medium bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500/30"
+        >
+          Save
+        </button>
+
+        <button
+          onClick={() => setShowAddModal(false)}
+          className="flex-1 py-2 rounded-lg font-medium bg-[var(--background-secondary)] border border-[var(--border)]"
+        >
+          Cancel
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
       {/* Password modal */}
       {showPasswordPrompt && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
