@@ -159,29 +159,36 @@ for(let i = 0; i < 10; i++){
   }
 
   // 🔐 AUTH HANDLING
-  if(text.includes("Unauthorized") || text.includes("401")){
-    if(refreshCount < 2){
-      console.error("Auth error → refreshing tokens")
+let parsed: any = null
 
-      await refreshTokens()
-      refreshCount++
+try {
+  parsed = JSON.parse(text)
+} catch {
+  console.error("Invalid JSON:", text.slice(0,100))
+  continue
+}
 
-      i--
-      continue
-    } else {
-      console.error("Auth failed after refresh", {
-        status: r.status,
-        body: text.slice(0,200)
-      })
+// 🔐 REAL AUTH CHECK
+if(parsed?.code === 401){
+  if(refreshCount < 2){
+    console.error("Auth error → refreshing tokens")
 
-      if(!alertSent){
-        alertSent = true
-        await sendDiscordAlert("🔐 AUTH ERROR - token refresh failed")
-      }
+    await refreshTokens()
+    refreshCount++
 
-      break
+    i--
+    continue
+  } else {
+    console.error("Auth failed after refresh", parsed)
+
+    if(!alertSent){
+      alertSent = true
+      await sendDiscordAlert("🔐 AUTH ERROR - token refresh failed")
     }
+
+    break
   }
+}
 
   // ✅ PARSE
   try {
@@ -192,12 +199,13 @@ for(let i = 0; i < 10; i++){
   }
 
   // ✅ SUCCESS
-  if(data?.data?.length > 0){
-    console.log("Snapshot ready:", kingdom, data.data.length)
-    success = true
-    lastSuccessfulDay = day
-    break
-  }
+if(parsed?.code === 200 && parsed?.data?.length > 0){
+  data = parsed
+  console.log("Snapshot ready:", kingdom, parsed.data.length)
+  success = true
+  lastSuccessfulDay = day
+  break
+}
 
   console.log("Retry:", kingdom, day)
 
