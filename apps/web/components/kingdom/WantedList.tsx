@@ -73,7 +73,11 @@ interface SortRule {
   field: SortableField;
   direction: 'asc' | 'desc';
 }
-
+type KingdomPlayer = {
+  ID: string;
+  Name: string;
+  Power: string;
+};
 const DEFAULT_SORT_RULES: SortRule[] = [
   { field: 'handled', direction: 'asc' },
   { field: 'power', direction: 'desc' },
@@ -122,7 +126,7 @@ const REASONS = [
   "no"
 ];
 
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<KingdomPlayer[]>([]);
 const [showResults, setShowResults] = useState(false);
   // Sort state
   const [sortRules, setSortRules] = useState<SortRule[]>(DEFAULT_SORT_RULES);
@@ -140,7 +144,7 @@ const [showResults, setShowResults] = useState(false);
   // Undo state
   const [undoAction, setUndoAction] = useState<UndoAction | null>(null);
   const undoTimerRef = useRef<NodeJS.Timeout | null>(null);
-
+const [allPlayers, setAllPlayers] = useState<KingdomPlayer[]>([]);
   // Refresh state
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastRefreshed, setLastRefreshed] = useState<Date | null>(null);
@@ -211,7 +215,14 @@ setPlayers(mergedPlayers);
       setPassword('');
     }
   };
-
+useEffect(() => {
+  fetch('/api/players-3237') // make sure this matches your route name
+    .then(res => res.json())
+    .then(data => {
+      console.log("3237 players:", data); // debug
+      setAllPlayers(data);
+    });
+}, []);
   const handleMarkStatus = async (governorId: number, playerName: string, status: OfficerMark | null) => {
     // Save previous state for undo
     const previousStatus = officerMarks.get(governorId) || null;
@@ -1049,13 +1060,14 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
       const value = e.target.value;
       setNewPlayer(prev => ({ ...prev, name: value }));
 
-      if (!value) {
-        setSearchResults([]);
-        return;
-      }
+     if (!value) {
+  setSearchResults([]);
+  setShowResults(false); // 🔥 important
+  return;
+}
 
       // 🔍 SEARCH FROM YOUR 3237 DATA
-  const results = players
+const results = allPlayers
   .filter(p =>
     p.Name?.toLowerCase().includes(value.toLowerCase())
   )
@@ -1076,11 +1088,11 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
           key={i}
           onClick={() => {
             // ✅ AUTOFILL EVERYTHING
-          setNewPlayer({
+         setNewPlayer({
   governorId: String(p.ID),
   name: p.Name,
   power: String(p.Power || ''),
-  alliance: '', // you don't have this in 3237 sheet
+  alliance: '',
   reason: '',
   zero: 'no'
 });
