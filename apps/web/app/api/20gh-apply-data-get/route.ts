@@ -33,7 +33,7 @@ export async function GET() {
     // --- Saved list sheet ---
 const listRes = await sheets.spreadsheets.values.get({
   spreadsheetId,
- range: "List 2!A1:N"
+ range: "List 2!A1:O"
 })
 
 const listRows = listRes.data.values || []
