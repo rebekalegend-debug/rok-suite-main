@@ -111,6 +111,12 @@ export async function POST(req: Request) {
   const formData = await req.formData()
 const ghFile = formData.get("ghImage") as File | null
 const currentGH = formData.get("currentGH") as string
+ const parsedGH = Number(currentGH)
+
+if (!currentGH || isNaN(parsedGH)) {
+  console.warn("Invalid GH value:", currentGH)
+}
+  
   const gearFile = formData.get("equipment") as File | null
   const id = formData.get("id") as string
   const name = formData.get("name") as string
@@ -127,9 +133,12 @@ const currentGH = formData.get("currentGH") as string
   if (!file) return ""
 
   const buffer = Buffer.from(await file.arrayBuffer())
-  const fileExt = file.name.split('.').pop()
+const allowed = ["png","jpg","jpeg","webp"]
+const fileExt = allowed.includes(file.name.split('.').pop()?.toLowerCase() || "")
+  ? file.name.split('.').pop()?.toLowerCase()
+  : "png"
 
-  const filePath = `${folder}/20gh_${userId}.${fileExt}`
+  const filePath = `${folder}/20gh_${userId}_${Date.now()}.${fileExt}`
 
   const { error } = await supabase.storage
     .from("mge-screenshots")
@@ -169,7 +178,13 @@ const ghUrl = await uploadFile(ghFile, id, "gh") // 🔥 NEW
   })
 
   const headers = headerRes.data.values?.[0] || []
-  const col = (name:string) => headers.indexOf(name)
+ const col = (name: string) => {
+  const index = headers.indexOf(name)
+  if (index === -1) {
+    throw new Error(`Column "${name}" not found in sheet`)
+  }
+  return index
+}
 
   const row = new Array(headers.length).fill("")
 
@@ -185,7 +200,7 @@ const ghUrl = await uploadFile(ghFile, id, "gh") // 🔥 NEW
   row[col("ID")] = id
   row[col("Name")] = name
   row[col("Commander")] = commander
-  row[col("Current GH")] = currentGH
+  row[col("Current GH")] = isNaN(parsedGH) ? "" : parsedGH
   row[col("GH IMG")] = ghUrl
   row[col("Skills")] = skills
   row[col("Equipment")] = gearUrl
