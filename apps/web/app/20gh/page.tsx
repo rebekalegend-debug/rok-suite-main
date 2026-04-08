@@ -442,7 +442,6 @@ function formatUTC(date: Date) {
 }
   
 return (
-<>
  <AppSidebar>
 
 {/* GH EXAMPLE MODAL */}
@@ -461,38 +460,36 @@ return (
 
 {/* EXISTING POPUP */}
 {TwentyGhClosed && (
-  <div className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none">
+  <div
+    className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none"
+    style={{ left: '260px' }}
+  >
+    <div className="bg-zinc-900/95 rounded-xl p-6 w-[340px] text-center flex flex-col gap-4 shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
+      <div className="text-lg font-semibold text-yellow-400">
+        ⚔️ Closed ⚔️
+      </div>
 
-  {/* POPUP - fixed overlay */}
-  {TwentyGhClosed && (
-    <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none"
-      style={{ left: '260px' }}
-    >
-      <div className="bg-zinc-900/95 rounded-xl p-6 w-[340px] text-center flex flex-col gap-4 shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
-        <div className="text-lg font-semibold text-yellow-400">
-          ⚔️ Closed ⚔️
-        </div>
-        <div className="text-sm leading-relaxed space-y-2">
-          <div className="text-emerald-400 font-semibold text-base">
-            {TwentyGhClosed
-  ? "Registration opens in "
-  : "20GH Registration closes in "}
+      <div className="text-sm leading-relaxed space-y-2">
+        <div className="text-emerald-400 font-semibold text-base">
+          {TwentyGhClosed
+            ? "Registration opens in "
+            : "20GH Registration closes in "}
+
           {countdown.days > 0 && `${countdown.days}D `}
-{countdown.hours === 0 && countdown.minutes === 0 && countdown.seconds === 0
-  ? (countdown.mode === "OPEN"
-      ? "Closing now..."
-      : "Opening now...")
-  : `${String(countdown.hours).padStart(2,"0")}:${String(countdown.minutes).padStart(2,"0")}:${String(countdown.seconds).padStart(2,"0")}`
-}
-          </div>
-          <div className="text-xs text-zinc-400">
-            at {formatUTC(countdown.target)}
-          </div>
+          {countdown.hours === 0 && countdown.minutes === 0 && countdown.seconds === 0
+            ? (countdown.mode === "OPEN"
+                ? "Closing now..."
+                : "Opening now...")
+            : `${String(countdown.hours).padStart(2,"0")}:${String(countdown.minutes).padStart(2,"0")}:${String(countdown.seconds).padStart(2,"0")}`}
+        </div>
+
+        <div className="text-xs text-zinc-400">
+          at {formatUTC(countdown.target)}
         </div>
       </div>
     </div>
-  )}
+  </div>
+)}
 
   {/* PAGE CONTENT - only this part blurs */}
   <div className="flex justify-center items-start">
