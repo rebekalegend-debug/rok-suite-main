@@ -403,7 +403,7 @@ setPlayers((prev:any[]) =>
   <input
     type="number"
     className="w-20 bg-zinc-800 border border-zinc-600 rounded px-2 text-center"
-    value={player.ghHave || 0}
+    value={player.ghHave ?? 0}
     onChange={(e) => {
       const value = Number(e.target.value) || 0
 
@@ -645,7 +645,7 @@ const sheetPlayers = json.data
 .map((p:any)=>({
 
   ...p,
-ghHave: Number(p.ghHave || 0),
+ghHave: Number(p["GH Have"] || 0),
   main: p["Main Troop Type"] || p.main
 
 }))
