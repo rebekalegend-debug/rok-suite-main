@@ -891,6 +891,7 @@ onChange={(e)=>{
   }
 }}
 />
+
 </label>
 
 </div>
@@ -900,11 +901,8 @@ onChange={(e)=>{
     🖼️ Current GH's image:
   </label>
 
-<label
-onClick={(e) => {
-  e.preventDefault()
-  setShowGhExample(true)
-}}
+<div
+  onClick={() => setShowGhExample(true)}
   className={`flex items-center gap-3 rounded-lg px-4 py-3 cursor-pointer transition
   ${missing.ghImage
     ? "border-red-500 shadow-[0_0_10px_rgba(255,60,60,0.7)]"
@@ -926,39 +924,38 @@ onClick={(e) => {
     <circle cx="12" cy="13" r="4"/>
   </svg>
 
-  {/* TEXT */}
+ {/* TEXT */}
   <span className={`text-sm ${
     ghFile ? "text-[#FFD76B]" : "text-slate-400"
   }`}>
     {ghFile ? ghFile.name : "Tap to upload screenshot"}
   </span>
-
-  {/* HIDDEN INPUT */}
-  <input
-    ref={ghInputRef}
-    type="file"
-    name="ghImage"
-    accept="image/*"
-    className="hidden"
-    onChange={async (e)=>{
-  const file = e.target.files?.[0] || null
-  setGhFile(file)
-
-  if(file){
-    setMissing(prev => ({ ...prev, ghImage:false }))
-
-    // OCR
-    const detected = await readGHFromImage(file)
-
-    if (detected) {
-      setGhNumber(detected)
-    }
-  }
-}}
-  />
-</label>
 </div>
 
+
+
+</div>
+<input
+  ref={ghInputRef}
+  type="file"
+  name="ghImage"
+  accept="image/*"
+  className="hidden"
+  onChange={async (e)=>{
+    const file = e.target.files?.[0] || null
+    setGhFile(file)
+
+    if(file){
+      setMissing(prev => ({ ...prev, ghImage:false }))
+
+      const detected = await readGHFromImage(file)
+
+      if (detected) {
+        setGhNumber(detected)
+      }
+    }
+  }}
+/>
 {/* GH NUMBER */}
 <div className="pt-4 border-t border-[var(--border)]">
   <label className="form-label">
