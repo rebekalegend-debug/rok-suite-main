@@ -130,7 +130,9 @@ const [alreadyApplied,setAlreadyApplied] = useState(false)
 const [commanderBlurred,setCommanderBlurred] = useState(false)
 const memberInputRef = useRef<HTMLInputElement>(null)
 const commanderInputRef = useRef<HTMLInputElement>(null)
-const [commanderSearch,setCommanderSearch] = useState("")
+const ghInputRef = useRef<HTMLInputElement | null>(null)
+  
+  const [commanderSearch,setCommanderSearch] = useState("")
 const [memberFocus,setMemberFocus] = useState(false)
 const [commanderFocus,setCommanderFocus] = useState(false)
   const [commanderTouched,setCommanderTouched] = useState(false)
@@ -183,7 +185,8 @@ const [missing,setMissing] = useState({
   rank:false,
   kvk:false,
   troop:false,
-  equipment:false
+  equipment:false,
+  ghImage: false
 })
 
 function triggerConfirmError() {
@@ -327,10 +330,10 @@ async function submitApplication(){
     kvk: !form.kvkSpending,
     troop: !form.troopType,
     equipment: false,
-  gh: !ghNumber,
-ghImage: !ghFile
-  
-  }
+ ghNumber: !ghNumber,
+ghImage: !ghFile,
+ghNumber: false 
+}
 
   setMissing(newMissing)
 
@@ -443,20 +446,6 @@ function formatUTC(date: Date) {
   
 return (
  <AppSidebar>
-
-{/* GH EXAMPLE MODAL */}
-{showGhExample && (
-  <div
-    className="fixed inset-0 bg-black/90 z-[99999] flex items-center justify-center cursor-pointer"
-    onClick={() => setShowGhExample(false)}
-  >
-    <img
-      src="https://media.discordapp.net/attachments/1473350200276943002/1491221315842211860/Screenshot_2026-04-14_063812.png"
-      alt="GH Example"
-      className="max-w-full max-h-full object-contain"
-    />
-  </div>
-)}
 
 {/* EXISTING POPUP */}
 {TwentyGhClosed && (
@@ -895,31 +884,56 @@ onChange={(e)=>{
     🖼️ Current GH's image:
   </label>
 
-  <div
-    onClick={() => setShowGhExample(true)}
-    className="text-xs text-[#FFD76B] underline cursor-pointer mb-2"
+<label
+  onClick={(e) => {
+    e.preventDefault()
+    setShowGhExample(true)
+  }}
+  className={`flex items-center gap-3 rounded-lg px-4 py-3 cursor-pointer transition
+  ${missing.ghImage
+    ? "border-red-500 shadow-[0_0_10px_rgba(255,60,60,0.7)]"
+    : "gold-input hover:gold-glow"
+  }`}
+>
+
+  {/* ICON */}
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="22"
+    height="22"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
   >
-    (Full screen image) Click or Tap here to see example!
-  </div>
+    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4l2-2h6l2 2h4a2 2 0 0 1 2 2z"/>
+    <circle cx="12" cy="13" r="4"/>
+  </svg>
 
-  <label className="flex items-center gap-3 rounded-lg px-4 py-3 cursor-pointer gold-input hover:gold-glow transition">
-    
-    <span className={`text-sm ${
-      ghFile ? "text-[#FFD76B]" : "text-slate-400"
-    }`}>
-      {ghFile ? ghFile.name : "Tap to upload GH screenshot"}
-    </span>
+  {/* TEXT */}
+  <span className={`text-sm ${
+    ghFile ? "text-[#FFD76B]" : "text-slate-400"
+  }`}>
+    {ghFile ? ghFile.name : "Tap to upload screenshot"}
+  </span>
 
-    <input
-      type="file"
-      accept="image/*"
-      className="hidden"
-      onChange={(e) => {
-        const file = e.target.files?.[0] || null
-        setGhFile(file)
-      }}
-    />
-  </label>
+  {/* HIDDEN INPUT */}
+  <input
+    ref={ghInputRef}
+    type="file"
+    name="ghImage"
+    accept="image/*"
+    className="hidden"
+    onChange={(e)=>{
+      const file = e.target.files?.[0] || null
+      setGhFile(file)
+
+      if(file){
+        setMissing(prev => ({ ...prev, ghImage:false }))
+      }
+    }}
+  />
+</label>
 </div>
 
 {/* GH NUMBER */}
@@ -1291,6 +1305,26 @@ I agree to follow all rules and accept any consequences if I break them.
 
     </div> {/* ROOT ISOLATION */}
   </div>
+
+{/* ✅ GH MODAL HERE */}
+{showGhExample && (
+  <div
+    className="fixed inset-0 bg-black/90 z-[99999] flex items-center justify-center cursor-pointer"
+    onClick={() => {
+      setShowGhExample(false)
+
+      setTimeout(() => {
+        ghInputRef.current?.click()
+      }, 100)
+    }}
+  >
+    <img
+      src="/20gh/Screenshot.png"
+      alt="GH Example"
+      className="max-w-full max-h-full object-contain"
+    />
+  </div>
+)}
 
 </AppSidebar>
 );
