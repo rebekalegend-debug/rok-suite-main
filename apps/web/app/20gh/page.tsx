@@ -347,9 +347,8 @@ async function submitApplication(){
     kvk: !form.kvkSpending,
     troop: !form.troopType,
     equipment: false,
- ghNumber: !ghNumber,
-ghImage: !ghFile,
-ghNumber: false 
+ ghNumber: false,
+ghImage: !ghFile
 }
 
   setMissing(newMissing)
