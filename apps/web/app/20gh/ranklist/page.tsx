@@ -1,7 +1,7 @@
 'use client'
 import { LogOut } from "lucide-react"
 import { useEffect, useState, useRef } from "react"
-import { getHeads, getPoints, kvkContributionPercent } from "@/utils/mgeRankLogic"
+import { getHeads, getPoints, kvkContributionPercent } from "@/utils/20ghRankLogic"
 import {
   DndContext,
   closestCenter
@@ -56,7 +56,14 @@ const [showEq,setShowEq] = useState(false)
 const initial =
   defaultPoints === "∞"
     ? Infinity
-    : Number(defaultPoints.replace("M",""))
+function parsePoints(val: string) {
+  if (val === "∞") return Infinity
+
+  const [kp] = val.split("/") // take only KP for editing
+  return Number(kp.replace("k", ""))
+}
+
+const initial = parsePoints(defaultPoints)
 
 const [value,setValue] = useState<number>(initial)
 const [editing,setEditing] = useState(false)
@@ -67,7 +74,7 @@ useEffect(() => {
   const newValue =
     pts === "∞"
       ? Infinity
-      : Number(pts.replace("M",""))
+    const newValue = parsePoints(pts)
 
   setValue(newValue)
 }, [rank, totalPlayers])
@@ -162,7 +169,9 @@ return (
     onClick={()=>setEditing(true)}
     className="cursor-pointer text-white hover:underline"
   >
-    {value === Infinity ? "∞" : value + "M"}
+  {defaultPoints === "∞"
+  ? "∞"
+  : defaultPoints}
   </span>
 )}
 
