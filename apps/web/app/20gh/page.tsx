@@ -2,6 +2,23 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { AppSidebar } from '@/components/AppSidebar';
+import Tesseract from "tesseract.js"
+
+async function readGHFromImage(file: File): Promise<string> {
+  const { data: { text } } = await Tesseract.recognize(file, "eng")
+
+  // find numbers like 1,271 or 1271
+  const matches = text.match(/\d{2,5}/g) || []
+
+  const numbers = matches.map(n => Number(n.replace(/,/g, "")))
+
+  // 🔥 FILTER (important)
+  const gh = numbers.find(n => n >= 1000 && n <= 2000)
+
+  return gh ? String(gh) : ""
+}
+
+
 declare global {
   interface Window {
     __TEST_TIME__?: string
@@ -925,13 +942,21 @@ onChange={(e)=>{
     accept="image/*"
     className="hidden"
     onChange={(e)=>{
-      const file = e.target.files?.[0] || null
-      setGhFile(file)
+     onChange={async (e)=>{
+  const file = e.target.files?.[0] || null
+  setGhFile(file)
 
-      if(file){
-        setMissing(prev => ({ ...prev, ghImage:false }))
-      }
-    }}
+  if(file){
+    setMissing(prev => ({ ...prev, ghImage:false }))
+
+    // 🔥 OCR AUTO READ
+    const detected = await readGHFromImage(file)
+
+    if (detected) {
+      setGhNumber(detected)
+    }
+  }
+}}
   />
 </label>
 </div>
