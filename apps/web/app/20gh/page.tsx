@@ -5,7 +5,8 @@ import { AppSidebar } from '@/components/AppSidebar';
 import Tesseract from "tesseract.js"
 
 async function readGHFromImage(file: File): Promise<string> {
-  const { data: { text } } = await Tesseract.recognize(file, "eng")
+ const LANGS = "eng+chi_sim+chi_tra+jpn+kor+rus+spa+fra+deu+por+ita+tur+vie+ara"
+  const { data: { text } } = await Tesseract.recognize(file, LANGS)
 
   console.log("OCR TEXT:", text)
 
