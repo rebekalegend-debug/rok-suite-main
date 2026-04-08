@@ -7,15 +7,31 @@ import Tesseract from "tesseract.js"
 async function readGHFromImage(file: File): Promise<string> {
   const { data: { text } } = await Tesseract.recognize(file, "eng")
 
-  // find numbers like 1,271 or 1271
-  const matches = text.match(/\d{2,5}/g) || []
+  console.log("OCR TEXT:", text) // 👈 DEBUG
 
-  const numbers = matches.map(n => Number(n.replace(/,/g, "")))
+  const normalized = text
+    .replace(/,/g, "")
+    .toLowerCase()
 
-  // 🔥 FILTER (important)
-  const gh = numbers.find(n => n >= 1000 && n <= 2000)
+  let match =
+    normalized.match(/(\d+(\.\d+)?)k/) ||  // 1.2k
+    normalized.match(/(\d{2,5})/)          // 1200
 
-  return gh ? String(gh) : ""
+  if (!match) return ""
+
+  let value = match[1]
+
+  let number = 0
+
+  if (normalized.includes("k")) {
+    number = Math.round(parseFloat(value) * 1000)
+  } else {
+    number = parseInt(value)
+  }
+
+  console.log("PARSED GH:", number) // 👈 DEBUG
+
+  return number ? String(number) : ""
 }
 
 
@@ -954,7 +970,13 @@ onChange={(e)=>{
     if(file){
       setMissing(prev => ({ ...prev, ghImage:false }))
 
-      const detected = await readGHFromImage(file)
+   const detected = await readGHFromImage(file)
+
+console.log("DETECTED GH:", detected) // 👈 ADD THIS
+
+if (detected) {
+  setGhNumber(detected)
+}
 
       if (detected) {
         setGhNumber(detected)
