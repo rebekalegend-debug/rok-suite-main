@@ -400,22 +400,9 @@ setPlayers((prev:any[]) =>
 </td>
 
 <td className="p-3" onPointerDown={stop}>
-  <input
-    type="number"
-    className="w-20 bg-zinc-800 border border-zinc-600 rounded px-2 text-center"
-    value={player.ghHave ?? 0}
-    onChange={(e) => {
-      const value = Number(e.target.value) || 0
-
-      setPlayers((prev:any[]) =>
-        prev.map(p =>
-          p.id === player.id
-            ? { ...p, ghHave: value }
-            : p
-        )
-      )
-    }}
-  />
+  <td className="p-3 text-center text-zinc-300">
+  {player.ghHave ?? 0}
+</td>
 </td>
   
       <td className="p-3" onPointerDown={stop}>{player.skills}</td>
