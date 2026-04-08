@@ -109,7 +109,8 @@ export async function POST(req: Request) {
 
   // USER FORM SUBMISSION
   const formData = await req.formData()
-
+const ghFile = formData.get("ghImage") as File | null
+const currentGH = formData.get("currentGH") as string
   const gearFile = formData.get("equipment") as File | null
   const id = formData.get("id") as string
   const name = formData.get("name") as string
@@ -122,30 +123,31 @@ export async function POST(req: Request) {
   const comment = formData.get("comment") as string
   const skills = formData.get("skills") as string
 
-  async function uploadFile(file: File | null, userId: string) {
-    if (!file) return ""
+  async function uploadFile(file: File | null, userId: string, folder: string) {
+  if (!file) return ""
 
-    const buffer = Buffer.from(await file.arrayBuffer())
-    const fileExt = file.name.split('.').pop()
-    const filePath = `equipment/20gh_${userId}.${fileExt}`   // ✅ prefixed so it doesn't clash with MGE files
+  const buffer = Buffer.from(await file.arrayBuffer())
+  const fileExt = file.name.split('.').pop()
 
-    const { error } = await supabase.storage
-      .from("mge-screenshots")
-      .upload(filePath, buffer, {
-        contentType: file.type,
-        upsert: true
-      })
+  const filePath = `${folder}/20gh_${userId}.${fileExt}`
 
-    if (error) throw error
+  const { error } = await supabase.storage
+    .from("mge-screenshots")
+    .upload(filePath, buffer, {
+      contentType: file.type,
+      upsert: true
+    })
 
-    const { data } = supabase.storage
-      .from("mge-screenshots")
-      .getPublicUrl(filePath)
+  if (error) throw error
 
-    return `${data.publicUrl}?t=${Date.now()}`
-  }
+  const { data } = supabase.storage
+    .from("mge-screenshots")
+    .getPublicUrl(filePath)
 
-  const gearUrl = await uploadFile(gearFile, id)
+  return `${data.publicUrl}?t=${Date.now()}`
+}
+ const gearUrl = await uploadFile(gearFile, id, "equipment")
+const ghUrl = await uploadFile(ghFile, id, "gh") // 🔥 NEW
 
   const sheetAuth = new google.auth.GoogleAuth({
     credentials:{
@@ -183,6 +185,8 @@ export async function POST(req: Request) {
   row[col("ID")] = id
   row[col("Name")] = name
   row[col("Commander")] = commander
+  row[col("Current GH")] = currentGH
+  row[col("GH IMG")] = ghUrl
   row[col("Skills")] = skills
   row[col("Equipment")] = gearUrl
   row[col("Commander Purpose")] = purpose
