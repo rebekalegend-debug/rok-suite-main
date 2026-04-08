@@ -87,7 +87,8 @@ return {
   kvkContribution: kvkMap[id] || 0,
   purpose: record["Commander Purpose"], 
   rg: list.rg,
-  eq: list.eq
+  eq: list.eq,
+  ghHave: Number(record["Current GH"] || 0)
 }
 
     })
