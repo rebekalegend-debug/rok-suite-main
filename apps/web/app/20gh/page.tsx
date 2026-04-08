@@ -139,6 +139,9 @@ const [skills,setSkills] = useState({
   skill3:0,
   skill4:0
 })
+
+const showGhExample = true //open always for testing, delete adter test
+  
 const [ghFile, setGhFile] = useState<File | null>(null)
 const [ghNumber, setGhNumber] = useState("")
 const [showGhExample, setShowGhExample] = useState(false)
