@@ -4,43 +4,51 @@ import React, { useState, useEffect, useRef } from 'react';
 import { AppSidebar } from '@/components/AppSidebar';
 import Tesseract from "tesseract.js"
 
+
+
+function cropOwnedArea(file: File): Promise<Blob> {
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.src = URL.createObjectURL(file)
+
+    img.onload = () => {
+      const canvas = document.createElement("canvas")
+      const ctx = canvas.getContext("2d")!
+
+      // 🔥 tuned for your screenshot layout
+      const cropX = img.width * 0.68
+      const cropY = img.height * 0.55
+      const cropW = img.width * 0.28
+      const cropH = img.height * 0.25
+
+      canvas.width = cropW
+      canvas.height = cropH
+
+      ctx.drawImage(
+        img,
+        cropX, cropY, cropW, cropH,
+        0, 0, cropW, cropH
+      )
+
+      canvas.toBlob(blob => resolve(blob!), "image/png")
+    }
+  })
+}
 async function readGHFromImage(file: File): Promise<string> {
-  const { data: { text } } = await Tesseract.recognize(file, "eng")
+  const cropped = await cropOwnedArea(file)
 
-  console.log("OCR TEXT:", text)
+  const { data: { text } } = await Tesseract.recognize(cropped, "eng")
 
-  const normalized = text
-    .replace(/\s+/g, " ")
-    .replace(/[|]/g, "1")   // OCR fix
-    .replace(/o/gi, "0")    // optional tweak
-    .toLowerCase()
-
-  const match = normalized.match(
-    /(owned|own|possessed|possed|possession|have|total|amount|count|qty|number|no\.?|nº|nr|anzahl|besitz|besitzt|propriété|possédé|cuenta|cantidad|tiene|拥有|持有|所持|所有|数|数量|保有|보유|소유|العدد|يملك|ملكية)[^\d]{0,10}([\d,]+)/i
-  )
+  const match = text.match(/([\d,]{3,})/)
 
   if (match) {
-    const number = match[2].replace(/,/g, "")
-    console.log("✅ MATCHED VALUE:", number)
-    return number
+    return match[1].replace(/,/g, "")
   }
 
-  // 🔥 FALLBACK (if keyword fails)
-  const fallback = normalized.match(/(\d{3,6})/g)
-
-  if (fallback) {
-    // take the biggest number (usually GH)
-    const biggest = fallback
-      .map(n => parseInt(n))
-      .sort((a, b) => b - a)[0]
-
-    console.log("⚠️ FALLBACK VALUE:", biggest)
-    return String(biggest)
-  }
-
-  console.log("❌ NOTHING FOUND")
   return ""
 }
+
+
 declare global {
   interface Window {
     __TEST_TIME__?: string
