@@ -148,7 +148,7 @@ const [commanderBlurred,setCommanderBlurred] = useState(false)
 const memberInputRef = useRef<HTMLInputElement>(null)
 const commanderInputRef = useRef<HTMLInputElement>(null)
 const ghInputRef = useRef<HTMLInputElement | null>(null)
-  
+  const [justClosed, setJustClosed] = useState(false)
   const [commanderSearch,setCommanderSearch] = useState("")
 const [memberFocus,setMemberFocus] = useState(false)
 const [commanderFocus,setCommanderFocus] = useState(false)
@@ -901,10 +901,10 @@ onChange={(e)=>{
   </label>
 
 <label
-  onClick={(e) => {
-    e.preventDefault()
-    setShowGhExample(true)
-  }}
+onClick={(e) => {
+  e.preventDefault()
+  setShowGhExample(true)
+}}
   className={`flex items-center gap-3 rounded-lg px-4 py-3 cursor-pointer transition
   ${missing.ghImage
     ? "border-red-500 shadow-[0_0_10px_rgba(255,60,60,0.7)]"
@@ -1331,16 +1331,18 @@ I agree to follow all rules and accept any consequences if I break them.
 
 {/* ✅ GH MODAL HERE */}
 {showGhExample && (
-  <div
-    className="fixed inset-0 bg-black/90 z-[99999] flex items-center justify-center cursor-pointer"
-    onClick={() => {
-      setShowGhExample(false)
+ <div
+  className="fixed inset-0 bg-black/90 z-[99999] flex items-center justify-center cursor-pointer"
+  onClick={(e) => {
+    e.stopPropagation() // 🔥 THIS FIXES EVERYTHING
 
-      setTimeout(() => {
-        ghInputRef.current?.click()
-      }, 100)
-    }}
-  >
+    setShowGhExample(false)
+
+    setTimeout(() => {
+      ghInputRef.current?.click()
+    }, 100)
+  }}
+>
     <img
       src="/20gh/Screenshot.png"
       alt="GH Example"
