@@ -31,6 +31,7 @@ type Player = {
   eq?: string
   purpose?: string
   ghHave?: number 
+  points?: string
 }
 const badge = "px-3 py-1 rounded-md text-xs font-semibold border"
 function Row({ player, rank, setPlayers, totalPlayers }: any) {
@@ -51,32 +52,13 @@ const eqRef = useRef<any>(null)
 const eq = player.eq || "N/A"
 const [showEq,setShowEq] = useState(false)
 
-  const defaultPoints = getPoints(rank, totalPlayers)
-
-const initial =
-  defaultPoints === "∞"
-    ? Infinity
-function parsePoints(val: string) {
-  if (val === "∞") return Infinity
-
-  const [kp] = val.split("/") // take only KP for editing
-  return Number(kp.replace("k", ""))
-}
-
-const initial = parsePoints(defaultPoints)
-
-const [value,setValue] = useState<number>(initial)
+  const defaultPoints = player.points || getPoints(rank, totalPlayers)
+const [value,setValue] = useState(defaultPoints)
+ 
 const [editing,setEditing] = useState(false)
   
 useEffect(() => {
-  const pts = getPoints(rank, totalPlayers)
-
-  const newValue =
-    pts === "∞"
-      ? Infinity
-    const newValue = parsePoints(pts)
-
-  setValue(newValue)
+  setValue(getPoints(rank, totalPlayers))
 }, [rank, totalPlayers])
   
   
@@ -154,24 +136,28 @@ return (
      <td className="p-3" onPointerDown={stop}>
 
 {editing ? (
-  <input
-    className="w-16 bg-zinc-800 border border-zinc-600 rounded px-1 text-center"
-    autoFocus
-    defaultValue={value}
-    onBlur={(e)=>{
-      const v = Number(e.target.value) || 0
-      setValue(v)
-      setEditing(false)
-    }}
-  />
+ <input
+  className="w-20 bg-zinc-800 border border-zinc-600 rounded px-1 text-center"
+  autoFocus
+  value={value}
+  onChange={(e)=>setValue(e.target.value)}
+  onBlur={()=>{
+  setPlayers((prev:any[]) =>
+    prev.map(p =>
+      p.id === player.id
+        ? { ...p, points: value }
+        : p
+    )
+  )
+  setEditing(false)
+}}
+/>
 ) : (
   <span
     onClick={()=>setEditing(true)}
     className="cursor-pointer text-white hover:underline"
   >
-  {defaultPoints === "∞"
-  ? "∞"
-  : defaultPoints}
+ {value}
   </span>
 )}
 
@@ -430,7 +416,7 @@ function parseRokMail(text:string, players:Player[]){
   const ranks = players.map((p,index)=>{
 
     const rank = index + 1
-    const pts = getPoints(rank, players.length)
+    const pts = p.points || getPoints(rank, players.length)
     const pointsText = pts === "∞" ? "Unlimited" : pts
 
     return `${rank}. ${p.name} - ${pointsText}`
@@ -552,7 +538,7 @@ let raw = mail
 const ranks = players.map((p,index)=>{
 
   const rank = index + 1
-  const pts = getPoints(rank, players.length)
+  const pts = p.points || getPoints(rank, players.length)
   const pointsText = pts === "∞" ? "Unlimited" : pts
 
   return `${rank}. ${p.name} - ${pointsText}`
@@ -573,7 +559,7 @@ async function saveList(updated:any[]) {
   return [
   p.id,
   getHeads(rank),
-  getPoints(rank, updated.length),
+  p.points || getPoints(rank, updated.length),
   rank,
   p.desiredRank,
   p.name,
