@@ -1022,7 +1022,7 @@ if (detected) {
 />
   {ghAuto && (
   <div className="text-xs text-yellow-400 mt-1">
-    ⚠️ Auto-detected from image — please verify and adjust if needed.
+    ⚠️ Owned GH auto-detected from image — please verify and adjust if needed.
   </div>
 )}
 </div>     
