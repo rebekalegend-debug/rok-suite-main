@@ -645,7 +645,7 @@ const sheetPlayers = json.data
 .map((p:any)=>({
 
   ...p,
-ghHave: Number(p["GH Have"] || 0),
+ghHave: Number(p["Current GH"] || 0),
   main: p["Main Troop Type"] || p.main
 
 }))
