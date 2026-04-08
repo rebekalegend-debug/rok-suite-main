@@ -140,8 +140,8 @@ const [skills,setSkills] = useState({
   skill4:0
 })
 
-const [showGhExample, setShowGhExample] = useState(true) //open always for testing, delete adter test
- // enable it back after test const [showGhExample, setShowGhExample] = useState(false)
+const [showGhExample, setShowGhExample] = useState(false) 
+
 
   
   const [ghFile, setGhFile] = useState<File | null>(null)
@@ -241,7 +241,8 @@ function update() {
   const countdownData = get20ghCountdown()
 
   setCountdown(countdownData)
-  setTwentyGhClosed(!isOpen)
+ //reenable after test setTwentyGhClosed(!isOpen)
+setTwentyGhClosed(false)  //delete after test
 }
  
   (window as any).forceUpdate20GH = update
