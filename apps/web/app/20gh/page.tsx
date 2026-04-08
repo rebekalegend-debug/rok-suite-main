@@ -140,11 +140,13 @@ const [skills,setSkills] = useState({
   skill4:0
 })
 
-const showGhExample = true //open always for testing, delete adter test
+const [showGhExample, setShowGhExample] = useState(true) //open always for testing, delete adter test
+ // enable it back after test const [showGhExample, setShowGhExample] = useState(false)
+
   
-const [ghFile, setGhFile] = useState<File | null>(null)
+  const [ghFile, setGhFile] = useState<File | null>(null)
 const [ghNumber, setGhNumber] = useState("")
-const [showGhExample, setShowGhExample] = useState(false)
+
 const [alreadyApplied,setAlreadyApplied] = useState(false)
   const [shakeConfirm, setShakeConfirm] = useState(false)
 const [commanderBlurred,setCommanderBlurred] = useState(false)
