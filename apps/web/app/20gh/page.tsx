@@ -176,7 +176,7 @@ const [showGhExample, setShowGhExample] = useState(false)
   
   const [ghFile, setGhFile] = useState<File | null>(null)
 const [ghNumber, setGhNumber] = useState("")
-
+const [ghAuto, setGhAuto] = useState(false)
 const [alreadyApplied,setAlreadyApplied] = useState(false)
   const [shakeConfirm, setShakeConfirm] = useState(false)
 const [commanderBlurred,setCommanderBlurred] = useState(false)
@@ -994,6 +994,7 @@ if (detected) {
 
       if (detected) {
         setGhNumber(detected)
+        setGhAuto(true)
       }
     }
   }}
@@ -1004,20 +1005,26 @@ if (detected) {
     🔢 Your current GH number:
   </label>
 
-  <input
-    type="number"
-    min={0}
-    max={5000}
-    placeholder="Enter GH (0 - 5000)"
-    value={ghNumber}
-    onChange={(e) => {
-      const val = e.target.value
-      if (Number(val) >= 0 && Number(val) <= 5000) {
-        setGhNumber(val)
-      }
-    }}
-    className="w-full px-3 py-2 rounded gold-input focus:border-[#FFD76B] focus:shadow-[0_0_12px_rgba(255,215,107,0.45)]"
-  />
+<input
+  type="text"
+  inputMode="numeric"
+  placeholder="Enter GH (0 - 5000)"
+  value={ghNumber}
+  onChange={(e) => {
+    let val = e.target.value.replace(/[^0-9]/g, "")
+
+    if (Number(val) > 5000) val = "5000"
+
+    setGhNumber(val)
+    setGhAuto(false) // 👈 RESET HERE
+  }}
+  className="w-full px-3 py-2 rounded gold-input"
+/>
+  {ghAuto && (
+  <div className="text-xs text-yellow-400 mt-1">
+    ⚠️ Auto-detected from image — please verify and adjust if needed.
+  </div>
+)}
 </div>     
 {/* PURPOSE */}
 <div className="pt-4 border-t border-[var(--border)]">
