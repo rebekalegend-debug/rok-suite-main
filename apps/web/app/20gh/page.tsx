@@ -122,7 +122,9 @@ const [skills,setSkills] = useState({
   skill3:0,
   skill4:0
 })
-
+const [ghFile, setGhFile] = useState<File | null>(null)
+const [ghNumber, setGhNumber] = useState("")
+const [showGhExample, setShowGhExample] = useState(false)
 const [alreadyApplied,setAlreadyApplied] = useState(false)
   const [shakeConfirm, setShakeConfirm] = useState(false)
 const [commanderBlurred,setCommanderBlurred] = useState(false)
@@ -324,7 +326,10 @@ async function submitApplication(){
     rank: !form.rank,
     kvk: !form.kvkSpending,
     troop: !form.troopType,
-    equipment: false
+    equipment: false,
+  gh: !ghNumber,
+ghImage: !ghFile
+  
   }
 
   setMissing(newMissing)
@@ -362,7 +367,7 @@ async function submitApplication(){
   data.append("troopType", form.troopType)
   data.append("pair", form.pair || "")
   data.append("comment", form.comment || "")
-
+data.append("currentGH", ghNumber)
   data.append(
     "skills",
     `${skills.skill1}${skills.skill2}${skills.skill3}${skills.skill4}`
@@ -371,7 +376,9 @@ async function submitApplication(){
   if (commanderFile) {
     data.append("equipment", commanderFile)
   }
-
+if (ghFile) {
+  data.append("ghImage", ghFile, "20GH_GH_ID")
+}
   setSubmitting(true)
 
   try {
@@ -436,7 +443,25 @@ function formatUTC(date: Date) {
   
 return (
 <>
-  <AppSidebar>
+ <AppSidebar>
+
+{/* GH EXAMPLE MODAL */}
+{showGhExample && (
+  <div
+    className="fixed inset-0 bg-black/90 z-[99999] flex items-center justify-center cursor-pointer"
+    onClick={() => setShowGhExample(false)}
+  >
+    <img
+      src="https://media.discordapp.net/attachments/1473350200276943002/1491221315842211860/Screenshot_2026-04-14_063812.png"
+      alt="GH Example"
+      className="max-w-full max-h-full object-contain"
+    />
+  </div>
+)}
+
+{/* EXISTING POPUP */}
+{TwentyGhClosed && (
+  <div className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none">
 
   {/* POPUP - fixed overlay */}
   {TwentyGhClosed && (
@@ -867,7 +892,60 @@ onChange={(e)=>{
 </label>
 
 </div>
-      
+ {/* GH IMAGE */}
+<div className="pt-4 border-t border-[var(--border)]">
+  <label className="form-label mb-1 block">
+    🖼️ Current GH's image:
+  </label>
+
+  <div
+    onClick={() => setShowGhExample(true)}
+    className="text-xs text-[#FFD76B] underline cursor-pointer mb-2"
+  >
+    (Full screen image) Click or Tap here to see example!
+  </div>
+
+  <label className="flex items-center gap-3 rounded-lg px-4 py-3 cursor-pointer gold-input hover:gold-glow transition">
+    
+    <span className={`text-sm ${
+      ghFile ? "text-[#FFD76B]" : "text-slate-400"
+    }`}>
+      {ghFile ? ghFile.name : "Tap to upload GH screenshot"}
+    </span>
+
+    <input
+      type="file"
+      accept="image/*"
+      className="hidden"
+      onChange={(e) => {
+        const file = e.target.files?.[0] || null
+        setGhFile(file)
+      }}
+    />
+  </label>
+</div>
+
+{/* GH NUMBER */}
+<div className="pt-4 border-t border-[var(--border)]">
+  <label className="form-label">
+    🔢 Your current GH number:
+  </label>
+
+  <input
+    type="number"
+    min={0}
+    max={5000}
+    placeholder="Enter GH (0 - 5000)"
+    value={ghNumber}
+    onChange={(e) => {
+      const val = e.target.value
+      if (Number(val) >= 0 && Number(val) <= 5000) {
+        setGhNumber(val)
+      }
+    }}
+    className="w-full px-3 py-2 rounded gold-input focus:border-[#FFD76B] focus:shadow-[0_0_12px_rgba(255,215,107,0.45)]"
+  />
+</div>     
 {/* PURPOSE */}
 <div className="pt-4 border-t border-[var(--border)]">
 <label className="form-label">🎯 Commander purpose: </label>
