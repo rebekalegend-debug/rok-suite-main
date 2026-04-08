@@ -941,15 +941,14 @@ onChange={(e)=>{
     name="ghImage"
     accept="image/*"
     className="hidden"
-    onChange={(e)=>{
-     onChange={async (e)=>{
+    onChange={async (e)=>{
   const file = e.target.files?.[0] || null
   setGhFile(file)
 
   if(file){
     setMissing(prev => ({ ...prev, ghImage:false }))
 
-    // 🔥 OCR AUTO READ
+    // OCR
     const detected = await readGHFromImage(file)
 
     if (detected) {
