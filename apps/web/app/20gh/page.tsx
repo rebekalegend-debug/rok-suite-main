@@ -7,34 +7,40 @@ import Tesseract from "tesseract.js"
 async function readGHFromImage(file: File): Promise<string> {
   const { data: { text } } = await Tesseract.recognize(file, "eng")
 
-  console.log("OCR TEXT:", text) // 👈 DEBUG
+  console.log("OCR TEXT:", text)
 
   const normalized = text
-    .replace(/,/g, "")
+    .replace(/\s+/g, " ")
+    .replace(/[|]/g, "1")   // OCR fix
+    .replace(/o/gi, "0")    // optional tweak
     .toLowerCase()
 
-  let match =
-    normalized.match(/(\d+(\.\d+)?)k/) ||  // 1.2k
-    normalized.match(/(\d{2,5})/)          // 1200
+  const match = normalized.match(
+    /(owned|own|possessed|possed|possession|have|total|amount|count|qty|number|no\.?|nº|nr|anzahl|besitz|besitzt|propriété|possédé|cuenta|cantidad|tiene|拥有|持有|所持|所有|数|数量|保有|보유|소유|العدد|يملك|ملكية)[^\d]{0,10}([\d,]+)/i
+  )
 
-  if (!match) return ""
-
-  let value = match[1]
-
-  let number = 0
-
-  if (normalized.includes("k")) {
-    number = Math.round(parseFloat(value) * 1000)
-  } else {
-    number = parseInt(value)
+  if (match) {
+    const number = match[2].replace(/,/g, "")
+    console.log("✅ MATCHED VALUE:", number)
+    return number
   }
 
-  console.log("PARSED GH:", number) // 👈 DEBUG
+  // 🔥 FALLBACK (if keyword fails)
+  const fallback = normalized.match(/(\d{3,6})/g)
 
-  return number ? String(number) : ""
+  if (fallback) {
+    // take the biggest number (usually GH)
+    const biggest = fallback
+      .map(n => parseInt(n))
+      .sort((a, b) => b - a)[0]
+
+    console.log("⚠️ FALLBACK VALUE:", biggest)
+    return String(biggest)
+  }
+
+  console.log("❌ NOTHING FOUND")
+  return ""
 }
-
-
 declare global {
   interface Window {
     __TEST_TIME__?: string
