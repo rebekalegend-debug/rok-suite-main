@@ -30,6 +30,7 @@ type Player = {
   rg?: string[]
   eq?: string
   purpose?: string
+  ghHave?: number 
 }
 const badge = "px-3 py-1 rounded-md text-xs font-semibold border"
 function Row({ player, rank, setPlayers, totalPlayers }: any) {
@@ -397,6 +398,26 @@ setPlayers((prev:any[]) =>
 )}
 
 </td>
+
+<td className="p-3" onPointerDown={stop}>
+  <input
+    type="number"
+    className="w-20 bg-zinc-800 border border-zinc-600 rounded px-2 text-center"
+    value={player.ghHave || 0}
+    onChange={(e) => {
+      const value = Number(e.target.value) || 0
+
+      setPlayers((prev:any[]) =>
+        prev.map(p =>
+          p.id === player.id
+            ? { ...p, ghHave: value }
+            : p
+        )
+      )
+    }}
+  />
+</td>
+  
       <td className="p-3" onPointerDown={stop}>{player.skills}</td>
       <td className="p-3" onPointerDown={stop}>{player.main}</td>
 
@@ -566,6 +587,7 @@ async function saveList(updated:any[]) {
   p.kvkContribution,
   p.spend,
   p.eq || "",
+  p.ghHave || 0,
   p.skills,
   p.main
 ]
@@ -623,7 +645,7 @@ const sheetPlayers = json.data
 .map((p:any)=>({
 
   ...p,
-
+ghHave: Number(p.ghHave || 0),
   main: p["Main Troop Type"] || p.main
 
 }))
@@ -766,6 +788,7 @@ strategy={verticalListSortingStrategy}
 <th className="p-3">KvK C.</th>
 <th className="p-3">Spend</th>
 <th className="p-3">EQ</th>
+  <th className="p-3">GH Have</th> 
 <th className="p-3">Skill</th>
 <th className="p-3">Main</th>
 </tr>
