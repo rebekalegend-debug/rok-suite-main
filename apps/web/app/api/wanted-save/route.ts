@@ -34,9 +34,9 @@ export async function POST(req: Request) {
     const rows = read.data.values || [];
 
     // ✅ 2. FIND PLAYER
-    const rowIndex = rows.findIndex(
-      (r) => String(r[0]) === String(governorId)
-    );
+   const rowIndex = rows.findIndex(
+  (r) => r?.[0] && String(r[0]) === String(governorId)
+);
 
     // ✅ 3. IF EXISTS → UPDATE
     if (rowIndex !== -1) {
