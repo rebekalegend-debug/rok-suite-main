@@ -417,18 +417,13 @@ const getHandledStatus = useCallback(
     const mark = officerMarks.get(player.governorId);
     const member = kingdomMembers.get(player.governorId);
 
-    // ✅ LEFT always wins (auto from kingdom API)
+    // LEFT always wins
     if (member?.migratedOut) return 'left';
 
-    // ✅ Manual mark
+    // 🔥 Supabase ALWAYS wins
     if (mark) return mark.status;
 
-    // ✅ Optional: not found in kingdom → treat as pending
-    if (!member) return 'pending';
-
-    // ✅ Fallback from sheet
-    if (player.zeroed === 'yes') return 'zeroed';
-
+    // ❌ DO NOT fallback to sheet anymore for zeroed
     return 'pending';
   },
   [officerMarks, kingdomMembers]
