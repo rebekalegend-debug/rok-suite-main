@@ -261,39 +261,74 @@ useEffect(() => {
       setAllPlayers(data);
     });
 }, []);
- const handleMarkStatus = async (
+
+  
+  
+  
+  
+const handleMarkStatus = async (
   governorId: number,
   playerName: string,
   status: 'zeroed' | 'left' | null
 ) => {
-    // Save previous state for undo
-    const previousStatus = officerMarks.get(governorId) || null;
+  const previousStatus = officerMarks.get(governorId) || null;
+const member = kingdomMembers.get(governorId);
+if (member?.migratedOut && status === 'zeroed') return;
+  if (undoTimerRef.current) clearTimeout(undoTimerRef.current);
 
-    // Clear any existing undo timer
-    if (undoTimerRef.current) clearTimeout(undoTimerRef.current);
+  // 🔹 SUPABASE UPDATE
+  if (status === null) {
+    await supabase.from('wanted_status').delete().eq('governor_id', governorId);
 
-    // Apply the change
-    if (status === null) {
-      await supabase.from('wanted_status').delete().eq('governor_id', governorId);
-      setOfficerMarks(prev => {
-        const next = new Map(prev);
-        next.delete(governorId);
-        return next;
+    setOfficerMarks(prev => {
+      const next = new Map(prev);
+      next.delete(governorId);
+      return next;
+    });
+  } else {
+    await supabase
+      .from('wanted_status')
+      .upsert({
+        governor_id: governorId,
+        status,
+        updated_at: new Date().toISOString()
       });
-    } else {
-      await supabase
-        .from('wanted_status')
-        .upsert({ governor_id: governorId, status, updated_at: new Date().toISOString() });
-     setOfficerMarks(prev => new Map(prev).set(governorId, {
-  status,
-  updated_at: new Date().toISOString()
-}));
-    }
 
-    // Show undo toast
-    setUndoAction({ governorId, playerName, previousStatus, newStatus: status });
-    undoTimerRef.current = setTimeout(() => setUndoAction(null), UNDO_TIMEOUT_MS);
-  };
+    setOfficerMarks(prev =>
+      new Map(prev).set(governorId, {
+        status,
+        updated_at: new Date().toISOString()
+      })
+    );
+  }
+
+  // 🔥 GOOGLE SHEET SYNC (FIXED POSITION)
+  const player = players.find(p => p.governorId === governorId);
+
+  if (player) {
+    await fetch('/api/wanted-save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        governorId,
+        name: player.name,
+        power: player.power2 || 0,
+        alliance: player.alliance || '',
+        reason: player.reason || '',
+        zero:
+          status === 'zeroed'
+            ? 'yes'
+            : status === 'left'
+              ? 'left'
+              : ''
+      })
+    });
+  }
+
+  // 🔹 UNDO
+  setUndoAction({ governorId, playerName, previousStatus, newStatus: status });
+  undoTimerRef.current = setTimeout(() => setUndoAction(null), UNDO_TIMEOUT_MS);
+};
 
   const handleUndo = async () => {
     if (!undoAction) return;
@@ -357,20 +392,18 @@ if (!newPlayer.governorId) {
   }
 
   // ⬇️ your existing fetch stays below
-  await fetch('/api/wanted-save', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      governorId: Number(newPlayer.governorId.trim()),
-      name: newPlayer.name.trim(),
-      power: Number(newPlayer.power.replace(/,/g, '')),
-      alliance: newPlayer.alliance.trim(),
-      reason: newPlayer.reason,
-      zero: newPlayer.zero
-    })
-  });
+await fetch('/api/wanted-save', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    governorId: Number(newPlayer.governorId),
+    name: newPlayer.name,
+    power: Number(newPlayer.power),
+    alliance: newPlayer.alliance,
+    reason: newPlayer.reason,
+    zero: newPlayer.zero === 'yes' ? 'yes' : ''
+  })
+});
 
   setShowAddModal(false);
   fetchData();
@@ -868,14 +901,25 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                   </td>
                 </tr>
               ) : (
-                filtered.map((player, idx) => { 
-                  const migrationDate = getMigrationDate(player);
-                  const handled = getHandledStatus(player);
-                  const mark = officerMarks.get(player.governorId);
-const zeroDate = mark?.status === 'zeroed' ? mark.updated_at : null;
-                  const isDone = handled !== 'pending';
-                  const isIllegal = player.reason?.toLowerCase().includes('illegal');
-                  return (
+filtered.map((player, idx) => { 
+  const migrationDate = getMigrationDate(player);
+  const handled = getHandledStatus(player);
+  const mark = officerMarks.get(player.governorId);
+  const zeroDate = mark?.status === 'zeroed' ? mark.updated_at : null;
+
+  const label =
+    handled === 'left' && migrationDate
+      ? `LEFT • ${formatLeftTime(migrationDate)}`
+      : handled === 'zeroed'
+        ? zeroDate
+          ? `ZEROED • ${formatLeftTime(zeroDate)}`
+        : 'ZEROED'
+        : null;
+
+  const isDone = handled !== 'pending';
+  const isIllegal = player.reason?.toLowerCase().includes('illegal');
+
+  return (
                     <tr
                       key={player.governorId || player.name}
                       className={`border-b border-[var(--border)] hover:bg-[var(--background-secondary)]/50 transition-colors ${idx % 2 === 0 ? 'bg-[var(--background-secondary)]/30' : ''} ${isDone ? 'opacity-50' : ''}`}
@@ -966,21 +1010,13 @@ const zeroDate = mark?.status === 'zeroed' ? mark.updated_at : null;
                           <span className="text-[var(--text-muted)]">-</span>
                         )}
                       </td>
-                      <td className="px-3 py-2.5 text-center">
-<div className="relative group inline-block">
- <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase border ${handledBg(handled)}`}>
- {handled === 'left' && migrationDate
-  ? `LEFT • ${formatLeftTime(migrationDate)}`
-: handled === 'zeroed' && zeroDate
-  ? `ZEROED • ${formatLeftTime(zeroDate)}`
-    : handled === 'pending'
-      ? 'NO ACTION'
-      : handled}
-</span>
-
-
-</div>
-                      </td>
+                     <td className="px-3 py-2.5 text-center">
+  <div className="relative group inline-block">
+    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase border ${handledBg(handled)}`}>
+      {label || 'NO ACTION'}
+    </span>
+  </div>
+</td>
 {isOfficer && (
   <td className="px-3 py-2.5 text-center">
     <div className="flex items-center justify-center gap-2">
@@ -996,7 +1032,11 @@ const zeroDate = mark?.status === 'zeroed' ? mark.updated_at : null;
 
       {/* EXISTING BUTTONS */}
       <button
-        onClick={() => handleMarkStatus(player.governorId, player.name, handled === 'zeroed' ? null : 'zeroed')}
+        onClick={() => handleMarkStatus(
+  player.governorId,
+  player.name,
+  mark?.status === 'zeroed' ? null : 'zeroed'
+)}
         className={`px-2 py-1 rounded text-[10px] font-semibold border transition-colors ${
           handled === 'zeroed'
             ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400'
@@ -1007,9 +1047,13 @@ const zeroDate = mark?.status === 'zeroed' ? mark.updated_at : null;
       </button>
 
       <button
-        onClick={() => handleMarkStatus(player.governorId, player.name, handled === 'left' ? null : 'left')}
+       onClick={() => handleMarkStatus(
+  player.governorId,
+  player.name,
+  mark?.status === 'left' ? null : 'left'
+)}
         className={`px-2 py-1 rounded text-[10px] font-semibold border transition-colors ${
-          handled === 'left'
+          mark?.status === 'left'
             ? 'bg-sky-500/20 border-sky-500/40 text-sky-400'
             : 'bg-[var(--background-secondary)] border-[var(--border)] text-[var(--text-muted)] hover:text-sky-400 hover:border-sky-500/40'
         }`}
@@ -1038,11 +1082,20 @@ const zeroDate = mark?.status === 'zeroed' ? mark.updated_at : null;
             </div>
           ) : (
            filtered.map((player) => {
-  const handled = getHandledStatus(player);
-  const migrationDate = getMigrationDate(player);
+const handled = getHandledStatus(player);
+const migrationDate = getMigrationDate(player);
 
-  const mark = officerMarks.get(player.governorId);
-  const zeroDate = mark?.status === 'zeroed' ? mark.updated_at : null;
+const mark = officerMarks.get(player.governorId);
+const zeroDate = mark?.status === 'zeroed' ? mark.updated_at : null;
+
+const label =
+  handled === 'left' && migrationDate
+    ? `LEFT • ${formatLeftTime(migrationDate)}`
+    : handled === 'zeroed'
+      ? zeroDate
+        ? `ZEROED • ${formatLeftTime(zeroDate)}`
+       : 'ZEROED'
+      : null;
               const isDone = handled !== 'pending';
               const isIllegal = player.reason?.toLowerCase().includes('illegal');
               return (
@@ -1061,11 +1114,9 @@ const zeroDate = mark?.status === 'zeroed' ? mark.updated_at : null;
                       </p>
                     </div>
                     <span>
-  {handled === 'left' && migrationDate
-    ? `LEFT • ${formatLeftTime(migrationDate)}`
-    : handled === 'zeroed' && zeroDate
-      ? `ZEROED • ${formatLeftTime(zeroDate)}`
-      : handled}
+<span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase border ${handledBg(handled)}`}>
+  {label || 'NO ACTION'}
+</span>
 </span>
                   </div>
 
@@ -1118,14 +1169,22 @@ const zeroDate = mark?.status === 'zeroed' ? mark.updated_at : null;
     </button>
 
     <button
-      onClick={() => handleMarkStatus(player.governorId, player.name, handled === 'zeroed' ? null : 'zeroed')}
+      onClick={() => handleMarkStatus(
+  player.governorId,
+  player.name,
+  mark?.status === 'zeroed' ? null : 'zeroed'
+)}
       className="flex-1 ..."
     >
       ZEROED
     </button>
 
     <button
-      onClick={() => handleMarkStatus(player.governorId, player.name, handled === 'left' ? null : 'left')}
+     onClick={() => handleMarkStatus(
+  player.governorId,
+  player.name,
+  mark?.status === 'left' ? null : 'left'
+)}
       className="flex-1 ..."
     >
       LEFT
