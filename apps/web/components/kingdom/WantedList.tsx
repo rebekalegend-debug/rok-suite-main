@@ -379,28 +379,27 @@ if (!newPlayer.governorId) {
   
   // Officer handling status: zeroed, left, or pending
   // Uses Supabase mark first, falls back to sheet "Zeroed" column
- const getHandledStatus = useCallback((player: WantedPlayer): 'pending' | 'zeroed' | 'left' => {
-const mark = officerMarks.get(player.governorId);
+const getHandledStatus = useCallback(
+  (player: WantedPlayer): 'pending' | 'zeroed' | 'left' => {
+    const mark = officerMarks.get(player.governorId);
+    const member = kingdomMembers.get(player.governorId);
 
-const member = kingdomMembers.get(player.governorId);
+    // ✅ LEFT always wins (auto from kingdom API)
+    if (member?.migratedOut) return 'left';
 
-// ✅ LEFT always wins
-if (member?.migratedOut) return 'left';
+    // ✅ Manual mark
+    if (mark) return mark.status;
 
-if (mark) return mark.status;
+    // ✅ Optional: not found in kingdom → treat as pending
+    if (!member) return 'pending';
 
-  const member = kingdomMembers.get(player.governorId);
+    // ✅ Fallback from sheet
+    if (player.zeroed === 'yes') return 'zeroed';
 
-  // ✅ AUTO LEFT
-  if (member?.migratedOut) return 'left';
-
-  // optional: if not found → treat as left
-  if (!member) return 'pending';
-
-  if (player.zeroed === 'yes') return 'zeroed';
-
-  return 'pending';
-}, [officerMarks, kingdomMembers]);
+    return 'pending';
+  },
+  [officerMarks, kingdomMembers]
+);
 const getMigrationDate = (player: WantedPlayer) => {
   const member = kingdomMembers.get(player.governorId);
   return member?.migratedOut || null;
