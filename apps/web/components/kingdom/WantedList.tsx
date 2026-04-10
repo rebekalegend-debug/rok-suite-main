@@ -46,7 +46,33 @@ const formatPower = (val: number): string => {
 
   return val.toString();
 };
+const formatLeftTime = (dateStr: string) => {
+  const date = new Date(dateStr);
+  const now = Date.now();
 
+  const diffMs = now - date.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+
+  let relative = '';
+
+  if (diffDays > 0) {
+    relative = `${diffDays}d ago`;
+  } else if (diffHours > 0) {
+    relative = `${diffHours}h ago`;
+  } else {
+    relative = 'now';
+  }
+
+  const formattedDate = date.toLocaleString(undefined, {
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+
+  return `${relative} • ${formattedDate}`;
+};
 /** Format summed power (raw power values) */
 const formatTotalPower = (val: number): string => {
   if (!val) return '0';
@@ -137,7 +163,7 @@ const [showResults, setShowResults] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [showPasswordPrompt, setShowPasswordPrompt] = useState(false);
   const [password, setPassword] = useState('');
-
+const [kingdomMembers, setKingdomMembers] = useState<Map<number, any>>(new Map());
   // Supabase officer marks
   const [officerMarks, setOfficerMarks] = useState<Map<number, OfficerMark>>(new Map());
 
@@ -155,12 +181,21 @@ const [allPlayers, setAllPlayers] = useState<KingdomPlayer[]>([]);
     setLoading(true);
     setError(null);
     try {
-     const [wantedPlayers, prevNamesMap, { data: statusRows }] = await Promise.all([
+    const KINGDOM_ID = "3237";
+
+const [wantedPlayers, prevNamesMap, { data: statusRows }, kingdomRes] = await Promise.all([
   fetchWantedSheet(WANTED_SHEET_URL),
   fetchPrevNamesSheet(PREV_NAMES_SHEET_URL),
   supabase.from('wanted_status').select('*'),
+  fetch(`/api/top-kingdom?kingdom=${KINGDOM_ID}`).then(r => r.json())
 ]);
+const memberMap = new Map<number, any>();
 
+for (const m of kingdomRes) {
+  memberMap.set(Number(m.id), m);
+}
+
+setKingdomMembers(memberMap);
     const mergedPlayers = wantedPlayers.map(p => ({
   ...p,
   prevNames: prevNamesMap.get(p.governorId) || p.prevNames || ""
@@ -330,14 +365,28 @@ if (!newPlayer.governorId) {
   
   // Officer handling status: zeroed, left, or pending
   // Uses Supabase mark first, falls back to sheet "Zeroed" column
-  const getHandledStatus = useCallback((player: WantedPlayer): 'pending' | 'zeroed' | 'left' => {
-    const mark = officerMarks.get(player.governorId);
-    if (mark) return mark;
-    if (player.zeroed === 'yes') return 'zeroed';
-     if (player.zeroed === 'left') return 'left';
-    return 'pending';
-  }, [officerMarks]);
+ const getHandledStatus = useCallback((player: WantedPlayer): 'pending' | 'zeroed' | 'left' => {
+  const mark = officerMarks.get(player.governorId);
 
+  // manual override first
+  if (mark) return mark;
+
+  const member = kingdomMembers.get(player.governorId);
+
+  // ✅ AUTO LEFT
+  if (member?.migratedOut) return 'left';
+
+  // optional: if not found → treat as left
+  if (!member) return 'pending';
+
+  if (player.zeroed === 'yes') return 'zeroed';
+
+  return 'pending';
+}, [officerMarks, kingdomMembers]);
+const getMigrationDate = (player: WantedPlayer) => {
+  const member = kingdomMembers.get(player.governorId);
+  return member?.migratedOut || null;
+};
   // ─── Sort logic ────────────────────────────────────────────────────
   const handleSort = (field: SortableField, addToChain: boolean) => {
     if (addToChain) {
@@ -802,7 +851,8 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                   </td>
                 </tr>
               ) : (
-                filtered.map((player, idx) => {
+                filtered.map((player, idx) => { 
+                  const migrationDate = getMigrationDate(player);
                   const handled = getHandledStatus(player);
                   const isDone = handled !== 'pending';
                   const isIllegal = player.reason?.toLowerCase().includes('illegal');
@@ -898,9 +948,19 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                         )}
                       </td>
                       <td className="px-3 py-2.5 text-center">
-<span className={`inline-block px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase border ${handledBg(handled)}`}>
-  {handled === 'pending' ? 'NO ACTION' : handled}
-</span>
+<div className="relative group inline-block">
+  <span className={`inline-block px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase border ${handledBg(handled)}`}>
+    {handled === 'pending' ? 'NO ACTION' : handled}
+  </span>
+
+{handled === 'left' && migrationDate && (
+  <div className="absolute hidden group-hover:block z-50 mt-1 left-1/2 -translate-x-1/2">
+    <div className="bg-[var(--background-card)] border border-[var(--border)] rounded-lg px-2 py-1 text-xs whitespace-nowrap shadow-lg">
+      {formatLeftTime(migrationDate)}
+    </div>
+  </div>
+)}
+</div>
                       </td>
 {isOfficer && (
   <td className="px-3 py-2.5 text-center">
