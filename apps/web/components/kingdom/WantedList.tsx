@@ -52,23 +52,18 @@ const formatLeftTime = (dateStr: string) => {
 
   const diffMs = now - date.getTime();
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
 
   let relative = '';
 
   if (diffDays > 0) {
     relative = `${diffDays}d ago`;
-  } else if (diffHours > 0) {
-    relative = `${diffHours}h ago`;
   } else {
-    relative = 'now';
+    relative = 'today';
   }
 
-  const formattedDate = date.toLocaleString(undefined, {
+  const formattedDate = date.toLocaleDateString(undefined, {
     month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
+    day: 'numeric'
   });
 
   return `${relative} • ${formattedDate}`;
@@ -883,7 +878,7 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
         <History size={12} />
       </button>
 
-     <div className="fixed hidden group-hover:block z-[9999] mt-1 ml-4">
+     <div className="absolute hidden group-hover:block z-50 mt-1 left-0">
         <div className="bg-[var(--background-card)] border border-[var(--border)] rounded-lg px-3 py-2 shadow-lg text-xs whitespace-nowrap">
           <div className="font-semibold text-[var(--text-secondary)] mb-1">
             {player.prevNames.split(',').map(n => n.trim()).filter(Boolean).length} previous names
@@ -949,17 +944,15 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                       </td>
                       <td className="px-3 py-2.5 text-center">
 <div className="relative group inline-block">
-  <span className={`inline-block px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase border ${handledBg(handled)}`}>
-    {handled === 'pending' ? 'NO ACTION' : handled}
-  </span>
+ <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase border ${handledBg(handled)}`}>
+  {handled === 'left' && migrationDate
+    ? `LEFT • ${formatLeftTime(migrationDate)}`
+    : handled === 'pending'
+      ? 'NO ACTION'
+      : handled}
+</span>
 
-{handled === 'left' && migrationDate && (
-  <div className="absolute hidden group-hover:block z-50 mt-1 left-1/2 -translate-x-1/2">
-    <div className="bg-[var(--background-card)] border border-[var(--border)] rounded-lg px-2 py-1 text-xs whitespace-nowrap shadow-lg">
-      {formatLeftTime(migrationDate)}
-    </div>
-  </div>
-)}
+
 </div>
                       </td>
 {isOfficer && (
