@@ -28,7 +28,7 @@ export async function POST(req: Request) {
     // ✅ 1. READ EXISTING DATA
     const read = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEET_ID!,
-      range: 'Wanted!A:F',
+    range: 'Wanted!A:G',
     });
 
     const rows = read.data.values || [];
@@ -42,35 +42,46 @@ export async function POST(req: Request) {
     if (rowIndex !== -1) {
       const sheetRow = rowIndex + 1;
 
-// ✅ ONLY UPDATE STATUS COLUMN (F)
+// ✅ map UI value → sheet value
+const sheetValue =
+  zero === 'zeroed' ? 'Yes' :
+  zero === 'left' ? 'left' :
+  'no';
+
+// ✅ update BOTH Zero + Zeroed columns
 await sheets.spreadsheets.values.update({
   spreadsheetId: process.env.GOOGLE_SHEET_ID!,
-  range: `Wanted!F${sheetRow}`,
+  range: `Wanted!F${sheetRow}:G${sheetRow}`,
   valueInputOption: 'USER_ENTERED',
   requestBody: {
-    values: [[zero]]
+    values: [[sheetValue, sheetValue]]
   }
 });
 
       return NextResponse.json({ success: true, type: 'updated' });
     }
 
-    // ✅ 4. ELSE → APPEND (your original logic)
-    await sheets.spreadsheets.values.append({
-      spreadsheetId: process.env.GOOGLE_SHEET_ID!,
-      range: 'Wanted!A:F',
-      valueInputOption: 'USER_ENTERED',
-      requestBody: {
-        values: [[
-          governorId,
-          name,
-          power,
-          alliance,
-          reason,
-          zero
-        ]]
-      }
-    });
+  const sheetValue =
+  zero === 'zeroed' ? 'Yes' :
+  zero === 'left' ? 'left' :
+  'no';
+
+await sheets.spreadsheets.values.append({
+  spreadsheetId: process.env.GOOGLE_SHEET_ID!,
+  range: 'Wanted!A:G',
+  valueInputOption: 'USER_ENTERED',
+  requestBody: {
+    values: [[
+      governorId,
+      name,
+      power,
+      alliance,
+      reason,
+      sheetValue, // F
+      sheetValue  // G
+    ]]
+  }
+});
 
     return NextResponse.json({ success: true, type: 'created' });
 
