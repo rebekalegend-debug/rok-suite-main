@@ -273,7 +273,10 @@ const handleMarkStatus = async (
 ) => {
   const previousStatus = officerMarks.get(governorId) || null;
 const member = kingdomMembers.get(governorId);
-if (member?.migratedOut && status === 'zeroed') return;
+if (member?.migratedOut && status === 'zeroed') {
+  alert("Player already left kingdom");
+  return;
+}
   if (undoTimerRef.current) clearTimeout(undoTimerRef.current);
 
   // 🔹 SUPABASE UPDATE
@@ -315,12 +318,12 @@ if (member?.migratedOut && status === 'zeroed') return;
         power: player.power2 || 0,
         alliance: player.alliance || '',
         reason: player.reason || '',
-        zero:
-          status === 'zeroed'
-            ? 'yes'
-            : status === 'left'
-              ? 'left'
-              : ''
+      zero:
+  status === 'zeroed'
+    ? 'Yes'
+    : status === 'left'
+      ? 'left'
+      : 'no'
       })
     });
   }
@@ -401,7 +404,10 @@ await fetch('/api/wanted-save', {
     power: Number(newPlayer.power),
     alliance: newPlayer.alliance,
     reason: newPlayer.reason,
-    zero: newPlayer.zero === 'yes' ? 'yes' : ''
+    zero:
+  newPlayer.zero === 'yes'
+    ? 'Yes'
+    : 'no'
   })
 });
 
@@ -493,7 +499,10 @@ const resetFiltersAndSort = () => {
       case 'power':      aVal = a.power2 || 0; bVal = b.power2 || 0; break;
       case 'alliance':   aVal = (a.alliance || '').toLowerCase(); bVal = (b.alliance || '').toLowerCase(); break;
       case 'reason':     aVal = (a.reason || '').toLowerCase(); bVal = (b.reason || '').toLowerCase(); break;
-      case 'zero':       aVal = zeroOrder(a.zero); bVal = zeroOrder(b.zero); break;
+      case 'zero':
+  aVal = zeroOrder(a.zero?.toLowerCase() as any);
+  bVal = zeroOrder(b.zero?.toLowerCase() as any);
+  break;
       case 'handled':    aVal = handledOrder(getHandledStatus(a)); bVal = handledOrder(getHandledStatus(b)); break;
       default: return 0;
     }
@@ -550,7 +559,7 @@ const duplicateNames = useMemo(() => {
       const handled = getHandledStatus(p);
       if (handledFilter !== 'all' && handled !== handledFilter) return false;
 
-      if (zeroFilter === 'yes' && p.zero !== 'yes') return false;
+     if (zeroFilter === 'yes' && p.zero?.toLowerCase() !== 'yes') return false;
 
       return true;
     })
@@ -997,7 +1006,7 @@ filtered.map((player, idx) => {
   )}
 </td>
                       <td className="px-3 py-2.5 text-center">
-                        {player.zero === 'yes' ? (
+                        {player.zero?.toLowerCase() === 'yes' ? (
                           <span className="text-xs font-semibold text-red-400">YES</span>
                         ) : player.zero === 'no' ? (
                           <span className="text-xs font-semibold text-[var(--text-muted)]">NO</span>
@@ -1128,7 +1137,7 @@ const label =
                     </div>
                     <div>
                       <span className="text-[var(--text-muted)]">Zero? </span>
-                      {player.zero === 'yes' ? (
+                      {player.zero?.toLowerCase() === 'yes' ? (
                         <span className="font-semibold text-red-400">YES</span>
                       ) : player.zero === 'no' ? (
                         <span className="font-semibold text-[var(--text-muted)]">NO</span>
