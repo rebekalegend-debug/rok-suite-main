@@ -259,7 +259,11 @@ useEffect(() => {
       setAllPlayers(data);
     });
 }, []);
-  const handleMarkStatus = async (governorId: number, playerName: string, status: OfficerMark | null) => {
+ const handleMarkStatus = async (
+  governorId: number,
+  playerName: string,
+  status: 'zeroed' | 'left' | null
+) => {
     // Save previous state for undo
     const previousStatus = officerMarks.get(governorId) || null;
 
