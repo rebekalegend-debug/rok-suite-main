@@ -42,21 +42,15 @@ export async function POST(req: Request) {
     if (rowIndex !== -1) {
       const sheetRow = rowIndex + 1;
 
-      await sheets.spreadsheets.values.update({
-        spreadsheetId: process.env.GOOGLE_SHEET_ID!,
-        range: `Wanted!A${sheetRow}:F${sheetRow}`,
-        valueInputOption: 'USER_ENTERED',
-        requestBody: {
-          values: [[
-            governorId,
-            name,
-            power,
-            alliance,
-            reason,
-            zero
-          ]]
-        }
-      });
+// ✅ ONLY UPDATE STATUS COLUMN (F)
+await sheets.spreadsheets.values.update({
+  spreadsheetId: process.env.GOOGLE_SHEET_ID!,
+  range: `Wanted!F${sheetRow}`,
+  valueInputOption: 'USER_ENTERED',
+  requestBody: {
+    values: [[zero]]
+  }
+});
 
       return NextResponse.json({ success: true, type: 'updated' });
     }
