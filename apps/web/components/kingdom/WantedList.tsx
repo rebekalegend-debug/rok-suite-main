@@ -10,7 +10,10 @@ import type { WantedPlayer } from '@/lib/kingdom/types';
 import { AlertCircle } from "lucide-react";
 import { fetchPrevNamesSheet } from '@/lib/kingdom/parse';
 import { PREV_NAMES_SHEET_URL } from '@/lib/kingdom/config';
-type OfficerMark = 'zeroed' | 'left';
+type OfficerMark = {
+  status: 'zeroed' | 'left';
+  updated_at: string;
+};
 
 interface WantedStatus {
   governor_id: number;
@@ -65,6 +68,9 @@ const formatLeftTime = (dateStr: string) => {
     month: 'short',
     day: 'numeric'
   });
+
+  return `${relative} on ${formattedDate}`;
+};
 
   return `${relative} • ${formattedDate}`;
 };
@@ -198,12 +204,15 @@ setKingdomMembers(memberMap);
 
 setPlayers(mergedPlayers);
 
-      const marks = new Map<number, OfficerMark>();
-      if (statusRows) {
-        for (const row of statusRows as WantedStatus[]) {
-          marks.set(row.governor_id, row.status);
-        }
-      }
+const marks = new Map<number, OfficerMark>();
+if (statusRows) {
+  for (const row of statusRows as WantedStatus[]) {
+    marks.set(row.governor_id, {
+      status: row.status,
+      updated_at: row.updated_at
+    });
+  }
+}
       setOfficerMarks(marks);
       setLastRefreshed(new Date());
     } catch (err) {
@@ -272,7 +281,10 @@ useEffect(() => {
       await supabase
         .from('wanted_status')
         .upsert({ governor_id: governorId, status, updated_at: new Date().toISOString() });
-      setOfficerMarks(prev => new Map(prev).set(governorId, status));
+     setOfficerMarks(prev => new Map(prev).set(governorId, {
+  status,
+  updated_at: new Date().toISOString()
+}));
     }
 
     // Show undo toast
@@ -361,10 +373,9 @@ if (!newPlayer.governorId) {
   // Officer handling status: zeroed, left, or pending
   // Uses Supabase mark first, falls back to sheet "Zeroed" column
  const getHandledStatus = useCallback((player: WantedPlayer): 'pending' | 'zeroed' | 'left' => {
-  const mark = officerMarks.get(player.governorId);
+const mark = officerMarks.get(player.governorId);
 
-  // manual override first
-  if (mark) return mark;
+if (mark) return mark.status;
 
   const member = kingdomMembers.get(player.governorId);
 
@@ -849,6 +860,8 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                 filtered.map((player, idx) => { 
                   const migrationDate = getMigrationDate(player);
                   const handled = getHandledStatus(player);
+                  const mark = officerMarks.get(player.governorId);
+const zeroDate = mark?.status === 'zeroed' ? mark.updated_at : null;
                   const isDone = handled !== 'pending';
                   const isIllegal = player.reason?.toLowerCase().includes('illegal');
                   return (
@@ -945,8 +958,10 @@ className="cursor-pointer rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 h
                       <td className="px-3 py-2.5 text-center">
 <div className="relative group inline-block">
  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase border ${handledBg(handled)}`}>
-  {handled === 'left' && migrationDate
-    ? `LEFT • ${formatLeftTime(migrationDate)}`
+ {handled === 'left' && migrationDate
+  ? `LEFT • ${formatLeftTime(migrationDate)}`
+  : handled === 'zeroed' && zeroDate
+    ? `ZERO • ${formatLeftTime(zeroDate)}`
     : handled === 'pending'
       ? 'NO ACTION'
       : handled}
