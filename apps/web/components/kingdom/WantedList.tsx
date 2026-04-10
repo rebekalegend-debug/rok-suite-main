@@ -69,9 +69,6 @@ const formatLeftTime = (dateStr: string) => {
     day: 'numeric'
   });
 
-  return `${relative} on ${formattedDate}`;
-};
-
   return `${relative} • ${formattedDate}`;
 };
 /** Format summed power (raw power values) */
