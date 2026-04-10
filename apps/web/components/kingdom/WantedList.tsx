@@ -1035,7 +1035,7 @@ filtered.map((player, idx) => {
         onClick={() => handleMarkStatus(
   player.governorId,
   player.name,
-  mark?.status === 'zeroed' ? null : 'zeroed'
+  handled === 'zeroed' ? null : 'zeroed'
 )}
         className={`px-2 py-1 rounded text-[10px] font-semibold border transition-colors ${
           handled === 'zeroed'
@@ -1172,7 +1172,7 @@ const label =
       onClick={() => handleMarkStatus(
   player.governorId,
   player.name,
-  mark?.status === 'zeroed' ? null : 'zeroed'
+  handled === 'zeroed' ? null : 'zeroed'
 )}
       className="flex-1 ..."
     >
