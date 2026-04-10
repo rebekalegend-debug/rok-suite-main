@@ -10,8 +10,10 @@ import type { WantedPlayer } from '@/lib/kingdom/types';
 import { AlertCircle } from "lucide-react";
 import { fetchPrevNamesSheet } from '@/lib/kingdom/parse';
 import { PREV_NAMES_SHEET_URL } from '@/lib/kingdom/config';
+type OfficerStatus = 'zeroed' | 'left';
+
 type OfficerMark = {
-  status: 'zeroed' | 'left';
+  status: OfficerStatus;
   updated_at: string;
 };
 
@@ -25,7 +27,7 @@ interface UndoAction {
   governorId: number;
   playerName: string;
   previousStatus: OfficerMark | null;
-  newStatus: OfficerMark | null;
+  newStatus: OfficerStatus | null; // ✅ FIXED
 }
 
 import { ADMIN_PASSWORD, OFFICER_PASSWORD } from '@/lib/auth-passwords';
@@ -69,7 +71,7 @@ const formatLeftTime = (dateStr: string) => {
     day: 'numeric'
   });
 
-  return `${relative} • ${formattedDate}`;
+  return `${relative} on ${formattedDate}`;
 };
 /** Format summed power (raw power values) */
 const formatTotalPower = (val: number): string => {
@@ -309,7 +311,11 @@ useEffect(() => {
     } else {
       await supabase
         .from('wanted_status')
-        .upsert({ governor_id: governorId, status: previousStatus, updated_at: new Date().toISOString() });
+       .upsert({
+  governor_id: governorId,
+  status: previousStatus.status, // ✅ correct
+  updated_at: previousStatus.updated_at
+});
       setOfficerMarks(prev => new Map(prev).set(governorId, previousStatus));
     }
 
@@ -375,6 +381,11 @@ if (!newPlayer.governorId) {
   // Uses Supabase mark first, falls back to sheet "Zeroed" column
  const getHandledStatus = useCallback((player: WantedPlayer): 'pending' | 'zeroed' | 'left' => {
 const mark = officerMarks.get(player.governorId);
+
+const member = kingdomMembers.get(player.governorId);
+
+// ✅ LEFT always wins
+if (member?.migratedOut) return 'left';
 
 if (mark) return mark.status;
 
@@ -961,8 +972,8 @@ const zeroDate = mark?.status === 'zeroed' ? mark.updated_at : null;
  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase border ${handledBg(handled)}`}>
  {handled === 'left' && migrationDate
   ? `LEFT • ${formatLeftTime(migrationDate)}`
-  : handled === 'zeroed' && zeroDate
-    ? `ZERO • ${formatLeftTime(zeroDate)}`
+: handled === 'zeroed' && zeroDate
+  ? `ZEROED • ${formatLeftTime(zeroDate)}`
     : handled === 'pending'
       ? 'NO ACTION'
       : handled}
@@ -1027,8 +1038,12 @@ const zeroDate = mark?.status === 'zeroed' ? mark.updated_at : null;
               {hasActiveFilters ? 'No players match filters' : 'No wanted players'}
             </div>
           ) : (
-            filtered.map((player) => {
-              const handled = getHandledStatus(player);
+           filtered.map((player) => {
+  const handled = getHandledStatus(player);
+  const migrationDate = getMigrationDate(player);
+
+  const mark = officerMarks.get(player.governorId);
+  const zeroDate = mark?.status === 'zeroed' ? mark.updated_at : null;
               const isDone = handled !== 'pending';
               const isIllegal = player.reason?.toLowerCase().includes('illegal');
               return (
@@ -1046,9 +1061,13 @@ const zeroDate = mark?.status === 'zeroed' ? mark.updated_at : null;
                         ID: {player.governorId || '-'}
                       </p>
                     </div>
-                    <span className={`shrink-0 px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase border ${handledBg(handled)}`}>
-                      {handled}
-                    </span>
+                    <span>
+  {handled === 'left' && migrationDate
+    ? `LEFT • ${formatLeftTime(migrationDate)}`
+    : handled === 'zeroed' && zeroDate
+      ? `ZEROED • ${formatLeftTime(zeroDate)}`
+      : handled}
+</span>
                   </div>
 
                   {/* Info grid */}
