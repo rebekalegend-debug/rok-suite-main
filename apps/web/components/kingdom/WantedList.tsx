@@ -16,8 +16,8 @@ type OfficerMark = {
 };
 
 interface WantedStatus {
-  governor_id: number;
-  status: OfficerMark;
+ governor_id: number;
+  status: 'zeroed' | 'left'; // ✅ correct
   updated_at: string;
 }
 
