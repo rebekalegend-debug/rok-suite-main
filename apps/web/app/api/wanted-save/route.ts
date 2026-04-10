@@ -40,7 +40,7 @@ export async function POST(req: Request) {
 
     // ✅ 3. IF EXISTS → UPDATE
     if (rowIndex !== -1) {
-    const sheetRow = rowIndex + 2;
+    const sheetRow = rowIndex + 1;
 
 // ✅ map UI value → sheet value
 const sheetValue =
