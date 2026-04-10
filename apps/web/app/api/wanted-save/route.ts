@@ -40,11 +40,11 @@ export async function POST(req: Request) {
 
     // ✅ 3. IF EXISTS → UPDATE
     if (rowIndex !== -1) {
-      const sheetRow = rowIndex + 1;
+    const sheetRow = rowIndex + 2;
 
 // ✅ map UI value → sheet value
 const sheetValue =
-  zero === 'zeroed' ? 'Yes' :
+  zero === 'Yes' ? 'Yes' :
   zero === 'left' ? 'left' :
   'no';
 
@@ -61,8 +61,8 @@ await sheets.spreadsheets.values.update({
       return NextResponse.json({ success: true, type: 'updated' });
     }
 
-  const sheetValue =
-  zero === 'zeroed' ? 'Yes' :
+const sheetValue =
+  zero === 'Yes' ? 'Yes' :
   zero === 'left' ? 'left' :
   'no';
 
@@ -77,8 +77,8 @@ await sheets.spreadsheets.values.append({
       power,
       alliance,
       reason,
-      sheetValue, // F
-      sheetValue  // G
+      sheetValue,
+      sheetValue
     ]]
   }
 });
