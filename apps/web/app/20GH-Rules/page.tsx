@@ -62,7 +62,7 @@ export default function GH20RulesPage() {
         {/* TITLE */}
         <div className="text-center space-y-2">
           <h1 className="text-4xl font-bold">🏆 20GH Rules</h1>
-           <h2 className="text-2xl font-semibold text-red-400">Page under maintainance!</h2>
+           <h2 className="text-2xl font-semibold text-red-400">Rules still under update!</h2>
           <p className="text-[var(--text-secondary)]">
           
             For any questions pm Harley Quinn!
