@@ -27,7 +27,6 @@ export default function GH20RulesPage() {
       const json = await res.json()
 
       if (!json.success) return
-
       setPlayers(json.data)
 
     } catch (e) {
@@ -68,7 +67,7 @@ export default function GH20RulesPage() {
         </div>
 
         {/* TOP 10 RULES */}
-        <section className="p-6 rounded-2xl bg-gradient-to-br from-[#FFD700]/10 via-[#FFC300]/5 to-[#FFB800]/10 border border-[#FFD700]/20 backdrop-blur-md shadow-[0_0_40px_rgba(255,215,0,0.08)] space-y-4">
+        <section className="p-6 rounded-2xl bg-gradient-to-br from-[#FFD700]/10 via-[#FFC300]/5 to-[#FFB800]/10 border border-[#FFD700]/20 space-y-4">
           <h2 className="text-2xl font-semibold text-[#FFD700]">👑 Top 10 Rules</h2>
 
           <p>🔒 <b>Top 10 is LIMITED</b></p>
@@ -80,97 +79,140 @@ export default function GH20RulesPage() {
           <p>⚔️ Players <b>below 100M KP</b> who enter Top 10 will be fined.</p>
 
           <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-white/80">
-            📌 <b>Everything outside Top 10 (Rank 11+)</b> is <b>FREE FOR ALL</b>
+            📌 <b>Rank 11+</b> is <b>FREE FOR ALL</b>
+          </div>
+        </section>
+
+        {/* RANKED MEMBERS */}
+        <section className="p-6 rounded-2xl bg-gradient-to-br from-yellow-500/10 via-amber-400/5 to-orange-500/10 border border-yellow-400/20 space-y-4">
+          <h2 className="text-2xl font-semibold text-yellow-300">🏅 Ranked Members (Top 10)</h2>
+
+          <div className="space-y-1 text-sm">
+            <p>🥇 Rank 1 → <b>Unlimited</b></p>
+            <p>🥈 Rank 2 → <b>400k / 40k</b></p>
+            <p>🥉 Rank 3 → <b>300k / 30k</b></p>
+            <p>🏅 Rank 4–10 → <b>250k / 20k</b></p>
+          </div>
+        </section>
+
+        {/* RANKED RULES */}
+        <section className="p-6 rounded-2xl bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-violet-500/10 border border-indigo-400/20 space-y-4">
+          <h2 className="text-2xl font-semibold text-indigo-300">👑 Ranked Rules</h2>
+
+          <ul className="space-y-2 text-sm">
+            <li>❌ Do NOT steal ranks from other ranked members.</li>
+            <li>⚖️ Maintain fair competition within the alliance.</li>
+            <li>⚡ If your rank is stolen → you may break your cap to recover it.</li>
+            <li>🚨 If a cap breaker appears → you MUST exceed them.</li>
+            <li>🕒 Be online in final hours.</li>
+          </ul>
+
+          <div className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-400/30 text-yellow-200 font-semibold">
+            ⚠️ Rank order is ALWAYS more important than caps.
+          </div>
+        </section>
+
+        {/* UNRANKED RULES */}
+        <section className="p-6 rounded-2xl bg-gradient-to-br from-gray-500/10 via-zinc-500/5 to-slate-500/10 border border-gray-400/20 space-y-4">
+          <h2 className="text-2xl font-semibold text-gray-300">⚔️ Unranked Rules</h2>
+
+          <ul className="space-y-2 text-sm">
+            <li>⏱️ Max <b>10k</b> speedups</li>
+            <li>⚡ Power upgrade cap: <b>200k</b></li>
+          </ul>
+
+          <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-400/30 text-blue-200 text-sm">
+            ❗ If unsure → <b>ASK BEFORE acting</b>
           </div>
         </section>
 
         {/* FINES */}
-        <section className="p-6 rounded-2xl bg-gradient-to-br from-red-500/10 via-rose-500/5 to-pink-500/10 border border-red-500/20 backdrop-blur-md shadow-[0_0_40px_rgba(239,68,68,0.1)] space-y-4">
+        <section className="p-6 rounded-2xl bg-gradient-to-br from-red-500/10 via-rose-500/5 to-pink-500/10 border border-red-500/20 space-y-4">
           <h2 className="text-2xl font-semibold text-red-400">💰 Penalties & Fines</h2>
 
           <p className="text-sm text-white/80">
-            ‼️ Fine in <b>GOLD per GH reward obtained</b>
+            Fine in <b>GOLD per GH reward</b>
           </p>
 
-          <div className="space-y-2 text-[15px]">
-            <p>🥇 1st offense → <b>25M gold / GH</b></p>
-            <p>🥈 2nd offense → <b>50M gold / GH</b></p>
-            <p>🥉 3rd offense → <b>100M gold / GH</b></p>
+          <div className="space-y-2 text-sm">
+            <p>🥇 1st offense → <b>25M / GH</b></p>
+            <p>🥈 2nd offense → <b>50M / GH</b></p>
+            <p>🥉 3rd offense → <b>100M / GH</b></p>
           </div>
 
           <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/40 text-red-300 font-semibold">
             ❌ No 4th offense
           </div>
 
-          <div className="text-sm space-y-1 text-white/80">
-            <p>📌 <b>Minimum fine: 100M gold</b></p>
-            <p>❌ Not paying = ZERO</p>
+          <div className="text-sm text-white/80">
+            📌 Minimum fine: <b>100M gold</b>
+          </div>
+
+          <div className="p-4 rounded-xl bg-yellow-500/10 border border-yellow-400/30 text-yellow-200 text-sm">
+            ⚠️ If you break <b>200k / 10k</b> as unranked BUT don’t steal rank:
+            <br />
+            ✔️ ≥100M KP → <b>NO fine</b><br />
+            ❌ &lt;100M KP → <b>FINED</b>
           </div>
         </section>
 
-        {/* PAYMENT RULES */}
-        <section className="p-6 rounded-2xl bg-gradient-to-br from-orange-500/10 via-amber-500/5 to-yellow-500/10 border border-orange-400/20 backdrop-blur-md shadow-[0_0_40px_rgba(251,191,36,0.08)] space-y-4">
+        {/* PAYMENT */}
+        <section className="p-6 rounded-2xl bg-gradient-to-br from-orange-500/10 via-amber-500/5 to-yellow-500/10 border border-orange-400/20 space-y-4">
           <h2 className="text-2xl font-semibold text-orange-300">⏳ Payment Rules</h2>
 
-          <p>📢 After fines are announced by the <b>King</b>:</p>
-
-          <ul className="space-y-2">
-            <li>⏱️ You have <b>48 hours</b> to pay</li>
-            <li>🏙️ A <b>48h cooldown marker</b> will be placed on your city</li>
-            <li>📸 You must send <b>proof (screenshots)</b> to Harley or R5</li>
+          <ul className="space-y-2 text-sm">
+            <li>⏱️ 48h to pay</li>
+            <li>🏙️ 48h city marker</li>
+            <li>📸 Send proof to Harley / R5</li>
           </ul>
         </section>
 
         {/* IMPORTANT */}
-        <section className="p-6 rounded-2xl bg-gradient-to-br from-blue-500/10 via-sky-400/5 to-cyan-500/10 border border-blue-400/20 backdrop-blur-md shadow-[0_0_40px_rgba(59,130,246,0.08)] space-y-4">
+        <section className="p-6 rounded-2xl bg-gradient-to-br from-blue-500/10 via-sky-400/5 to-cyan-500/10 border border-blue-400/20 space-y-4">
           <h2 className="text-2xl font-semibold text-blue-300">📊 Important Notes</h2>
 
           <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-400/30 text-blue-200">
-            ⚠️ <b>MGE and 20GH offenses STACK</b>
+            ⚠️ MGE and 20GH offenses STACK
           </div>
 
-          <p>Violations from both events are <b>combined into one progression</b>.</p>
-
           <p className="text-sm text-white/80">
-            Offenses may be removed over time depending on activity, KvK contribution, behavior, and age.
+            Offenses may be removed over time based on activity and behavior.
           </p>
         </section>
 
         {/* EXAMPLE */}
-        <section className="p-6 rounded-2xl bg-gradient-to-br from-violet-500/10 via-purple-500/5 to-indigo-500/10 border border-violet-400/20 backdrop-blur-md shadow-[0_0_40px_rgba(139,92,246,0.08)] space-y-4">
+        <section className="p-6 rounded-2xl bg-gradient-to-br from-violet-500/10 via-purple-500/5 to-indigo-500/10 border border-violet-400/20 space-y-4">
           <h2 className="text-2xl font-semibold text-violet-300">📚 Example</h2>
 
-          <p>👉 Player with <b>&lt;100M KP</b> gets <b>Rank 1</b> (20 GH reward):</p>
+          <p>👉 If you are unranked and get Rank 1:</p>
 
-          <div className="p-3 rounded-lg bg-white/5 border border-white/10">
-            💰 Fine = <b>25M × 20GH = 500M gold</b>
+          <div className="p-3 bg-white/5 rounded-lg border border-white/10">
+            💰 25M × 20GH = <b>500M gold</b>
           </div>
 
-          <p>👉 Player gets <b>Rank 4–10</b> (example 4 GH):</p>
+          <p>👉 If you get Rank 4–10:</p>
 
-          <div className="p-3 rounded-lg bg-white/5 border border-white/10">
-            💰 Fine = <b>25M × 4GH = 100M gold</b>
+          <div className="p-3 bg-white/5 rounded-lg border border-white/10">
+            💰 25M × 4GH = <b>100M gold</b>
           </div>
         </section>
 
-        {/* 🔎 SEARCH */}
+        {/* SEARCH */}
         <section className="p-6 rounded-2xl bg-gradient-to-br from-purple-500/10 via-indigo-500/5 to-blue-500/10 border border-purple-400/20 space-y-4">
 
-      <h2 className="text-2xl font-semibold text-purple-300">
-  Fast lookup to check if you meet req for 20GH! (If you can not find your name, check{" "}
-  <a 
-    href="https://app.rokstats.online/kvk/ranking" 
-    target="_blank" 
-    rel="noopener noreferrer"
-    className="underline text-purple-400"
-  >
-    Rokstats
-  </a>
-  )
-</h2>
+          <h2 className="text-2xl font-semibold text-purple-300">
+            Fast lookup (or check{" "}
+            <a
+              href="https://app.rokstats.online/kvk/ranking"
+              target="_blank"
+              className="underline"
+            >
+              Rokstats
+            </a>)
+          </h2>
 
           <input
-            placeholder="Search for your name or ID..."
+            placeholder="Search..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full p-3 rounded-xl bg-black/30 border border-white/10"
@@ -178,40 +220,32 @@ export default function GH20RulesPage() {
 
           {loading && <p className="text-sm text-white/60">Loading...</p>}
 
-          <div className="space-y-2">
-            {results.map(p => {
-              const kvk = kvkContributionPercent(p.kvkContribution)
+          {results.map(p => {
+            const kvk = kvkContributionPercent(p.kvkContribution)
 
-              return (
-                <div key={p.id} className="p-3 bg-white/5 rounded-xl border border-white/10">
-
-                  <div className="flex justify-between">
-                    <div>
-                      <div className="font-semibold">{p.name}</div>
-                      <div className="text-xs text-white/50">
-                        {p.kvkContribution.toLocaleString()} KP
-                      </div>
-                    </div>
-
-                    <span className="text-xs">{kvk.label}</span>
+            return (
+              <div key={p.id} className="p-3 bg-white/5 rounded-xl border border-white/10">
+                <div className="flex justify-between">
+                  <div>
+                    <div>{p.name}</div>
+                    <div className="text-xs">{p.kvkContribution.toLocaleString()} KP</div>
                   </div>
-
-                  {p.kvkContribution < 100_000_000 && (
-                    <div className="text-red-400 text-xs mt-1">
-                      🚨 Will be fined in Top 10
-                    </div>
-                  )}
-
+                  <span>{kvk.label}</span>
                 </div>
-              )
-            })}
-          </div>
 
+                {p.kvkContribution < 100_000_000 && (
+                  <div className="text-red-400 text-xs mt-1">
+                    🚨 Will be fined in Top 10
+                  </div>
+                )}
+              </div>
+            )
+          })}
         </section>
 
         {/* FINAL */}
         <section className="text-center">
-          <div className="p-4 rounded-xl bg-gradient-to-r from-red-500/20 to-pink-500/20 border border-red-500/40 text-red-300 font-bold">
+          <div className="p-4 rounded-xl bg-red-500/20 border border-red-500/40 text-red-300 font-bold">
             ‼️ NO EXCUSES • NO EXCEPTIONS ‼️
           </div>
         </section>
