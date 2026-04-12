@@ -47,7 +47,10 @@ export default function GH20RulesPage() {
 
     setResults(
       players
-        .filter(p => normalize(p.name).includes(q))
+        .filter(p => 
+  normalize(p.name).includes(q) ||
+  p.id.toLowerCase().includes(q)
+)
         .slice(0, 10)
     )
   }, [search, players])
@@ -60,8 +63,7 @@ export default function GH20RulesPage() {
         <div className="text-center space-y-2">
           <h1 className="text-4xl font-bold">🏆 20GH Rules</h1>
           <p className="text-[var(--text-secondary)]">
-            Top 10 is restricted. Everything else is free.
-            <br />
+          
             For any questions pm Harley Quinn!
           </p>
         </div>
@@ -76,10 +78,10 @@ export default function GH20RulesPage() {
             ✅ <b>Requirement:</b> Minimum <b>100M KP in last KvK</b>
           </div>
 
-          <p>⚔️ Players <b>below 100M KP</b> who enter Top 10 will be fined.</p>
+      
 
           <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-white/80">
-            📌 <b>Rank 11+</b> is <b>FREE FOR ALL</b>
+            📌 Players <b>below 100M KP</b> who enter Top 10 will be fined.
           </div>
         </section>
 
@@ -163,7 +165,7 @@ export default function GH20RulesPage() {
           <ul className="space-y-2 text-sm">
             <li>⏱️ 48h to pay</li>
             <li>🏙️ 48h city marker</li>
-            <li>📸 Send proof to Harley / R5</li>
+            <li>📸 Send proof to Harley</li>
           </ul>
         </section>
 
@@ -227,10 +229,25 @@ export default function GH20RulesPage() {
               <div key={p.id} className="p-3 bg-white/5 rounded-xl border border-white/10">
                 <div className="flex justify-between">
                   <div>
-                    <div>{p.name}</div>
-                    <div className="text-xs">{p.kvkContribution.toLocaleString()} KP</div>
-                  </div>
-                  <span>{kvk.label}</span>
+  <div className="font-semibold">{p.name}</div>
+  <div className="text-xs text-white/50">ID: {p.id}</div>
+  <div className="text-xs text-white/50">
+    {p.kvkContribution.toLocaleString()} KP
+  </div>
+</div>
+                 <span
+  className={
+    kvk.color === "green"
+      ? "text-green-400"
+      : kvk.color === "yellow"
+      ? "text-yellow-400"
+      : kvk.color === "orange"
+      ? "text-orange-400"
+      : "text-red-400"
+  }
+>
+  {kvk.label}
+</span>
                 </div>
 
                 {p.kvkContribution < 100_000_000 && (
