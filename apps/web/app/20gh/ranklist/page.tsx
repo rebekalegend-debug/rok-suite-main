@@ -166,11 +166,11 @@ return (
      <td className="p-3" onPointerDown={stop}>
   <span
     className={`${badge} ${
-      Number(player.desiredRank) <= 2
+      Number(player.desiredRank) <= 1
         ? "border-green-500 text-green-400 bg-green-500/10"
-        : Number(player.desiredRank) <= 5
+        : Number(player.desiredRank) <= 2
         ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
-        : Number(player.desiredRank) <= 10
+        : Number(player.desiredRank) <= 3
         ? "border-orange-500 text-orange-400 bg-orange-500/10"
         : "border-red-500 text-red-400 bg-red-500/10"
     }`}
