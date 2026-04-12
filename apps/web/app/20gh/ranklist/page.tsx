@@ -125,7 +125,7 @@ return (
         ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
         : getHeads(rank) >= 5
         ? "border-orange-500 text-orange-400 bg-orange-500/10"
-        : getHeads(rank) > 4
+        : getHeads(rank) > 0
         ? "border-red-500 text-red-400 bg-red-500/10"
         : "border-zinc-500 text-zinc-400 bg-zinc-500/10"
     }`}
