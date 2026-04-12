@@ -300,8 +300,8 @@ function update() {
   const countdownData = get20ghCountdown()
 
   setCountdown(countdownData)
- //reenable after test setTwentyGhClosed(!isOpen)
-setTwentyGhClosed(false)  //delete after test
+ setTwentyGhClosed(!isOpen)
+
 }
  
   (window as any).forceUpdate20GH = update
