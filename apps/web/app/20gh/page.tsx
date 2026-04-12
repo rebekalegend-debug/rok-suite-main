@@ -34,6 +34,35 @@ function cropOwnedArea(file: File): Promise<Blob> {
     }
   })
 }
+
+async function compressImage(file: File, maxWidth = 1200): Promise<Blob> {
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.src = URL.createObjectURL(file)
+
+    img.onload = () => {
+      const canvas = document.createElement("canvas")
+      const ctx = canvas.getContext("2d")!
+
+      const scale = Math.min(1, maxWidth / img.width)
+      const width = img.width * scale
+      const height = img.height * scale
+
+      canvas.width = width
+      canvas.height = height
+
+      ctx.drawImage(img, 0, 0, width, height)
+
+      canvas.toBlob(
+        (blob) => resolve(blob!),
+        "image/jpeg",
+        0.7 // 🔥 compression quality
+      )
+    }
+  })
+}
+
+
 async function readGHFromImage(file: File): Promise<string> {
   const cropped = await cropOwnedArea(file)
 
@@ -443,7 +472,14 @@ if (ghFile) {
     })
 
     // 🔥 SAME FIX AS MGE
-    if (!res.ok) throw new Error("Request failed")
+   if (!res.ok) {
+  if (res.status === 413) {
+    throw new Error("FILE_TOO_LARGE")
+  }
+
+  const text = await res.text()
+  throw new Error(text || "Request failed")
+}
 
     const result = await res.json()
     console.log("SUBMIT RESULT:", result)
@@ -454,7 +490,15 @@ if (ghFile) {
   } catch (err) {
     console.error("SUBMIT ERROR:", err)
 
-    alert("❌ Submission failed. Please try again with another screenshot!")
+   if (err instanceof Error) {
+  if (err.message === "FILE_TOO_LARGE") {
+    alert("❌ Upload failed: Image too large.\nTry a smaller screenshot.")
+  } else {
+    alert("❌ Error: " + err.message)
+  }
+} else {
+  alert("❌ Unknown error occurred")
+}
   } finally {
     setSubmitting(false)
   }
@@ -918,13 +962,23 @@ ${missing.equipment
 type="file"
 accept="image/*"
 className="hidden"
-onChange={(e)=>{
+onChange={async (e)=>{
   const file = e.target.files?.[0] || null
-  setCommanderFile(file)
-
-  if(file){
-    setMissing(prev => ({ ...prev, equipment:false }))
+if (file) {
+  if (file.size > 5_000_000) {
+     alert("❌ Image too large (max ~5MB).")
+    return
   }
+
+  const compressed = await compressImage(file)
+  const newFile = new File([compressed], "eq.jpg", { type: "image/jpeg" })
+
+  console.log("EQ original:", file.size)
+  console.log("EQ compressed:", newFile.size)
+
+  setCommanderFile(newFile)
+  setMissing(prev => ({ ...prev, equipment:false }))
+}
 }}
 />
 
@@ -979,24 +1033,29 @@ onChange={(e)=>{
   className="hidden"
   onChange={async (e)=>{
     const file = e.target.files?.[0] || null
-    setGhFile(file)
+   if (file) {
+  if (file.size > 5_000_000) {
+     alert("❌ Image too large (max ~5MB).")
+    return
+  }
 
-    if(file){
-      setMissing(prev => ({ ...prev, ghImage:false }))
+  const compressed = await compressImage(file)
+  const newFile = new File([compressed], "gh.jpg", { type: "image/jpeg" })
 
-   const detected = await readGHFromImage(file)
+  console.log("GH original:", file.size)
+  console.log("GH compressed:", newFile.size)
 
-console.log("DETECTED GH:", detected) // 👈 ADD THIS
+  setGhFile(newFile)
 
-if (detected) {
-  setGhNumber(detected)
+  setMissing(prev => ({ ...prev, ghImage:false }))
+
+  const detected = await readGHFromImage(newFile)
+
+  if (detected) {
+    setGhNumber(detected)
+    setGhAuto(true)
+  }
 }
-
-      if (detected) {
-        setGhNumber(detected)
-        setGhAuto(true)
-      }
-    }
   }}
 />
 {/* GH NUMBER */}
