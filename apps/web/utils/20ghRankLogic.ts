@@ -11,26 +11,12 @@ export function getHeads(rank: number): number {
 export function getPoints(rank: number, total: number) {
   if (rank === 1) return "∞"
 
-  // Rank 2 fixed
-  if (rank === 2) return "500k/50k"
+  if (rank === 2) return "400k/40k"
 
-  // Rank 3–10 → slope down to 200k/10k
-  if (rank >= 3 && rank <= 10) {
-    const maxKp = 500 // rank 2
-    const minKp = 200 // rank 10
+  if (rank === 3) return "300k/30k"
 
-    const maxAp = 50
-    const minAp = 10
+  if (rank >= 4 && rank <= 10) return "250k/20k"
 
-    const t = (rank - 2) / (10 - 2) // normalized 0 → 1
-
-    const kp = Math.round(maxKp - t * (maxKp - minKp))
-    const ap = Math.round(maxAp - t * (maxAp - minAp))
-
-    return `${kp}k/${ap}k`
-  }
-
-  // Rank 11+ → flat low cap
   return "200k/10k"
 }
 
