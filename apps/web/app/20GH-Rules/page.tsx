@@ -62,9 +62,11 @@ export default function GH20RulesPage() {
         {/* TITLE */}
         <div className="text-center space-y-2">
           <h1 className="text-4xl font-bold">🏆 20GH Rules</h1>
+           <h2 className="text-2xl font-semibold text-red-400">Page under maintainance!</h2>
           <p className="text-[var(--text-secondary)]">
           
             For any questions pm Harley Quinn!
+            
           </p>
         </div>
 
@@ -151,10 +153,10 @@ export default function GH20RulesPage() {
           </div>
 
           <div className="p-4 rounded-xl bg-yellow-500/10 border border-yellow-400/30 text-yellow-200 text-sm">
-            ⚠️ If you break <b>200k / 10k</b> as unranked BUT don’t steal rank:
+            ⚠️ If you break <b>200k / 10k</b> as an unranked player BUT don’t steal rank:
             <br />
-            ✔️ ≥100M KP → <b>NO fine</b><br />
-            ❌ &lt;100M KP → <b>FINED</b>
+            KvK contr ≥100M KP → <b>NO fine</b><br />
+            KvK contr &lt;100M KP → <b>FINED</b>
           </div>
         </section>
 
@@ -178,7 +180,7 @@ export default function GH20RulesPage() {
           </div>
 
           <p className="text-sm text-white/80">
-            Offenses may be removed over time based on activity and behavior.
+            Offenses may be expire over time based on activity, time and behavior.
           </p>
         </section>
 
@@ -186,7 +188,7 @@ export default function GH20RulesPage() {
         <section className="p-6 rounded-2xl bg-gradient-to-br from-violet-500/10 via-purple-500/5 to-indigo-500/10 border border-violet-400/20 space-y-4">
           <h2 className="text-2xl font-semibold text-violet-300">📚 Example</h2>
 
-          <p>👉 If you are unranked and get Rank 1:</p>
+          <p>👉 If you are unranked and get Rank 1 with first violation:</p>
 
           <div className="p-3 bg-white/5 rounded-lg border border-white/10">
             💰 25M × 20GH = <b>500M gold</b>
@@ -203,7 +205,7 @@ export default function GH20RulesPage() {
         <section className="p-6 rounded-2xl bg-gradient-to-br from-purple-500/10 via-indigo-500/5 to-blue-500/10 border border-purple-400/20 space-y-4">
 
           <h2 className="text-2xl font-semibold text-purple-300">
-            Fast lookup by ID (or check{" "}
+            Fast KP lookup by ID (or check{" "}
             <a
               href="https://app.rokstats.online/kvk/ranking"
               target="_blank"
