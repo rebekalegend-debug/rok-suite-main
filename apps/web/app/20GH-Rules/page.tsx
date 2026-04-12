@@ -203,7 +203,7 @@ export default function GH20RulesPage() {
         <section className="p-6 rounded-2xl bg-gradient-to-br from-purple-500/10 via-indigo-500/5 to-blue-500/10 border border-purple-400/20 space-y-4">
 
           <h2 className="text-2xl font-semibold text-purple-300">
-            Fast lookup (or check{" "}
+            Fast lookup by ID (or check{" "}
             <a
               href="https://app.rokstats.online/kvk/ranking"
               target="_blank"
@@ -214,11 +214,16 @@ export default function GH20RulesPage() {
           </h2>
 
           <input
-            placeholder="Search..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full p-3 rounded-xl bg-black/30 border border-white/10"
-          />
+  placeholder="Search by ID..."
+  value={search}
+  onChange={(e) => {
+    const value = e.target.value.replace(/\D/g, "") // remove non-digits
+    setSearch(value)
+  }}
+  inputMode="numeric"
+  pattern="[0-9]*"
+  className="w-full p-3 rounded-xl bg-black/30 border border-white/10"
+/>
 
           {loading && <p className="text-sm text-white/60">Loading...</p>}
 
