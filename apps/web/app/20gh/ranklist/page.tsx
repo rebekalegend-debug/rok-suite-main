@@ -119,13 +119,13 @@ return (
 <td className="p-3" onPointerDown={stop}>
   <span
     className={`${badge} ${
-      getHeads(rank) >= 90
+      getHeads(rank) >= 20
         ? "border-green-500 text-green-400 bg-green-500/10"
-        : getHeads(rank) >= 60
+        : getHeads(rank) >= 10
         ? "border-yellow-500 text-yellow-400 bg-yellow-500/10"
-        : getHeads(rank) >= 30
+        : getHeads(rank) >= 5
         ? "border-orange-500 text-orange-400 bg-orange-500/10"
-        : getHeads(rank) > 0
+        : getHeads(rank) > 4
         ? "border-red-500 text-red-400 bg-red-500/10"
         : "border-zinc-500 text-zinc-400 bg-zinc-500/10"
     }`}
