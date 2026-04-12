@@ -11,13 +11,13 @@ export function getHeads(rank: number): number {
 export function getPoints(rank: number, total: number) {
   if (rank === 1) return "∞"
 
-  if (rank === 2) return "400k/40k"
+  if (rank === 2) return "400K-40K"
 
-  if (rank === 3) return "300k/30k"
+  if (rank === 3) return "300K-30K"
 
-  if (rank >= 4 && rank <= 10) return "250k/20k"
+  if (rank >= 4 && rank <= 10) return "250K-20K"
 
-  return "200k/10k"
+  return "200K-10K"
 }
 
 export function formatMillions(value: number) {
