@@ -82,9 +82,12 @@ export default function GH20RulesPage() {
 
       
 
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-white/80">
-            📌 Players <b>below 100M KP</b> who enter Top 10 will be fined.
+        {/*  <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-white/80">
+          
+          📌 Players <b>below 100M KP</b> who enter Top 10 will be fined.
           </div>
+          */}
+          
         </section>
 
         {/* RANKED MEMBERS */}
