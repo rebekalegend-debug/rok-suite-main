@@ -3,34 +3,15 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Search, RefreshCw, Crosshair, Skull, LogOut, Target } from 'lucide-react';
 
-/** Format power */
-const formatPower = (val: number): string => {
-  if (!val) return "-";
-  if (val >= 1_000_000_000) return Math.round(val / 1_000_000_000) + "B";
-  if (val >= 1_000_000) return Math.round(val / 1_000_000) + "M";
-  if (val >= 1_000) return Math.round(val / 1_000) + "K";
-  return val.toString();
-};
-
-const formatTotalPower = (val: number): string => {
-  if (!val) return '0';
-  if (val >= 1_000_000_000_000) return (val / 1_000_000_000_000).toFixed(2) + 'T';
-  if (val >= 1_000_000_000) return (val / 1_000_000_000).toFixed(2) + 'B';
-  if (val >= 1_000_000) return (val / 1_000_000).toFixed(1) + 'M';
-  if (val >= 1_000) return (val / 1_000).toFixed(0) + 'K';
-  return val.toString();
-};
-
 type Player = {
   governorId: number;
   name: string;
-  power2: number;
-  alliance: string;
+  honor: number;
+  lastUpdated: string;
   rank: number;
-  display: boolean;
 };
 
-type SortField = 'name' | 'power' | 'alliance' | 'rank';
+type SortField = 'name' | 'honor' | 'rank';
 
 export default function HonorPage() {
   const [players, setPlayers] = useState<Player[]>([]);
@@ -40,42 +21,34 @@ export default function HonorPage() {
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
   const [lastRefreshed, setLastRefreshed] = useState<Date | null>(null);
 
+  const KINGDOMS = [2554, 2500, 3237];
+
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
- const res = await fetch(
-  "https://statsmasterdatahub.com/api/honor-rankings/2554?kvk_number=c13131"
-);
+      const results: Player[] = [];
 
-const json = await res.json();
-console.log("API RESPONSE:", json);
+      for (const kd of KINGDOMS) {
+        const res = await fetch(
+          `https://statsmasterdatahub.com/api/honor-rankings/${kd}?kvk_number=c13131`
+        );
 
-// 🔥 try ALL possible paths safely
-let list: any[] = [];
+        const json = await res.json();
 
-if (Array.isArray(json)) list = json;
-else if (Array.isArray(json.data)) list = json.data;
-else if (Array.isArray(json.results)) list = json.results;
-else if (Array.isArray(json.data?.data)) list = json.data.data;
-else if (Array.isArray(json.data?.results)) list = json.data.results;
-else if (Array.isArray(json.rankings)) list = json.rankings;
-else if (Array.isArray(json.players)) list = json.players;
+        const list = json.players || [];
 
-// ❗ if still empty → log clearly
-if (!list.length) {
-  console.error("❌ Could not find array in response", json);
-}
+        list.forEach((p: any, index: number) => {
+          results.push({
+            governorId: Number(p.governor_id || p.id || index),
+            name: p.name || "Unknown",
+            honor: Number(p.honor || p.points || 0),
+            lastUpdated: p.last_updated || p.updated_at || "",
+            rank: Number(p.rank || index + 1),
+          });
+        });
+      }
 
-const mapped = list.map((p: any, index: number) => ({
-  governorId: Number(p.governor_id || p.id || p.player_id || index),
-  name: p.name || p.player_name || p.nickname || "Unknown",
-  power2: Number(p.power || p.power_value || 0),
-  alliance: p.alliance || p.alliance_name || p.tag || "",
-  rank: Number(p.rank || index + 1),
-  display: true,
-}));
-
-setPlayers(mapped);
+      setPlayers(results);
       setLastRefreshed(new Date());
     } catch (e) {
       console.error(e);
@@ -100,8 +73,7 @@ setPlayers(mapped);
 
         switch (sortField) {
           case 'name': aVal = a.name; bVal = b.name; break;
-          case 'power': aVal = a.power2; bVal = b.power2; break;
-          case 'alliance': aVal = a.alliance; bVal = b.alliance; break;
+          case 'honor': aVal = a.honor; bVal = b.honor; break;
           case 'rank': aVal = a.rank; bVal = b.rank; break;
         }
 
@@ -111,11 +83,9 @@ setPlayers(mapped);
   }, [players, search, sortField, sortDir]);
 
   const stats = useMemo(() => {
-    let totalPower = 0;
-    for (const p of players) totalPower += p.power2;
     return {
       total: players.length,
-      totalPower,
+      totalHonor: players.reduce((sum, p) => sum + p.honor, 0),
     };
   }, [players]);
 
@@ -126,6 +96,13 @@ setPlayers(mapped);
       setSortField(field);
       setSortDir(field === 'name' ? 'asc' : 'desc');
     }
+  };
+
+  const formatNumber = (v: number) => {
+    if (v >= 1_000_000_000) return (v / 1_000_000_000).toFixed(1) + 'B';
+    if (v >= 1_000_000) return (v / 1_000_000).toFixed(1) + 'M';
+    if (v >= 1_000) return (v / 1_000).toFixed(1) + 'K';
+    return v.toString();
   };
 
   return (
@@ -160,8 +137,8 @@ setPlayers(mapped);
 
         <div className="p-4 border rounded-xl">
           <Skull size={16} />
-          <p className="text-2xl font-bold">{formatTotalPower(stats.totalPower)}</p>
-          <p className="text-xs opacity-60">Total Power</p>
+          <p className="text-2xl font-bold">{formatNumber(stats.totalHonor)}</p>
+          <p className="text-xs opacity-60">Total Honor</p>
         </div>
 
         <div className="p-4 border rounded-xl">
@@ -197,10 +174,10 @@ setPlayers(mapped);
             <tr className="border-b text-sm">
               <th>#</th>
               <th onClick={() => toggleSort('rank')}>Rank</th>
-              <th onClick={() => toggleSort('name')}>Name</th>
               <th>ID</th>
-              <th onClick={() => toggleSort('power')}>Power</th>
-              <th onClick={() => toggleSort('alliance')}>Alliance</th>
+              <th onClick={() => toggleSort('name')}>Name</th>
+              <th onClick={() => toggleSort('honor')}>Honor Points</th>
+              <th>Last Updated</th>
             </tr>
           </thead>
 
@@ -214,10 +191,10 @@ setPlayers(mapped);
                 <tr key={p.governorId} className="border-b hover:bg-white/5">
                   <td>{i + 1}</td>
                   <td>{p.rank}</td>
-                  <td>{p.name}</td>
                   <td>{p.governorId}</td>
-                  <td className="text-right">{formatPower(p.power2)}</td>
-                  <td>{p.alliance}</td>
+                  <td>{p.name}</td>
+                  <td className="text-right">{formatNumber(p.honor)}</td>
+                  <td>{p.lastUpdated ? new Date(p.lastUpdated).toLocaleString() : '-'}</td>
                 </tr>
               ))
             )}
