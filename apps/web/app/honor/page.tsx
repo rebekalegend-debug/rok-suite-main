@@ -43,21 +43,39 @@ export default function HonorPage() {
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(
-        "https://statsmasterdatahub.com/api/honor-rankings/2554?kvk_number=c13131"
-      );
-      const data = await res.json();
+ const res = await fetch(
+  "https://statsmasterdatahub.com/api/honor-rankings/2554?kvk_number=c13131"
+);
 
-      const mapped = data.map((p: any, index: number) => ({
-        governorId: Number(p.governor_id || p.id || index),
-        name: p.name || p.player_name || "Unknown",
-        power2: Number(p.power || 0),
-        alliance: p.alliance || p.alliance_name || "",
-        rank: index + 1,
-        display: true,
-      }));
+const json = await res.json();
+console.log("API RESPONSE:", json);
 
-      setPlayers(mapped);
+// 🔥 try ALL possible paths safely
+let list: any[] = [];
+
+if (Array.isArray(json)) list = json;
+else if (Array.isArray(json.data)) list = json.data;
+else if (Array.isArray(json.results)) list = json.results;
+else if (Array.isArray(json.data?.data)) list = json.data.data;
+else if (Array.isArray(json.data?.results)) list = json.data.results;
+else if (Array.isArray(json.rankings)) list = json.rankings;
+else if (Array.isArray(json.players)) list = json.players;
+
+// ❗ if still empty → log clearly
+if (!list.length) {
+  console.error("❌ Could not find array in response", json);
+}
+
+const mapped = list.map((p: any, index: number) => ({
+  governorId: Number(p.governor_id || p.id || p.player_id || index),
+  name: p.name || p.player_name || p.nickname || "Unknown",
+  power2: Number(p.power || p.power_value || 0),
+  alliance: p.alliance || p.alliance_name || p.tag || "",
+  rank: Number(p.rank || index + 1),
+  display: true,
+}));
+
+setPlayers(mapped);
       setLastRefreshed(new Date());
     } catch (e) {
       console.error(e);
