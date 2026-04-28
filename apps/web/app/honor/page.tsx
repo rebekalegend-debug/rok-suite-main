@@ -102,25 +102,24 @@ async function loadMembers(){
 
 setLoadingMembers(true)
 const res = await fetch(
-  `https://statsmasterdatahub.com/api/honor-rankings/${selectedKingdom}?kvk_number=c13131`
+  `https://statsmasterdatahub.com/api/honor-rankings/${selectedKingdom}`
 )
 
 const json = await res.json()
 
-const mapped = (json.players || []).map((p: any, index: number) => ({
-  id: String(p.governor_id || index),
-  name: p.name || "Unknown",
+const players = json?.players || json || []
 
-  // 🔥 THIS = HONOR POINTS (used as "power" in your UI)
-  power: Number(p.honor_points || p.power || 0),
+const mapped = players.map((p: any, index: number) => ({
+  id: String(p.governor_id ?? p.id ?? index),
+  name: p.name ?? "Unknown",
+
+  // Honor Points
+  power: Number(p.honor_points ?? p.power ?? 0),
 
   prevNames: [],
-
-  // ❌ NOT AVAILABLE IN API → leave empty
   migratedOut: null,
   migratedIn: null,
 
-  // ✅ use last update if exists, fallback to now
   lastSeen: p.last_updated
     ? new Date(p.last_updated * 1000).toISOString()
     : new Date().toISOString(),
@@ -136,8 +135,8 @@ loadMembers()
 },[selectedKingdom])
   const [search, setSearch] = useState('');
   const [filterMode,setFilterMode] = useState<'all'|'current'|'in'|'out'>('all')
-  const [sortField, setSortField] = useState<SortField>('name');
-  const [sortDir, setSortDir] = useState<SortDir>('desc');
+  const [sortField, setSortField] = useState<SortField>('power');
+const [sortDir, setSortDir] = useState<SortDir>('desc');
 
   // Chart state
   const [chartKingdoms, setChartKingdoms] = useState<Set<number>>(new Set());
@@ -170,10 +169,9 @@ let data = [...cleanMembers]
     )
   }
 
-  // 🔥 FILTERS + SPECIAL SORT
-  if (filterMode === 'current') {
-    data = data.filter(m => !m.migratedOut)
-  }
+if (filterMode === 'current') {
+  // keep all (API has no migration info)
+}
 
 if (filterMode === 'in') {
   data = data.filter(m => {
@@ -250,7 +248,7 @@ const top300Data = useMemo(() => {
   }
 }, [snapshotMembers])
 
-const currentMembers = snapshotMembers
+const currentMembers = cleanMembers
   
 const currentTotalPower = useMemo(() => {
   return snapshotMembers.reduce((sum, m) => {
@@ -584,150 +582,40 @@ className="w-full pl-9 pr-3 py-2 rounded-xl bg-[var(--background-secondary)] bor
 <thead className="sticky top-0 z-10 bg-[var(--background-card)]">
 <tr className="border-b border-[var(--border)]">
 
-<th className="px-3 py-2.5 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">#</th>
+<th className="px-3 py-3 text-center text-xs text-[var(--text-muted)]">Rank</th>
+<th className="px-3 py-3 text-center text-xs text-[var(--text-muted)]">Governor ID</th>
+<th className="px-3 py-3 text-center text-xs text-[var(--text-muted)]">Name</th>
+<th className="px-3 py-3 text-center text-xs text-[var(--text-muted)]">Honor Points</th>
+<th className="px-3 py-3 text-center text-xs text-[var(--text-muted)]">Last Updated</th>
 
-<th
-onClick={()=>handleSort('id')}
-className="px-3 py-2.5 sm:py-3text-center text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
->
-ID
-<span className="inline-flex mr-1">
-{sortField === 'id' ? (
-  sortDir === 'asc'
-    ? <ChevronUp className="w-3.5 h-3.5 text-[#6f7f97]"/>
-    : <ChevronDown className="w-3.5 h-3.5 text-[#6f7f97]"/>
-) : (
-  <ChevronUp className="w-3.5 h-3.5 opacity-30"/>
-)}
-</span>
-</th>
-
-<th
-onClick={()=>handleSort('name')}
-className="px-3 py-2.5 sm:py-3text-center text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
->
-Name
-<span className="inline-flex mr-1">
-{sortField === 'name'
-  ? (sortDir === 'asc'
-      ? <ChevronUp className="w-3.5 h-3.5 text-[#6f7f97]"/>
-      : <ChevronDown className="w-3.5 h-3.5 text-[#6f7f97]"/>)
-  : <ChevronUp className="w-3.5 h-3.5 opacity-30"/>
-}
-</span>
-</th>
-
-<th
-onClick={()=>handleSort('power')}
-className="px-3 py-2.5 sm:py-3text-center text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
->
-Power
-<span className="inline-flex mr-1">
-{sortField === 'power'
-  ? (sortDir === 'asc'
-      ? <ChevronUp className="w-3.5 h-3.5 text-[#6f7f97]"/>
-      : <ChevronDown className="w-3.5 h-3.5 text-[#6f7f97]"/>)
-  : <ChevronUp className="w-3.5 h-3.5 opacity-30"/>
-}
-</span>
-</th>
-
-<th
-onClick={()=>handleSort('in')}
-className="px-3 py-2.5 sm:py-3text-center text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
->
-Show Up
-<span className="inline-flex mr-1">
-{sortField === 'in'
-  ? (sortDir === 'asc'
-      ? <ChevronUp className="w-3.5 h-3.5 text-[#6f7f97]"/>
-      : <ChevronDown className="w-3.5 h-3.5 text-[#6f7f97]"/>)
-  : <ChevronUp className="w-3.5 h-3.5 opacity-30"/>
-}
-</span>
-</th>
-<th
-onClick={()=>handleSort('out')}
-className="px-3 py-2.5 sm:py-3text-center text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] cursor-pointer"
->
-Off
-<span className="inline-flex mr-1">
-{sortField === 'out'
-  ? (sortDir === 'asc'
-      ? <ChevronUp className="w-3.5 h-3.5 text-[#6f7f97]"/>
-      : <ChevronDown className="w-3.5 h-3.5 text-[#6f7f97]"/>)
-  : <ChevronUp className="w-3.5 h-3.5 opacity-30"/>
-}
-</span>
-</th>
 </tr>
-
 </thead>
-               <tbody>
+              <tbody>
 {filtered.map((m, i) => (
-<tr
-key={m.id}
-className={`border-b border-[var(--border)] hover:bg-[var(--background-secondary)]/50 transition-colors ${
-i % 2 === 0 ? 'bg-[var(--background-secondary)]/30' : ''
-}`}
->
+<tr key={m.id} className="border-b border-[var(--border)]">
 
-<td className="px-3 py-2.5 text-center font-mono text-sm text-[var(--foreground)]">
-{i + 1}
-</td>
+<td className="px-3 py-2 text-center">{i + 1}</td>
 
-<td className="px-3 py-2.5 text-center font-mono text-xs text-[var(--text-muted)]">
+<td className="px-3 py-2 text-center">
 <a
 href={`https://app.rokstats.online/governor/${m.id}`}
 target="_blank"
-rel="noopener noreferrer"
-className="text-cyan-400/80 hover:text-cyan-300 hover:underline"  >
+className="text-cyan-400 hover:underline"
+>
 {m.id}
 </a>
 </td>
 
-<td className="px-3 py-2.5 text-center">
-
-<div className="flex items-center justify-center gap-2">
-
-<span className="font-medium text-sm text-[var(--foreground)]">{m.name}</span>
-
-{m.prevNames?.length > 0 && (
-<div className="relative group flex items-center">
-
-<Clock size={14} className="text-[var(--text-muted)] hover:text-[var(--foreground)] transition cursor-pointer" />
-
-<div className="absolute left-5 bottom-full mb-2 hidden group-hover:block z-[9999]
-bg-[var(--background-card)] border border-[var(--border)]
-rounded-lg px-3 py-2.5 text-xs shadow-lg min-w-[140px]">
-
-<div className="text-[var(--text-muted)] mb-1">
-{m.prevNames.length} previous names
-</div>
-
-{m.prevNames.map((n,i)=>(
-<div key={i}>{n}</div>
-))}
-
-</div>
-
-</div>
-)}
-
-</div>
-
+<td className="px-3 py-2 text-center">
+{m.name}
 </td>
 
-<td className="px-3 py-2.5 text-center font-mono text-sm text-[var(--foreground)]">
+<td className="px-3 py-2 text-center font-mono">
 {formatCompact(m.power)}
 </td>
 
-<td className="px-3 py-2.5 text-center text-sm text-[var(--text-muted)]" title={m.migratedIn || ""}>
-{formatRelative(m.migratedIn)}
-</td>
-
-<td className="px-3 py-2.5 text-center text-sm text-[var(--text-muted)]" title={m.migratedOut || ""}>
-{formatRelative(m.migratedOut)}
+<td className="px-3 py-2 text-center text-sm text-[var(--text-muted)]">
+{m.lastSeen ? new Date(m.lastSeen).toLocaleDateString() : "-"}
 </td>
 
 </tr>
