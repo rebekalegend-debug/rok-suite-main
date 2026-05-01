@@ -45,7 +45,7 @@ export default function Page() {
     );
   }
 
-  const schedule = data?.evolutionChapters || [];
+ const schedule = data?.evolutionChapters?.[0] || [];
   const altar = data?.kvkDetailsData?.altar;
   const ruins = data?.kvkDetailsData?.ruins;
 
