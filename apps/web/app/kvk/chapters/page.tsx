@@ -2,30 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-const API_URL =
-  "https://beta.prokingdoms.com/proxy-fast/stats/kvk/aggregated/891993";
-
-export default function KvKPage() {
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function load() {
-      try {
-        const JWT = process.env.NEXT_PUBLIC_KVK_JWT;
-
-        const res = await fetch(API_URL, {
-          headers: {
-            Authorization: `Bearer ${JWT}`,
-            Accept: "*/*",
-          },
-          credentials: "include",
-        });
-
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-        const json = await res.json();
+const res = await fetch("/api/kvk");
+const data = await res.json();
         setData(json);
       } catch (err: any) {
         setError(err.message || "Fetch error");
