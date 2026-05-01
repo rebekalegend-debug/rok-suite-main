@@ -2,11 +2,25 @@
 
 import { useEffect, useState } from "react";
 
-const res = await fetch("/api/kvk");
-const data = await res.json();
+export default function Page() {
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const res = await fetch("/api/kvk");
+
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+
+        const json = await res.json();
         setData(json);
-      } catch (err: any) {
-        setError(err.message || "Fetch error");
+      } catch (err) {
+        const message = err instanceof Error ? err.message : "Fetch error";
+        setError(message);
       } finally {
         setLoading(false);
       }
@@ -44,9 +58,8 @@ const data = await res.json();
           Track KvK progression and kingdom milestones
         </p>
 
-        {/* timeline strip */}
         <div className="mt-4 flex gap-2 overflow-x-auto">
-          {schedule?.map((s: any, i: number) => (
+          {schedule.map((s: any, i: number) => (
             <div
               key={i}
               className="min-w-[40px] h-[40px] rounded-full bg-yellow-500/30 flex items-center justify-center text-xs"
@@ -62,18 +75,14 @@ const data = await res.json();
         <h2 className="text-lg font-semibold mb-3">Pass Opening Times</h2>
 
         <div className="space-y-2 text-sm">
-          {schedule?.slice(0, 6).map((p: any, i: number) => (
+          {schedule.slice(0, 6).map((p: any, i: number) => (
             <div
               key={i}
               className="flex justify-between bg-[#0f172a] p-3 rounded"
             >
               <span>Pass {p.pass || i + 1}</span>
-              <span className="text-gray-400">
-                {p.opensAt || "Locked"}
-              </span>
-              <span className="text-yellow-400">
-                {p.status || "Premium Only"}
-              </span>
+              <span className="text-gray-400">{p.opensAt || "Locked"}</span>
+              <span className="text-yellow-400">{p.status || "Premium Only"}</span>
             </div>
           ))}
         </div>
@@ -81,9 +90,7 @@ const data = await res.json();
 
       {/* ALTAR & RUINS */}
       <div className="bg-[#111a2e] rounded-xl p-5">
-        <h2 className="text-lg font-semibold mb-4">
-          Altar & Ruins Schedule
-        </h2>
+        <h2 className="text-lg font-semibold mb-4">Altar & Ruins Schedule</h2>
 
         <div className="space-y-4 text-sm">
           <div className="bg-[#0f172a] p-4 rounded">
