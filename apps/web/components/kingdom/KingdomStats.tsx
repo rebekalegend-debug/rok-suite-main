@@ -215,12 +215,12 @@ const top300Data = useMemo(() => {
 
   const totalPower = top.reduce((sum, m) => sum + m.power, 0)
 
-  function getSeed(power: number) {
-    if (power > 9.7e9) return "A"
-    if (power > 7.8e9) return "B"
-    if (power > 6.2e9) return "C"
-    return "D"
-  }
+function getSeed(power: number) {
+  if (power > 9.54e9) return "A"
+  if (power >= 7.59e9) return "B"
+  if (power >= 6.02e9) return "C"
+  return "D"
+}
 
   return {
     count: top.length,
