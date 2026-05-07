@@ -96,43 +96,43 @@ const snapshotMembers = useMemo(() => {
   
   // Table state
   const [selectedKingdom, setSelectedKingdom] = useState<number>(3237);
-React.useEffect(()=>{
+React.useEffect(() => {
+  async function loadMembers() {
+    try {
+      setLoadingMembers(true)
 
-async function loadMembers(){
+      const res = await fetch(
+        `https://statsmasterdatahub.com/api/honor-rankings/${selectedKingdom}?kvk_number=c13131`
+      )
 
-setLoadingMembers(true)
-const res = await fetch(
-  `https://statsmasterdatahub.com/api/honor-rankings/${selectedKingdom}`
-)
+      const json = await res.json()
 
-const json = await res.json()
+      const players = json.players || []
 
-const players = json?.players || json || []
+      const mapped = players.map((p: any) => ({
+        id: String(p.governor_id),
+        name: p.name,
+        power: Number(p.points || 0), // honor points
+        prevNames: [],
+        migratedOut: null,
+        migratedIn: null,
 
-const mapped = players.map((p: any, index: number) => ({
-  id: String(p.governor_id ?? p.id ?? index),
-  name: p.name ?? "Unknown",
+        // updated_on is unix timestamp
+        lastSeen: p.updated_on
+          ? new Date(p.updated_on * 1000).toISOString()
+          : null,
+      }))
 
-  // Honor Points
-  power: Number(p.honor_points ?? p.power ?? 0),
+      setMembers(mapped)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoadingMembers(false)
+    }
+  }
 
-  prevNames: [],
-  migratedOut: null,
-  migratedIn: null,
-
-  lastSeen: p.last_updated
-    ? new Date(p.last_updated * 1000).toISOString()
-    : new Date().toISOString(),
-}))
-
-setMembers(mapped)
-setLoadingMembers(false)
-
-}
-
-loadMembers()
-
-},[selectedKingdom])
+  loadMembers()
+}, [selectedKingdom])
   const [search, setSearch] = useState('');
   const [filterMode,setFilterMode] = useState<'all'|'current'|'in'|'out'>('all')
   const [sortField, setSortField] = useState<SortField>('power');
