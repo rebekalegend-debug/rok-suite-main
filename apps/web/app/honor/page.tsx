@@ -419,21 +419,11 @@ Track name change's and appear\disappeared members in KD
 </p>
 
 <p className="text-xs text-[var(--text-muted)] opacity-70 mt-1">
-Scan will auto run daily in every kingdom and updates data • Data sourced from Lilith newly released Tool (available since 2025/09/15) 
+Scan will auto run daily in every kingdom and updates data.
 <br />
-https://rok-game-tools-global.lilith.com
+Data for current KvK will appear avaible after ingame honor ranking become avaible!
 </p>
-</div>
 
-<div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
-<Clock size={14} />
-<span>
-{dataUpdated
-? `Data updated on ${dataUpdated}`
-: "Loading status..."
-}
-</span>
-</div>
 
 </div>
 
@@ -441,89 +431,7 @@ https://rok-game-tools-global.lilith.com
 
 
 
-      
- {/* Summary cards */}
-<div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
 
-<div onClick={()=>setFilterMode('all')} className="cursor-pointer">
-<GlowCard
-title="All Members"
-icon={Radar}
-value={cleanMembers.length}
-sub={`${formatCompact(cleanMembers.reduce((a,b)=>a+b.power,0))} total power`}
-color="green"
-/>
-</div>
-
-<div onClick={() => {
-  setFilterMode('current')
-  setSortField('power')
-  setSortDir('desc')
-}} className="cursor-pointer">
-<GlowCard
-title={`KD Members (${top300Data.seed} Seed)`}
-icon={Users}
-value={currentMembers.length}
-sub={`${formatCompact(currentTotalPower)} total power`}
-color="yellow"
-/>
-</div>
-
-<div onClick={() => {
-  setFilterMode('in')
-  setSortField('in')
-  setSortDir('desc')
-}} className="cursor-pointer">
-<GlowCard
-title="Mig.in / Wake up / New acc (7d)"
-icon={Eye}
-value={
-snapshotMembers.filter(m=>{
-  if(!m.migratedIn) return false
-  return Date.now() - new Date(m.migratedIn).getTime() <= 7*86400000
-}).length
-}
-sub={`${formatCompact(
-snapshotMembers
-.filter(m=>{
-  if(!m.migratedIn) return false
-  return Date.now() - new Date(m.migratedIn).getTime() <= 7*86400000
-})
-.reduce((a,b)=>a+b.power,0)
-)} total power`}
-color="orange"
-/>
-</div>
-
-<div onClick={() => {
-  setFilterMode('out')
-  setSortField('out')
-  setSortDir('desc')
-}} className="cursor-pointer">
-
-<GlowCard
-title="Mig.out / Off map (1M)"
-icon={EyeOff}
-value={
-cleanMembers.filter(m=>{
-  if(!m.migratedOut) return false
-  return Date.now() - new Date(m.migratedOut).getTime() <= 30*86400000
-}).length
-}
-sub={`${formatCompact(
-cleanMembers
-.filter(m=>{
-  if(!m.migratedOut) return false
-  return Date.now() - new Date(m.migratedOut).getTime() <= 30*86400000
-})
-.reduce((a,b)=>a+b.power,0)
-)} total power`}
-color="red"
-/>
-
-</div>
-
-</div>
 {/* Controls */}
 <div className="flex flex-wrap items-center gap-3 mb-6">
 
