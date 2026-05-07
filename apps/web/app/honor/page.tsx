@@ -427,11 +427,6 @@ Data for current KvK will appear avaible after ingame honor ranking become avaib
 
 </div>
 
-     
-
-
-
-
 {/* Controls */}
 <div className="flex flex-wrap items-center gap-3 mb-6">
 
@@ -583,8 +578,8 @@ className="text-cyan-400 hover:underline"
 </div>
 
 </div>
-
 );
+
 }
 
 function SummaryCard({ label, value, color }: { label: string; value: string; color: string }) {
@@ -595,28 +590,22 @@ function SummaryCard({ label, value, color }: { label: string; value: string; co
     </div>
   );
 }
+</div>
+function formatCompact(v:number){
 
-function formatRelative(date?:string | null){
+  if(v >= 1_000_000_000) {
+    return (v / 1_000_000_000).toFixed(1) + "B"
+  }
 
-if(!date) return "-"
+  if(v >= 1_000_000) {
+    return (v / 1_000_000).toFixed(1) + "M"
+  }
 
-const d = new Date(date)
-const now = new Date()
+  if(v >= 1_000) {
+    return (v / 1_000).toFixed(1) + "K"
+  }
 
-const diff = (now.getTime() - d.getTime()) / 1000
-
-const day = 86400
-
-if(diff < day) return "today"
-
-if(diff < day*7) return `${Math.floor(diff/day)} days ago`
-
-if(diff < day*30) return `${Math.floor(diff/(day*7))} weeks ago`
-
-if(diff < day*365) return `${Math.floor(diff/(day*30))} months ago`
-
-return `${Math.floor(diff/(day*365))} years ago`
-
+  return v.toString()
 }
 
 function GlowCard({
@@ -666,12 +655,4 @@ hover:scale-[1.02] shadow-lg ${styles[color]}`}>
 
 )
 }
-function formatCompact(v:number){
 
-  if(v>=1_000_000_000) return (v/1_000_000_000).toFixed(1)+"B"
-  if(v>=1_000_000) return (v/1_000_000).toFixed(1)+"M"
-  if(v>=1_000) return (v/1_000).toFixed(1)+"K"
-
-  return v.toString()
-
-}
