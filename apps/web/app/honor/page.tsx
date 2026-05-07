@@ -37,7 +37,8 @@ type Member = {
 
 const [members,setMembers] = useState<Member[]>([])
 const [loadingMembers,setLoadingMembers] = useState(true)
-
+const [kvkMap, setKvkMap] = useState<Record<string, string[]>>({})
+const [selectedKvk, setSelectedKvk] = useState("")
 const cleanMembers = useMemo(() => {
   const map = new Map<string, Member>()
 
@@ -97,12 +98,14 @@ const snapshotMembers = useMemo(() => {
   // Table state
   const [selectedKingdom, setSelectedKingdom] = useState<number>(3237);
 React.useEffect(() => {
+  if (!selectedKvk) return
+
   async function loadMembers() {
     try {
       setLoadingMembers(true)
 
       const res = await fetch(
-        `https://statsmasterdatahub.com/api/honor-rankings/${selectedKingdom}?kvk_number=c13131`
+        `https://statsmasterdatahub.com/api/honor-rankings/${selectedKingdom}?kvk_number=${selectedKvk}`
       )
 
       const json = await res.json()
@@ -112,12 +115,12 @@ React.useEffect(() => {
       const mapped = players.map((p: any) => ({
         id: String(p.governor_id),
         name: p.name,
-        power: Number(p.points || 0), // honor points
+        power: Number(p.points || 0),
+
         prevNames: [],
         migratedOut: null,
         migratedIn: null,
 
-        // updated_on is unix timestamp
         lastSeen: p.updated_on
           ? new Date(p.updated_on * 1000).toISOString()
           : null,
@@ -132,7 +135,15 @@ React.useEffect(() => {
   }
 
   loadMembers()
-}, [selectedKingdom])
+}, [selectedKingdom, selectedKvk])
+React.useEffect(() => {
+  const list = kvkMap[String(selectedKingdom)] || []
+
+  if (list.length > 0) {
+    setSelectedKvk(list[0])
+  }
+}, [selectedKingdom, kvkMap])
+  
   const [search, setSearch] = useState('');
   const [filterMode,setFilterMode] = useState<'all'|'current'|'in'|'out'>('all')
   const [sortField, setSortField] = useState<SortField>('power');
@@ -155,6 +166,29 @@ const chartKingdomIds = useMemo(
   [chartKingdoms]
 )
 
+
+
+React.useEffect(() => {
+  async function loadKvks() {
+    try {
+      const res = await fetch("/api/kvks")
+      const json = await res.json()
+
+      setKvkMap(json)
+
+      const first = json[String(selectedKingdom)]?.[0]
+
+      if (first) {
+        setSelectedKvk(first)
+      }
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  loadKvks()
+}, [])
+  
   // Sort & filter (already limited to top 400 by the hook)
 const filtered = useMemo(() => {
 
@@ -493,28 +527,47 @@ color="red"
 {/* Controls */}
 <div className="flex flex-wrap items-center gap-3 mb-6">
 
-<select
-value={selectedKingdom}
-onChange={e => setSelectedKingdom(Number(e.target.value))}
-className="px-3 py-2.5 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] text-sm"
->
-{KINGDOMS.map(k => (
-<option key={k} value={k}>KD {k}</option>
-))}
-</select>
+  {/* Kingdom */}
+  <select
+    value={selectedKingdom}
+    onChange={e => setSelectedKingdom(Number(e.target.value))}
+    className="px-3 py-2.5 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-sm"
+  >
+    {KINGDOMS.map(k => (
+      <option key={k} value={k}>
+        KD {k}
+      </option>
+    ))}
+  </select>
 
-<div className="relative flex-1">
-<Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
+  {/* KvK */}
+  <select
+    value={selectedKvk}
+    onChange={e => setSelectedKvk(e.target.value)}
+    className="px-3 py-2.5 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-sm"
+  >
+    {(kvkMap[String(selectedKingdom)] || []).map((kvk: string) => (
+      <option key={kvk} value={kvk}>
+        {kvk}
+      </option>
+    ))}
+  </select>
 
-<input
-type="text"
-placeholder="Search player..."
-value={search}
-onChange={e => setSearch(e.target.value)}
-className="w-full pl-9 pr-3 py-2 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] text-sm"
-/>
+  {/* Search */}
+  <div className="relative flex-1">
+    <Search
+      size={16}
+      className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]"
+    />
 
-</div>
+    <input
+      type="text"
+      placeholder="Search player..."
+      value={search}
+      onChange={e => setSearch(e.target.value)}
+      className="w-full pl-9 pr-3 py-2 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-sm"
+    />
+  </div>
 
 </div>
 
