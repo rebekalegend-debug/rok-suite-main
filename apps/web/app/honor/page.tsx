@@ -590,7 +590,7 @@ function SummaryCard({ label, value, color }: { label: string; value: string; co
     </div>
   );
 }
-</div>
+
 function formatCompact(v:number){
 
   if(v >= 1_000_000_000) {
