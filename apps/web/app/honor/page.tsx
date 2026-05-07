@@ -519,18 +519,10 @@ Data for current KvK will appear avaible after ingame honor ranking become avaib
 
         {/* Power */}
         <div className="text-sm text-[var(--foreground)] mb-1">
-          Power: {formatCompact(m.power)}
+          Points: {formatCompact(m.power)}
         </div>
 
-        {/* Show up */}
-        <div className="text-xs text-green-400">
-          Show up: {formatRelative(m.migratedIn)}
-        </div>
-
-        {/* Off */}
-        <div className="text-xs text-red-400">
-          Off: {formatRelative(m.migratedOut)}
-        </div>
+      
       </div>
     ))}
   </div>
