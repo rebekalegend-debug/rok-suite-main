@@ -402,11 +402,11 @@ const chartData = useMemo(() => {
 
  const isLoading = loadingMembers;
 
- return (
-
-    <div className="min-h-screen p-4 lg:p-8">
+return (
+  <div className="min-h-screen w-full flex justify-center px-4 lg:px-8">
+    <div className="w-full max-w-7xl">
       {/* Header */}
-     <div className="mb-6 flex items-start justify-between">
+    <div className="mb-6 flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
 
 <div>
 <h1 className="text-2xl font-bold text-[var(--foreground)] flex items-center gap-2">
@@ -513,9 +513,9 @@ Data for current KvK will appear avaible after ingame honor ranking become avaib
         </div>
 
         {/* Power */}
-        <div className="text-sm text-[var(--foreground)] mb-1">
-          Points: {formatCompact(m.power)}
-        </div>
+   <div className="text-sm text-[var(--foreground)] mb-1">
+  Honor Points: {formatCompact(m.power)}
+</div>
 
       
       </div>
@@ -524,7 +524,7 @@ Data for current KvK will appear avaible after ingame honor ranking become avaib
 
  
                 
-             <div className="hidden md:block overflow-x-auto overflow-y-visible">
+            <div className="hidden md:block w-full overflow-x-auto">
         <table className="w-full">
 
 <thead className="sticky top-0 z-10 bg-[var(--background-card)]">
@@ -577,7 +577,8 @@ className="text-cyan-400 hover:underline"
 
 </div>
 </div>
-</div>
+    </div>
+  </div>
 );
 
 }
