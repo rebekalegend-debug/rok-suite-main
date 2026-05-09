@@ -279,11 +279,11 @@ return (
   <div className="flex flex-col items-center text-center">
     <h1 className="text-2xl font-bold text-[var(--foreground)] flex items-center gap-2 justify-center">
       <Star size={28} className="text-yellow-400" />
-      Honor Rankings
+      Pre KvK Rankings
     </h1>
 
 <p className="text-sm text-[var(--text-muted)] mt-1">
-Track honor ranking for 3237, 2554 and 2500!
+Track Pre KvK rankings for 3237, 2554 and 2500!
   <br />
   Last few and current KvK's!
 </p>
