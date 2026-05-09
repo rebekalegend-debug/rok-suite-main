@@ -405,14 +405,15 @@ const chartData = useMemo(() => {
 return (
   <div className="min-h-screen w-full flex justify-center px-4 lg:px-8">
     <div className="w-full max-w-7xl">
-      {/* Header */}
-   <div className="mb-6 flex flex-col items-center text-center gap-4">
+{/* Header */}
+<div className="mb-6 flex flex-col items-center text-center w-full">
 
-<div>
-<h1 className="text-2xl font-bold text-[var(--foreground)] flex items-center gap-2">
-<Star size={28} className="text-yellow-400" />
-Honor Rankings
-</h1>
+  {/* Title */}
+  <div className="flex flex-col items-center text-center">
+    <h1 className="text-2xl font-bold text-[var(--foreground)] flex items-center gap-2 justify-center">
+      <Star size={28} className="text-yellow-400" />
+      Honor Rankings
+    </h1>
 
 <p className="text-sm text-[var(--text-muted)] mt-1">
 Track honor ranking for 3237, 2554 and 2500!
@@ -426,7 +427,7 @@ Scan will auto run daily in every kingdom and updates data.
 Data for current KvK will appear avaible after ingame honor ranking become avaible!
 </p>
 
-
+  </div>
 </div>
 
 {/* Controls */}
