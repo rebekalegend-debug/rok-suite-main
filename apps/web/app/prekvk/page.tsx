@@ -59,7 +59,7 @@ React.useEffect(() => {
       setLoadingMembers(true)
 
       const res = await fetch(
-       `https://statsmasterdatahub.com/api/dashboard/c13164/prekvk-rankings?kd=${selectedKingdom}&kvk_number=${selectedKvk}`
+       `https://statsmasterdatahub.com/api/dashboard/${selectedKvk}/prekvk-rankings?kd=${selectedKingdom}`
 
       )
 
