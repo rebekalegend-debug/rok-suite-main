@@ -488,9 +488,9 @@ Data for current KvK will appear avaible after ingame honor ranking become avaib
           {/* Table */}
         <div>
             {isLoading ? (
-              <div className="p-12text-center text-[var(--text-muted)]">Loading...</div>
+              <div className="p-12 text-center text-[var(--text-muted)]">Loading...</div>
             ) : filtered.length === 0 ? (
-              <div className="p-12text-center text-[var(--text-muted)]">No data available</div>
+              <div className="p-12 text-center text-[var(--text-muted)]">No data available</div>
             ) : (
              <>
   {/* 🔥 MOBILE VIEW (PUT THIS FIRST) */}
