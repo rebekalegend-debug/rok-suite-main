@@ -403,8 +403,8 @@ const chartData = useMemo(() => {
  const isLoading = loadingMembers;
 
 return (
-  <div className="min-h-screen w-full flex justify-center px-4 lg:px-8">
-    <div className="w-full max-w-7xl">
+<div className="min-h-screen w-full px-4 lg:px-8">
+  <div className="w-full">
 {/* Header */}
 <div className="mb-6 flex flex-col items-center text-center w-full">
 
