@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Search, ChevronUp, ChevronDown, BarChart3, Radar, Eye, EyeOff, Users } from 'lucide-react';
+import { Search, ChevronUp, ChevronDown, BarChart3, Star, Eye, EyeOff, Users } from 'lucide-react';
 import { Clock } from "lucide-react"
 
 type SortField = 'name' | 'id' | 'power' | 'in' | 'out';
@@ -406,16 +406,18 @@ return (
   <div className="min-h-screen w-full flex justify-center px-4 lg:px-8">
     <div className="w-full max-w-7xl">
       {/* Header */}
-    <div className="mb-6 flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+   <div className="mb-6 flex flex-col items-center text-center gap-4">
 
 <div>
 <h1 className="text-2xl font-bold text-[var(--foreground)] flex items-center gap-2">
-<Radar size={28} className="text-green-500" />
-Migration tracker
+<Star size={28} className="text-yellow-400" />
+Honor Rankings
 </h1>
 
 <p className="text-sm text-[var(--text-muted)] mt-1">
-Track name change's and appear\disappeared members in KD
+Track honor ranking for 3237, 2554 and 2500!
+  <br />
+  Last few and current KvK's!
 </p>
 
 <p className="text-xs text-[var(--text-muted)] opacity-70 mt-1">
@@ -430,34 +432,42 @@ Data for current KvK will appear avaible after ingame honor ranking become avaib
 {/* Controls */}
 <div className="flex flex-wrap items-center gap-3 mb-6">
 
-  {/* Kingdom */}
-  <select
-    value={selectedKingdom}
-    onChange={e => setSelectedKingdom(Number(e.target.value))}
-    className="px-3 py-2.5 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-sm"
-  >
-    {KINGDOMS.map(k => (
-      <option key={k} value={k}>
-        KD {k}
-      </option>
-    ))}
-  </select>
+  {/* KD */}
+  <div className="flex items-center gap-2">
+    <span className="text-xs text-[var(--text-muted)]">Select KD</span>
+
+    <select
+      value={selectedKingdom}
+      onChange={e => setSelectedKingdom(Number(e.target.value))}
+      className="px-3 py-2.5 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-sm"
+    >
+      {KINGDOMS.map(k => (
+        <option key={k} value={k}>
+          KD {k}
+        </option>
+      ))}
+    </select>
+  </div>
 
   {/* KvK */}
-  <select
-    value={selectedKvk}
-    onChange={e => setSelectedKvk(e.target.value)}
-    className="px-3 py-2.5 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-sm"
-  >
-    {(kvkMap[String(selectedKingdom)] || []).map((kvk: string) => (
-      <option key={kvk} value={kvk}>
-        {kvk}
-      </option>
-    ))}
-  </select>
+  <div className="flex items-center gap-2">
+    <span className="text-xs text-[var(--text-muted)]">Select KvK</span>
+
+    <select
+      value={selectedKvk}
+      onChange={e => setSelectedKvk(e.target.value)}
+      className="px-3 py-2.5 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)] text-sm"
+    >
+      {(kvkMap[String(selectedKingdom)] || []).map((kvk: string) => (
+        <option key={kvk} value={kvk}>
+          {kvk}
+        </option>
+      ))}
+    </select>
+  </div>
 
   {/* Search */}
-  <div className="relative flex-1">
+  <div className="relative flex-1 min-w-[200px]">
     <Search
       size={16}
       className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]"
