@@ -65,19 +65,20 @@ React.useEffect(() => {
 
       const json = await res.json()
 
-      const players = json.players || []
+    const players = json.data || []
 
-  const mapped = players.map((p: any) => ({
+const mapped = players.map((p: any, index: number) => ({
   id: String(p.governor_id),
+
   name: p.name,
 
-  rank: p.rank ?? 0,
+  rank: index + 1,
 
-  stage1: Number(p.stage_1 || 0),
-  stage2: Number(p.stage_2 || 0),
-  stage3: Number(p.stage_3 || 0),
+  stage1: Number(p.stage1_points || 0),
+  stage2: Number(p.stage2_points || 0),
+  stage3: Number(p.stage3_points || 0),
 
-  total: Number(p.total || 0),
+  total: Number(p.total_points || 0),
 }))
 
       setMembers(mapped)
