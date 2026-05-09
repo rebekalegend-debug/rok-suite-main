@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
+
 import { Search, Star } from 'lucide-react';
 
 type SortField = 'name' | 'rank' | 'total';
@@ -20,8 +20,8 @@ const KD_COLORS = ['#818cf8', '#f87171', '#34d399', '#fbbf24', '#fb923c', '#a78b
 type TabType = 'table';
 
 export default function KingdomStats() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
+ 
+ 
 const KINGDOMS = [3237, 2554, 2500];
 const kingdoms = KINGDOMS;
 type Member = {
