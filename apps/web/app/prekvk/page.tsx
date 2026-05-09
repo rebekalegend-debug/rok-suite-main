@@ -360,45 +360,85 @@ Data for current KvK will appear avaible after ingame honor ranking become avaib
               <div className="p-12 text-center text-[var(--text-muted)]">No data available</div>
             ) : (
              <>
-  {/* 🔥 MOBILE VIEW (PUT THIS FIRST) */}
-  <div className="md:hidden space-y-3">
-    {filtered.map((m, i) => (
-      <div
-        key={m.id}
-        className="rounded-xl border border-[var(--border)] bg-[var(--background-card)] p-4 shadow-sm"
-      >
-        {/* Header */}
-        <div className="flex justify-between items-center mb-2">
-          <div className="font-semibold text-[var(--foreground)]">
-            {m.name}
+{/* 🔥 MOBILE VIEW */}
+<div className="md:hidden space-y-3">
+  {filtered.map((m, i) => (
+    <div
+      key={m.id}
+      className="rounded-xl border border-[var(--border)] bg-[var(--background-card)] p-4 shadow-sm"
+    >
+      {/* Header */}
+      <div className="flex justify-between items-center mb-2">
+        <div className="font-semibold text-[var(--foreground)] truncate">
+          {m.name}
+        </div>
+
+        <span className="text-[10px] px-2 py-1 rounded-lg border border-yellow-500/40 text-yellow-400">
+          #{m.rank}
+        </span>
+      </div>
+
+      {/* ID */}
+      <div className="text-xs text-[var(--text-muted)] mb-3">
+        ID:{" "}
+        <a
+          href={`https://app.rokstats.online/governor/${m.id}`}
+          target="_blank"
+          className="text-cyan-400"
+        >
+          {m.id}
+        </a>
+      </div>
+
+      {/* Stages */}
+      <div className="grid grid-cols-3 gap-2 mb-3">
+
+        <div className="rounded-lg bg-[var(--background-secondary)] p-2 text-center">
+          <div className="text-[10px] text-[var(--text-muted)] mb-1">
+            Stage I
           </div>
 
-          <span className="text-[10px] px-2 py-1 rounded-lg border border-yellow-500/40 text-yellow-400">
-            #{i + 1}
-          </span>
+          <div className="text-sm font-semibold">
+            {formatCompact(m.stage1)}
+          </div>
         </div>
 
-        {/* ID */}
-        <div className="text-xs text-[var(--text-muted)] mb-1">
-          ID:{" "}
-          <a
-            href={`https://app.rokstats.online/governor/${m.id}`}
-            target="_blank"
-            className="text-cyan-400"
-          >
-            {m.id}
-          </a>
+        <div className="rounded-lg bg-[var(--background-secondary)] p-2 text-center">
+          <div className="text-[10px] text-[var(--text-muted)] mb-1">
+            Stage II
+          </div>
+
+          <div className="text-sm font-semibold">
+            {formatCompact(m.stage2)}
+          </div>
         </div>
 
-        {/* Power */}
-   <div className="text-sm text-[var(--foreground)] mb-1">
-  👑 Total: {formatCompact(m.total)}
-</div>
+        <div className="rounded-lg bg-[var(--background-secondary)] p-2 text-center">
+          <div className="text-[10px] text-[var(--text-muted)] mb-1">
+            Stage III
+          </div>
 
-      
+          <div className="text-sm font-semibold">
+            {formatCompact(m.stage3)}
+          </div>
+        </div>
+
       </div>
-    ))}
-  </div>
+
+      {/* Total */}
+      <div className="rounded-xl border border-yellow-500/20 bg-yellow-500/5 p-3 text-center">
+        <div className="text-xs text-yellow-400 mb-1">
+          👑 Total
+        </div>
+
+        <div className="text-lg font-bold text-[var(--foreground)]">
+          {formatCompact(m.total)}
+        </div>
+      </div>
+
+    </div>
+  ))}
+</div>
 
  
                 
