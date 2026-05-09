@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useState, useMemo, useCallback } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { Search, ChevronUp, ChevronDown, BarChart3, Star, Eye, EyeOff, Users } from 'lucide-react';
-import { Clock } from "lucide-react"
+import React, { useState, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
+import { Search, Star } from 'lucide-react';
 
-type SortField = 'name' | 'id' | 'power' | 'in' | 'out';
+type SortField = 'name' | 'rank' | 'total';
 type SortDir = 'asc' | 'desc';
 
 const METRICS = [
@@ -43,58 +42,10 @@ const [loadingMembers,setLoadingMembers] = useState(true)
 const [kvkMap, setKvkMap] = useState<Record<string, string[]>>({})
 const [selectedKvk, setSelectedKvk] = useState("")
 const cleanMembers = useMemo(() => {
-  const map = new Map<string, Member>()
-
-  for (const m of members) {
-    if (!m.id || m.id === "0") continue
-
-    const power = typeof m.power === "number"
-      ? m.power
-      : parseInt(String(m.power).replace(/[^\d]/g, ""), 10)
-
-    const existing = map.get(m.id)
-
-    // ✅ KEEP LATEST ENTRY (not highest power)
-    if (!existing) {
-      map.set(m.id, {
-        ...m,
-        power: isNaN(power) ? 0 : power
-      })
-      continue
-    }
-
-    const currentTime = m.lastSeen ? new Date(m.lastSeen).getTime() : 0
-    const existingTime = existing.lastSeen ? new Date(existing.lastSeen).getTime() : 0
-
-    if (currentTime > existingTime) {
-      map.set(m.id, {
-        ...m,
-        power: isNaN(power) ? 0 : power
-      })
-    }
-  }
-
-  return Array.from(map.values())
+  return members.filter(m => m.id && m.id !== "0")
 }, [members])
 
-const snapshotMembers = useMemo(() => {
-  if (cleanMembers.length === 0) return []
-
-  let latest = 0
-
-  for (const m of cleanMembers) {
-    if (!m.lastSeen) continue
-    const t = new Date(m.lastSeen).getTime()
-    if (t > latest) latest = t
-  }
-
-  const latestDate = new Date(latest).toISOString().slice(0, 10)
-
-  return cleanMembers.filter(m =>
-    m.lastSeen &&
-    new Date(m.lastSeen).toISOString().slice(0, 10) === latestDate
-  )
-}, [cleanMembers])
+const snapshotMembers = cleanMembers
 
 
   
@@ -149,7 +100,7 @@ React.useEffect(() => {
   
   const [search, setSearch] = useState('');
   const [filterMode,setFilterMode] = useState<'all'|'current'|'in'|'out'>('all')
-  const [sortField, setSortField] = useState<SortField>('power');
+const [sortField, setSortField] = useState<SortField>('total');
 const [sortDir, setSortDir] = useState<SortDir>('desc');
 
   // Chart state
@@ -210,49 +161,19 @@ if (filterMode === 'current') {
   // keep all (API has no migration info)
 }
 
-if (filterMode === 'in') {
-  data = data.filter(m => {
-    if (!m.migratedIn) return false
-    return Date.now() - new Date(m.migratedIn).getTime() <= 7 * 86400000
-  })
-}
-
-if (filterMode === 'out') {
-  data = data.filter(m => {
-    if (!m.migratedOut) return false
-    return Date.now() - new Date(m.migratedOut).getTime() <= 30 * 86400000
-  })
-}
 
   // 🔄 DEFAULT SORT (for all / current)
   data.sort((a, b) => {
 
     let res = 0
 
-    if (sortField === 'name') {
-      res = a.name.localeCompare(b.name)
-    }
+ if (sortField === 'rank') {
+  res = a.rank - b.rank
+}
 
-    if (sortField === 'id') {
-      res = Number(a.id) - Number(b.id)
-    }
-
-    if (sortField === 'power') {
-      res = a.power - b.power
-    }
-
-    if (sortField === 'in') {
-      res =
-        new Date(a.migratedIn || 0).getTime() -
-        new Date(b.migratedIn || 0).getTime()
-    }
-
-    if (sortField === 'out') {
-      res =
-        new Date(a.migratedOut || 0).getTime() -
-        new Date(b.migratedOut || 0).getTime()
-    }
-
+if (sortField === 'total') {
+  res = a.total - b.total
+}
     return sortDir === 'asc' ? res : -res
   })
 
@@ -262,68 +183,10 @@ if (filterMode === 'out') {
 
 
 
-const top300Data = useMemo(() => {
- const current = snapshotMembers
 
-  const sorted = [...current].sort((a, b) => b.power - a.power)
-
-  const top = sorted.slice(0, Math.min(300, sorted.length))
-
-  const totalPower = top.reduce((sum, m) => sum + m.power, 0)
-
-  function getSeed(power: number) {
-    if (power > 9.7e9) return "A"
-    if (power > 7.8e9) return "B"
-    if (power > 6.2e9) return "C"
-    return "D"
-  }
-
-  return {
-    count: top.length,
-    power: totalPower,
-    seed: getSeed(totalPower)
-  }
-}, [snapshotMembers])
 
 const currentMembers = cleanMembers
   
-const currentTotalPower = useMemo(() => {
-  return snapshotMembers.reduce((sum, m) => {
-    const p = typeof m.power === "number"
-      ? m.power
-      : parseInt(String(m.power).replace(/[^\d]/g, ""), 10)
-
-    return sum + (isNaN(p) ? 0 : p)
-  }, 0)
-}, [snapshotMembers])
-  
-const dataUpdated = useMemo(() => {
-
-if(members.length === 0) return null
-
-let latest = 0
-
-for(const m of members){
-
-if(!m.lastSeen) continue
-
-const t = new Date(m.lastSeen).getTime()
-
-if(t > latest) latest = t
-
-}
-
-if(!latest) return null
-
-const d = new Date(latest)
-
-return `${d.getUTCFullYear()}/${
-String(d.getUTCMonth()+1).padStart(2,'0')
-}/${
-String(d.getUTCDate()).padStart(2,'0')
-} 03:30 UTC`
-
-},[members])
 const paged = filtered
  const handleSort = (field: SortField) => {
 
@@ -528,7 +391,7 @@ Data for current KvK will appear avaible after ingame honor ranking become avaib
 
         {/* Power */}
    <div className="text-sm text-[var(--foreground)] mb-1">
-  Honor Points: {formatCompact(m.power)}
+  👑 Total: {formatCompact(m.total)}
 </div>
 
       
@@ -557,27 +420,25 @@ Data for current KvK will appear avaible after ingame honor ranking become avaib
 {filtered.map((m, i) => (
 <tr key={m.id} className="border-b border-[var(--border)]">
 
-<td className="px-3 py-2 text-center">{i + 1}</td>
-
 <td className="px-3 py-2 text-center">
-<a
-href={`https://app.rokstats.online/governor/${m.id}`}
-target="_blank"
-className="text-cyan-400 hover:underline"
->
-{m.id}
-</a>
+  {m.rank}
 </td>
 
 <td className="px-3 py-2 text-center">
-{m.name}
+  {m.name}
 </td>
 
-<td className="px-3 py-2 text-center">{formatCompact(m.stage1)}</td>
+<td className="px-3 py-2 text-center">
+  {formatCompact(m.stage1)}
+</td>
 
-<td className="px-3 py-2 text-center">{formatCompact(m.stage2)}</td>
+<td className="px-3 py-2 text-center">
+  {formatCompact(m.stage2)}
+</td>
 
-<td className="px-3 py-2 text-center">{formatCompact(m.stage3)}</td>
+<td className="px-3 py-2 text-center">
+  {formatCompact(m.stage3)}
+</td>
 
 <td className="px-3 py-2 text-center font-mono">
   {formatCompact(m.total)}
