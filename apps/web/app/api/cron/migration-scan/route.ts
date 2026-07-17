@@ -57,7 +57,7 @@ await refreshTokens()
   const sheets = google.sheets({version:"v4",auth})
   const spreadsheetId = process.env.GOOGLE_SHEET_ID!
 
-  const kingdoms = [2500,2554,3237]
+  const kingdoms = [3237]
 
   // 🔥 GET LAST PROCESSED FROM SHEETS
   let lastProcessed:string | null = null
